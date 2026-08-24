@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F58529"/>
+      <stop offset="50%" stop-color="#DD2A7B"/>
+      <stop offset="100%" stop-color="#8134AF"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="#0f172a"/>
+  <rect width="800" height="600" fill="url(#grid)"/>
+  <rect x="330" y="215" width="140" height="6" rx="3" fill="url(#accent)"/>
+  <text x="400" y="290" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#f1f5f9">Food Ordering System</text>
+  <text x="400" y="330" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">Project screenshot placeholder</text>
+</svg>
