@@ -102,6 +102,53 @@ body {
   }
 }
 
+/* --- Slash Particles (thin diagonal strokes, ambient float) --- */
+:root {
+  --slash-ink: rgba(30, 32, 40, 0.45);
+}
+.dark {
+  --slash-ink: rgba(226, 230, 240, 0.55);
+}
+
+.slash-particle {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--slash-ink);
+  will-change: opacity, transform;
+  animation: slashFloat var(--dur) ease-in-out var(--delay) infinite;
+}
+
+/* Compose translate-drift + constant slash rotation. */
+@keyframes slashFloat {
+  0% {
+    transform: translate(0px, 0px) rotate(var(--angle));
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--peak);
+  }
+  50% {
+    transform: translate(var(--sway), -140px) rotate(var(--angle));
+    opacity: var(--peak);
+  }
+  86% {
+    opacity: 0;
+  }
+  100% {
+    transform: translate(calc(var(--sway) * -0.6), -300px) rotate(var(--angle));
+    opacity: 0;
+  }
+}
+
+/* Static fallback when reduced motion is preferred. */
+.slash-static {
+  animation: none;
+  opacity: var(--peak);
+  transform: rotate(var(--angle));
+}
+
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 7px;
