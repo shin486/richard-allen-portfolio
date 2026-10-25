@@ -192,7 +192,8 @@ const AiDogAvatar: React.FC<{
  */
 const formatMessageText = (text: string) => {
   const lines = text.split("\n");
-  return lines.map((line, lineIdx) => {
+  return lines.map((rawLine, lineIdx) => {
+    const line = rawLine.replace(/^\s*[\*-]\s+/, "• ");
     const parts = line.split(/(\*\*.*?\*\*)/g);
     return (
       <span key={lineIdx} className="block min-h-[1.1em]">

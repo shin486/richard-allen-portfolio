@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 
 // Construct system prompt grounded in verified portfolio data
 const SYSTEM_PROMPT = `
-You are "Byte" 🐾, the loyal AI Cyber-Pup and Portfolio Assistant for Richard Allen Liman (@shin486), an aspiring Full-Stack and Mobile Developer.
-Your role is to answer questions from recruiters, hiring managers, and visitors about Richard's work, experience, technical stack, and availability in a warm, friendly, concise, and professional tone (with an occasional subtle, charming pup pun like "fetching details" or "pawsome" — keep it professional and never overdo it).
+You are "Byte" 🐾, the friendly, intelligent AI Cyber-Pup and Portfolio Assistant for Richard Allen Liman (@shin486), an aspiring Full-Stack and Mobile Developer.
+Speak naturally, conversationally, and directly to the user (like ChatGPT or Gemini), with a warm and helpful tone. Never output your internal reasoning, prompt analysis, or meta-notes — only output your direct conversational reply to the user.
 
 VERIFIED FACTS ABOUT RICHARD ALLEN LIMAN:
 - Name: Richard Allen Liman (preferred name: Richard Allen, handle: @shin486)
@@ -46,10 +46,11 @@ CERTIFICATIONS:
 ${certificatesData.map((c) => `- ${c.title} (Issued by: ${c.issuer}${c.year ? `, ${c.year}` : ""})`).join("\n")}
 
 GUIDELINES FOR YOUR RESPONSES:
-1. Directly and specifically answer the user's exact question. If they ask about multiple projects (e.g., "what did Richard do in ShinPay+ and PalengkeHub"), address ALL mentioned projects clearly.
-2. Only speak about information grounded in the facts above. Do NOT invent companies, salaries, unverified metrics, or projects.
-3. If asked about his availability or hiring, emphasize that he is actively open for OJT / internships and encourage reaching out via email at richardallenliman@gmail.com or his LinkedIn.
-4. Keep answers clear, well-structured (using bold text and bullet points where helpful), and concise.
+1. Respond directly and conversationally to the user's message. Never include "* User Input:", "* Persona:", or internal chain-of-thought notes.
+2. If the user asks about multiple projects (e.g., "what did Richard do in ShinPay+ and PalengkeHub"), address ALL mentioned projects clearly.
+3. Only speak about information grounded in the facts above. Do NOT invent companies, salaries, unverified metrics, or projects.
+4. If asked about his availability or hiring, emphasize that he is actively open for OJT / internships and encourage reaching out via email at richardallenliman@gmail.com or his LinkedIn.
+5. Keep answers well-structured (using bold text and bullet points • where helpful) and concise.
 `;
 
 interface HistoryItem {
@@ -58,13 +59,11 @@ interface HistoryItem {
 }
 
 /**
- * Multi-intent synthesizer that answers compound, role-specific, comparative,
- * and multi-project questions accurately even when no external LLM API key is configured.
+ * Multi-intent synthesizer fallback when no external LLM API key is configured or rate-limited.
  */
 function synthesizePortfolioReply(message: string, history: HistoryItem[] = []): string {
   const lower = message.toLowerCase().trim();
 
-  // 1. Detect all matched projects in the current query
   const projectMatchers: { project: Project; keywords: string[]; whatHeDid: string }[] = [
     {
       project: projectsData[0], // PalengkeHub
@@ -104,7 +103,6 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
     },
   ];
 
-  // Check if user says "it", "that", "both", "those" referring to previous message
   let matchedEntries = projectMatchers.filter((entry) =>
     entry.keywords.some((kw) => lower.includes(kw))
   );
@@ -123,7 +121,6 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
     );
   }
 
-  // Detect question intent
   const isAskingWhatHeDidOrRole =
     /\b(what did richard do|what did he do|what does he do|his role|role in|contribute|contribution|responsible|how did he build|what he built|work on|did in)\b/.test(
       lower
@@ -137,10 +134,8 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
   const isAskingWhenOrTimeline =
     /\b(when|date|year|timeline|how long|started|completed)\b/.test(lower);
 
-  // If 1 or more specific projects were mentioned:
   if (matchedEntries.length > 0) {
     if (matchedEntries.length > 1) {
-      // Multi-project response (e.g., "what did richard do in shinpay and palengkehub")
       const intro = isAskingWhatHeDidOrRole
         ? `🐾 Here is what Richard did as **Full-Stack Developer** in ${matchedEntries.map((m) => `**${m.project.title}**`).join(" and ")}:`
         : isAskingTechStack
@@ -166,7 +161,6 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
       return `${intro}\n\n${bullets.join("\n\n")}`;
     }
 
-    // Single specific project mentioned
     const { project, whatHeDid } = matchedEntries[0];
     if (isAskingWhatHeDidOrRole) {
       return `🐾 In **${project.title}** (${project.year}), Richard ${whatHeDid.charAt(0).toLowerCase() + whatHeDid.slice(1)}`;
@@ -186,7 +180,6 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
     return `🐾 **${project.title}** — *${project.subtitle}* (${project.year})\n\n• **What Richard Did:** ${whatHeDid}\n• **Tech Stack:** **${project.technologies.join(", ")}**${project.githubUrl ? `\n• **GitHub:** ${project.githubUrl}` : ""}`;
   }
 
-  // General intent checks when no specific single project name was typed
   if (
     /\b(ojt|intern|internship|available|availability|hire|hiring|open to work|job|opportunity|recruit)\b/.test(
       lower
@@ -235,9 +228,6 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
   return `Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Here's a quick summary of what I can help you with:\n\n• **His 6 Projects:** PalengkeHub, ShinPay+, IT Elective 4 Project, Auto Avenue, AVMS, and Crave Cart\n• **His Role & Contributions:** Full-Stack Web & Mobile architecture, Supabase RLS, REST APIs, and database design\n• **Education & Availability:** 4th-year BSIT at **De La Salle Lipa** (June 2027), actively open for **OJT / internships**\n\nTry asking: *"What did Richard do in ShinPay+ and PalengkeHub?"* or *"Compare his mobile and web projects!"*`;
 }
 
-/**
- * Clean an API key that might have quotes, whitespace, or accidental "KEY_NAME=" prefix from copy-pasting
- */
 function sanitizeApiKey(raw?: string): string {
   if (!raw) return "";
   let cleaned = raw.trim();
@@ -253,7 +243,27 @@ function sanitizeApiKey(raw?: string): string {
 }
 
 /**
- * Calls Google Gemini REST API directly, auto-discovering enabled models for the key if needed.
+ * Strips any leaked internal reasoning blocks if a model ever outputs meta-bullets
+ */
+function cleanModelOutput(rawText: string): string {
+  let cleaned = rawText.trim();
+  // Remove any lines starting with "* User Input:", "* Persona:", "* Goal:", etc.
+  if (cleaned.includes("* User Input:") || cleaned.includes("* Persona:")) {
+    const lines = cleaned.split("\n");
+    const filtered = lines.filter(
+      (line) =>
+        !/^\s*\*\s*(User Input|Persona|Goal|Name|Role|Capabilities|Projects|Tone|Context|Analysis|Constraint|Plan):/i.test(
+          line
+        )
+    );
+    cleaned = filtered.join("\n").trim();
+  }
+  return cleaned;
+}
+
+/**
+ * Calls Google Gemini REST API directly, disabling internal thinking tokens on 2.5 models
+ * and filtering out `thought: true` parts so only the clean conversational response is returned.
  */
 async function callGeminiRestApi(
   apiKey: string,
@@ -268,9 +278,8 @@ async function callGeminiRestApi(
           .join("\n")}\n`
       : "";
 
-  const fullPrompt = `${SYSTEM_PROMPT}${historyText}\nVisitor Question: ${message}\n\nByte's Response:`;
+  const fullPrompt = `${SYSTEM_PROMPT}${historyText}\nVisitor message: "${message}"\n\nRespond directly to the visitor as Byte (do not include any reasoning steps or meta notes):`;
 
-  // Priority order of fast Gemini/Gemma models
   const candidateModels = [
     "models/gemini-2.5-flash",
     "models/gemini-2.5-flash-lite",
@@ -282,7 +291,6 @@ async function callGeminiRestApi(
     "models/gemma-3-27b-it",
   ];
 
-  // Discover what models this key actually has access to
   let modelsToTry = [...candidateModels];
   try {
     const listRes = await fetch(
@@ -318,7 +326,6 @@ async function callGeminiRestApi(
       return { error: `ListModels HTTP ${listRes.status}: ${errBody.slice(0, 200)}` };
     }
   } catch (e) {
-    // If listing fails due to network hiccup, still try candidateModels
     console.warn("Could not list Gemini models:", e);
   }
 
@@ -328,6 +335,16 @@ async function callGeminiRestApi(
       const url = `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent?key=${encodeURIComponent(
         apiKey
       )}`;
+
+      const is25Model = modelPath.includes("2.5");
+      const generationConfig: Record<string, unknown> = {
+        temperature: 0.6,
+        maxOutputTokens: 1024,
+      };
+      if (is25Model) {
+        generationConfig.thinkingConfig = { thinkingBudget: 0 };
+      }
+
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -338,22 +355,23 @@ async function callGeminiRestApi(
               parts: [{ text: fullPrompt }],
             },
           ],
-          generationConfig: {
-            temperature: 0.4,
-            maxOutputTokens: 500,
-          },
+          generationConfig,
         }),
         cache: "no-store",
       });
 
       if (res.ok) {
         const data = await res.json();
-        const text =
-          data?.candidates?.[0]?.content?.parts
-            ?.map((p: { text?: string }) => p.text || "")
-            .join("") || "";
-        if (text.trim()) {
-          return { reply: text.trim(), modelUsed: modelPath };
+        const rawParts: Array<{ text?: string; thought?: boolean }> =
+          data?.candidates?.[0]?.content?.parts || [];
+
+        // Filter out internal thinking parts (`thought: true`)
+        const visibleParts = rawParts.filter((p) => !p.thought && typeof p.text === "string");
+        const rawText = visibleParts.map((p) => p.text || "").join("").trim();
+        const cleanedText = cleanModelOutput(rawText);
+
+        if (cleanedText) {
+          return { reply: cleanedText, modelUsed: modelPath };
         }
       } else {
         const errText = await res.text();
@@ -395,7 +413,6 @@ export async function POST(req: Request) {
           model: geminiResult.modelUsed,
         });
       }
-      // If Gemini key had an error, log it and fall back cleanly to the multi-intent synthesizer
       console.warn("Gemini API fallback triggered:", geminiResult.error);
       return NextResponse.json({
         reply: synthesizePortfolioReply(message, history),
