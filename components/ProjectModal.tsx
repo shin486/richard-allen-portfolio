@@ -37,7 +37,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
     }
   }, [project]);
 
-  // Handle ESC key and scroll lock
+  // Handle ESC key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -46,12 +46,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
     };
 
     if (project) {
-      document.body.style.overflow = "hidden";
       window.addEventListener("keydown", handleKeyDown);
     }
 
     return () => {
-      document.body.style.overflow = "";
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [project, onClose]);

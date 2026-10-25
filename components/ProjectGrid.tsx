@@ -8,6 +8,8 @@ import {
   Bookmark,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  CheckCircle,
   CheckCircle2,
   ArrowUpRight,
   Github,
@@ -33,6 +35,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery }) => {
     null
   );
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isBreakdownExpanded, setIsBreakdownExpanded] = useState(false);
   const [likedIds, setLikedIds] = useState<Record<string, boolean>>({});
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
@@ -252,7 +255,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery }) => {
                   return (
                     <div
                       key={project.id}
-                      onClick={() => setActiveModalProject(project)}
+                      onClick={() => setIsBreakdownExpanded((prev) => !prev)}
                       className="w-full h-full flex-shrink-0 relative cursor-pointer overflow-hidden"
                     >
                       <Image
@@ -492,15 +495,50 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery }) => {
                   ))}
                 </div>
 
+                {/* Inline Project Breakdown (Expands directly on the page, no modal layer lock) */}
+                {isBreakdownExpanded && (
+                  <div className="pt-3.5 pb-1 space-y-3 border-t border-neutral-100 dark:border-zinc-800/80 animate-fade-in">
+                    {/* Key Features */}
+                    {activeProject.keyFeatures &&
+                      activeProject.keyFeatures.length > 0 && (
+                        <div>
+                          <h4 className="text-[11px] font-bold uppercase tracking-wider text-neutral-500 dark:text-zinc-400 mb-2 flex items-center gap-1.5">
+                            <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                            Key Features &amp; Architecture
+                          </h4>
+                          <ul className="space-y-2">
+                            {activeProject.keyFeatures.map((feature, idx) => (
+                              <li
+                                key={idx}
+                                className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-700 dark:text-zinc-300"
+                              >
+                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-ig-pink flex-shrink-0" />
+                                <span className="leading-relaxed">{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                  </div>
+                )}
+
                 {/* Action Footer Buttons */}
                 <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
                   <div className="flex flex-wrap items-center gap-2">
                     <button
-                      onClick={() => setActiveModalProject(activeProject)}
+                      onClick={() => setIsBreakdownExpanded((prev) => !prev)}
                       className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-ig-gradient hover:opacity-90 active:scale-95 transition-all shadow-sm"
                     >
-                      <span>View Project Breakdown</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
+                      <span>
+                        {isBreakdownExpanded
+                          ? "Hide Breakdown"
+                          : "View Project Breakdown"}
+                      </span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          isBreakdownExpanded ? "rotate-180" : ""
+                        }`}
+                      />
                     </button>
 
                     {activeProject.githubUrl && (
