@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { JourneyTimeline } from "@/components/JourneyTimeline";
+import { Highlights } from "@/components/Highlights";
+import { HighlightViewer } from "@/components/highlights/HighlightViewer";
 import { PortfolioTabs, PortfolioTabType } from "@/components/PortfolioTabs";
 import { ProjectGrid } from "@/components/ProjectGrid";
 import { SkillsSection } from "@/components/SkillsSection";
@@ -17,6 +18,7 @@ import { Reveal } from "@/components/Reveal";
 import { projectsData } from "@/data/projects";
 import { skillsData } from "@/data/skills";
 import { certificatesData } from "@/data/certificates";
+import { highlightsData } from "@/data/highlights";
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,6 +29,14 @@ export default function HomePage() {
     projectId: string;
     nonce: number;
   } | null>(null);
+
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [activeHighlightIndex, setActiveHighlightIndex] = useState(0);
+
+  const handleOpenHighlight = (index: number) => {
+    setActiveHighlightIndex(index);
+    setIsViewerOpen(true);
+  };
 
   const scrollToSection = (sectionId: string) => {
     const targetId =
@@ -92,9 +102,9 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Journey Timeline (entrance: after profile) */}
+        {/* Curated Story Highlights (entrance: after profile) */}
         <div className="rise-in" style={{ animationDelay: "180ms" }}>
-          <JourneyTimeline onViewProject={handleViewProject} />
+          <Highlights onOpenHighlight={handleOpenHighlight} />
         </div>
 
         {/* Instagram Post & Navigation Tabs */}
@@ -132,6 +142,14 @@ export default function HomePage() {
           <ContactSection />
         </Reveal>
       </main>
+
+      {/* Instagram Story Viewer Modal */}
+      <HighlightViewer
+        isOpen={isViewerOpen}
+        initialHighlightIndex={activeHighlightIndex}
+        highlights={highlightsData}
+        onClose={() => setIsViewerOpen(false)}
+      />
 
       {/* Instagram DM AI Portfolio Assistant */}
       <AiChatDrawer />

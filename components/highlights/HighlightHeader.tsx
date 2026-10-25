@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { X, CheckCircle2, Pause, Play } from "lucide-react";
 import { profileData } from "@/data/profile";
+import profilePic from "@/assets/PROFILEPIC.png";
 
 interface HighlightHeaderProps {
   highlightTitle: string;
@@ -27,7 +28,7 @@ export const HighlightHeader: React.FC<HighlightHeaderProps> = ({
         <div className="w-8 h-8 rounded-full p-[1.5px] bg-ig-gradient shadow-sm">
           <div className="w-full h-full bg-slate-900 rounded-full overflow-hidden relative">
             <Image
-              src={profileData.avatarUrl}
+              src={profilePic}
               alt={profileData.name}
               fill
               className="object-cover"

@@ -18,7 +18,7 @@ export interface HighlightStory {
   features?: string[];
   badge?: string;
   timeAgo?: string;
-  duration?: number; // duration in ms (default: 5000ms)
+  duration?: number; // duration in ms (default: 5500ms)
   quote?: string;
   authorNote?: string;
   githubUrl?: string;
@@ -31,266 +31,264 @@ export interface HighlightStory {
 export interface HighlightGroup {
   id: string;
   title: string;
-  coverIcon: string;
+  coverIcon: "Trophy" | "ShieldCheck" | "Sparkles" | "GraduationCap" | "Briefcase";
   timeAgo?: string;
   stories: HighlightStory[];
 }
 
+/**
+ * Curated Milestones & Spotlights
+ * Authentic Instagram Story Highlights providing narrative proof of work
+ * without repeating the main page tabs.
+ */
 export const highlightsData: HighlightGroup[] = [
   {
-    id: "about",
-    title: "About",
-    coverIcon: "User",
-    timeAgo: "1d ago",
+    id: "capstone",
+    title: "Capstone",
+    coverIcon: "Trophy",
+    timeAgo: "Defended",
     stories: [
       {
-        id: "about-1",
-        type: "text",
-        heading: "Hi, I'm Richard Allen",
-        subheading: "Aspiring Full-Stack Developer",
-        description:
-          "I'm an Information Technology student at De La Salle Lipa passionate about building practical, user-focused web and mobile applications.",
-        quote: "Turning everyday ideas into intuitive digital experiences.",
-        badge: "About Me",
-        timeAgo: "1d ago",
-        duration: 5500,
-      },
-      {
-        id: "about-2",
-        type: "text",
-        heading: "What I Love Building",
-        subheading: "Full-Stack & Mobile Development",
-        description:
-          "I specialize in bridging responsive frontend interfaces (React, Next.js, React Native) with scalable backend architectures and SQL databases.",
-        items: [
-          { title: "Mobile Apps", subtitle: "React Native & Expo cross-platform utilities", tag: "Mobile" },
-          { title: "Modern Web Apps", subtitle: "Next.js, TypeScript & Tailwind CSS", tag: "Web" },
-          { title: "Backend Systems", subtitle: "Supabase, PostgreSQL & RESTful APIs", tag: "Backend" },
-        ],
-        badge: "Focus Areas",
-        timeAgo: "1d ago",
-        duration: 6000,
-      },
-      {
-        id: "about-3",
-        type: "text",
-        heading: "My Goal & Mindset",
-        subheading: "Preparing for OJT & Internships",
-        description:
-          "I am actively seeking an internship or On-the-Job Training opportunity where I can collaborate with talented engineering teams, build real-world software, and continuously elevate my technical craft.",
-        quote: "Always learning, building, and solving real user problems.",
-        badge: "Open to Work",
-        timeAgo: "1d ago",
-        duration: 5500,
-      },
-    ],
-  },
-
-  {
-    id: "projects",
-    title: "Projects",
-    coverIcon: "Code2",
-    timeAgo: "2d ago",
-    stories: [
-      {
-        id: "proj-palengkehub",
+        id: "capstone-1",
         type: "project",
-        heading: "PalengkeHub",
-        subheading: "Featured Project • Capstone",
+        heading: "PalengkeHub Capstone",
+        subheading: "Public-Market Price Transparency & Pre-Ordering",
         description:
-          "A mobile marketplace application for public-market price transparency and pre-ordering with Supabase authentication and database workflows.",
+          "Developed a mobile marketplace application addressing commodity price opacity and pre-ordering in the Lipa City Public Market.",
         image: "/projects/palengkehub.svg",
-        technologies: ["JavaScript", "React Native", "Supabase", "HTML"],
-        badge: "Capstone Project",
+        technologies: ["JavaScript", "React Native", "Supabase", "Expo"],
+        badge: "Capstone Thesis",
         githubUrl: "https://github.com/shin486/PalengkeHubFinal",
-        timeAgo: "2d ago",
-        duration: 6500,
+        timeAgo: "Thesis Completed",
+        duration: 6000,
       },
       {
-        id: "proj-others",
+        id: "capstone-2",
         type: "text",
-        heading: "More Projects",
-        subheading: "Full-Stack & Web Projects",
+        heading: "What Richard Engineered",
+        subheading: "Full-Stack Mobile Architecture",
         description:
-          "Additional SaaS, full-stack, and web systems I have built.",
+          "Engineered the consumer pre-ordering workflows, stall locator map, and Supabase database schemas supporting consumer, vendor, and admin operations.",
         items: [
-          { title: "ShinPay+", subtitle: "Multi-Tenant Payroll & HR SaaS (In Progress)", tag: "Next.js 14" },
-          { title: "IT Elective 4 Project", subtitle: "Full-Stack CRUD & Gemini AI Integration", tag: "TypeScript" },
-          { title: "Auto Avenue", subtitle: "Centralized Inventory Management System (IMS)", tag: "PHP / MySQL" },
-          { title: "AVMS", subtitle: "Automated Visitor Management System (ITSM)", tag: "ITSM" },
-          { title: "Crave Cart", subtitle: "Food Ordering System (IT Elective 1)", tag: "Node.js" },
+          {
+            title: "Price Transparency",
+            subtitle: "Real-time commodity price monitoring aligned with DTI standards",
+            tag: "Mobile",
+          },
+          {
+            title: "Vendor Workflows",
+            subtitle: "Stall locating, product management, and order transaction logging",
+            tag: "Supabase",
+          },
+          {
+            title: "Role & Timeline",
+            subtitle: "Full-Stack Developer • September 2025 – October 2026",
+            tag: "Thesis Defended",
+          },
         ],
-        buttonText: "View All on GitHub",
-        buttonUrl: "https://github.com/shin486",
-        badge: "Projects",
-        timeAgo: "2d ago",
+        quote: "Transforming everyday community commerce through clean mobile architecture.",
+        badge: "Architecture",
+        timeAgo: "2025–2026",
         duration: 6500,
       },
     ],
   },
-
   {
-    id: "skills",
-    title: "Skills",
-    coverIcon: "Terminal",
-    timeAgo: "3d ago",
+    id: "cisco-ccna",
+    title: "Cisco CCNA",
+    coverIcon: "ShieldCheck",
+    timeAgo: "Dual Cert",
     stories: [
       {
-        id: "skills-frontend",
-        type: "skills",
-        heading: "Frontend & Languages",
-        subheading: "Core Stack",
+        id: "cisco-1",
+        type: "certificate",
+        heading: "CCNA: Enterprise Networking, Security, & Automation",
+        subheading: "Cisco Networking Academy • 2026",
         description:
-          "Building modern, accessible, and high-performance user interfaces across web and mobile platforms.",
-        items: [
-          { title: "JavaScript (ES6+)", subtitle: "Async/Await, DOM, Events", tag: "Language" },
-          { title: "TypeScript", subtitle: "Strong typing, Interfaces, Next.js", tag: "Language" },
-          { title: "React & Next.js", subtitle: "App Router, Hooks, SSR/SSG", tag: "Frontend" },
-          { title: "React Native", subtitle: "Expo mobile development", tag: "Mobile" },
-          { title: "Tailwind CSS", subtitle: "Modern responsive utility systems", tag: "Styling" },
-        ],
-        badge: "Frontend Stack",
-        timeAgo: "3d ago",
+          "Configuring enterprise routing protocols (OSPF), network security access-control lists (ACLs), site-to-site VPNs, and network automation workflows.",
+        badge: "Cisco Certified",
+        timeAgo: "2026",
         duration: 5500,
       },
       {
-        id: "skills-backend-tools",
-        type: "skills",
-        heading: "Backend, DB & Tools",
-        subheading: "Data & Workflow",
+        id: "cisco-2",
+        type: "certificate",
+        heading: "CCNA: Switching, Routing, & Wireless Essentials",
+        subheading: "Cisco Networking Academy • 2025",
         description:
-          "Configuring reliable databases, REST APIs, and collaborative developer workflows.",
-        items: [
-          { title: "Supabase & PostgreSQL", subtitle: "Relational queries, Auth, RLS", tag: "Database" },
-          { title: "MySQL", subtitle: "Schema design, Normalization, Joins", tag: "Database" },
-          { title: "Git & GitHub", subtitle: "Version control, Branching, PRs", tag: "Tools" },
-          { title: "Figma", subtitle: "UI/UX wireframing & prototyping", tag: "Design" },
-          { title: "VS Code & Expo", subtitle: "Development environment & testing", tag: "Dev Tools" },
-        ],
-        badge: "Backend & Tooling",
-        timeAgo: "3d ago",
+          "Configuring enterprise VLANs, inter-VLAN routing, STP, EtherChannel, and wireless LAN controllers (WLC) in complex topologies.",
+        badge: "Cisco Certified",
+        timeAgo: "2025",
         duration: 5500,
+      },
+      {
+        id: "cisco-3",
+        type: "certificate",
+        heading: "Python Essentials 1 & 2",
+        subheading: "Cisco Networking Academy",
+        description:
+          "Certified mastery of Python fundamentals, data structures, object-oriented programming, and scripting for automation.",
+        badge: "Cisco Verified",
+        timeAgo: "Verified",
+        duration: 5000,
       },
     ],
   },
-
   {
-    id: "certificates",
-    title: "Certificates",
-    coverIcon: "Award",
-    timeAgo: "4d ago",
+    id: "ai-gemini",
+    title: "AI & Gemini",
+    coverIcon: "Sparkles",
+    timeAgo: "Live API",
     stories: [
       {
-        id: "cert-python-1",
-        type: "certificate",
-        heading: "Python Essentials 1",
-        subheading: "Cisco Networking Academy",
-        badge: "Certification",
-        timeAgo: "4d ago",
-        duration: 5000,
-      },
-      {
-        id: "cert-python-2",
-        type: "certificate",
-        heading: "Python Essentials 2",
-        subheading: "Cisco Networking Academy",
-        badge: "Certification",
-        timeAgo: "4d ago",
-        duration: 5000,
-      },
-      {
-        id: "cert-ethical-hacking",
-        type: "certificate",
-        heading:
-          "Bridging Ethical Hacking and Data Analytics: Building Smarter and Safer Systems",
-        subheading: "De La Salle Lipa",
-        badge: "2026",
-        timeAgo: "4d ago",
+        id: "ai-1",
+        type: "project",
+        heading: "Live Gemini AI Integration",
+        subheading: "IT Elective 4 Project • Full-Stack CRUD + AI",
+        description:
+          "Built a live REST endpoint (POST /api/ai) powered by Google Gemini, returning structured reviews validated with Zod schemas and protected with rate limiting.",
+        image: "/projects/itelect4-project.svg",
+        technologies: ["React", "Express", "Google Gemini API", "Zod", "MongoDB"],
+        badge: "Full-Stack + AI",
+        githubUrl: "https://github.com/shin486/itelect4-project",
+        timeAgo: "Aug 2026 – Present",
         duration: 6000,
       },
       {
-        id: "cert-devroutes",
-        type: "certificate",
-        heading: "DevRoutes: Learning How to Learn with Roadmaps",
-        subheading: "De La Salle Lipa / Swinburne University of Technology",
-        badge: "2026",
-        timeAgo: "4d ago",
-        duration: 6000,
-      },
-      {
-        id: "cert-ai-ethics",
+        id: "ai-2",
         type: "certificate",
         heading: "AI Ethics and Governance",
         subheading: "USAID / Asia Open RAN Academy",
-        badge: "Certification",
-        timeAgo: "4d ago",
-        duration: 5000,
+        description:
+          "Certified in responsible AI deployment frameworks, ethical algorithmic alignment, model bias mitigation, and enterprise data governance.",
+        badge: "USAID Certified",
+        timeAgo: "Certified",
+        duration: 5500,
+      },
+      {
+        id: "ai-3",
+        type: "text",
+        heading: "Byte: The AI Cyber-Pup",
+        subheading: "Interactive Portfolio Companion",
+        description:
+          "Designed and built an interactive AI mascot on this portfolio, powered by Google Gemini 2.5 API with automatic fallback to verified portfolio facts.",
+        quote: "Bridging modern LLM APIs with real-world developer portfolio experiences.",
+        badge: "Live Feature",
+        timeAgo: "Online",
+        duration: 5500,
       },
     ],
   },
-
   {
-    id: "education",
-    title: "Education",
+    id: "dlsl-jpcs",
+    title: "DLSL & JPCS",
     coverIcon: "GraduationCap",
-    timeAgo: "5d ago",
+    timeAgo: "Class 2027",
     stories: [
       {
-        id: "edu-dlsl",
+        id: "dlsl-1",
         type: "education",
         heading: "De La Salle Lipa",
-        subheading: "BS Information Technology",
+        subheading: "BS Information Technology (2023 – June 2027)",
         description:
-          "Currently pursuing a Bachelor of Science in Information Technology with expected graduation in June 2027.",
+          "Pursuing Bachelor of Science in Information Technology at De La Salle Lipa, maintaining focused coursework on full-stack web and mobile systems.",
         items: [
-          { title: "Degree Program", subtitle: "Bachelor of Science in Information Technology", tag: "BSIT" },
-          { title: "Institution", subtitle: "De La Salle Lipa • Lipa City, Batangas", tag: "DLSL" },
-          { title: "Expected Graduation", subtitle: "June 2027", tag: "Class of 2027" },
-          { title: "Academic Focus", subtitle: "Full-Stack Web & Mobile App Development, Databases", tag: "Focus" },
+          {
+            title: "Degree Program",
+            subtitle: "Bachelor of Science in Information Technology",
+            tag: "BSIT",
+          },
+          {
+            title: "Institution",
+            subtitle: "De La Salle Lipa • Lipa City, Batangas",
+            tag: "DLSL",
+          },
+          {
+            title: "Expected Graduation",
+            subtitle: "June 2, 2027",
+            tag: "Class of 2027",
+          },
+          {
+            title: "Current Status",
+            subtitle: "Actively seeking 480+ hour OJT / Internship",
+            tag: "Open to Work",
+          },
         ],
         badge: "Academic Background",
-        timeAgo: "5d ago",
+        timeAgo: "2023 – 2027",
         duration: 6000,
       },
-    ],
-  },
-
-  {
-    id: "organizations",
-    title: "Organizations",
-    coverIcon: "Users",
-    timeAgo: "6d ago",
-    stories: [
       {
-        id: "org-jpcs",
+        id: "dlsl-2",
         type: "text",
         heading: "Junior Philippine Computer Society",
-        subheading: "JPCS — DLSL Chapter",
-        description: "Member",
+        subheading: "JPCS — DLSL Chapter Member",
+        description:
+          "Active student organization member participating in technical workshops, hackathons, and developer community activities.",
+        items: [
+          {
+            title: "Ethical Hacking & Data Analytics",
+            subtitle: "DLSL 2026 symposium participant",
+            tag: "Symposium",
+          },
+          {
+            title: "DevRoutes",
+            subtitle: "Roadmap learning and career readiness with Swinburne University",
+            tag: "Workshop",
+          },
+        ],
         badge: "Organization",
-        timeAgo: "6d ago",
-        duration: 5000,
+        timeAgo: "2023 – Present",
+        duration: 5500,
       },
     ],
   },
-
   {
-    id: "contact",
-    title: "Contact",
-    coverIcon: "Mail",
-    timeAgo: "Just now",
+    id: "immersion",
+    title: "Immersion",
+    coverIcon: "Briefcase",
+    timeAgo: "80 Hours",
     stories: [
       {
-        id: "contact-story",
-        type: "contact",
-        heading: "Let's Connect",
-        subheading: "Open for OJT & Collaboration",
+        id: "immersion-1",
+        type: "text",
+        heading: "Work Immersion Program",
+        subheading: "Creotec Philippines Inc. (80 Hours)",
         description:
-          "Interested in discussing an internship, OJT opportunity, or technical collaboration? Feel free to reach out directly through any of the channels below.",
-        buttonText: "Email Me Directly",
-        buttonUrl: "mailto:richardallenliman@gmail.com?subject=Portfolio%20Inquiry%20/%20OJT%20Opportunity",
-        badge: "Get in Touch",
-        timeAgo: "Just now",
+          "Completed 80 hours of hands-on industry work immersion covering corporate software lifecycles, Agile collaboration, code quality, and professional documentation.",
+        items: [
+          {
+            title: "Industry Immersion",
+            subtitle: "80 hours hands-on corporate tech simulation",
+            tag: "Creotec",
+          },
+          {
+            title: "Professional Standards",
+            subtitle: "Team sprints, code reviews, and technical documentation",
+            tag: "Workflow",
+          },
+          {
+            title: "Readiness",
+            subtitle: "Prepared to transition directly into industry engineering teams",
+            tag: "OJT Ready",
+          },
+        ],
+        badge: "80-Hour Certified",
+        timeAgo: "Certified",
+        duration: 6000,
+      },
+      {
+        id: "immersion-2",
+        type: "contact",
+        heading: "Ready for OJT Opportunities",
+        subheading: "Full-Stack Web & Mobile Development",
+        description:
+          "Open to full-time On-the-Job Training and software engineering internships starting immediately. Ready to contribute across React, Next.js, React Native, and Supabase stacks.",
+        buttonText: "Email Richard Directly",
+        buttonUrl:
+          "mailto:richardallen0901@gmail.com?subject=OJT%20/%20Internship%20Opportunity",
+        badge: "Available Now",
+        timeAgo: "Immediate",
         duration: 6500,
       },
     ],
