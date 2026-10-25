@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { Highlights } from "@/components/Highlights";
+import { JourneyTimeline } from "@/components/JourneyTimeline";
 import { PortfolioTabs, PortfolioTabType } from "@/components/PortfolioTabs";
 import { ProjectGrid } from "@/components/ProjectGrid";
 import { SkillsSection } from "@/components/SkillsSection";
@@ -13,19 +13,19 @@ import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { Reveal } from "@/components/Reveal";
-import { HighlightViewer } from "@/components/highlights/HighlightViewer";
 import { projectsData } from "@/data/projects";
 import { skillsData } from "@/data/skills";
 import { certificatesData } from "@/data/certificates";
-import { highlightsData } from "@/data/highlights";
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<string>("projects");
 
-  // Instagram Story Highlight Viewer State
-  const [isHighlightViewerOpen, setIsHighlightViewerOpen] = useState(false);
-  const [selectedHighlightIndex, setSelectedHighlightIndex] = useState(0);
+  // Lets the Journey Timeline jump the Projects carousel to a specific project
+  const [projectFocus, setProjectFocus] = useState<{
+    projectId: string;
+    nonce: number;
+  } | null>(null);
 
   const scrollToSection = (sectionId: string) => {
     const targetId =
@@ -62,9 +62,11 @@ export default function HomePage() {
     }
   };
 
-  const handleOpenHighlight = (index: number) => {
-    setSelectedHighlightIndex(index);
-    setIsHighlightViewerOpen(true);
+  const handleViewProject = (projectId: string) => {
+    setSearchQuery("");
+    setActiveTab("projects");
+    setProjectFocus({ projectId, nonce: Date.now() });
+    scrollToSection("portfolio-grid");
   };
 
   return (
@@ -89,9 +91,9 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Story / Highlight Bubbles (entrance: after profile) */}
+        {/* Journey Timeline (entrance: after profile) */}
         <div className="rise-in" style={{ animationDelay: "180ms" }}>
-          <Highlights onOpenHighlight={handleOpenHighlight} />
+          <JourneyTimeline onViewProject={handleViewProject} />
         </div>
 
         {/* Instagram Post & Navigation Tabs */}
@@ -113,6 +115,7 @@ export default function HomePage() {
             <ProjectGrid
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
+              focusRequest={projectFocus}
             />
           )}
 
@@ -128,14 +131,6 @@ export default function HomePage() {
           <ContactSection />
         </Reveal>
       </main>
-
-      {/* Full-Screen Instagram Highlight Viewer Overlay */}
-      <HighlightViewer
-        isOpen={isHighlightViewerOpen}
-        initialHighlightIndex={selectedHighlightIndex}
-        highlights={highlightsData}
-        onClose={() => setIsHighlightViewerOpen(false)}
-      />
 
       {/* Footer */}
       <Footer />

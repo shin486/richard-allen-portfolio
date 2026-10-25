@@ -28,9 +28,11 @@ import { ProjectModal } from "./ProjectModal";
 interface ProjectGridProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
+  /** When set (e.g. from the Journey Timeline), the carousel jumps to this project */
+  focusRequest?: { projectId: string; nonce: number } | null;
 }
 
-export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery }) => {
+export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequest }) => {
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(
     null
   );
@@ -60,6 +62,19 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery }) => {
   useEffect(() => {
     setCurrentSlide(0);
   }, [searchQuery]);
+
+  // Jump to a specific project when requested (declared after the reset so it wins)
+  useEffect(() => {
+    if (!focusRequest) return;
+    const index = filteredProjects.findIndex(
+      (p) => p.id === focusRequest.projectId
+    );
+    if (index !== -1) {
+      setCurrentSlide(index);
+      setIsBreakdownExpanded(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusRequest]);
 
   const totalSlides = filteredProjects.length;
   const safeSlideIndex =

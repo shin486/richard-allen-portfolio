@@ -1,5 +1,16 @@
+export interface ProjectMilestone {
+  /** Sortable date in YYYY-MM format (e.g. "2025-09") */
+  date: string;
+  /** Short label shown on the Journey Timeline (e.g. "Started", "Completed") */
+  label: string;
+}
+
 export interface Project {
   id: string;
+  /** Journey Timeline entries — projects without milestones are not shown on the timeline */
+  milestones?: ProjectMilestone[];
+  /** True while the project is still being built (shows a live indicator on the timeline) */
+  inProgress?: boolean;
   title: string;
   subtitle: string;
   description: string;
@@ -23,6 +34,10 @@ export interface Project {
 export const projectsData: Project[] = [
   {
     id: "palengkehub",
+    milestones: [
+      { date: "2025-09", label: "Capstone Started" },
+      { date: "2026-10", label: "Capstone Completed" },
+    ],
     title: "PalengkeHub",
     subtitle: "Public-Market Price Transparency & Pre-Ordering",
     description:
@@ -44,6 +59,8 @@ export const projectsData: Project[] = [
   },
   {
     id: "shinpay-plus",
+    milestones: [{ date: "2026-09", label: "SaaS Build Started" }],
+    inProgress: true,
     title: "ShinPay+",
     subtitle: "Multi-Tenant Payroll & HR SaaS (In Progress)",
     description:
@@ -70,6 +87,8 @@ export const projectsData: Project[] = [
   },
   {
     id: "itelect4-project",
+    milestones: [{ date: "2026-08", label: "Full-Stack + Gemini AI" }],
+    inProgress: true,
     title: "IT Elective 4 Project",
     subtitle: "Full-Stack CRUD & Google Gemini AI Integration",
     description:
@@ -90,6 +109,7 @@ export const projectsData: Project[] = [
   },
   {
     id: "auto-avenue-ims",
+    milestones: [{ date: "2025-04", label: "Project Charter" }],
     title: "Auto Avenue",
     subtitle: "Inventory Management System (Project Charter: April 2025)",
     description:
@@ -110,6 +130,7 @@ export const projectsData: Project[] = [
   },
   {
     id: "avms",
+    milestones: [{ date: "2024-12", label: "ITSM Project" }],
     title: "Automated Visitor Management System (AVMS)",
     subtitle: "IT Service Management (ITSM) Project",
     description:
