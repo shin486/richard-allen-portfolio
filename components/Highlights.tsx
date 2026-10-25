@@ -35,9 +35,9 @@ export const Highlights: React.FC<HighlightsProps> = ({ onOpenHighlight }) => {
   return (
     <section
       aria-label="Story Highlights"
-      className="py-4 border-b border-neutral-200/80 dark:border-zinc-800/80"
+      className="py-2.5 sm:py-4 border-b border-neutral-100 dark:border-zinc-800/80 -mx-4 px-4 sm:mx-0 sm:px-0"
     >
-      <div className="flex items-center gap-4 sm:gap-7 overflow-x-auto no-scrollbar py-2 px-1 sm:justify-start">
+      <div className="flex items-center gap-3.5 sm:gap-7 overflow-x-auto no-scrollbar py-1">
         {highlightsData.map((highlight, index) => {
           const Icon = getHighlightIcon(highlight.coverIcon);
 
@@ -45,27 +45,27 @@ export const Highlights: React.FC<HighlightsProps> = ({ onOpenHighlight }) => {
             <button
               key={highlight.id}
               onClick={() => onOpenHighlight(index)}
-              className="flex flex-col items-center gap-2 group flex-shrink-0 focus:outline-none transition-transform active:scale-95"
+              className="flex flex-col items-center gap-1.5 group flex-shrink-0 focus:outline-none transition-transform active:scale-95"
               aria-label={`View ${highlight.title} story highlight`}
             >
               {/* Instagram Animated Gradient Story Ring */}
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-[2.5px] animated-ig-ring transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
+              <div className="w-[62px] h-[62px] sm:w-20 sm:h-20 rounded-full p-[2.5px] animated-ig-ring transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
                 {/* Inner white / dark gap */}
                 <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] flex items-center justify-center transition-colors duration-200">
                   {/* Bubble interior */}
                   <div className="w-full h-full rounded-full bg-neutral-50 dark:bg-[#16161D] group-hover:bg-pink-50 dark:group-hover:bg-pink-950/30 text-neutral-700 dark:text-zinc-300 group-hover:text-ig-pink dark:group-hover:text-pink-400 flex items-center justify-center transition-colors duration-200">
-                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 transition-transform duration-200 group-hover:scale-110" />
+                    <Icon className="w-5 h-5 sm:w-7 sm:h-7 transition-transform duration-200 group-hover:scale-110" />
                   </div>
                 </div>
               </div>
 
               {/* Highlight Label */}
               <div className="flex flex-col items-center leading-tight">
-                <span className="text-xs sm:text-xs font-semibold tracking-tight text-neutral-800 dark:text-zinc-300 group-hover:text-black dark:group-hover:text-white transition-colors">
+                <span className="text-[11px] sm:text-xs font-semibold tracking-tight text-neutral-800 dark:text-zinc-300 group-hover:text-black dark:group-hover:text-white transition-colors truncate max-w-[68px] sm:max-w-none text-center">
                   {highlight.title}
                 </span>
                 {highlight.timeAgo && (
-                  <span className="text-[10px] text-neutral-400 dark:text-zinc-500 font-mono">
+                  <span className="text-[9px] sm:text-[10px] text-neutral-400 dark:text-zinc-500 font-mono hidden sm:inline">
                     {highlight.timeAgo}
                   </span>
                 )}

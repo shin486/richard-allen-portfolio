@@ -204,7 +204,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
           </div>
 
           {/* Single Authentic Instagram Multi-Photo Carousel Post */}
-          <article className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm transition-all">
+          <article className="bg-white dark:bg-[#111116] border-y sm:border border-neutral-200 dark:border-zinc-800 -mx-4 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden shadow-sm transition-all">
             {/* Instagram Post Header */}
             <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-neutral-100 dark:border-zinc-800/80">
               <div className="flex items-center gap-3 min-w-0">

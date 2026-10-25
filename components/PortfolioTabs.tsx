@@ -59,8 +59,11 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
   };
 
   return (
-    <nav aria-label="Portfolio Navigation Tabs" className="border-t border-neutral-200 dark:border-zinc-800 -mt-[1px]">
-      <div className="flex items-center justify-center sm:justify-center gap-3 sm:gap-12">
+    <nav
+      aria-label="Portfolio Navigation Tabs"
+      className="border-t border-neutral-200 dark:border-zinc-800 -mx-4 sm:mx-0 -mt-[1px]"
+    >
+      <div className="flex items-center justify-around sm:justify-center sm:gap-12">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -69,24 +72,33 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
             <button
               key={tab.id}
               onClick={() => handleTabClick(tab.id)}
-              className={`flex items-center gap-2 py-3.5 sm:py-4 px-2 -mt-[1px] border-t transition-all focus:outline-none ${
+              className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 py-3 sm:py-4 px-2 -mt-[1px] border-t-2 transition-all focus:outline-none ${
                 isActive
                   ? "border-neutral-900 dark:border-zinc-100 text-neutral-900 dark:text-zinc-100 font-semibold"
-                  : "border-transparent text-neutral-500 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200"
+                  : "border-transparent text-neutral-400 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200"
               }`}
               aria-selected={isActive}
               role="tab"
+              title={tab.subLabel}
             >
-              <Icon className={`w-4 h-4 ${isActive ? "text-neutral-900 dark:text-zinc-100" : "text-neutral-500 dark:text-zinc-500"}`} />
-              <span className="text-xs tracking-wider uppercase font-bold">
+              <Icon
+                className={`w-5 h-5 sm:w-4 sm:h-4 ${
+                  isActive
+                    ? "text-neutral-900 dark:text-zinc-100"
+                    : "text-neutral-400 dark:text-zinc-500"
+                }`}
+              />
+              <span className="text-xs tracking-wider uppercase font-bold hidden sm:inline">
                 {tab.label}
               </span>
               {typeof tab.count === "number" && (
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full hidden sm:inline transition-colors ${
-                  isActive
-                    ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 font-bold"
-                    : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
-                }`}>
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full hidden sm:inline transition-colors ${
+                    isActive
+                      ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 font-bold"
+                      : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
+                  }`}
+                >
                   {tab.count}
                 </span>
               )}
