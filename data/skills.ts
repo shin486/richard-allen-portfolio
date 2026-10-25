@@ -19,6 +19,12 @@ export const skillsData: SkillCategory[] = [
     description: "Core programming and query languages used across projects",
     skills: [
       {
+        name: "Python",
+        highlight: true,
+        description: "Python Essentials 1 & 2 (Cisco), automation, data structures",
+        usedIn: ["Academic Coursework", "Cisco Certifications"],
+      },
+      {
         name: "JavaScript",
         highlight: true,
         description: "ES6+, Async/Await, DOM manipulation",
@@ -128,6 +134,11 @@ export const skillsData: SkillCategory[] = [
         description: "Relational inventory & POS database management",
         usedIn: ["Auto Avenue"],
       },
+      {
+        name: "SQLite",
+        description: "Embedded local relational database",
+        usedIn: ["Academic Coursework"],
+      },
     ],
   },
   {
@@ -148,6 +159,12 @@ export const skillsData: SkillCategory[] = [
         usedIn: ["ShinPay+", "IT Elective 4 Project", "Portfolio"],
       },
       {
+        name: "Postman",
+        highlight: true,
+        description: "REST API testing, endpoint debugging & validation",
+        usedIn: ["IT Elective 4 Project"],
+      },
+      {
         name: "Vite",
         description: "Fast frontend build tooling and dev server",
         usedIn: ["IT Elective 4 Project"],
@@ -159,6 +176,11 @@ export const skillsData: SkillCategory[] = [
         usedIn: ["PalengkeHub", "ShinPay+"],
       },
       {
+        name: "Linux",
+        description: "Basic shell navigation, scripts, system environments",
+        usedIn: ["Development & Academic"],
+      },
+      {
         name: "VS Code",
         description: "Primary code editor, extensions, debugging",
         usedIn: ["All Projects"],
@@ -168,6 +190,11 @@ export const skillsData: SkillCategory[] = [
         highlight: true,
         description: "React Native mobile development & testing",
         usedIn: ["PalengkeHub"],
+      },
+      {
+        name: "PowerBI & UiPath",
+        description: "Data visualization & basic Robotic Process Automation",
+        usedIn: ["Academic Coursework"],
       },
     ],
   },

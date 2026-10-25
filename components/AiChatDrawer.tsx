@@ -318,14 +318,18 @@ const getLocalByteReply = (message: string): string => {
   ) {
     return "🐾 Richard is pursuing his **Bachelor of Science in Information Technology (BSIT)** at **De La Salle Lipa** (2023 – June 2027), focusing on scalable web systems, mobile application architecture, and database design. He is also an active member of the **Junior Philippine Computer Society (JPCS) - DLSL Chapter**.";
   }
+  if (lower.includes("resume") || lower.includes("cv") || lower.includes("biodata")) {
+    return "🐾 You can view or download Richard's official 1-page resume directly here: [**Download Resume (PDF)**](/resume.pdf) — featuring his BSIT education at **De La Salle Lipa**, verified projects (**PalengkeHub**, **ShinPay+**, **IT Elective 4**), skills, and Cisco certifications!";
+  }
   if (
     lower.includes("contact") ||
     lower.includes("email") ||
     lower.includes("reach") ||
     lower.includes("linkedin") ||
-    lower.includes("github")
+    lower.includes("github") ||
+    lower.includes("phone")
   ) {
-    return "🐾 You can get in touch with Richard directly via:\n\n• **Email:** richardallenliman@gmail.com\n• **GitHub:** https://github.com/shin486\n• **LinkedIn:** https://www.linkedin.com/in/allenliman";
+    return "🐾 You can get in touch with Richard directly via:\n\n• **Email:** richardallen0901@gmail.com\n• **Phone:** 09936105240\n• **GitHub:** https://github.com/shin486\n• **LinkedIn:** https://www.linkedin.com/in/allen-liman-00637438a\n• **Resume:** /resume.pdf";
   }
   if (lower.includes("project") || lower.includes("built") || lower.includes("portfolio")) {
     return "🐾 Richard has built **6 official projects**:\n\n1. **PalengkeHub** — Mobile Market & Price Transparency App (React Native, Supabase)\n2. **ShinPay+** — Multi-Tenant Payroll & HR SaaS (Next.js 14, TypeScript, Supabase)\n3. **IT Elective 4 Project** — Full-Stack App + Gemini AI API (React, Express, MongoDB)\n4. **Auto Avenue** — Web Inventory Management System (PHP, MySQL)\n5. **AVMS** — Automated Visitor Management System (ITSM / QR Check-in)\n6. **Crave Cart** — Web Food Ordering System (Node.js, JS)\n\nAsk me about any combination of these and I'll fetch the details!";

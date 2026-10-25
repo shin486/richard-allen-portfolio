@@ -8,6 +8,7 @@ export interface SocialLinks {
   github: string;
   linkedin: string;
   email: string;
+  phone?: string;
   resumeUrl: string;
 }
 
@@ -50,7 +51,7 @@ export const profileData: ProfileData = {
   educationSummary: {
     degree: "Bachelor of Science in Information Technology",
     school: "De La Salle Lipa",
-    expectedGraduation: "June 2027",
+    expectedGraduation: "June 2, 2027",
     location: "Lipa City, Batangas, Philippines",
   },
 
@@ -85,8 +86,9 @@ export const profileData: ProfileData = {
 
   socials: {
     github: "https://github.com/shin486",
-    linkedin: "https://www.linkedin.com/in/allenliman",
-    email: "richardallenliman@gmail.com",
+    linkedin: "https://www.linkedin.com/in/allen-liman-00637438a",
+    email: "richardallen0901@gmail.com",
+    phone: "09936105240",
     resumeUrl: "/resume.pdf",
   },
 

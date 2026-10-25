@@ -12,10 +12,12 @@ Speak naturally, conversationally, and directly to the user (like ChatGPT or Gem
 
 VERIFIED FACTS ABOUT RICHARD ALLEN LIMAN:
 - Name: Richard Allen Liman (preferred name: Richard Allen, handle: @shin486)
-- Education: Bachelor of Science in Information Technology (BSIT) at De La Salle Lipa (Lipa City, Batangas, Philippines), 2023 – June 2027 (Expected Graduation: June 2027).
+- Education: Bachelor of Science in Information Technology (BSIT) at De La Salle Lipa (Lipa City, Batangas, Philippines), 2023 – June 2027 (Expected Graduation: June 2, 2027).
+- Location: Mataas na Kahoy, Batangas, Philippines.
 - Organization: Active Member, Junior Philippine Computer Society (JPCS) - De La Salle Lipa Chapter (2023 – Present).
 - Career Goal: Open and actively seeking On-the-Job Training (OJT), internship, and junior full-stack / mobile developer opportunities.
-- Contact: richardallenliman@gmail.com | GitHub: https://github.com/shin486 | LinkedIn: https://www.linkedin.com/in/allenliman
+- Contact: richardallen0901@gmail.com | Phone: 09936105240 | GitHub: https://github.com/shin486 | LinkedIn: https://www.linkedin.com/in/allen-liman-00637438a
+- Resume: Official 1-page PDF available at /resume.pdf (includes verified projects PalengkeHub, ShinPay+, IT Elective 4, Cisco Python certifications, and DLSL education).
 
 OFFICIAL PROJECTS (Exactly these 6):
 ${projectsData
@@ -208,8 +210,12 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
     return `🐾 Richard is pursuing his **Bachelor of Science in Information Technology (BSIT)** at **De La Salle Lipa** in Lipa City, Batangas (2023 – June 2027). He is also an active member of the **Junior Philippine Computer Society (JPCS) - DLSL Chapter**.`;
   }
 
-  if (/\b(contact|email|reach|linkedin|github|social|message)\b/.test(lower)) {
-    return `🐾 You can reach Richard directly via:\n\n• **Email:** richardallenliman@gmail.com\n• **GitHub:** https://github.com/shin486\n• **LinkedIn:** https://www.linkedin.com/in/allenliman`;
+  if (/\b(resume|cv|curriculum vitae|biodata)\b/.test(lower)) {
+    return `🐾 You can view or download Richard's official 1-page resume directly here: [**Download Resume (PDF)**](/resume.pdf) — featuring his education at **De La Salle Lipa**, verified projects (**PalengkeHub**, **ShinPay+**, **IT Elective 4**), skills, and Cisco certifications!`;
+  }
+
+  if (/\b(contact|email|reach|linkedin|github|social|message|phone)\b/.test(lower)) {
+    return `🐾 You can reach Richard directly via:\n\n• **Email:** richardallen0901@gmail.com\n• **Phone:** 09936105240\n• **GitHub:** https://github.com/shin486\n• **LinkedIn:** https://www.linkedin.com/in/allen-liman-00637438a\n• **Resume:** /resume.pdf`;
   }
 
   if (

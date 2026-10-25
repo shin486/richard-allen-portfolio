@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Mail, Send, MessageSquare, Check } from "lucide-react";
+import { Mail, Send, MessageSquare, Check, FileText } from "lucide-react";
 import { profileData } from "@/data/profile";
 
 export const ContactSection: React.FC = () => {
@@ -73,6 +73,17 @@ export const ContactSection: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               Available for OJT
             </div>
+
+            <a
+              href={profileData.socials.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              download="Richard_Allen_Liman_Resume.pdf"
+              className="inline-flex items-center justify-center gap-1.5 w-full px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-zinc-800 hover:bg-neutral-100 dark:hover:bg-zinc-700 text-neutral-800 dark:text-zinc-200 border border-neutral-300 dark:border-zinc-700 transition-all shadow-sm active:scale-95"
+            >
+              <FileText className="w-3.5 h-3.5 text-ig-purple" />
+              <span>Download Resume (PDF)</span>
+            </a>
           </div>
         </div>
 
