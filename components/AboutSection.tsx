@@ -7,7 +7,7 @@ import { profileData } from "@/data/profile";
 
 export const AboutSection: React.FC = () => {
   return (
-    <section id="about-section" className="py-8 sm:py-10 border-t border-neutral-200 dark:border-zinc-800">
+    <section id="about-section" className="py-6 sm:py-8">
       {/* Section Header */}
       <div className="flex items-center gap-2.5 mb-6">
         <div className="w-8 h-8 rounded-lg p-[1.5px] animated-ig-ring">

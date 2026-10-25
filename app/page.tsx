@@ -28,16 +28,26 @@ export default function HomePage() {
   const [selectedHighlightIndex, setSelectedHighlightIndex] = useState(0);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const navOffset = 70;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
+    const targetId =
+      sectionId === "portfolio-grid" ||
+      sectionId === "skills-section" ||
+      sectionId === "certificates-section" ||
+      sectionId === "about-section"
+        ? "portfolio-tabs"
+        : sectionId;
+
+    setTimeout(() => {
+      const element = document.getElementById(targetId);
+      if (element) {
+        const navOffset = 70;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    }, 30);
   };
 
   const handleTabChange = (tab: PortfolioTabType) => {
@@ -85,38 +95,33 @@ export default function HomePage() {
         </div>
 
         {/* Instagram Post & Navigation Tabs */}
-        <Reveal>
-          <PortfolioTabs
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            projectCount={projectsData.length}
-            skillCategoriesCount={skillsData.length}
-            certCount={certificatesData.length}
-          />
-        </Reveal>
+        <div id="portfolio-tabs">
+          <Reveal>
+            <PortfolioTabs
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              projectCount={projectsData.length}
+              skillCategoriesCount={skillsData.length}
+              certCount={certificatesData.length}
+            />
+          </Reveal>
+        </div>
 
-        {/* Project Grid (POSTS) */}
-        <Reveal>
-          <ProjectGrid
-            searchQuery={searchQuery}
-            onSearchChange={handleSearchChange}
-          />
-        </Reveal>
+        {/* Active Tab Content — only renders the selected tab when clicked */}
+        <div key={activeTab} className="animate-fade-in">
+          {activeTab === "projects" && (
+            <ProjectGrid
+              searchQuery={searchQuery}
+              onSearchChange={handleSearchChange}
+            />
+          )}
 
-        {/* Skills Section (TAGGED) */}
-        <Reveal>
-          <SkillsSection />
-        </Reveal>
+          {activeTab === "skills" && <SkillsSection />}
 
-        {/* Certificates Grid (SAVED) */}
-        <Reveal>
-          <CertificateGrid />
-        </Reveal>
+          {activeTab === "certificates" && <CertificateGrid />}
 
-        {/* About Section (ABOUT) */}
-        <Reveal>
-          <AboutSection />
-        </Reveal>
+          {activeTab === "about" && <AboutSection />}
+        </div>
 
         {/* Contact / Direct Message Section */}
         <Reveal>

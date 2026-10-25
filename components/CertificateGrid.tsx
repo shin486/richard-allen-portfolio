@@ -7,7 +7,7 @@ import { certificatesData } from "@/data/certificates";
 
 export const CertificateGrid: React.FC = () => {
   return (
-    <section id="certificates-section" className="py-8 sm:py-10 border-t border-neutral-200 dark:border-zinc-800">
+    <section id="certificates-section" className="py-6 sm:py-8">
       {/* Section Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2.5">

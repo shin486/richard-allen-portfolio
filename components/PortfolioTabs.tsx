@@ -54,18 +54,8 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
     },
   ];
 
-  const handleTabClick = (tabId: PortfolioTabType, sectionId: string) => {
+  const handleTabClick = (tabId: PortfolioTabType) => {
     onTabChange(tabId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const navOffset = 70;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
   };
 
   return (
@@ -78,7 +68,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
           return (
             <button
               key={tab.id}
-              onClick={() => handleTabClick(tab.id, tab.sectionId)}
+              onClick={() => handleTabClick(tab.id)}
               className={`flex items-center gap-2 py-3.5 sm:py-4 px-2 -mt-[1px] border-t transition-all focus:outline-none ${
                 isActive
                   ? "border-neutral-900 dark:border-zinc-100 text-neutral-900 dark:text-zinc-100 font-semibold"
