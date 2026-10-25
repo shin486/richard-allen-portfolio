@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
 import Image from "next/image";
@@ -41,7 +41,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
-          onError={() => setImgSrc(project.image)}
+          onError={() => setImgSrc("/placeholder-project.svg")}
         />
 
         {/* Desktop Hover Overlay */}

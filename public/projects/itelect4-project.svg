@@ -1,17 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
   <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#17153b"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
     <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F58529"/>
-      <stop offset="50%" stop-color="#DD2A7B"/>
-      <stop offset="100%" stop-color="#8134AF"/>
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ec4899"/>
     </linearGradient>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="1"/>
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
     </pattern>
   </defs>
-  <rect width="800" height="600" fill="#0f172a"/>
+  <rect width="800" height="600" fill="url(#bg)"/>
   <rect width="800" height="600" fill="url(#grid)"/>
-  <rect x="330" y="215" width="140" height="6" rx="3" fill="url(#accent)"/>
-  <text x="400" y="290" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#f1f5f9">ITElect4 Project</text>
-  <text x="400" y="330" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">Project screenshot placeholder</text>
+  <circle cx="660" cy="140" r="180" fill="#8b5cf6" fill-opacity="0.09"/>
+  <circle cx="140" cy="460" r="180" fill="#ec4899" fill-opacity="0.08"/>
+  <rect x="330" y="210" width="140" height="6" rx="3" fill="url(#accent)"/>
+  <text x="400" y="280" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="36" font-weight="800" fill="#f8fafc">IT Elective 4 Project</text>
+  <text x="400" y="320" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="500" fill="#94a3b8">Full-Stack CRUD &amp; Google Gemini AI Integration</text>
+  <text x="400" y="360" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" fill="#64748b">TypeScript • React • Vite • Express • MongoDB</text>
 </svg>

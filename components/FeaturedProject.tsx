@@ -40,6 +40,9 @@ export const FeaturedProject: React.FC<FeaturedProjectProps> = ({
             <h3 className="font-bold text-2xl sm:text-3xl tracking-tight text-neutral-900 dark:text-zinc-100 group-hover:text-ig-pink transition-colors">
               {project.title}
             </h3>
+            <p className="text-sm font-semibold text-neutral-500 dark:text-zinc-400 mt-1">
+              {project.subtitle}
+            </p>
             <p className="mt-3 text-sm sm:text-base text-neutral-600 dark:text-zinc-400 leading-relaxed">
               {project.description}
             </p>
@@ -93,7 +96,7 @@ export const FeaturedProject: React.FC<FeaturedProjectProps> = ({
               fill
               sizes="(max-width: 1024px) 100vw, 60vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-              onError={() => setImgSrc("/projects/palengkehub.svg")}
+              onError={() => setImgSrc("/placeholder-project.svg")}
               priority
             />
           </div>

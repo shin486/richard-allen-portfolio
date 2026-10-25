@@ -43,8 +43,8 @@ export const Highlights: React.FC<HighlightsProps> = ({ onOpenHighlight }) => {
               className="flex flex-col items-center gap-2 group flex-shrink-0 focus:outline-none transition-transform active:scale-95"
               aria-label={`View ${highlight.title} story highlight`}
             >
-              {/* Instagram Animated Gradient Story Ring */}
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-[2.5px] bg-neutral-200 dark:bg-zinc-800 group-hover:animated-ig-ring transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
+              {/* Instagram Animated Gradient Story Ring — always visible */}
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-[2.5px] animated-ig-ring transition-transform duration-300 group-hover:scale-105 group-hover:shadow-md">
                 {/* Inner white / dark gap */}
                 <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] flex items-center justify-center transition-colors duration-200">
                   {/* Bubble interior */}

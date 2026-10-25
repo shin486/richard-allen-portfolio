@@ -78,7 +78,7 @@ export const profileData: ProfileData = {
   ],
 
   stats: {
-    projects: "05",
+    projects: "06",
     technologies: "10+",
     certificates: "05",
   },
