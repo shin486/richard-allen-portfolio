@@ -539,10 +539,6 @@ export const AiChatDrawer: React.FC = () => {
                   <span className="font-bold text-sm text-neutral-900 dark:text-zinc-100">
                     Byte
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-ig-gradient text-white shadow-sm">
-                    <Sparkles className="w-2.5 h-2.5" />
-                    AI Cyber-Pup
-                  </span>
                 </div>
                 <p className="text-[11px] text-neutral-500 dark:text-zinc-400">
                   {isLoading
