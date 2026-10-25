@@ -11,6 +11,7 @@ import { CertificateGrid } from "@/components/CertificateGrid";
 import { AboutSection } from "@/components/AboutSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { AiChatDrawer } from "@/components/AiChatDrawer";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { Reveal } from "@/components/Reveal";
 import { projectsData } from "@/data/projects";
@@ -131,6 +132,9 @@ export default function HomePage() {
           <ContactSection />
         </Reveal>
       </main>
+
+      {/* Instagram DM AI Portfolio Assistant */}
+      <AiChatDrawer />
 
       {/* Footer */}
       <Footer />
