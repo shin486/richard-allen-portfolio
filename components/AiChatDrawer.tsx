@@ -215,21 +215,76 @@ const formatMessageText = (text: string) => {
 };
 
 const getLocalByteReply = (message: string): string => {
-  const lower = message.toLowerCase();
+  const lower = message.toLowerCase().trim();
 
-  if (lower.includes("palengkehub") || lower.includes("capstone") || lower.includes("thesis")) {
-    return "🐾 **PalengkeHub** is Richard's Capstone Thesis Project (2025 – 2026). It's a mobile marketplace app bringing real-time commodity price transparency and pre-ordering to the Lipa City Public Market, built with **React Native, TypeScript, Supabase, PostgreSQL, and Expo**. Richard served as the **Full-Stack Mobile Developer & Co-Researcher**.";
+  const projects = [
+    {
+      title: "PalengkeHub",
+      year: "September 2025 – October 2026",
+      tech: "JavaScript, React Native, Supabase, HTML",
+      keywords: ["palengkehub", "palengke", "capstone", "thesis", "market"],
+      whatHeDid:
+        "Served as **Full-Stack Developer**, building the React Native mobile marketplace for consumer price viewing, stall locating, and pre-ordering, and integrating **Supabase** authentication and database operations across consumer, vendor, and administrator workflows.",
+    },
+    {
+      title: "ShinPay+",
+      year: "September 2026 – Present",
+      tech: "Next.js 14, TypeScript, Supabase, PostgreSQL, Tailwind CSS, Vercel",
+      keywords: ["shinpay", "shin pay", "payroll", "saas", "multi-tenant"],
+      whatHeDid:
+        "Serving as **Full-Stack Developer**, architecting the multi-tenant payroll and HR SaaS using **Next.js 14 App Router** and **TypeScript**, with **Supabase PostgreSQL**, authentication, file storage, and tenant-aware **Row-Level Security (RLS)** for Philippine statutory compliance.",
+    },
+    {
+      title: "IT Elective 4 Project",
+      year: "August 2026 – Present",
+      tech: "TypeScript, React, Vite, Express, MongoDB",
+      keywords: ["elective 4", "itelect4", "gemini", "zod"],
+      whatHeDid:
+        "Served as **Full-Stack Developer**, building a **React + Express + MongoDB** app with JWT-authenticated CRUD, protected routes, tenant-isolated data, and a live **Google Gemini AI** endpoint (`POST /api/ai`) with Zod-validated JSON reviews.",
+    },
+    {
+      title: "Auto Avenue",
+      year: "April 2025",
+      tech: "PHP, MySQL, Bootstrap, Git",
+      keywords: ["auto avenue", "inventory", "ims", "pos"],
+      whatHeDid:
+        "Served as **Full-Stack Developer**, building a centralized web-based Inventory Management System (**PHP, MySQL, Bootstrap**) integrated directly with the Point of Sale (POS) system for real-time inventory updates and automated reordering alerts.",
+    },
+    {
+      title: "Automated Visitor Management System (AVMS)",
+      year: "December 2024",
+      tech: "ITSM, QR Access Control, RBAC & MFA, 99.9% Uptime SLA",
+      keywords: ["avms", "visitor", "itsm", "qr"],
+      whatHeDid:
+        "Engineered an **IT Service Management (ITSM)** campus visitor system featuring online pre-registration, QR-coded access badges, customizable visitor access levels, a **99.9% uptime SLA**, and RBAC, MFA, encryption, and audit logs.",
+    },
+    {
+      title: "Crave Cart",
+      year: "IT Elective 1 Project",
+      tech: "Node.js, HTML, CSS, JavaScript, Local File Handling",
+      keywords: ["crave cart", "cravecart", "food"],
+      whatHeDid:
+        "Served as **Full-Stack Developer**, developing a web-based food ordering system (**Node.js, HTML, CSS, JavaScript**) with a digital menu browser, cart management, Google Maps integration, and a local file-handling customer feedback system.",
+    },
+  ];
+
+  const matched = projects.filter((p) => p.keywords.some((kw) => lower.includes(kw)));
+  if (matched.length > 1) {
+    return `🐾 Here is what Richard did as **Full-Stack Developer** in ${matched.map((m) => `**${m.title}**`).join(" and ")}:\n\n${matched
+      .map((m) => `• **${m.title}** (${m.year}): ${m.whatHeDid}`)
+      .join("\n\n")}`;
   }
-  if (lower.includes("shinpay") || lower.includes("payroll") || lower.includes("saas")) {
-    return "🐾 **ShinPay+** is an in-progress multi-tenant payroll and HR SaaS application (2026). Built with **Next.js 14, TypeScript, Tailwind CSS, Supabase, and PostgreSQL**, it implements tenant-aware data access control with **Supabase Row-Level Security (RLS)** to support Philippine statutory compliance (SSS, PhilHealth, Pag-IBIG, and BIR).";
+  if (matched.length === 1) {
+    const m = matched[0];
+    return `🐾 **${m.title}** (${m.year})\n\n• **What Richard Did:** ${m.whatHeDid}\n• **Tech Stack:** **${m.tech}**`;
   }
+
   if (
     lower.includes("ojt") ||
     lower.includes("intern") ||
     lower.includes("available") ||
     lower.includes("hire") ||
     lower.includes("hiring") ||
-    lower.includes("work") ||
     lower.includes("opportunity")
   ) {
     return "🐾 **Yes!** Richard is a 4th-year BS Information Technology student at **De La Salle Lipa** (graduating June 2027) and is **actively open for On-the-Job Training (OJT) and internship opportunities** in Full-Stack Web or Mobile Development. You can reach him directly at **richardallenliman@gmail.com** or on **LinkedIn**!";
@@ -271,20 +326,8 @@ const getLocalByteReply = (message: string): string => {
   ) {
     return "🐾 You can get in touch with Richard directly via:\n\n• **Email:** richardallenliman@gmail.com\n• **GitHub:** https://github.com/shin486\n• **LinkedIn:** https://www.linkedin.com/in/allenliman";
   }
-  if (lower.includes("auto avenue") || lower.includes("inventory") || lower.includes("ims")) {
-    return "🐾 **Auto Avenue** is a centralized web-based Inventory Management System (IMS) developed for Auto Avenue Car Care Center in Mataas na Kahoy, Batangas, integrating with their POS system for real-time stock updates. Built with **PHP, MySQL, Bootstrap, and Git**.";
-  }
-  if (lower.includes("visitor") || lower.includes("avms") || lower.includes("itsm")) {
-    return "🐾 **Automated Visitor Management System (AVMS)** is an IT Service Management (ITSM) project featuring online pre-registration, QR-coded badges, access levels, and a 99.9% uptime SLA with RBAC, MFA, and audit logs.";
-  }
-  if (lower.includes("crave cart") || lower.includes("food")) {
-    return "🐾 **Crave Cart** is a lightweight web food ordering system featuring a digital menu browser, cart management, Google Maps integration, and a local file-handling feedback system built with **Node.js, HTML, CSS, and JavaScript**.";
-  }
-  if (lower.includes("elective 4") || lower.includes("gemini")) {
-    return "🐾 **IT Elective 4 Project** is a full-stack React + Express + MongoDB app with JWT authentication, tenant isolation, and a live Google Gemini AI endpoint (POST /api/ai) returning Zod-validated structured reviews. Deployed on Vercel!";
-  }
   if (lower.includes("project") || lower.includes("built") || lower.includes("portfolio")) {
-    return "🐾 Richard has built **6 official projects**:\n\n1. **PalengkeHub** — Mobile Market & Price Transparency App (React Native, Supabase)\n2. **ShinPay+** — Multi-Tenant Payroll & HR SaaS (Next.js, TypeScript, Supabase)\n3. **IT Elective 4 Project** — Full-Stack App + Gemini AI API (React, Express, MongoDB)\n4. **Auto Avenue** — Web Inventory Management System (PHP, MySQL)\n5. **AVMS** — Automated Visitor Management System (ITSM / QR Check-in)\n6. **Crave Cart** — Web Food Ordering System (Node.js, JS)\n\nAsk me about any of these and I'll fetch the details!";
+    return "🐾 Richard has built **6 official projects**:\n\n1. **PalengkeHub** — Mobile Market & Price Transparency App (React Native, Supabase)\n2. **ShinPay+** — Multi-Tenant Payroll & HR SaaS (Next.js 14, TypeScript, Supabase)\n3. **IT Elective 4 Project** — Full-Stack App + Gemini AI API (React, Express, MongoDB)\n4. **Auto Avenue** — Web Inventory Management System (PHP, MySQL)\n5. **AVMS** — Automated Visitor Management System (ITSM / QR Check-in)\n6. **Crave Cart** — Web Food Ordering System (Node.js, JS)\n\nAsk me about any combination of these and I'll fetch the details!";
   }
 
   return "Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Richard is an aspiring Full-Stack and Mobile Developer (BSIT student at **De La Salle Lipa**, graduating June 2027) who is actively seeking **OJT / internship opportunities**. Feel free to ask me to fetch details on his **6 projects** (PalengkeHub, ShinPay+, IT Elective 4, Auto Avenue, AVMS, Crave Cart), his **tech stack**, or his **certifications**!";
@@ -338,13 +381,20 @@ export const AiChatDrawer: React.FC = () => {
     setIsLoading(true);
 
     try {
+      const historyPayload = messages
+        .slice(-6)
+        .map((m) => ({ sender: m.sender, text: m.text }));
+
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: query }),
+        body: JSON.stringify({ message: query, history: historyPayload }),
       });
 
       const data = await res.json().catch(() => ({}));
+      if (data?.debugHint) {
+        console.info("[Byte AI Info]:", data.debugHint);
+      }
       const botReply = data?.reply || getLocalByteReply(query);
 
       const botMsg: ChatMessage = {

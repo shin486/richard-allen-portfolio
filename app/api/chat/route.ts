@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { projectsData } from "@/data/projects";
+import { projectsData, Project } from "@/data/projects";
 import { skillsData } from "@/data/skills";
 import { certificatesData } from "@/data/certificates";
+
+export const dynamic = "force-dynamic";
 
 // Construct system prompt grounded in verified portfolio data
 const SYSTEM_PROMPT = `
@@ -11,7 +12,8 @@ Your role is to answer questions from recruiters, hiring managers, and visitors 
 
 VERIFIED FACTS ABOUT RICHARD ALLEN LIMAN:
 - Name: Richard Allen Liman (preferred name: Richard Allen, handle: @shin486)
-- Education: Bachelor of Science in Information Technology (BSIT) at De La Salle Lipa (Lipa City, Batangas, Philippines). Expected Graduation: June 2027.
+- Education: Bachelor of Science in Information Technology (BSIT) at De La Salle Lipa (Lipa City, Batangas, Philippines), 2023 – June 2027 (Expected Graduation: June 2027).
+- Organization: Active Member, Junior Philippine Computer Society (JPCS) - De La Salle Lipa Chapter (2023 – Present).
 - Career Goal: Open and actively seeking On-the-Job Training (OJT), internship, and junior full-stack / mobile developer opportunities.
 - Contact: richardallenliman@gmail.com | GitHub: https://github.com/shin486 | LinkedIn: https://www.linkedin.com/in/allenliman
 
@@ -24,7 +26,7 @@ ${i + 1}. ${p.title} (${p.subtitle})
    - Timeline / Date: ${p.year}
    - Category: ${p.category}
    - Tech Stack: ${p.technologies.join(", ")}
-   - Description: ${p.description}
+   - What Richard Did / Description: ${p.description}
    ${p.operationsNote ? `- Operations / ITSM: ${p.operationsNote}` : ""}
    ${p.keyFeatures ? `- Key Features: ${p.keyFeatures.join("; ")}` : ""}
    ${p.githubUrl ? `- GitHub: ${p.githubUrl}` : ""}
@@ -44,151 +46,374 @@ CERTIFICATIONS:
 ${certificatesData.map((c) => `- ${c.title} (Issued by: ${c.issuer}${c.year ? `, ${c.year}` : ""})`).join("\n")}
 
 GUIDELINES FOR YOUR RESPONSES:
-1. Be concise, polite, and enthusiastic. Use formatting (bullet points, bold text) where appropriate for easy reading.
+1. Directly and specifically answer the user's exact question. If they ask about multiple projects (e.g., "what did Richard do in ShinPay+ and PalengkeHub"), address ALL mentioned projects clearly.
 2. Only speak about information grounded in the facts above. Do NOT invent companies, salaries, unverified metrics, or projects.
 3. If asked about his availability or hiring, emphasize that he is actively open for OJT / internships and encourage reaching out via email at richardallenliman@gmail.com or his LinkedIn.
-4. Keep answers brief (typically 2-4 sentences or a short bulleted list) so they fit nicely in a mobile chat interface.
+4. Keep answers clear, well-structured (using bold text and bullet points where helpful), and concise.
 `;
 
-function getSmartFallbackReply(message: string): string {
-  const lower = message.toLowerCase();
+interface HistoryItem {
+  sender: "user" | "bot";
+  text: string;
+}
 
-  if (lower.includes("palengkehub") || lower.includes("capstone") || lower.includes("thesis")) {
-    return `🐾 **PalengkeHub** is Richard's Capstone Thesis Project (${projectsData[0].year}). It's a mobile marketplace app bringing real-time commodity price transparency and pre-ordering to the Lipa City Public Market, built with **${projectsData[0].technologies.join(", ")}**. Richard served as the **${projectsData[0].role}**, building the mobile user flows, Supabase schema, and DTI price monitoring compliance logic.`;
+/**
+ * Multi-intent synthesizer that answers compound, role-specific, comparative,
+ * and multi-project questions accurately even when no external LLM API key is configured.
+ */
+function synthesizePortfolioReply(message: string, history: HistoryItem[] = []): string {
+  const lower = message.toLowerCase().trim();
+
+  // 1. Detect all matched projects in the current query
+  const projectMatchers: { project: Project; keywords: string[]; whatHeDid: string }[] = [
+    {
+      project: projectsData[0], // PalengkeHub
+      keywords: ["palengkehub", "palengke", "capstone", "thesis", "public market", "market app"],
+      whatHeDid:
+        "Served as **Full-Stack Developer**, building the React Native mobile marketplace for consumer price viewing, stall locating, and pre-ordering, plus integrating **Supabase** authentication and database operations across consumer, vendor, and administrator workflows (product management, transaction processing, and admin reporting).",
+    },
+    {
+      project: projectsData[1], // ShinPay+
+      keywords: ["shinpay", "shin pay", "payroll", "hr saas", "multi-tenant", "multitenant"],
+      whatHeDid:
+        "Serving as **Full-Stack Developer**, architecting the multi-tenant payroll and HR SaaS using **Next.js 14 App Router** and **TypeScript**, implementing **Supabase PostgreSQL** database services, authentication, file storage, and tenant-aware **Row-Level Security (RLS)** for Philippine statutory compliance, deployed on Vercel.",
+    },
+    {
+      project: projectsData[2], // IT Elective 4 Project
+      keywords: ["elective 4", "itelect4", "it elective 4", "gemini", "zod"],
+      whatHeDid:
+        "Served as **Full-Stack Developer**, building a **React + Express + MongoDB** app with JWT-authenticated CRUD, protected routes, and tenant-isolated data, and integrating a live **Google Gemini AI** endpoint (`POST /api/ai`) with Zod-validated JSON reviews and rate limiting, deployed on Vercel.",
+    },
+    {
+      project: projectsData[3], // Auto Avenue
+      keywords: ["auto avenue", "inventory", "ims", "car care", "pos"],
+      whatHeDid:
+        "Served as **Full-Stack Developer**, developing a centralized web-based Inventory Management System (**PHP, MySQL, Bootstrap**) for Auto Avenue Car Care Center in Mataas na Kahoy, Batangas, integrating directly with their Point of Sale (POS) system for real-time stock updates and automated reordering alerts.",
+    },
+    {
+      project: projectsData[4], // AVMS
+      keywords: ["avms", "visitor", "itsm", "qr", "service management"],
+      whatHeDid:
+        "Engineered an **IT Service Management (ITSM)** campus visitor management system featuring online pre-registration, QR-coded access badges, visitor category access levels, SMS/email host alerts, a **99.9% uptime SLA**, and RBAC, MFA, encryption, and audit logs.",
+    },
+    {
+      project: projectsData[5], // Crave Cart
+      keywords: ["crave cart", "cravecart", "food ordering", "food", "elective 1"],
+      whatHeDid:
+        "Served as **Full-Stack Developer**, building a web-based food ordering system (**Node.js, HTML, CSS, JavaScript**) with an interactive digital menu browser, cart management, order confirmation, Google Maps store locator, and a local file-handling customer feedback system.",
+    },
+  ];
+
+  // Check if user says "it", "that", "both", "those" referring to previous message
+  let matchedEntries = projectMatchers.filter((entry) =>
+    entry.keywords.some((kw) => lower.includes(kw))
+  );
+
+  if (
+    matchedEntries.length === 0 &&
+    history.length > 0 &&
+    /\b(it|its|that|those|them|both|he do there|role there|tech stack for that)\b/.test(lower)
+  ) {
+    const lastContext = history
+      .slice(-2)
+      .map((h) => h.text.toLowerCase())
+      .join(" ");
+    matchedEntries = projectMatchers.filter((entry) =>
+      entry.keywords.some((kw) => lastContext.includes(kw))
+    );
   }
 
-  if (lower.includes("shinpay") || lower.includes("payroll") || lower.includes("saas")) {
-    return `🐾 **ShinPay+** is an in-progress multi-tenant payroll and HR SaaS application (${projectsData[1].year}). Built with **${projectsData[1].technologies.join(", ")}**, it implements tenant-aware data access control with **Supabase Row-Level Security (RLS)** to support Philippine statutory compliance (SSS, PhilHealth, Pag-IBIG, and BIR).`;
+  // Detect question intent
+  const isAskingWhatHeDidOrRole =
+    /\b(what did richard do|what did he do|what does he do|his role|role in|contribute|contribution|responsible|how did he build|what he built|work on|did in)\b/.test(
+      lower
+    );
+  const isAskingTechStack =
+    /\b(tech|stack|technolog|built with|language|framework|database|tool|use in|used in)\b/.test(
+      lower
+    );
+  const isAskingGithubOrLink =
+    /\b(github|repo|repository|source code|link|url|code)\b/.test(lower);
+  const isAskingWhenOrTimeline =
+    /\b(when|date|year|timeline|how long|started|completed)\b/.test(lower);
+
+  // If 1 or more specific projects were mentioned:
+  if (matchedEntries.length > 0) {
+    if (matchedEntries.length > 1) {
+      // Multi-project response (e.g., "what did richard do in shinpay and palengkehub")
+      const intro = isAskingWhatHeDidOrRole
+        ? `🐾 Here is what Richard did as **Full-Stack Developer** in ${matchedEntries.map((m) => `**${m.project.title}**`).join(" and ")}:`
+        : isAskingTechStack
+        ? `🐾 Here is the tech stack Richard used in ${matchedEntries.map((m) => `**${m.project.title}**`).join(" and ")}:`
+        : `🐾 Here are the details on ${matchedEntries.map((m) => `**${m.project.title}**`).join(" and ")}:`;
+
+      const bullets = matchedEntries.map(({ project, whatHeDid }) => {
+        if (isAskingWhatHeDidOrRole) {
+          return `• **${project.title}** (${project.year}): ${whatHeDid}`;
+        }
+        if (isAskingTechStack) {
+          return `• **${project.title}:** Built with **${project.technologies.join(", ")}** — ${project.subtitle}.`;
+        }
+        if (isAskingGithubOrLink) {
+          return `• **${project.title}:** ${project.githubUrl ? project.githubUrl : "Private / In-Progress repository (demo available upon request)"}`;
+        }
+        if (isAskingWhenOrTimeline) {
+          return `• **${project.title}:** ${project.year} (${project.badge || project.category})`;
+        }
+        return `• **${project.title}** (${project.subtitle}, ${project.year}): ${whatHeDid}`;
+      });
+
+      return `${intro}\n\n${bullets.join("\n\n")}`;
+    }
+
+    // Single specific project mentioned
+    const { project, whatHeDid } = matchedEntries[0];
+    if (isAskingWhatHeDidOrRole) {
+      return `🐾 In **${project.title}** (${project.year}), Richard ${whatHeDid.charAt(0).toLowerCase() + whatHeDid.slice(1)}`;
+    }
+    if (isAskingTechStack) {
+      return `🐾 **${project.title}** was built using **${project.technologies.join(", ")}**. ${whatHeDid}`;
+    }
+    if (isAskingGithubOrLink) {
+      return project.githubUrl
+        ? `🐾 You can check out the source code for **${project.title}** on GitHub: **${project.githubUrl}**`
+        : `🐾 **${project.title}** is an ${project.inProgress ? "in-progress SaaS build" : "academic ITSM project"}, so its repository is private, but Richard is happy to walk through the architecture and demo it live!`;
+    }
+    if (isAskingWhenOrTimeline) {
+      return `🐾 **${project.title}** timeline: **${project.year}** (${project.subtitle}).`;
+    }
+
+    return `🐾 **${project.title}** — *${project.subtitle}* (${project.year})\n\n• **What Richard Did:** ${whatHeDid}\n• **Tech Stack:** **${project.technologies.join(", ")}**${project.githubUrl ? `\n• **GitHub:** ${project.githubUrl}` : ""}`;
+  }
+
+  // General intent checks when no specific single project name was typed
+  if (
+    /\b(ojt|intern|internship|available|availability|hire|hiring|open to work|job|opportunity|recruit)\b/.test(
+      lower
+    )
+  ) {
+    return `🐾 **Yes!** Richard is a 4th-year BS Information Technology student at **De La Salle Lipa** (graduating June 2027) and is **actively open for On-the-Job Training (OJT) and internship opportunities** in Full-Stack Web or Mobile Development.\n\n• **Email:** richardallenliman@gmail.com\n• **LinkedIn:** https://www.linkedin.com/in/allenliman\n• **GitHub:** https://github.com/shin486`;
   }
 
   if (
-    lower.includes("ojt") ||
-    lower.includes("intern") ||
-    lower.includes("available") ||
-    lower.includes("hire") ||
-    lower.includes("hiring") ||
-    lower.includes("work") ||
-    lower.includes("opportunity")
+    /\b(stack|skill|technolog|language|framework|database|frontend|backend|mobile|tools)\b/.test(
+      lower
+    )
   ) {
-    return `🐾 **Yes!** Richard is a 4th-year BS Information Technology student at **De La Salle Lipa** (graduating June 2027) and is **actively open for On-the-Job Training (OJT) and internship opportunities** in Full-Stack Web or Mobile Development. You can reach him directly at **richardallenliman@gmail.com** or on **LinkedIn**!`;
+    return `🐾 Here's what I fetched on Richard's technical stack and where he used each tool:\n\n• **Frontend & Mobile:** React (IT Elective 4), Next.js 14 (ShinPay+), React Native (PalengkeHub), TypeScript (ShinPay+, IT Elective 4), JavaScript, Tailwind CSS, Bootstrap\n• **Backend & Databases:** Supabase & PostgreSQL (PalengkeHub, ShinPay+), Node.js & Express (IT Elective 4, Crave Cart), PHP & MySQL (Auto Avenue), MongoDB (IT Elective 4)\n• **Workflow & Security:** Git, GitHub, Vercel, Row-Level Security (RLS), JWT Auth, ITSM / RBAC`;
+  }
+
+  if (/\b(certificate|certification|certified|cisco|ccna|freecodecamp|creotec)\b/.test(lower)) {
+    return `🐾 Richard holds **5 verified certifications**:\n\n• **CCNA: Enterprise Networking, Security, and Automation** — Cisco (2026)\n• **CCNA: Switching, Routing, and Wireless Essentials** — Cisco (2025)\n• **Legacy Responsive Web Design V8** — freeCodeCamp (2024)\n• **Work Immersion Program (80 Hours)** — Creotec Philippines Inc. (2023)\n• **12th Citezen's General Assembly & Tutorial** — De La Salle Lipa (2023)`;
   }
 
   if (
-    lower.includes("stack") ||
-    lower.includes("skill") ||
-    lower.includes("technolog") ||
-    lower.includes("language") ||
-    lower.includes("framework")
+    /\b(school|educat|college|university|dlsl|la salle|degree|course|graduate|graduation|jpcs|organization)\b/.test(
+      lower
+    )
   ) {
-    return `🐾 Here's what I fetched on Richard's core technical stack:\n\n• **Frontend & Mobile:** React, Next.js 14, React Native, TypeScript, Tailwind CSS\n• **Backend & Databases:** Supabase, PostgreSQL, Node.js, Express, PHP, MySQL, MongoDB\n• **Tools & Workflow:** Git, GitHub, Vercel, Vite, Figma, Expo`;
+    return `🐾 Richard is pursuing his **Bachelor of Science in Information Technology (BSIT)** at **De La Salle Lipa** in Lipa City, Batangas (2023 – June 2027). He is also an active member of the **Junior Philippine Computer Society (JPCS) - DLSL Chapter**.`;
+  }
+
+  if (/\b(contact|email|reach|linkedin|github|social|message)\b/.test(lower)) {
+    return `🐾 You can reach Richard directly via:\n\n• **Email:** richardallenliman@gmail.com\n• **GitHub:** https://github.com/shin486\n• **LinkedIn:** https://www.linkedin.com/in/allenliman`;
   }
 
   if (
-    lower.includes("certificate") ||
-    lower.includes("certification") ||
-    lower.includes("cisco") ||
-    lower.includes("ccna")
+    /\b(project|built|portfolio|work|experience|what has he made|apps|applications)\b/.test(
+      lower
+    ) ||
+    isAskingWhatHeDidOrRole
   ) {
-    return `🐾 Richard holds **5 verified technical certifications**:\n\n• **CCNA: Enterprise Networking, Security, and Automation** (Cisco)\n• **CCNA: Switching, Routing, and Wireless Essentials** (Cisco)\n• **Legacy Responsive Web Design V8** (freeCodeCamp)\n• **Work Immersion Program (80 Hours)** (Creotec Philippines Inc.)\n• **12th Citezen's General Assembly & Tutorial** (DLSL)`;
+    return `🐾 Richard has served as **Full-Stack Developer** across **6 official projects**:\n\n1. **PalengkeHub** (2025–2026) — Mobile public-market price transparency & pre-ordering app (**React Native, Supabase**)\n2. **ShinPay+** (2026–Present) — Multi-tenant payroll & HR SaaS with RLS (**Next.js 14, TypeScript, Supabase**)\n3. **IT Elective 4 Project** (2026–Present) — Full-stack JWT CRUD app + live Google Gemini AI endpoint (**React, Express, MongoDB**)\n4. **Auto Avenue** (2025) — Web Inventory Management System integrated with POS (**PHP, MySQL, Bootstrap**)\n5. **AVMS** (2024) — Automated Visitor Management System with QR badges & 99.9% SLA (**ITSM, RBAC & MFA**)\n6. **Crave Cart** — Web food ordering system with cart & Google Maps (**Node.js, JavaScript**)\n\nAsk me about any combination of these and I'll fetch the exact details!`;
   }
 
-  if (
-    lower.includes("school") ||
-    lower.includes("educat") ||
-    lower.includes("college") ||
-    lower.includes("university") ||
-    lower.includes("dlsl") ||
-    lower.includes("la salle") ||
-    lower.includes("student")
-  ) {
-    return `🐾 Richard is pursuing his **Bachelor of Science in Information Technology (BSIT)** at **De La Salle Lipa** (2023 – June 2027), focusing on scalable web systems, mobile application architecture, and database design. He is also an active member of the **Junior Philippine Computer Society (JPCS) - DLSL Chapter**.`;
+  if (/\b(who is richard|about richard|tell me about him|introduce|bio|summary)\b/.test(lower)) {
+    return `🐾 **Richard Allen Liman (@shin486)** is a 4th-year **BS Information Technology** student at **De La Salle Lipa** (graduating June 2027) and an aspiring **Full-Stack & Mobile Developer**.\n\nHe has built **6 projects** spanning React Native mobile apps (**PalengkeHub**), multi-tenant Next.js/Supabase SaaS (**ShinPay+**), Express/MongoDB + Gemini AI (**IT Elective 4**), and PHP/MySQL inventory systems (**Auto Avenue**). He is currently **open for OJT and internship opportunities**!`;
   }
 
-  if (
-    lower.includes("contact") ||
-    lower.includes("email") ||
-    lower.includes("reach") ||
-    lower.includes("linkedin") ||
-    lower.includes("github")
-  ) {
-    return `🐾 You can get in touch with Richard directly via:\n\n• **Email:** richardallenliman@gmail.com\n• **GitHub:** https://github.com/shin486\n• **LinkedIn:** https://www.linkedin.com/in/allenliman`;
+  return `Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Here's a quick summary of what I can help you with:\n\n• **His 6 Projects:** PalengkeHub, ShinPay+, IT Elective 4 Project, Auto Avenue, AVMS, and Crave Cart\n• **His Role & Contributions:** Full-Stack Web & Mobile architecture, Supabase RLS, REST APIs, and database design\n• **Education & Availability:** 4th-year BSIT at **De La Salle Lipa** (June 2027), actively open for **OJT / internships**\n\nTry asking: *"What did Richard do in ShinPay+ and PalengkeHub?"* or *"Compare his mobile and web projects!"*`;
+}
+
+/**
+ * Clean an API key that might have quotes, whitespace, or accidental "KEY_NAME=" prefix from copy-pasting
+ */
+function sanitizeApiKey(raw?: string): string {
+  if (!raw) return "";
+  let cleaned = raw.trim();
+  if (cleaned.includes("=")) {
+    const parts = cleaned.split("=");
+    if (parts[0].trim().toUpperCase().includes("KEY")) {
+      cleaned = parts.slice(1).join("=").trim();
+    }
+  }
+  cleaned = cleaned.replace(/^["'`]+|["'`]+$/g, "").trim();
+  if (cleaned === "your_gemini_api_key_here") return "";
+  return cleaned;
+}
+
+/**
+ * Calls Google Gemini REST API directly, auto-discovering enabled models for the key if needed.
+ */
+async function callGeminiRestApi(
+  apiKey: string,
+  message: string,
+  history: HistoryItem[]
+): Promise<{ reply?: string; error?: string; modelUsed?: string }> {
+  const historyText =
+    history.length > 0
+      ? `\nCONVERSATION HISTORY:\n${history
+          .slice(-6)
+          .map((h) => `${h.sender === "user" ? "Visitor" : "Byte"}: ${h.text}`)
+          .join("\n")}\n`
+      : "";
+
+  const fullPrompt = `${SYSTEM_PROMPT}${historyText}\nVisitor Question: ${message}\n\nByte's Response:`;
+
+  // Priority order of fast Gemini/Gemma models
+  const candidateModels = [
+    "models/gemini-2.5-flash",
+    "models/gemini-2.5-flash-lite",
+    "models/gemini-2.0-flash",
+    "models/gemini-2.0-flash-lite",
+    "models/gemini-flash-latest",
+    "models/gemini-1.5-flash",
+    "models/gemini-1.5-flash-latest",
+    "models/gemma-3-27b-it",
+  ];
+
+  // Discover what models this key actually has access to
+  let modelsToTry = [...candidateModels];
+  try {
+    const listRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`,
+      { method: "GET", cache: "no-store" }
+    );
+    if (listRes.ok) {
+      const listData = await listRes.json();
+      const available: string[] = (listData.models || [])
+        .filter(
+          (m: { name?: string; supportedGenerationMethods?: string[] }) =>
+            m.name &&
+            Array.isArray(m.supportedGenerationMethods) &&
+            m.supportedGenerationMethods.includes("generateContent")
+        )
+        .map((m: { name: string }) => m.name);
+
+      if (available.length > 0) {
+        const prioritized = candidateModels.filter((c) => available.includes(c));
+        const remaining = available.filter(
+          (a) =>
+            !prioritized.includes(a) &&
+            (a.includes("gemini") || a.includes("gemma")) &&
+            !a.includes("vision") &&
+            !a.includes("embedding") &&
+            !a.includes("tts") &&
+            !a.includes("imagen")
+        );
+        modelsToTry = [...prioritized, ...remaining].slice(0, 5);
+      }
+    } else {
+      const errBody = await listRes.text();
+      return { error: `ListModels HTTP ${listRes.status}: ${errBody.slice(0, 200)}` };
+    }
+  } catch (e) {
+    // If listing fails due to network hiccup, still try candidateModels
+    console.warn("Could not list Gemini models:", e);
   }
 
-  if (
-    lower.includes("auto avenue") ||
-    lower.includes("inventory") ||
-    lower.includes("ims")
-  ) {
-    return `🐾 **Auto Avenue** is a centralized web-based Inventory Management System (IMS) developed for Auto Avenue Car Care Center in Mataas na Kahoy, Batangas, integrating with their POS system for real-time stock updates. Built with **PHP, MySQL, Bootstrap, and Git**.`;
+  let lastError = "";
+  for (const modelPath of modelsToTry) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent?key=${encodeURIComponent(
+        apiKey
+      )}`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: fullPrompt }],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.4,
+            maxOutputTokens: 500,
+          },
+        }),
+        cache: "no-store",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const text =
+          data?.candidates?.[0]?.content?.parts
+            ?.map((p: { text?: string }) => p.text || "")
+            .join("") || "";
+        if (text.trim()) {
+          return { reply: text.trim(), modelUsed: modelPath };
+        }
+      } else {
+        const errText = await res.text();
+        lastError = `${modelPath} -> HTTP ${res.status}: ${errText.slice(0, 150)}`;
+      }
+    } catch (err) {
+      lastError = `${modelPath} -> ${String(err)}`;
+    }
   }
 
-  if (
-    lower.includes("visitor") ||
-    lower.includes("avms") ||
-    lower.includes("itsm")
-  ) {
-    return `🐾 **Automated Visitor Management System (AVMS)** is an IT Service Management (ITSM) project featuring online pre-registration, QR-coded badges, access levels, and a 99.9% uptime SLA with RBAC, MFA, and audit logs.`;
-  }
-
-  if (lower.includes("crave cart") || lower.includes("food")) {
-    return `🐾 **Crave Cart** is a lightweight web food ordering system featuring a digital menu browser, cart management, Google Maps integration, and a local file-handling feedback system built with **Node.js, HTML, CSS, and JavaScript**.`;
-  }
-
-  if (lower.includes("elective 4") || lower.includes("gemini")) {
-    return `🐾 **IT Elective 4 Project** is a full-stack React + Express + MongoDB app with JWT authentication, tenant isolation, and a live Google Gemini AI endpoint (POST /api/ai) returning Zod-validated structured reviews. Deployed on Vercel!`;
-  }
-
-  if (lower.includes("project") || lower.includes("built") || lower.includes("portfolio")) {
-    return `🐾 Richard has built **6 official projects**:\n\n1. **PalengkeHub** — Mobile Market & Price Transparency App (React Native, Supabase)\n2. **ShinPay+** — Multi-Tenant Payroll & HR SaaS (Next.js, TypeScript, Supabase)\n3. **IT Elective 4 Project** — Full-Stack App + Gemini AI API (React, Express, MongoDB)\n4. **Auto Avenue** — Web Inventory Management System (PHP, MySQL)\n5. **AVMS** — Automated Visitor Management System (ITSM / QR Check-in)\n6. **Crave Cart** — Web Food Ordering System (Node.js, JS)\n\nAsk me about any of these and I'll fetch the details!`;
-  }
-
-  return `Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Richard is an aspiring Full-Stack and Mobile Developer (BSIT student at **De La Salle Lipa**, graduating June 2027) who is actively seeking **OJT / internship opportunities**. Feel free to ask me to fetch details on his **6 projects** (PalengkeHub, ShinPay+, IT Elective 4, Auto Avenue, AVMS, Crave Cart), his **tech stack**, or his **certifications**!`;
+  return { error: lastError || "All candidate models failed" };
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const message = typeof body?.message === "string" ? body.message : "";
+    const history: HistoryItem[] = Array.isArray(body?.history) ? body.history : [];
 
     if (!message.trim()) {
-      return NextResponse.json(
-        { reply: getSmartFallbackReply("hello") },
-        { status: 200 }
-      );
+      return NextResponse.json({
+        reply: synthesizePortfolioReply("hello", history),
+        source: "synthesizer",
+      });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const rawKey =
+      process.env.GEMINI_API_KEY ||
+      process.env.GOOGLE_API_KEY ||
+      process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const apiKey = sanitizeApiKey(rawKey);
 
-    // If API key is available, try calling Google Gemini AI (with automatic fallback on any model/quota error)
-    if (apiKey && apiKey !== "your_gemini_api_key_here") {
-      const modelsToTry = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
-      const genAI = new GoogleGenerativeAI(apiKey);
-
-      for (const modelName of modelsToTry) {
-        try {
-          const model = genAI.getGenerativeModel({
-            model: modelName,
-            systemInstruction: SYSTEM_PROMPT,
-          });
-
-          const result = await model.generateContent(message);
-          const reply = result.response.text();
-          if (reply && reply.trim()) {
-            return NextResponse.json({ reply });
-          }
-        } catch (geminiErr) {
-          console.warn(`Gemini model ${modelName} failed, trying next or fallback:`, geminiErr);
-        }
+    if (apiKey) {
+      const geminiResult = await callGeminiRestApi(apiKey, message, history);
+      if (geminiResult.reply) {
+        return NextResponse.json({
+          reply: geminiResult.reply,
+          source: "gemini",
+          model: geminiResult.modelUsed,
+        });
       }
+      // If Gemini key had an error, log it and fall back cleanly to the multi-intent synthesizer
+      console.warn("Gemini API fallback triggered:", geminiResult.error);
+      return NextResponse.json({
+        reply: synthesizePortfolioReply(message, history),
+        source: "synthesizer",
+        debugHint: geminiResult.error,
+      });
     }
 
-    // Reliable built-in response grounded in Richard's portfolio data
-    const reply = getSmartFallbackReply(message);
-    return NextResponse.json({ reply });
-  } catch (error) {
-    console.error("AI chat route error, using fallback:", error);
     return NextResponse.json({
-      reply: getSmartFallbackReply(""),
+      reply: synthesizePortfolioReply(message, history),
+      source: "synthesizer",
+      debugHint: "GEMINI_API_KEY environment variable is not set",
+    });
+  } catch (error) {
+    console.error("AI chat route error:", error);
+    return NextResponse.json({
+      reply: synthesizePortfolioReply(""),
+      source: "synthesizer",
     });
   }
 }
