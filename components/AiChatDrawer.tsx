@@ -214,6 +214,82 @@ const formatMessageText = (text: string) => {
   });
 };
 
+const getLocalByteReply = (message: string): string => {
+  const lower = message.toLowerCase();
+
+  if (lower.includes("palengkehub") || lower.includes("capstone") || lower.includes("thesis")) {
+    return "🐾 **PalengkeHub** is Richard's Capstone Thesis Project (2025 – 2026). It's a mobile marketplace app bringing real-time commodity price transparency and pre-ordering to the Lipa City Public Market, built with **React Native, TypeScript, Supabase, PostgreSQL, and Expo**. Richard served as the **Full-Stack Mobile Developer & Co-Researcher**.";
+  }
+  if (lower.includes("shinpay") || lower.includes("payroll") || lower.includes("saas")) {
+    return "🐾 **ShinPay+** is an in-progress multi-tenant payroll and HR SaaS application (2026). Built with **Next.js 14, TypeScript, Tailwind CSS, Supabase, and PostgreSQL**, it implements tenant-aware data access control with **Supabase Row-Level Security (RLS)** to support Philippine statutory compliance (SSS, PhilHealth, Pag-IBIG, and BIR).";
+  }
+  if (
+    lower.includes("ojt") ||
+    lower.includes("intern") ||
+    lower.includes("available") ||
+    lower.includes("hire") ||
+    lower.includes("hiring") ||
+    lower.includes("work") ||
+    lower.includes("opportunity")
+  ) {
+    return "🐾 **Yes!** Richard is a 4th-year BS Information Technology student at **De La Salle Lipa** (graduating June 2027) and is **actively open for On-the-Job Training (OJT) and internship opportunities** in Full-Stack Web or Mobile Development. You can reach him directly at **richardallenliman@gmail.com** or on **LinkedIn**!";
+  }
+  if (
+    lower.includes("stack") ||
+    lower.includes("skill") ||
+    lower.includes("technolog") ||
+    lower.includes("language") ||
+    lower.includes("framework")
+  ) {
+    return "🐾 Here's what I fetched on Richard's core technical stack:\n\n• **Frontend & Mobile:** React, Next.js 14, React Native, TypeScript, Tailwind CSS\n• **Backend & Databases:** Supabase, PostgreSQL, Node.js, Express, PHP, MySQL, MongoDB\n• **Tools & Workflow:** Git, GitHub, Vercel, Vite, Figma, Expo";
+  }
+  if (
+    lower.includes("certificate") ||
+    lower.includes("certification") ||
+    lower.includes("cisco") ||
+    lower.includes("ccna")
+  ) {
+    return "🐾 Richard holds **5 verified technical certifications**:\n\n• **CCNA: Enterprise Networking, Security, and Automation** (Cisco)\n• **CCNA: Switching, Routing, and Wireless Essentials** (Cisco)\n• **Legacy Responsive Web Design V8** (freeCodeCamp)\n• **Work Immersion Program (80 Hours)** (Creotec Philippines Inc.)\n• **12th Citezen's General Assembly & Tutorial** (DLSL)";
+  }
+  if (
+    lower.includes("school") ||
+    lower.includes("educat") ||
+    lower.includes("college") ||
+    lower.includes("university") ||
+    lower.includes("dlsl") ||
+    lower.includes("la salle") ||
+    lower.includes("student")
+  ) {
+    return "🐾 Richard is pursuing his **Bachelor of Science in Information Technology (BSIT)** at **De La Salle Lipa** (2023 – June 2027), focusing on scalable web systems, mobile application architecture, and database design. He is also an active member of the **Junior Philippine Computer Society (JPCS) - DLSL Chapter**.";
+  }
+  if (
+    lower.includes("contact") ||
+    lower.includes("email") ||
+    lower.includes("reach") ||
+    lower.includes("linkedin") ||
+    lower.includes("github")
+  ) {
+    return "🐾 You can get in touch with Richard directly via:\n\n• **Email:** richardallenliman@gmail.com\n• **GitHub:** https://github.com/shin486\n• **LinkedIn:** https://www.linkedin.com/in/allenliman";
+  }
+  if (lower.includes("auto avenue") || lower.includes("inventory") || lower.includes("ims")) {
+    return "🐾 **Auto Avenue** is a centralized web-based Inventory Management System (IMS) developed for Auto Avenue Car Care Center in Mataas na Kahoy, Batangas, integrating with their POS system for real-time stock updates. Built with **PHP, MySQL, Bootstrap, and Git**.";
+  }
+  if (lower.includes("visitor") || lower.includes("avms") || lower.includes("itsm")) {
+    return "🐾 **Automated Visitor Management System (AVMS)** is an IT Service Management (ITSM) project featuring online pre-registration, QR-coded badges, access levels, and a 99.9% uptime SLA with RBAC, MFA, and audit logs.";
+  }
+  if (lower.includes("crave cart") || lower.includes("food")) {
+    return "🐾 **Crave Cart** is a lightweight web food ordering system featuring a digital menu browser, cart management, Google Maps integration, and a local file-handling feedback system built with **Node.js, HTML, CSS, and JavaScript**.";
+  }
+  if (lower.includes("elective 4") || lower.includes("gemini")) {
+    return "🐾 **IT Elective 4 Project** is a full-stack React + Express + MongoDB app with JWT authentication, tenant isolation, and a live Google Gemini AI endpoint (POST /api/ai) returning Zod-validated structured reviews. Deployed on Vercel!";
+  }
+  if (lower.includes("project") || lower.includes("built") || lower.includes("portfolio")) {
+    return "🐾 Richard has built **6 official projects**:\n\n1. **PalengkeHub** — Mobile Market & Price Transparency App (React Native, Supabase)\n2. **ShinPay+** — Multi-Tenant Payroll & HR SaaS (Next.js, TypeScript, Supabase)\n3. **IT Elective 4 Project** — Full-Stack App + Gemini AI API (React, Express, MongoDB)\n4. **Auto Avenue** — Web Inventory Management System (PHP, MySQL)\n5. **AVMS** — Automated Visitor Management System (ITSM / QR Check-in)\n6. **Crave Cart** — Web Food Ordering System (Node.js, JS)\n\nAsk me about any of these and I'll fetch the details!";
+  }
+
+  return "Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Richard is an aspiring Full-Stack and Mobile Developer (BSIT student at **De La Salle Lipa**, graduating June 2027) who is actively seeking **OJT / internship opportunities**. Feel free to ask me to fetch details on his **6 projects** (PalengkeHub, ShinPay+, IT Elective 4, Auto Avenue, AVMS, Crave Cart), his **tech stack**, or his **certifications**!";
+};
+
 export const AiChatDrawer: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showGreetingBubble, setShowGreetingBubble] = useState(true);
@@ -268,10 +344,8 @@ export const AiChatDrawer: React.FC = () => {
         body: JSON.stringify({ message: query }),
       });
 
-      const data = await res.json();
-      const botReply =
-        data.reply ||
-        "Ruff! I had trouble fetching that. Please try asking again!";
+      const data = await res.json().catch(() => ({}));
+      const botReply = data?.reply || getLocalByteReply(query);
 
       const botMsg: ChatMessage = {
         id: `bot-${Date.now()}`,
@@ -288,10 +362,13 @@ export const AiChatDrawer: React.FC = () => {
       setMessages((prev) => [
         ...prev,
         {
-          id: `bot-err-${Date.now()}`,
+          id: `bot-fallback-${Date.now()}`,
           sender: "bot",
-          text: "Sorry, my connection dropped while fetching that! You can always reach Richard directly at **richardallenliman@gmail.com**.",
-          timestamp: "Just now",
+          text: getLocalByteReply(query),
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
         },
       ]);
     } finally {
