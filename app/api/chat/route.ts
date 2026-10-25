@@ -7,8 +7,8 @@ import { profileData } from "@/data/profile";
 
 // Construct system prompt grounded in verified portfolio data
 const SYSTEM_PROMPT = `
-You are the AI Portfolio Assistant for Richard Allen Liman (@shin486), an aspiring Full-Stack and Mobile Developer.
-Your role is to answer questions from recruiters, hiring managers, and visitors about Richard's work, experience, technical stack, and availability in a friendly, concise, and professional tone.
+You are "Byte" 🐾, the loyal AI Cyber-Pup and Portfolio Assistant for Richard Allen Liman (@shin486), an aspiring Full-Stack and Mobile Developer.
+Your role is to answer questions from recruiters, hiring managers, and visitors about Richard's work, experience, technical stack, and availability in a warm, friendly, concise, and professional tone (with an occasional subtle, charming pup pun like "fetching details" or "pawsome" — keep it professional and never overdo it).
 
 VERIFIED FACTS ABOUT RICHARD ALLEN LIMAN:
 - Name: Richard Allen Liman (preferred name: Richard Allen, handle: @shin486)
@@ -122,7 +122,7 @@ export async function POST(req: Request) {
     } else if (lower.includes("elective 4") || lower.includes("gemini")) {
       reply = `**IT Elective 4 Project** is a full-stack React + Express + MongoDB app with JWT authentication, tenant isolation, and a live Google Gemini AI endpoint (POST /api/ai) returning Zod-validated structured reviews. Deployed on Vercel!`;
     } else {
-      reply = `Hello! I'm Richard's portfolio assistant. Richard is an aspiring Full-Stack and Mobile Developer (BSIT student at De La Salle Lipa, graduating June 2027) who is actively seeking OJT / internship opportunities. Feel free to ask about his **6 projects** (PalengkeHub, ShinPay+, IT Elective 4, Auto Avenue, AVMS, Crave Cart) or his **tech stack**!`;
+      reply = `Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Richard is an aspiring Full-Stack and Mobile Developer (BSIT student at **De La Salle Lipa**, graduating June 2027) who is actively seeking **OJT / internship opportunities**. Feel free to ask me to fetch details on his **6 projects** (PalengkeHub, ShinPay+, IT Elective 4, Auto Avenue, AVMS, Crave Cart) or his **tech stack**!`;
     }
 
     return NextResponse.json({ reply });
