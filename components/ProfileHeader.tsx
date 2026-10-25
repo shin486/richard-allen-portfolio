@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { CheckCircle2, Download, Code2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 import { ProfileStats } from "./ProfileStats";
@@ -74,35 +74,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
         {/* Profile Details */}
         <div className="flex-1 w-full flex flex-col gap-4">
-          {/* Username & Action Buttons Row (Desktop) */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-            <div className="hidden sm:flex items-center gap-2">
-              <h1 className="font-bold text-xl sm:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
-                {profileData.username}
-              </h1>
-              <div title="Verified Developer Profile" className="cursor-help">
-                <CheckCircle2 className="w-5 h-5 text-blue-500 fill-blue-500 inline" />
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
-              <button
-                onClick={handleViewProjects}
-                className="flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-lg text-sm font-semibold text-white bg-ig-gradient hover:opacity-95 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-1.5"
-              >
-                <Code2 className="w-4 h-4" />
-                <span>View Projects</span>
-              </button>
-
-              <a
-                href={profileData.socials.resumeUrl}
-                download="Richard_Allen_Liman_Resume.pdf"
-                className="flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-semibold text-neutral-900 dark:text-zinc-100 bg-neutral-100 dark:bg-zinc-800/90 hover:bg-neutral-200 dark:hover:bg-zinc-700/90 border border-neutral-200 dark:border-zinc-700/60 active:scale-95 transition-all flex items-center justify-center gap-1.5"
-              >
-                <Download className="w-4 h-4 text-neutral-500 dark:text-zinc-400" />
-                <span>Resume</span>
-              </a>
+          {/* Username Row (Desktop) */}
+          <div className="hidden sm:flex items-center gap-2">
+            <h1 className="font-bold text-xl sm:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
+              {profileData.username}
+            </h1>
+            <div title="Verified Developer Profile" className="cursor-help">
+              <CheckCircle2 className="w-5 h-5 text-blue-500 fill-blue-500 inline" />
             </div>
           </div>
 
