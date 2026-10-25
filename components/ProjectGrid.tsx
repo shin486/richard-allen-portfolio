@@ -317,23 +317,12 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery }) => {
                 </button>
               )}
 
-              {/* Bottom Overlay Bar: Date + View Details Prompt */}
-              <div className="absolute bottom-3.5 inset-x-3.5 z-10 flex items-center justify-between gap-2 pointer-events-none">
+              {/* Bottom Overlay Bar: Date */}
+              <div className="absolute bottom-3.5 left-3.5 z-10 pointer-events-none">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-black/65 text-zinc-200 backdrop-blur-md border border-white/10">
                   <Calendar className="w-3.5 h-3.5 text-ig-pink" />
                   {activeProject.year}
                 </span>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveModalProject(activeProject);
-                  }}
-                  className="pointer-events-auto inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border border-white/25 transition-all active:scale-95"
-                >
-                  <span>View Full Details</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
               </div>
             </div>
 
@@ -365,10 +354,23 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery }) => {
                   </button>
 
                   <button
-                    onClick={() => setActiveModalProject(activeProject)}
+                    onClick={() => {
+                      const contactEl = document.getElementById("contact-section");
+                      if (contactEl) {
+                        const navOffset = 70;
+                        const elementPosition =
+                          contactEl.getBoundingClientRect().top;
+                        const offsetPosition =
+                          elementPosition + window.pageYOffset - navOffset;
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      }
+                    }}
                     className="hover:text-neutral-900 dark:hover:text-white transition-colors"
-                    aria-label="Open project details"
-                    title="View key features & details"
+                    aria-label="Inquire or message about this project"
+                    title="Send a message or inquire about this project"
                   >
                     <MessageCircle className="w-5 h-5" />
                   </button>
@@ -524,24 +526,6 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery }) => {
                         <span>Live Demo</span>
                       </a>
                     )}
-                  </div>
-
-                  {/* Next / Prev quick text navigation */}
-                  <div className="flex items-center gap-1.5 ml-auto">
-                    <button
-                      onClick={goPrev}
-                      disabled={safeSlideIndex === 0}
-                      className="px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                    >
-                      ← Prev
-                    </button>
-                    <button
-                      onClick={goNext}
-                      disabled={safeSlideIndex === totalSlides - 1}
-                      className="px-2.5 py-1.5 rounded-lg text-xs font-semibold border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                    >
-                      Next →
-                    </button>
                   </div>
                 </div>
               </div>
