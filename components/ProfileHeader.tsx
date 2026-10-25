@@ -114,9 +114,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             }}
           />
 
-          {/* Name, Handle & Professional Summary */}
-          <div className="flex flex-col gap-2 text-sm sm:text-[15px]">
-            {/* Primary Name + muted sub-label */}
+          {/* Name & Handle */}
+          <div className="flex flex-col gap-1 text-sm sm:text-[15px]">
             <div>
               <h1 className="font-bold text-xl sm:text-2xl text-neutral-900 dark:text-white tracking-tight">
                 {profileData.name}
@@ -126,27 +125,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 <span className="text-neutral-300 dark:text-zinc-700"> · </span>
                 {profileData.title}
               </p>
-            </div>
-
-            {/* Single high-impact summary line */}
-            <p className="text-neutral-700 dark:text-zinc-300 leading-relaxed max-w-2xl font-normal">
-              {profileData.bio}
-            </p>
-
-            {/* Metadata: Education · Stack · Status (pipe/dot divided, no emojis) */}
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs sm:text-sm text-neutral-600 dark:text-zinc-400">
-              <span className="font-semibold text-neutral-900 dark:text-zinc-100">
-                Education: <span>BS Information Technology</span>
-              </span>
-              <span className="text-neutral-400 dark:text-zinc-500">{profileData.educationSummary.school}</span>
-              <span className="text-neutral-300 dark:text-zinc-700">|</span>
-              <span className="font-semibold text-neutral-900 dark:text-zinc-100">
-                Stack: <span>React · React Native · Node.js · TypeScript · Tailwind CSS</span>
-              </span>
-              <span className="text-neutral-300 dark:text-zinc-700">|</span>
-              <span className="font-medium text-emerald-700 dark:text-emerald-400">
-                {profileData.statusMessage}
-              </span>
             </div>
           </div>
         </div>
