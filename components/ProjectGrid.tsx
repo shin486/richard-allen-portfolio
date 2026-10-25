@@ -113,10 +113,6 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery }) => {
           <h2 className="text-lg sm:text-xl font-bold tracking-tight text-neutral-900 dark:text-zinc-100">
             Projects
           </h2>
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300 border border-neutral-200 dark:border-zinc-700">
-            <Layers className="w-3 h-3 text-ig-pink" />
-            Swipe Carousel
-          </span>
         </div>
 
         <div className="text-xs text-neutral-500 dark:text-zinc-400 font-medium flex items-center gap-1.5">
