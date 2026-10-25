@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { CheckCircle2, FileDown, Mail } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 import { ProfileStats } from "./ProfileStats";
@@ -104,27 +104,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 {profileData.title}
               </p>
             </div>
-          </div>
-
-          {/* Action Buttons: Resume & Contact (Instagram Profile Action Row Style) */}
-          <div className="flex items-center gap-2 pt-0.5">
-            <a
-              href={profileData.socials.resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              download="Richard_Allen_Liman_Resume.pdf"
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold bg-neutral-100 dark:bg-zinc-800/90 hover:bg-neutral-200 dark:hover:bg-zinc-700 text-neutral-900 dark:text-zinc-100 border border-neutral-200 dark:border-zinc-700/60 shadow-sm transition-all active:scale-95"
-            >
-              <FileDown className="w-3.5 h-3.5" />
-              <span>Resume</span>
-            </a>
-            <button
-              onClick={() => onNavigateToSection("contact-section")}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold bg-neutral-100 dark:bg-zinc-800/90 hover:bg-neutral-200 dark:hover:bg-zinc-700 text-neutral-900 dark:text-zinc-100 border border-neutral-200 dark:border-zinc-700/60 shadow-sm transition-all active:scale-95"
-            >
-              <Mail className="w-3.5 h-3.5" />
-              <span>Contact</span>
-            </button>
           </div>
         </div>
       </div>
