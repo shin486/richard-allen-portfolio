@@ -114,7 +114,10 @@ export default function HomePage() {
               activeTab={activeTab}
               onTabChange={handleTabChange}
               projectCount={projectsData.length}
-              skillCategoriesCount={skillsData.length}
+              skillCategoriesCount={skillsData.reduce(
+                (total, cat) => total + cat.skills.length,
+                0
+              )}
               certCount={certificatesData.length}
             />
           </Reveal>
