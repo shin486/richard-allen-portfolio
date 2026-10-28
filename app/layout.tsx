@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,16 +8,9 @@ const inter = Inter({
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "Richard Allen Liman | Aspiring Full-Stack Developer",
-  description:
-    "Portfolio of Richard Allen Liman, an Information Technology student and aspiring Full-Stack Developer showcasing projects, skills, and experience.",
+  description: "Portfolio of Richard Allen Liman, an Information Technology student and aspiring Full-Stack Developer showcasing projects, skills, and experience.",
   keywords: [
     "Richard Allen Liman",
     "Richard Allen",
@@ -38,15 +31,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://richardallen.dev",
     title: "Richard Allen Liman | Aspiring Full-Stack Developer",
-    description:
-      "Portfolio of Richard Allen Liman, an Information Technology student and aspiring Full-Stack Developer showcasing projects, skills, and experience.",
+    description: "Portfolio of Richard Allen Liman, an Information Technology student and aspiring Full-Stack Developer showcasing projects, skills, and experience.",
     siteName: "Richard Allen Liman Portfolio",
   },
   twitter: {
     card: "summary_large_image",
     title: "Richard Allen Liman | Aspiring Full-Stack Developer",
-    description:
-      "Information Technology student passionate about building practical, user-focused web and mobile applications.",
+    description: "Information Technology student passionate about building practical, user-focused web and mobile applications.",
   },
 };
 
@@ -77,7 +68,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-[#fafafa] dark:bg-[#0a0a0b] text-[#111111] dark:text-[#ededef] min-h-screen flex flex-col antialiased selection:bg-neutral-900 selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-200`}
+        className={`${inter.variable} font-sans bg-white dark:bg-[#0B0B0F] text-[#111111] dark:text-[#F5F5F5] min-h-screen flex flex-col antialiased selection:bg-pink-500/20 selection:text-pink-500 transition-colors duration-200`}
       >
         {children}
       </body>

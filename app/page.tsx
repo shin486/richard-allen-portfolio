@@ -85,73 +85,66 @@ export default function HomePage() {
       {/* Layered Animated Background (radial glows + floating technical lines) */}
       <AnimatedBackground />
 
-      {/* Fixed Desktop Left Sidebar Rail + Mobile Sticky Top Bar */}
+      {/* Sticky Top Navigation (entrance animation lives on the header itself to preserve stickiness) */}
       <Navbar
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
-        activeTab={activeTab}
         onSelectTab={setActiveTab}
       />
 
-      {/* Main Editorial Content Column (offset by fixed sidebar on lg+) */}
-      <div className="flex-1 lg:pl-60 xl:pl-64 dot-grid min-h-screen flex flex-col relative z-10">
-        <main className="flex-1 max-w-3xl w-full mx-auto px-5 sm:px-8 py-4 sm:py-6">
-          {/* Minimalist Editorial Profile Hero + 2x3 Hairline Matrix */}
-          <div className="rise-in" style={{ animationDelay: "90ms" }}>
-            <ProfileHeader
-              onSelectTab={setActiveTab}
-              onNavigateToSection={scrollToSection}
-              onOpenHighlight={handleOpenHighlight}
-            />
-          </div>
+      {/* Main Profile Layout Container */}
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 relative z-10">
+        {/* Instagram Profile Header (entrance: after navbar) */}
+        <div className="rise-in" style={{ animationDelay: "90ms" }}>
+          <ProfileHeader
+            onSelectTab={setActiveTab}
+            onNavigateToSection={scrollToSection}
+          />
+        </div>
 
-          {/* Compact Minimalist Story Highlights Strip */}
-          <div className="rise-in" style={{ animationDelay: "160ms" }}>
-            <Highlights onOpenHighlight={handleOpenHighlight} />
-          </div>
+        {/* Curated Story Highlights (entrance: after profile) */}
+        <div className="rise-in" style={{ animationDelay: "180ms" }}>
+          <Highlights onOpenHighlight={handleOpenHighlight} />
+        </div>
 
-          {/* Numbered Monospace Portfolio Navigation Tabs */}
-          <div id="portfolio-tabs">
-            <Reveal>
-              <PortfolioTabs
-                activeTab={activeTab}
-                onTabChange={handleTabChange}
-                projectCount={projectsData.length}
-                skillCategoriesCount={skillsData.reduce(
-                  (total, cat) => total + cat.skills.length,
-                  0
-                )}
-                certCount={certificatesData.length}
-              />
-            </Reveal>
-          </div>
-
-          {/* Active Tab Content — only renders the selected tab when clicked */}
-          <div key={activeTab} className="stagger-item">
-            {activeTab === "projects" && (
-              <ProjectGrid
-                searchQuery={searchQuery}
-                onSearchChange={handleSearchChange}
-                focusRequest={projectFocus}
-              />
-            )}
-
-            {activeTab === "skills" && <SkillsSection />}
-
-            {activeTab === "certificates" && <CertificateGrid />}
-
-            {activeTab === "about" && <AboutSection />}
-          </div>
-
-          {/* Contact / Direct Message Section */}
+        {/* Instagram Post & Navigation Tabs */}
+        <div id="portfolio-tabs">
           <Reveal>
-            <ContactSection />
+            <PortfolioTabs
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              projectCount={projectsData.length}
+              skillCategoriesCount={skillsData.reduce(
+                (total, cat) => total + cat.skills.length,
+                0
+              )}
+              certCount={certificatesData.length}
+            />
           </Reveal>
-        </main>
+        </div>
 
-        {/* Footer aligned with main column */}
-        <Footer />
-      </div>
+        {/* Active Tab Content — only renders the selected tab when clicked */}
+        <div key={activeTab} className="stagger-item">
+          {activeTab === "projects" && (
+            <ProjectGrid
+              searchQuery={searchQuery}
+              onSearchChange={handleSearchChange}
+              focusRequest={projectFocus}
+            />
+          )}
+
+          {activeTab === "skills" && <SkillsSection />}
+
+          {activeTab === "certificates" && <CertificateGrid />}
+
+          {activeTab === "about" && <AboutSection />}
+        </div>
+
+        {/* Contact / Direct Message Section */}
+        <Reveal>
+          <ContactSection />
+        </Reveal>
+      </main>
 
       {/* Instagram Story Viewer Modal */}
       <HighlightViewer
@@ -163,6 +156,9 @@ export default function HomePage() {
 
       {/* Instagram DM AI Portfolio Assistant */}
       <AiChatDrawer />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
