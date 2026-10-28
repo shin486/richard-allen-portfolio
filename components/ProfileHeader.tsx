@@ -54,15 +54,15 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
         </div>
 
-        {/* Right Side: Desktop Username + Stats */}
+        {/* Right Side: Profile Name + Stats */}
         <div className="flex-1 flex flex-col justify-center gap-2 sm:gap-4 min-w-0">
-          {/* Username Row (Desktop) */}
-          <div className="hidden sm:flex items-center gap-2">
-            <h1 className="font-bold text-xl sm:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
-              {profileData.username}
+          {/* Profile Name & Verified Badge */}
+          <div className="flex items-center gap-2">
+            <h1 className="font-bold text-lg sm:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
+              {profileData.name}
             </h1>
             <div title="Verified Developer Profile" className="cursor-help">
-              <CheckCircle2 className="w-5 h-5 text-blue-500 fill-blue-500 inline" />
+              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 fill-blue-500 inline flex-shrink-0" />
             </div>
           </div>
 
@@ -76,21 +76,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
       </div>
 
-      {/* Bio Block (Directly beneath avatar + stats, exactly like Instagram mobile) */}
-      <div className="mt-3 sm:mt-4 flex flex-col gap-1 text-sm sm:text-[15px]">
-        {/* Name and Mobile Username */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <h1 className="font-bold text-[15px] sm:text-xl text-neutral-900 dark:text-white tracking-tight">
-            {profileData.name}
-          </h1>
-          <CheckCircle2 className="w-4 h-4 text-blue-500 fill-blue-500 sm:hidden inline flex-shrink-0" />
-          <span className="text-xs text-neutral-400 dark:text-zinc-500 font-mono sm:hidden">
-            @{profileData.username}
-          </span>
-        </div>
-
+      {/* Bio Block (Directly beneath avatar + stats) */}
+      <div className="mt-2.5 sm:mt-4 flex flex-col gap-1 text-sm sm:text-[15px]">
         {/* Professional Category / Title */}
-        <p className="text-xs sm:text-sm text-neutral-500 dark:text-zinc-400 font-medium">
+        <p className="text-xs sm:text-sm text-neutral-600 dark:text-zinc-400 font-medium">
           {profileData.title}
         </p>
 
