@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
-import { CheckCircle2, Clock, MapPin } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 import { ProfileStats } from "./ProfileStats";
@@ -16,29 +16,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onSelectTab,
   onNavigateToSection,
 }) => {
-  const [timeStr, setTimeStr] = useState<string>("");
-
-  useEffect(() => {
-    const updateTime = () => {
-      try {
-        const now = new Date();
-        const pht = new Intl.DateTimeFormat("en-US", {
-          timeZone: "Asia/Manila",
-          hour: "numeric",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true,
-        }).format(now);
-        setTimeStr(pht);
-      } catch {
-        setTimeStr("");
-      }
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
   const handleViewProjects = () => {
     onSelectTab("projects");
     onNavigateToSection("portfolio-grid");
@@ -111,19 +88,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           4th-year BSIT @ <span className="font-medium text-neutral-900 dark:text-zinc-100">De La Salle Lipa</span>
         </p>
 
-        {/* Live Developer Pulse & OJT Availability Row */}
-        <div className="pt-1.5 flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60 shadow-2xs">
+        {/* OJT Availability Badge */}
+        <div className="pt-1 flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60 shadow-2xs w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Open for OJT &amp; Opportunities
-          </span>
-
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-600 dark:text-zinc-400 bg-neutral-100 dark:bg-zinc-850 px-2.5 py-0.5 rounded-full border border-neutral-200 dark:border-zinc-750 font-mono shadow-2xs">
-            <MapPin className="w-3 h-3 text-red-500 shrink-0" />
-            <span>Lipa City, PH</span>
-            <span className="text-neutral-300 dark:text-zinc-600">·</span>
-            <Clock className="w-3 h-3 text-neutral-400 dark:text-zinc-500 shrink-0" />
-            <span className="text-neutral-900 dark:text-zinc-200 font-semibold">{timeStr || "PHT"}</span>
           </span>
         </div>
       </div>
