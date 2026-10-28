@@ -7,12 +7,30 @@ import ItElectDemo from "./ItElectDemo";
 import AutoAvenueDemo from "./AutoAvenueDemo";
 import { AvmsDemo } from "./AvmsDemo";
 import CraveCartDemo from "./CraveCartDemo";
-import { Code2, Play, ExternalLink } from "lucide-react";
+import { Code2, Play, ExternalLink, Lock, Smartphone, Laptop } from "lucide-react";
 
 interface ProjectDemoHostProps {
   projectId: string;
   className?: string;
 }
+
+const PROJECT_GLOWS: Record<string, string> = {
+  palengkehub: "rgba(232, 131, 58, 0.28)",
+  "shinpay-plus": "rgba(83, 108, 81, 0.32)",
+  "itelect4-project": "rgba(37, 99, 235, 0.28)",
+  "auto-avenue-ims": "rgba(66, 169, 111, 0.28)",
+  avms: "rgba(168, 85, 247, 0.28)",
+  "crave-cart": "rgba(255, 107, 107, 0.30)",
+};
+
+const PROJECT_URLS: Record<string, string> = {
+  palengkehub: "palengkehub.ph/market/lipa",
+  "shinpay-plus": "shinpay.ph/app/dashboard",
+  "itelect4-project": "itelect4-project-nine.vercel.app",
+  "auto-avenue-ims": "autoavenue.ph/ims/dashboard.php",
+  "crave-cart": "cravecart.local/menu",
+  avms: "avms.dlsl.edu.ph/portal",
+};
 
 const REAL_CODE_SNIPPETS: Record<
   string,
@@ -22,7 +40,7 @@ const REAL_CODE_SNIPPETS: Record<
     filePath: "PalengkeHubFinal / src/screens/customer/HomeScreen.js & tokens.js",
     repoUrl: "https://github.com/shin486/PalengkeHubFinal",
     language: "javascript",
-    code: `// PalengkeHub Real Customer HomeScreen.js & Theme Tokens (tokens.js)
+    code: `// PalengkeHub Customer HomeScreen.js & Theme Tokens (tokens.js)
 // Primary Basket Orange: #E8833A | Outline Deep Brown: #261006 | Cream: #F7F5F0
 const PresyoCheckCard = ({ item }) => {
   const fillPct = item.maxPrice > 0 ? Math.min(100, (item.minPrice / item.maxPrice) * 100) : 0;
@@ -135,6 +153,7 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
   className = "",
 }) => {
   const [subMode, setSubMode] = useState<"app" | "code">("app");
+  const [isPhoneMode, setIsPhoneMode] = useState<boolean>(projectId === "palengkehub");
 
   const renderDemo = () => {
     switch (projectId) {
@@ -162,28 +181,38 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
   const getRecruiterInsight = () => {
     switch (projectId) {
       case "palengkehub":
-        return "Authentic PalengkeHub UI (#E8833A basket orange, Presyo Check bars, Lipa Public Market stalls & QR Pickup Pass)";
+        return "PalengkeHub Mobile UI (#E8833A basket orange, Presyo Check, Lipa Market stalls & QR Pickup Pass)";
       case "shinpay-plus":
-        return "Authentic ShinPay+ Tactile Sage UI (#536c51 sidebar, 2025 PH SSS/PhilHealth/Pag-IBIG/TRAIN engine & BIR Payslip)";
+        return "ShinPay+ Tactile Sage UI (#536c51 sidebar, 2025 PH SSS/PhilHealth/Pag-IBIG/TRAIN engine & BIR Payslip)";
       case "itelect4-project":
-        return "Authentic ITELECT4 UI (Layout.tsx navbar, Zustand stores & Gemini 2.5 Flash review schema + Live Vercel link)";
+        return "ITELECT4 UI (Layout.tsx navbar, Zustand stores & Gemini 2.5 Flash review schema + Live Vercel link)";
       case "auto-avenue-ims":
-        return "Authentic Auto Avenue IMS UI (dashboard.php black-emerald header, autoavelogo.svg, low-stock PO generator)";
+        return "Auto Avenue IMS UI (dashboard.php black-emerald header, autoavelogo.svg, low-stock PO generator)";
       case "avms":
-        return "Interactive Campus Vehicle Access Pass generator, live gate scanner & 99.9% SLA telemetry monitor";
+        return "Campus Vehicle Access Pass generator, live gate scanner & 99.9% SLA telemetry monitor";
       case "crave-cart":
-        return "Authentic Crave Cart UI (#ff6b6b header, data/menu.json filter, 8% tax cart summary & 5-star feedback form)";
+        return "Crave Cart UI (#ff6b6b header, data/menu.json filter, 8% tax cart summary & 5-star feedback form)";
       default:
         return "Interactive live application UI.";
     }
   };
 
   const codeEntry = REAL_CODE_SNIPPETS[projectId];
+  const activeGlow = PROJECT_GLOWS[projectId] || "rgba(236,72,153,0.22)";
+  const activeUrl = PROJECT_URLS[projectId] || "app.local";
 
   return (
-    <div className={`w-full flex flex-col items-center ${className}`}>
+    <div className={`w-full flex flex-col items-center relative ${className}`}>
+      {/* Dynamic Project-Themed Ambient Glow behind chassis */}
+      <div
+        className="absolute -top-10 -right-10 w-72 sm:w-96 h-72 sm:h-96 rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out opacity-60 dark:opacity-40 -z-10"
+        style={{
+          background: `radial-gradient(circle, ${activeGlow} 0%, transparent 70%)`,
+        }}
+      />
+
       {/* Top Bar: UI Status + [ UI | Code ] Switcher */}
-      <div className="w-full mb-2.5 px-3 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-700 dark:text-zinc-300 shadow-2xs">
+      <div className="w-full mb-2.5 px-3 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-700 dark:text-zinc-300 shadow-2xs backdrop-blur-sm">
         <div className="flex items-center gap-2 font-semibold min-w-0">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
           <span className="truncate">{getRecruiterInsight()}</span>
@@ -195,7 +224,7 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
               href={codeEntry.repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-2 py-1 rounded-md border border-neutral-200 dark:border-zinc-700 text-[10px] font-bold text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white inline-flex items-center gap-1"
+              className="px-2 py-1 rounded-md border border-neutral-200 dark:border-zinc-700 text-[10px] font-bold text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white inline-flex items-center gap-1 transition-colors"
             >
               <span>GitHub Repo</span>
               <ExternalLink className="w-2.5 h-2.5" />
@@ -233,7 +262,7 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
         </div>
       </div>
 
-      {/* Render either Interactive UI or Repository Source Code */}
+      {/* Render either Code or Authentic Hardware Device Viewport */}
       {subMode === "code" && codeEntry ? (
         <div className="w-full rounded-2xl bg-[#0d0d12] border border-zinc-800 shadow-xl overflow-hidden animate-fade-in">
           <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs text-zinc-300 font-mono">
@@ -250,13 +279,81 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
               </a>
             )}
           </div>
-          <pre className="p-4 text-[11px] sm:text-xs font-mono text-zinc-200 overflow-x-auto leading-relaxed h-[450px]">
+          <pre className="p-4 text-[11px] sm:text-xs font-mono text-zinc-200 overflow-x-auto leading-relaxed h-[470px]">
             <code>{codeEntry.code}</code>
           </pre>
         </div>
+      ) : projectId === "palengkehub" && isPhoneMode ? (
+        /* Authentic Mobile Phone Frame Chassis for PalengkeHub */
+        <div className="w-full h-[510px] sm:h-[530px] rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl overflow-hidden bg-neutral-100/70 dark:bg-[#0c0c10] p-2 sm:p-3 flex items-center justify-center relative">
+          {/* Chassis Top Controls */}
+          <div className="absolute top-2.5 right-3.5 z-30 flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setIsPhoneMode(false)}
+              className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/90 dark:bg-zinc-850/90 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white flex items-center gap-1 shadow-2xs"
+              title="Expand to Full Width"
+            >
+              <Laptop className="w-3 h-3" />
+              <span>Full View</span>
+            </button>
+          </div>
+
+          {/* Curved Phone Chassis */}
+          <div className="w-full max-w-[340px] sm:max-w-[350px] h-full rounded-[38px] border-[4px] border-zinc-800 dark:border-zinc-700 bg-[#F7F5F0] shadow-2xl relative flex flex-col overflow-hidden">
+            {/* Dynamic Island Pill */}
+            <div className="absolute top-1.5 inset-x-0 mx-auto w-24 h-3.5 bg-black rounded-full flex items-center justify-end pr-2 z-30 shadow-xs pointer-events-none">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500/80" />
+            </div>
+
+            {/* Inner Mobile Screen */}
+            <div className="flex-1 w-full overflow-hidden pt-1.5">
+              <PalengkeHubDemo />
+            </div>
+
+            {/* Home Indicator Bar */}
+            <div className="w-24 h-1 bg-zinc-400 dark:bg-zinc-600 rounded-full mx-auto my-1 shrink-0 pointer-events-none" />
+          </div>
+        </div>
       ) : (
-        <div className="w-full h-[480px] sm:h-[510px] rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-lg overflow-hidden bg-white dark:bg-zinc-950">
-          {renderDemo()}
+        /* Authentic macOS / Desktop Browser Chrome Window */
+        <div className="w-full h-[490px] sm:h-[520px] rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl overflow-hidden bg-white dark:bg-zinc-950 flex flex-col">
+          {/* macOS Window Header */}
+          <div className="px-3 py-2 bg-neutral-100 dark:bg-zinc-900 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between gap-2 shrink-0">
+            {/* Traffic Lights */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f] border border-[#1aab29]" />
+            </div>
+
+            {/* Center SSL Address Bar */}
+            <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-[10.5px] font-mono text-neutral-600 dark:text-zinc-300 max-w-xs truncate shadow-2xs">
+              <Lock className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span className="truncate">{activeUrl}</span>
+            </div>
+
+            {/* Right Controls */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {projectId === "palengkehub" && (
+                <button
+                  type="button"
+                  onClick={() => setIsPhoneMode(true)}
+                  className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white flex items-center gap-1"
+                  title="Switch to Mobile Chassis"
+                >
+                  <Smartphone className="w-3 h-3" />
+                  <span>Phone Frame</span>
+                </button>
+              )}
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Live System Online" />
+            </div>
+          </div>
+
+          {/* Main Demo Content */}
+          <div className="flex-1 w-full overflow-hidden">
+            {renderDemo()}
+          </div>
         </div>
       )}
     </div>
