@@ -190,3 +190,85 @@ body {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
+
+/* ============================================================================
+   HIGH-CRAFT DESIGN ENGINEERING UTILITIES (Milled Hardware, Spotlight, Springs)
+   ============================================================================ */
+
+/* 1. Milled Hardware Card (Directional overhead lighting & inner top highlight) */
+.milled-card {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
+    0 2px 8px -2px rgba(15, 23, 42, 0.05);
+}
+
+.dark .milled-card {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    0 10px 28px -8px rgba(0, 0, 0, 0.55);
+}
+
+/* 2. Interactive Cursor-Reactive Spotlight Sheen */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: radial-gradient(
+    260px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(221, 42, 123, 0.09),
+    rgba(129, 52, 175, 0.04) 45%,
+    transparent 80%
+  );
+  z-index: 1;
+}
+
+.dark .spotlight-card::before {
+  background: radial-gradient(
+    280px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(255, 255, 255, 0.07),
+    rgba(221, 42, 123, 0.05) 45%,
+    transparent 80%
+  );
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* 3. Spring-Physics Sliding Pill & Segmented Control */
+.spring-pill {
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    left 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  will-change: transform;
+}
+
+/* 4. Rapid Staggered Micro-Cascade for Tab & Filter Switches */
+@keyframes microCascade {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.stagger-item {
+  opacity: 0;
+  animation: microCascade 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: opacity, transform;
+}
+

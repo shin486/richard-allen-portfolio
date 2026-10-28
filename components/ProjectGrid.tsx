@@ -208,7 +208,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
           </div>
 
           {/* Single Authentic Instagram Multi-Photo Carousel Post */}
-          <article className="bg-white dark:bg-[#111116] border-y sm:border border-neutral-200 dark:border-zinc-800 -mx-4 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden shadow-sm transition-all">
+          <article className="milled-card bg-white dark:bg-[#111116] border-y sm:border border-neutral-200 dark:border-zinc-800 sm:border-t-neutral-300/80 dark:sm:border-t-zinc-700/70 -mx-4 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden transition-all">
             {/* Instagram Post Header */}
             <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-neutral-100 dark:border-zinc-800/80">
               <div className="flex items-center gap-3 min-w-0">
@@ -242,14 +242,28 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
 
               {/* Mode Toggle & Slide Counter Badge */}
               <div className="flex items-center gap-2 flex-shrink-0">
-                {/* Live Interactive UI vs Static Poster Switcher */}
-                <div className="flex items-center bg-neutral-100 dark:bg-zinc-800 p-0.5 rounded-full border border-neutral-200 dark:border-zinc-700/60 text-xs">
+                {/* Live Interactive UI vs Static Poster Switcher with Spring-Physics Pill */}
+                <div className="relative grid grid-cols-2 items-center bg-neutral-100 dark:bg-zinc-800 p-0.5 rounded-full border border-neutral-200 dark:border-zinc-700/60 text-xs min-w-[146px] sm:min-w-[162px]">
+                  <span
+                    aria-hidden="true"
+                    className={`spring-pill absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] rounded-full shadow-xs pointer-events-none ${
+                      isLiveDemoView
+                        ? "bg-ig-gradient"
+                        : "bg-white dark:bg-zinc-700"
+                    }`}
+                    style={{
+                      transform: isLiveDemoView
+                        ? "translateX(2px)"
+                        : "translateX(calc(100% + 2px))",
+                    }}
+                  />
                   <button
+                    type="button"
                     onClick={() => setIsLiveDemoView(true)}
                     aria-label="Launch live interactive UI"
-                    className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all flex items-center gap-1.5 ${
+                    className={`relative z-10 px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors duration-200 flex items-center justify-center gap-1.5 ${
                       isLiveDemoView
-                        ? "bg-ig-gradient text-white shadow-sm"
+                        ? "text-white"
                         : "text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white"
                     }`}
                   >
@@ -258,21 +272,22 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   </button>
                   <button
+                    type="button"
                     onClick={() => setIsLiveDemoView(false)}
                     aria-label="View static poster preview"
-                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all flex items-center gap-1 ${
+                    className={`relative z-10 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-colors duration-200 flex items-center justify-center gap-1 ${
                       !isLiveDemoView
-                        ? "bg-white dark:bg-zinc-700 text-neutral-900 dark:text-white shadow-sm"
+                        ? "text-neutral-900 dark:text-white"
                         : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                     }`}
                   >
                     <Layers className="w-3 h-3 text-ig-pink" />
-                    <span className="hidden sm:inline">Poster</span>
+                    <span>Poster</span>
                   </button>
                 </div>
 
                 {/* Instagram Slide Counter */}
-                <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900/90 dark:bg-zinc-800 text-white text-xs font-semibold tracking-wider">
+                <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900/90 dark:bg-zinc-800 text-white text-xs font-semibold tabular-nums tracking-wider">
                   <span>
                     {safeSlideIndex + 1} / {totalSlides}
                   </span>

@@ -121,7 +121,7 @@ export default function HomePage() {
         </div>
 
         {/* Active Tab Content — only renders the selected tab when clicked */}
-        <div key={activeTab} className="animate-fade-in">
+        <div key={activeTab} className="stagger-item">
           {activeTab === "projects" && (
             <ProjectGrid
               searchQuery={searchQuery}

@@ -93,6 +93,15 @@ export const SkillsSection: React.FC = () => {
     },
   ];
 
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    el.style.setProperty("--spot-x", `${x}px`);
+    el.style.setProperty("--spot-y", `${y}px`);
+  };
+
   return (
     <section id="skills-section" className="py-6 sm:py-8">
       {/* Section Header */}
@@ -113,7 +122,7 @@ export const SkillsSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="text-xs text-neutral-500 dark:text-zinc-400 font-medium">
+        <div className="text-xs text-neutral-500 dark:text-zinc-400 font-medium tabular-nums">
           Showing{" "}
           <strong className="text-neutral-900 dark:text-zinc-100">
             {filteredSkills.length}
@@ -135,10 +144,11 @@ export const SkillsSection: React.FC = () => {
           return (
             <button
               key={tab.key}
+              type="button"
               onClick={() => setActiveFilter(tab.key)}
               role="tab"
               aria-selected={isActive}
-              className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
+              className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 border active:scale-95 ${
                 isActive
                   ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 border-neutral-900 dark:border-zinc-100 shadow-sm"
                   : "bg-white dark:bg-[#111116] text-neutral-600 dark:text-zinc-400 border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 hover:text-neutral-900 dark:hover:text-zinc-200"
@@ -153,7 +163,7 @@ export const SkillsSection: React.FC = () => {
               />
               <span>{tab.label}</span>
               <span
-                className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                className={`text-[10px] tabular-nums px-1.5 py-0.2 rounded-full font-mono ${
                   isActive
                     ? "bg-white/20 dark:bg-neutral-900/15 text-white dark:text-neutral-900"
                     : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
@@ -166,14 +176,19 @@ export const SkillsSection: React.FC = () => {
         })}
       </div>
 
-      {/* Interactive Skill Cards Grid with Project Cross-Reference */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        {filteredSkills.map((skill) => (
+      {/* Interactive Skill Cards Grid with Cursor Spotlight, Milled Hardware Lighting & Staggered Cascade */}
+      <div
+        key={activeFilter}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+      >
+        {filteredSkills.map((skill, idx) => (
           <div
             key={`${skill.categoryKey}-${skill.name}`}
-            className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-neutral-300 dark:hover:border-zinc-700 transition-all flex flex-col justify-between gap-3"
+            onMouseMove={handleCardMouseMove}
+            style={{ animationDelay: `${Math.min(idx * 22, 260)}ms` }}
+            className="stagger-item spotlight-card milled-card bg-white dark:bg-[#111116] border border-neutral-200/90 dark:border-zinc-800 border-t-neutral-300/80 dark:border-t-zinc-700/70 rounded-xl p-4 hover:-translate-y-0.5 hover:border-neutral-300 dark:hover:border-zinc-700 transition-all duration-200 flex flex-col justify-between gap-3"
           >
-            <div>
+            <div className="relative z-10">
               {/* Top Row: Name + Core / Category Badge */}
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2">
@@ -203,7 +218,7 @@ export const SkillsSection: React.FC = () => {
 
             {/* Project Cross-Reference ("Used in") */}
             {skill.usedIn && skill.usedIn.length > 0 && (
-              <div className="pt-2.5 border-t border-neutral-100 dark:border-zinc-800/80 flex flex-col gap-1.5">
+              <div className="relative z-10 pt-2.5 border-t border-neutral-100 dark:border-zinc-800/80 flex flex-col gap-1.5">
                 <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-zinc-500 flex items-center gap-1">
                   <FolderCode className="w-3 h-3 text-ig-purple" />
                   Used in Projects

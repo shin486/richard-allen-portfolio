@@ -139,7 +139,7 @@ export const CertificateGrid: React.FC = () => {
         </div>
 
         {/* Single Instagram Multi-Photo Carousel Post for Certificates */}
-        <article className="bg-white dark:bg-[#111116] border-y sm:border border-neutral-200 dark:border-zinc-800 -mx-4 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden shadow-sm transition-all">
+        <article className="milled-card bg-white dark:bg-[#111116] border-y sm:border border-neutral-200 dark:border-zinc-800 sm:border-t-neutral-300/80 dark:sm:border-t-zinc-700/70 -mx-4 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden transition-all">
           {/* Instagram Post Header */}
           <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-neutral-100 dark:border-zinc-800/80">
             <div className="flex items-center gap-3 min-w-0">
