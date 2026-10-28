@@ -1,99 +1,257 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 import { profileData } from "@/data/profile";
+import { skillsData } from "@/data/skills";
+import { highlightsData } from "@/data/highlights";
 import profilePic from "@/assets/PROFILEPIC.png";
-import { ProfileStats } from "./ProfileStats";
 
 interface ProfileHeaderProps {
   onSelectTab: (tab: string) => void;
   onNavigateToSection: (sectionId: string) => void;
+  onOpenHighlight?: (index: number) => void;
+}
+
+function useOdometerCount(target: number, durationMs = 620, delayMs = 80) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      setValue(target);
+      return;
+    }
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      setValue(target);
+      return;
+    }
+
+    let rafId = 0;
+    const timeoutId = window.setTimeout(() => {
+      const start = performance.now();
+      const step = (now: number) => {
+        const elapsed = now - start;
+        const progress = Math.min(1, elapsed / durationMs);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setValue(Math.round(eased * target));
+        if (progress < 1) {
+          rafId = requestAnimationFrame(step);
+        }
+      };
+      rafId = requestAnimationFrame(step);
+    }, delayMs);
+
+    return () => {
+      clearTimeout(timeoutId);
+      cancelAnimationFrame(rafId);
+    };
+  }, [target, durationMs, delayMs]);
+
+  return String(value).padStart(2, "0");
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onSelectTab,
   onNavigateToSection,
+  onOpenHighlight,
 }) => {
-  const handleViewProjects = () => {
-    onSelectTab("projects");
-    onNavigateToSection("portfolio-grid");
+  const totalTechnologies =
+    skillsData.reduce((total, category) => total + category.skills.length, 0) ||
+    Number(profileData.stats.technologies) ||
+    28;
+
+  const projectsTarget = Number(profileData.stats.projects) || 6;
+  const certsTarget = Number(profileData.stats.certificates) || 5;
+
+  const projectsCount = useOdometerCount(projectsTarget, 580, 60);
+  const techCount = useOdometerCount(totalTechnologies, 680, 120);
+  const certsCount = useOdometerCount(certsTarget, 580, 180);
+
+  const handleStatNavigate = (sectionId: string, tabName: string) => {
+    onSelectTab(tabName);
+    onNavigateToSection(sectionId);
   };
 
   return (
-    <section id="profile-header" className="pt-3 sm:pt-8 pb-3 sm:pb-6">
-      {/* Top Section: Avatar on left, Stats on right (authentic Instagram mobile layout) */}
-      <div className="flex items-center gap-4 sm:gap-12 md:gap-16">
-        {/* Profile Picture with Animated IG Gradient Story Ring */}
-        <div
-          className="relative group cursor-pointer flex-shrink-0"
-          onClick={handleViewProjects}
-        >
-          <div className="w-[78px] h-[78px] sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full p-[2.5px] sm:p-[3px] animated-ig-ring shadow-md transition-transform duration-300 group-hover:scale-105">
-            <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] transition-colors duration-200">
-              <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900 flex items-center justify-center">
-                <Image
-                  src={profilePic}
-                  alt={profileData.name}
-                  fill
-                  sizes="(max-width: 640px) 78px, (max-width: 768px) 144px, 160px"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
+    <section id="profile-header" className="pt-4 sm:pt-8 pb-6 space-y-8">
+      {/* A. MINIMALIST EDITORIAL PROFILE HERO (Bryl Lim Layout + IG Identity) */}
+      <div className="flex flex-col sm:flex-row items-start gap-6 sm:gap-9">
+        {/* Square Editorial Portrait (Monochrome -> Color on hover) + Highlights Trigger */}
+        <div className="relative group shrink-0">
+          <div
+            onClick={() => handleStatNavigate("portfolio-grid", "projects")}
+            className="w-36 h-36 sm:w-44 sm:h-44 rounded-lg overflow-hidden border border-neutral-200 dark:border-zinc-800 bg-neutral-900 relative cursor-pointer"
+          >
+            <Image
+              src={profilePic}
+              alt={profileData.name}
+              fill
+              sizes="(max-width: 640px) 144px, 176px"
+              className="object-cover portrait-bw group-hover:scale-[1.02]"
+              priority
+            />
           </div>
 
-          {/* Active Status Indicator */}
-          <div
-            className="absolute bottom-0.5 right-0.5 sm:bottom-2 sm:right-2 bg-emerald-500 text-white rounded-full p-0.5 sm:p-1 border-2 border-white dark:border-[#0B0B0F] shadow-sm"
-            title="Open to OJT / Internship"
-          >
-            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
-          </div>
+          {onOpenHighlight && (
+            <button
+              type="button"
+              onClick={() => onOpenHighlight(0)}
+              className="mt-2 w-full py-1.5 px-2.5 rounded-md border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 hover:bg-neutral-100 dark:hover:bg-zinc-800 text-[11px] font-mono text-neutral-700 dark:text-zinc-300 flex items-center justify-center gap-1.5 transition-colors"
+            >
+              <span className="w-2 h-2 rounded-full bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-500 shrink-0" />
+              <span>View {highlightsData.length} Highlights</span>
+            </button>
+          )}
         </div>
 
-        {/* Right Side: Profile Name + Stats */}
-        <div className="flex-1 flex flex-col justify-center gap-2 sm:gap-4 min-w-0">
-          {/* Profile Name & Verified Badge */}
-          <div className="flex items-center gap-2">
-            <h1 className="font-bold text-lg sm:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
+        {/* Right Editorial Bio Column */}
+        <div className="space-y-3.5 flex-1 min-w-0">
+          <div className="flex items-center gap-2.5">
+            <h1 className="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">
               {profileData.name}
             </h1>
-            <div title="Verified Developer Profile" className="cursor-help">
-              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 fill-blue-500 inline flex-shrink-0" />
-            </div>
+            <span title="Verified Developer Profile" className="cursor-help shrink-0">
+              <CheckCircle2 className="w-5 h-5 text-blue-500 fill-blue-500" />
+            </span>
           </div>
 
-          {/* Stats Row */}
-          <ProfileStats
-            onStatClick={(sectionId, tabName) => {
-              if (tabName) onSelectTab(tabName);
-              onNavigateToSection(sectionId);
-            }}
-          />
+          <div className="space-y-3 text-sm text-neutral-600 dark:text-zinc-300 leading-relaxed max-w-xl">
+            <p>
+              I&apos;m an aspiring full-stack &amp; mobile developer. I build modern web
+              systems and cross-platform apps, with a focus on real-world
+              operations, clean database architecture, and AI integration.
+            </p>
+            <p className="text-neutral-500 dark:text-zinc-400">
+              Right now I&apos;m completing my 4th-year BSIT degree at{" "}
+              <strong className="text-neutral-900 dark:text-zinc-200 font-medium">
+                De La Salle Lipa
+              </strong>{" "}
+              and shipping production-ready tools people can actually use.
+            </p>
+          </div>
+
+          {/* Inline Minimalist Monospace Social Links */}
+          <div className="pt-1 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-xs text-neutral-500 dark:text-zinc-400">
+            <a
+              href={profileData.socials.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors"
+            >
+              github ↗
+            </a>
+            <a
+              href={profileData.socials.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors"
+            >
+              linkedin ↗
+            </a>
+            <a
+              href={profileData.socials.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors"
+            >
+              resume.pdf ↗
+            </a>
+            <a
+              href={`mailto:${profileData.socials.email}`}
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors"
+            >
+              email ↗
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* Bio Block (Directly beneath avatar + stats) */}
-      <div className="mt-2.5 sm:mt-4 flex flex-col gap-1 text-sm sm:text-[15px]">
-        {/* Professional Category / Title */}
-        <p className="text-xs sm:text-sm text-neutral-600 dark:text-zinc-400 font-medium">
-          {profileData.title}
-        </p>
+      {/* B. 2x3 HAIRLINE CREDENTIALS & IG STATS MATRIX */}
+      <div className="border-y border-neutral-200 dark:border-zinc-800/90 divide-y divide-neutral-200 dark:divide-zinc-800/90">
+        {/* Row 1: Identity & Affiliations */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200 dark:divide-zinc-800/90">
+          <div className="py-3.5 px-4 sm:first:pl-0">
+            <div className="text-xs font-semibold text-neutral-900 dark:text-white">
+              De La Salle Lipa
+            </div>
+            <div className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mt-0.5">
+              4TH-YEAR BSIT · 2027
+            </div>
+          </div>
 
-        {/* Education Line */}
-        <p className="text-xs sm:text-sm text-neutral-700 dark:text-zinc-300 leading-snug">
-          4th-year BSIT @ <span className="font-medium text-neutral-900 dark:text-zinc-100">De La Salle Lipa</span>
-        </p>
+          <div className="py-3.5 px-4">
+            <div className="text-xs font-semibold text-neutral-900 dark:text-white">
+              Full-Stack &amp; Mobile
+            </div>
+            <div className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mt-0.5">
+              NEXT.JS · REACT NATIVE · TS
+            </div>
+          </div>
 
-        {/* OJT Availability Badge */}
-        <div className="pt-1 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60 shadow-2xs w-fit">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Open for OJT &amp; Opportunities
-          </span>
+          <div className="py-3.5 px-4">
+            <div className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Open for OJT</span>
+            </div>
+            <div className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mt-0.5">
+              LIPA CITY, PH · AVAILABLE
+            </div>
+          </div>
+        </div>
+
+        {/* Row 2: Clickable Instagram Profile Stats in Minimalist Hairline Cells */}
+        <div className="grid grid-cols-3 divide-x divide-neutral-200 dark:divide-zinc-800/90">
+          <button
+            type="button"
+            onClick={() => handleStatNavigate("portfolio-grid", "projects")}
+            className="py-4 px-4 first:pl-0 text-left group focus:outline-none transition-colors hover:bg-neutral-100/60 dark:hover:bg-zinc-900/40"
+          >
+            <div className="font-mono text-xl font-bold tabular-nums text-neutral-900 dark:text-white group-hover:text-neutral-600 dark:group-hover:text-zinc-300 flex items-baseline gap-1">
+              <span>{projectsCount}</span>
+              <span className="text-xs text-neutral-400 dark:text-zinc-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                ↗
+              </span>
+            </div>
+            <div className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mt-1">
+              PROJECTS SHIPPED
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleStatNavigate("skills-section", "skills")}
+            className="py-4 px-4 text-left group focus:outline-none transition-colors hover:bg-neutral-100/60 dark:hover:bg-zinc-900/40"
+          >
+            <div className="font-mono text-xl font-bold tabular-nums text-neutral-900 dark:text-white group-hover:text-neutral-600 dark:group-hover:text-zinc-300 flex items-baseline gap-1">
+              <span>{techCount}</span>
+              <span className="text-xs text-neutral-400 dark:text-zinc-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                ↗
+              </span>
+            </div>
+            <div className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mt-1">
+              TECHNOLOGIES
+            </div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() =>
+              handleStatNavigate("certificates-section", "certificates")
+            }
+            className="py-4 px-4 text-left group focus:outline-none transition-colors hover:bg-neutral-100/60 dark:hover:bg-zinc-900/40"
+          >
+            <div className="font-mono text-xl font-bold tabular-nums text-neutral-900 dark:text-white group-hover:text-neutral-600 dark:group-hover:text-zinc-300 flex items-baseline gap-1">
+              <span>{certsCount}</span>
+              <span className="text-xs text-neutral-400 dark:text-zinc-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                ↗
+              </span>
+            </div>
+            <div className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mt-1">
+              CERTIFICATES
+            </div>
+          </button>
         </div>
       </div>
     </section>
