@@ -31,7 +31,7 @@ export interface HighlightStory {
 export interface HighlightGroup {
   id: string;
   title: string;
-  coverIcon: "Trophy" | "ShieldCheck" | "Sparkles" | "GraduationCap" | "Briefcase";
+  coverIcon: "Trophy" | "ShieldCheck" | "Cpu" | "GraduationCap" | "Briefcase";
   timeAgo?: string;
   stories: HighlightStory[];
 }
@@ -137,7 +137,7 @@ export const highlightsData: HighlightGroup[] = [
   {
     id: "ai-gemini",
     title: "AI & Gemini",
-    coverIcon: "Sparkles",
+    coverIcon: "Cpu",
     timeAgo: "Live API",
     stories: [
       {

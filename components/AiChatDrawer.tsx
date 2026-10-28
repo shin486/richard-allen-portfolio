@@ -360,6 +360,12 @@ export const AiChatDrawer: React.FC = () => {
   };
 
   useEffect(() => {
+    const handleOpenEvent = () => setIsOpen(true);
+    window.addEventListener("open-byte-chat", handleOpenEvent);
+    return () => window.removeEventListener("open-byte-chat", handleOpenEvent);
+  }, []);
+
+  useEffect(() => {
     if (isOpen) {
       setShowGreetingBubble(false);
       scrollToBottom();

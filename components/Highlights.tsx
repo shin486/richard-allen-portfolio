@@ -4,7 +4,7 @@ import React from "react";
 import {
   Trophy,
   ShieldCheck,
-  Sparkles,
+  Cpu,
   GraduationCap,
   Briefcase,
 } from "lucide-react";
@@ -21,14 +21,14 @@ export const Highlights: React.FC<HighlightsProps> = ({ onOpenHighlight }) => {
         return Trophy;
       case "ShieldCheck":
         return ShieldCheck;
-      case "Sparkles":
-        return Sparkles;
+      case "Cpu":
+        return Cpu;
       case "GraduationCap":
         return GraduationCap;
       case "Briefcase":
         return Briefcase;
       default:
-        return Sparkles;
+        return Cpu;
     }
   };
 
