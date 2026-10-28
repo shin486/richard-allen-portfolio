@@ -242,11 +242,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
 
               {/* Mode Toggle & Slide Counter Badge */}
               <div className="flex items-center gap-2 flex-shrink-0">
-                {/* Live Interactive Real UI vs Static Poster Switcher */}
+                {/* Live Interactive UI vs Static Poster Switcher */}
                 <div className="flex items-center bg-neutral-100 dark:bg-zinc-800 p-0.5 rounded-full border border-neutral-200 dark:border-zinc-700/60 text-xs">
                   <button
                     onClick={() => setIsLiveDemoView(true)}
-                    aria-label="Launch live interactive real UI"
+                    aria-label="Launch live interactive UI"
                     className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all flex items-center gap-1.5 ${
                       isLiveDemoView
                         ? "bg-ig-gradient text-white shadow-sm"

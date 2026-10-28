@@ -182,7 +182,7 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
 
   return (
     <div className={`w-full flex flex-col items-center ${className}`}>
-      {/* Top Bar: Real UI Status + [ Real UI | Real Code ] Switcher */}
+      {/* Top Bar: UI Status + [ UI | Code ] Switcher */}
       <div className="w-full mb-2.5 px-3 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2 text-[11px] text-neutral-700 dark:text-zinc-300 shadow-2xs">
         <div className="flex items-center gap-2 font-semibold min-w-0">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
@@ -214,7 +214,7 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
                 }`}
               >
                 <Play className="w-2.5 h-2.5 fill-current" />
-                <span>Real UI</span>
+                <span>UI</span>
               </button>
               <button
                 type="button"
@@ -226,14 +226,14 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
                 }`}
               >
                 <Code2 className="w-3 h-3" />
-                <span>Real Code</span>
+                <span>Code</span>
               </button>
             </div>
           )}
         </div>
       </div>
 
-      {/* Render either Authentic Interactive Real UI or Real Repository Source Code */}
+      {/* Render either Interactive UI or Repository Source Code */}
       {subMode === "code" && codeEntry ? (
         <div className="w-full rounded-2xl bg-[#0d0d12] border border-zinc-800 shadow-xl overflow-hidden animate-fade-in">
           <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs text-zinc-300 font-mono">
