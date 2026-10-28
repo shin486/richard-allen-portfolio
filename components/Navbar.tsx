@@ -99,42 +99,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative" ref={switcherRef}>
             <button
               onClick={() => setSwitcherOpen((prev) => !prev)}
-              className="group flex items-center gap-2.5 py-1 px-1.5 -ml-1.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-900/90 text-left focus:outline-none transition-colors"
+              className="group flex items-center gap-1.5 py-1 px-2.5 -ml-2 rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-900/90 text-left focus:outline-none transition-colors border border-transparent hover:border-neutral-200 dark:hover:border-zinc-800"
               aria-expanded={switcherOpen}
               aria-haspopup="true"
               aria-label="Switch portfolio view"
             >
-              <div className="relative w-8 h-8 rounded-full p-[1.5px] animated-ig-ring shadow-sm flex-shrink-0 transition-transform duration-200 group-hover:scale-105">
-                <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[1px]">
-                  <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900">
-                    <Image
-                      src={profilePic}
-                      alt={profileData.name}
-                      fill
-                      sizes="32px"
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#0B0B0F]" />
-              </div>
-
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1">
-                  <span className="font-bold text-sm sm:text-[15px] tracking-tight text-neutral-900 dark:text-zinc-100">
-                    {profileData.username}
-                  </span>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 fill-blue-500 flex-shrink-0" />
-                  <ChevronDown
-                    className={`w-3.5 h-3.5 text-neutral-500 dark:text-zinc-400 transition-transform duration-200 ${
-                      switcherOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </div>
-                <span className="text-[10px] text-neutral-500 dark:text-zinc-400 leading-none hidden sm:inline">
-                  {profileData.name}
-                </span>
-              </div>
+              <span className="font-bold text-base sm:text-lg tracking-tight text-neutral-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition-colors">
+                {profileData.username}
+              </span>
+              <CheckCircle2 className="w-4 h-4 text-blue-500 fill-blue-500 flex-shrink-0" />
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-neutral-500 dark:text-zinc-400 transition-transform duration-200 ${
+                  switcherOpen ? "rotate-180 text-neutral-900 dark:text-white" : ""
+                }`}
+              />
             </button>
 
             {/* Instagram Account Switcher Popover */}
