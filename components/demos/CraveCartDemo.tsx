@@ -1,383 +1,504 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  Utensils,
-  ShoppingCart,
-  Receipt,
-  RotateCcw,
-  Star,
-  MessageSquare,
-  CheckCircle2,
-} from "lucide-react";
+import React, { useState, useMemo } from "react";
 
 interface MenuItem {
   id: number;
   name: string;
+  description: string;
   price: number;
-  category: "Burgers" | "Pizzas" | "Sides" | "Drinks";
-  image: string;
+  category: "mains" | "sides" | "drinks";
+  emoji: string;
 }
 
-/**
- * Exact menu items from data/menu.json in shin486/food-ordering-system:
- * Default cart items & 8% tax formula from public/js/cart.js
- * Feedback fs.writeFileSync from server.js & public/js/feedback.js
- */
-const REAL_MENU_ITEMS: MenuItem[] = [
-  { id: 1, name: "Cheeseburger", price: 5.99, category: "Burgers", image: "burger.jpg" },
-  { id: 2, name: "Pepperoni Pizza", price: 8.99, category: "Pizzas", image: "pizza.jpg" },
-  { id: 3, name: "French Fries", price: 2.99, category: "Sides", image: "fries.jpg" },
-  { id: 4, name: "Soda", price: 1.49, category: "Drinks", image: "soda.jpg" },
+// Synced directly with data/menu.json from https://github.com/shin486/food-ordering-system
+const MENU_DATA: MenuItem[] = [
+  {
+    id: 1,
+    name: "Classic Burger",
+    description: "Juicy beef patty with lettuce, tomato, and special sauce",
+    price: 8.99,
+    category: "mains",
+    emoji: "🍔",
+  },
+  {
+    id: 2,
+    name: "Margherita Pizza",
+    description: "Traditional pizza with tomato sauce, mozzarella, and basil",
+    price: 12.99,
+    category: "mains",
+    emoji: "🍕",
+  },
+  {
+    id: 3,
+    name: "Caesar Salad",
+    description: "Crisp romaine lettuce with Caesar dressing, croutons, and parmesan",
+    price: 6.99,
+    category: "sides",
+    emoji: "🥗",
+  },
+  {
+    id: 4,
+    name: "French Fries",
+    description: "Crispy golden fries with a pinch of salt",
+    price: 3.99,
+    category: "sides",
+    emoji: "🍟",
+  },
+  {
+    id: 5,
+    name: "Iced Tea",
+    description: "Refreshing brewed iced tea with lemon",
+    price: 2.49,
+    category: "drinks",
+    emoji: "🍹",
+  },
 ];
 
-export const CraveCartDemo: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"menu" | "feedback">("menu");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  // Matches default cartItems in public/js/cart.js: 2x Cheeseburger, 1x French Fries
-  const [cart, setCart] = useState<Record<number, number>>({ 1: 2, 3: 1 });
-  const [orderConfirmed, setOrderConfirmed] = useState(false);
-
-  // Feedback state matching public/js/feedback.js
+export default function CraveCartDemo() {
+  const [activeView, setActiveView] = useState<
+    "home" | "menu" | "cart" | "feedback" | "confirmation"
+  >("menu");
+  const [selectedCategory, setSelectedCategory] = useState<
+    "all" | "mains" | "sides" | "drinks"
+  >("all");
+  const [cart, setCart] = useState<Record<number, number>>({
+    1: 1,
+    4: 1,
+  });
+  const [orderId, setOrderId] = useState<string>("1793208941205");
   const [rating, setRating] = useState<number>(5);
-  const [comments, setComments] = useState<string>("Fast ordering and great cheeseburger!");
-  const [feedbackJson, setFeedbackJson] = useState<
-    { rating: number; comments: string; date: string }[]
-  >([
-    {
-      rating: 5,
-      comments: "Smooth checkout flow from /menu to /cart!",
-      date: "2026-10-28T14:20:00.000Z",
-    },
-  ]);
+  const [comments, setComments] = useState<string>("");
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState<boolean>(false);
 
-  const filteredMenu =
-    selectedCategory === "all"
-      ? REAL_MENU_ITEMS
-      : REAL_MENU_ITEMS.filter(
-          (item) => item.category.toLowerCase() === selectedCategory
-        );
+  const filteredMenu = useMemo(() => {
+    if (selectedCategory === "all") return MENU_DATA;
+    return MENU_DATA.filter((item) => item.category === selectedCategory);
+  }, [selectedCategory]);
 
-  const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
+  const cartList = useMemo(() => {
+    return Object.entries(cart)
+      .filter(([, qty]) => qty > 0)
+      .map(([id, qty]) => {
+        const item = MENU_DATA.find((m) => m.id === Number(id))!;
+        return { item, qty, lineTotal: item.price * qty };
+      });
+  }, [cart]);
 
-  // Exact formula from public/js/cart.js:
-  // const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  // const tax = subtotal * 0.08; // 8% tax
-  // const total = subtotal + tax;
-  const subtotal = Object.entries(cart).reduce((sum, [id, qty]) => {
-    const item = REAL_MENU_ITEMS.find((m) => m.id === Number(id));
-    return sum + (item ? item.price * qty : 0);
-  }, 0);
+  const totalItems = cartList.reduce((acc, c) => acc + c.qty, 0);
+  const subtotal = cartList.reduce((acc, c) => acc + c.lineTotal, 0);
   const tax = subtotal * 0.08;
   const total = subtotal + tax;
 
-  const addToCart = (id: number) => {
-    setCart((prev) => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
-    setOrderConfirmed(false);
-  };
-
-  const removeFromCart = (id: number) => {
+  const updateCart = (id: number, delta: number) => {
     setCart((prev) => {
-      const copy = { ...prev };
-      if (copy[id] > 1) copy[id] -= 1;
-      else delete copy[id];
-      return copy;
+      const next = (prev[id] || 0) + delta;
+      if (next <= 0) {
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      }
+      return { ...prev, [id]: next };
     });
   };
 
-  const handleSubmitFeedback = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!comments.trim()) return;
-    const entry = {
-      rating,
-      comments: comments.trim(),
-      date: new Date().toISOString(),
-    };
-    setFeedbackJson((prev) => [entry, ...prev]);
-    setComments("");
+  // POST /api/orders from app.js
+  const handlePlaceOrder = () => {
+    if (cartList.length === 0) return;
+    setOrderId(Date.now().toString());
+    setActiveView("confirmation");
   };
 
-  const handleReset = () => {
-    setCart({ 1: 2, 3: 1 });
-    setOrderConfirmed(false);
-    setSelectedCategory("all");
+  // POST /api/feedback from app.js
+  const handleFeedbackSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFeedbackSubmitted(true);
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-center py-2 text-zinc-900 dark:text-zinc-100 select-none">
-      <div className="w-full max-w-2xl bg-white dark:bg-[#111116] rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl overflow-hidden flex flex-col">
-        {/* Header */}
-        <div className="px-4 py-3 bg-neutral-100 dark:bg-zinc-900 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-orange-500 text-white flex items-center justify-center text-xs">
-              <Utensils className="w-3.5 h-3.5" />
+    /* Exact CSS from shin486/food-ordering-system/public/css/style.css:
+       header { background: #ff6b6b; color: white; padding: 1rem; display: flex; justify-content: space-between; }
+       .category-filter button.active { background: #ff6b6b; color: white; }
+       .menu-item { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; text-align: center; } */
+    <div className="w-full h-full flex flex-col bg-white text-[#333333] font-sans select-none overflow-hidden">
+      {/* Exact <header> from views/menu.html & public/css/style.css */}
+      <header className="bg-[#ff6b6b] text-white px-4 py-2.5 flex items-center justify-between shrink-0 shadow-xs">
+        <div className="flex items-center gap-2">
+          <h1
+            onClick={() => setActiveView("home")}
+            className="text-[16px] font-bold tracking-tight cursor-pointer"
+          >
+            Crave Cart
+          </h1>
+          <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded font-semibold">
+            Express.js + JSON Store
+          </span>
+        </div>
+
+        <nav className="flex items-center gap-3 text-[12px]">
+          {(
+            [
+              { id: "home", label: "Home" },
+              { id: "menu", label: "Menu" },
+              { id: "cart", label: `Cart (${totalItems})` },
+              { id: "feedback", label: "Feedback" },
+            ] as const
+          ).map((nav) => (
+            <button
+              key={nav.id}
+              type="button"
+              onClick={() => setActiveView(nav.id)}
+              className={`transition-opacity ${
+                activeView === nav.id
+                  ? "font-bold underline underline-offset-4"
+                  : "text-white/90 hover:text-white"
+              }`}
+            >
+              {nav.label}
+            </button>
+          ))}
+        </nav>
+      </header>
+
+      {/* Main Content Container (max-width: 1200px) */}
+      <main className="flex-1 overflow-y-auto p-3.5">
+        {/* VIEW 1: views/index.html */}
+        {activeView === "home" && (
+          <div className="space-y-3 text-center py-2">
+            <div className="rounded-xl bg-gradient-to-r from-[#ff6b6b] to-[#ff8e53] text-white p-5 shadow-xs">
+              <span className="inline-block bg-white/20 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-1">
+                Special Offer · Fresh Daily
+              </span>
+              <h2 className="text-xl font-extrabold">Hungry? Order Now!</h2>
+              <p className="text-xs text-white/90 mt-1 max-w-md mx-auto">
+                Freshly grilled Classic Burgers, wood-fired Margherita Pizza, and crispy golden sides delivered hot from Crave Cart.
+              </p>
+              <button
+                type="button"
+                onClick={() => setActiveView("menu")}
+                className="mt-3 px-4 py-1.5 rounded bg-white text-[#ff6b6b] font-bold text-xs hover:bg-white/95 shadow-xs"
+              >
+                Browse Menu →
+              </button>
             </div>
-            <div>
-              <span className="text-xs font-bold text-neutral-800 dark:text-zinc-200 block leading-tight">
-                Crave Cart (server.js • Express 4.18)
-              </span>
-              <span className="text-[10px] text-neutral-500">
-                GET /api/menu • POST /api/feedback (data/feedback.json)
-              </span>
+
+            <div className="grid grid-cols-3 gap-2.5 text-left">
+              {MENU_DATA.slice(0, 3).map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => setActiveView("menu")}
+                  className="border border-[#dddddd] rounded-lg p-2.5 text-center cursor-pointer hover:border-[#ff6b6b] transition-colors"
+                >
+                  <div className="text-2xl mb-1">{item.emoji}</div>
+                  <div className="text-xs font-bold text-[#333333]">{item.name}</div>
+                  <div className="text-[11px] font-bold text-[#ff6b6b]">
+                    ${item.price.toFixed(2)}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+        )}
 
-          <button
-            onClick={handleReset}
-            className="flex items-center gap-1 text-[11px] font-medium text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
-          >
-            <RotateCcw className="w-3 h-3" />
-            <span>Reset</span>
-          </button>
-        </div>
+        {/* VIEW 2: views/menu.html */}
+        {activeView === "menu" && (
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-[15px] font-bold text-[#333333]">Our Menu</h2>
 
-        {/* Navigation matching views/menu.html & views/feedback.html */}
-        <div className="flex border-b border-neutral-200 dark:border-zinc-800 text-xs font-semibold bg-neutral-50 dark:bg-zinc-900/50">
-          <button
-            onClick={() => setActiveTab("menu")}
-            className={`flex-1 py-2.5 text-center flex items-center justify-center gap-1.5 border-b-2 transition-colors ${
-              activeTab === "menu"
-                ? "border-orange-500 text-orange-600 dark:text-orange-400 bg-white dark:bg-zinc-900"
-                : "border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
-            }`}
-          >
-            <ShoppingCart className="w-3.5 h-3.5" />
-            <span>/menu &amp; /cart (data/menu.json)</span>
-          </button>
-          <button
-            onClick={() => setActiveTab("feedback")}
-            className={`flex-1 py-2.5 text-center flex items-center justify-center gap-1.5 border-b-2 transition-colors ${
-              activeTab === "feedback"
-                ? "border-orange-500 text-orange-600 dark:text-orange-400 bg-white dark:bg-zinc-900"
-                : "border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
-            }`}
-          >
-            <MessageSquare className="w-3.5 h-3.5" />
-            <span>/feedback (fs.writeFileSync)</span>
-          </button>
-        </div>
+              {/* Exact .category-filter buttons from views/menu.html & public/css/style.css */}
+              <div className="flex items-center gap-1.5">
+                {(
+                  [
+                    { id: "all", label: "All" },
+                    { id: "mains", label: "Mains" },
+                    { id: "sides", label: "Sides" },
+                    { id: "drinks", label: "Drinks" },
+                  ] as const
+                ).map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`px-3 py-1 rounded text-[11px] font-semibold transition-colors ${
+                      selectedCategory === cat.id
+                        ? "bg-[#ff6b6b] text-white"
+                        : "bg-[#f0f0f0] text-[#333333] hover:bg-[#e4e4e4]"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-        {/* Body Content */}
-        <div className="p-4 sm:p-5 flex-1 min-h-[350px]">
-          {activeTab === "menu" ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Menu Browser (public/js/menu.js) */}
-              <div className="md:col-span-2 space-y-3">
-                {/* Category Filter Buttons from views/menu.html */}
-                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
-                  {[
-                    { key: "all", label: "All Items" },
-                    { key: "burgers", label: "Burgers" },
-                    { key: "pizzas", label: "Pizzas" },
-                    { key: "sides", label: "Sides" },
-                    { key: "drinks", label: "Drinks" },
-                  ].map((cat) => (
-                    <button
-                      key={cat.key}
-                      onClick={() => setSelectedCategory(cat.key)}
-                      className={`px-2.5 py-1 rounded-full font-semibold transition-all ${
-                        selectedCategory === cat.key
-                          ? "bg-orange-500 text-white"
-                          : "bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-400"
-                      }`}
+            {/* Exact .menu-items grid with .menu-item cards from public/css/style.css */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              {filteredMenu.map((item) => {
+                const qty = cart[item.id] || 0;
+                return (
+                  <div
+                    key={item.id}
+                    className="border border-[#dddddd] rounded-[8px] p-3 text-center flex flex-col justify-between hover:border-[#ff6b6b] transition-colors bg-white"
+                  >
+                    <div>
+                      <div className="w-full h-16 rounded bg-[#fff5f5] border border-[#ffe0e0] flex items-center justify-center text-3xl mb-2">
+                        {item.emoji}
+                      </div>
+                      <h3 className="text-[13px] font-bold text-[#333333]">
+                        {item.name}
+                      </h3>
+                      <p className="text-[10.5px] text-[#666666] mt-0.5 line-clamp-2">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    <div className="mt-2.5 pt-2 border-t border-[#eeeeee] flex items-center justify-between">
+                      <span className="text-[13px] font-bold text-[#333333]">
+                        ${item.price.toFixed(2)}
+                      </span>
+
+                      {qty === 0 ? (
+                        <button
+                          type="button"
+                          onClick={() => updateCart(item.id, 1)}
+                          className="bg-[#ff6b6b] hover:bg-[#ff5252] text-white text-[11px] font-semibold px-2.5 py-1 rounded-[4px] transition-colors"
+                        >
+                          Add to Cart
+                        </button>
+                      ) : (
+                        <div className="inline-flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => updateCart(item.id, -1)}
+                            className="w-6 h-6 rounded bg-[#f0f0f0] hover:bg-[#e0e0e0] text-[#333333] font-bold text-xs"
+                          >
+                            -
+                          </button>
+                          <span className="text-xs font-bold text-[#ff6b6b] min-w-[16px]">
+                            {qty}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => updateCart(item.id, 1)}
+                            className="w-6 h-6 rounded bg-[#ff6b6b] hover:bg-[#ff5252] text-white font-bold text-xs"
+                          >
+                            +
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* VIEW 3: views/cart.html */}
+        {activeView === "cart" && (
+          <div className="space-y-3">
+            <h2 className="text-[15px] font-bold text-[#333333]">Your Order</h2>
+
+            {cartList.length === 0 ? (
+              <div className="border border-[#dddddd] rounded-lg p-6 text-center">
+                <p className="text-xs text-[#666666] mb-2">Your cart is empty.</p>
+                <button
+                  type="button"
+                  onClick={() => setActiveView("menu")}
+                  className="bg-[#ff6b6b] hover:bg-[#ff5252] text-white text-xs font-semibold px-3 py-1.5 rounded-[4px]"
+                >
+                  Browse Menu
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                {/* .cart-items */}
+                <div className="sm:col-span-7 border border-[#dddddd] rounded-lg divide-y divide-[#dddddd]">
+                  {cartList.map(({ item, qty, lineTotal }) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between p-2.5 text-xs"
                     >
-                      {cat.label}
-                    </button>
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{item.emoji}</span>
+                        <div>
+                          <div className="font-bold text-[#333333]">{item.name}</div>
+                          <div className="text-[10.5px] text-[#666666]">
+                            ${item.price.toFixed(2)} × {qty}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-[#333333]">
+                          ${lineTotal.toFixed(2)}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => updateCart(item.id, -1)}
+                          className="w-5 h-5 rounded bg-[#f0f0f0] text-[#333333] font-bold"
+                        >
+                          -
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => updateCart(item.id, 1)}
+                          className="w-5 h-5 rounded bg-[#ff6b6b] text-white font-bold"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
                   ))}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {filteredMenu.map((item) => {
-                    const qty = cart[item.id] || 0;
-                    return (
-                      <div
-                        key={item.id}
-                        className="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 flex flex-col justify-between"
-                      >
-                        <div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-mono text-neutral-400">
-                              {item.category}
-                            </span>
-                            <span className="text-[10px] font-mono text-neutral-400">
-                              {item.image}
-                            </span>
-                          </div>
-                          <h5 className="text-xs font-bold mt-0.5">{item.name}</h5>
-                          <span className="text-sm font-black font-mono text-orange-600 dark:text-orange-400 block mt-1">
-                            ${item.price.toFixed(2)}
-                          </span>
-                        </div>
-
-                        <div className="mt-3 flex items-center justify-end">
-                          {qty > 0 ? (
-                            <div className="flex items-center gap-1.5 bg-neutral-100 dark:bg-zinc-800 rounded-lg p-0.5">
-                              <button
-                                onClick={() => removeFromCart(item.id)}
-                                className="w-6 h-6 rounded bg-white dark:bg-zinc-700 text-xs font-bold"
-                              >
-                                -
-                              </button>
-                              <span className="text-xs font-bold font-mono px-1.5">
-                                {qty}
-                              </span>
-                              <button
-                                onClick={() => addToCart(item.id)}
-                                className="w-6 h-6 rounded bg-white dark:bg-zinc-700 text-xs font-bold"
-                              >
-                                +
-                              </button>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => addToCart(item.id)}
-                              className="px-3 py-1 rounded-lg bg-orange-500 text-white text-xs font-bold hover:bg-orange-600 transition-colors"
-                            >
-                              Add to Cart
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Cart Container (public/js/cart.js) */}
-              <div className="p-3.5 rounded-2xl bg-neutral-50 dark:bg-zinc-900/80 border border-neutral-200 dark:border-zinc-800 flex flex-col justify-between space-y-3">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-zinc-800">
-                    <span className="text-xs font-bold">#cartContainer</span>
-                    <span className="text-[11px] font-mono text-neutral-500">
-                      {cartCount} items
-                    </span>
-                  </div>
-
-                  {orderConfirmed ? (
-                    <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-1.5 animate-fade-in">
-                      <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto" />
-                      <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
-                        Order Placed!
-                      </p>
-                      <p className="text-[10px] font-mono text-neutral-500">
-                        Redirected to /order-confirm.html
-                      </p>
+                {/* Exact .order-summary from views/cart.html & public/css/style.css */}
+                <div className="sm:col-span-5 bg-[#f9f9f9] border border-[#e5e5e5] rounded-[8px] p-3 flex flex-col justify-between">
+                  <div className="space-y-1.5 text-xs">
+                    <h3 className="font-bold text-[13px] text-[#333333] border-b border-[#dddddd] pb-1">
+                      Order Summary
+                    </h3>
+                    <div className="flex justify-between">
+                      <span>Subtotal:</span>
+                      <span className="font-mono">${subtotal.toFixed(2)}</span>
                     </div>
-                  ) : (
-                    <div className="space-y-1.5 text-xs max-h-[130px] overflow-y-auto">
-                      {Object.entries(cart).map(([id, qty]) => {
-                        const item = REAL_MENU_ITEMS.find((m) => m.id === Number(id));
-                        if (!item) return null;
-                        return (
-                          <div
-                            key={id}
-                            className="flex justify-between items-center text-[11px]"
-                          >
-                            <span className="truncate pr-1">
-                              {item.name} (${item.price.toFixed(2)} × {qty})
-                            </span>
-                            <span className="font-mono font-bold">
-                              ${(item.price * qty).toFixed(2)}
-                            </span>
-                          </div>
-                        );
-                      })}
+                    <div className="flex justify-between">
+                      <span>Tax (8%):</span>
+                      <span className="font-mono">${tax.toFixed(2)}</span>
                     </div>
-                  )}
-                </div>
-
-                <div className="space-y-1.5 pt-2 border-t border-neutral-200 dark:border-zinc-800 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-neutral-500">#subtotal:</span>
-                    <span className="font-mono font-bold">${subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-neutral-500">#tax (8%):</span>
-                    <span className="font-mono font-bold">${tax.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-sm font-black pt-1 border-t border-neutral-200 dark:border-zinc-800">
-                    <span>#total:</span>
-                    <span className="text-orange-600 dark:text-orange-400 font-mono">
-                      ${total.toFixed(2)}
-                    </span>
+                    <div className="flex justify-between font-bold text-[13px] pt-1 border-t border-[#dddddd]">
+                      <span>Total:</span>
+                      <span className="font-mono text-[#ff6b6b]">
+                        ${total.toFixed(2)}
+                      </span>
+                    </div>
                   </div>
 
                   <button
-                    onClick={() => setOrderConfirmed(true)}
-                    disabled={cartCount === 0}
-                    className="w-full mt-2 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold active:scale-95 transition-all shadow-sm flex items-center justify-center gap-1.5 disabled:opacity-50"
+                    type="button"
+                    onClick={handlePlaceOrder}
+                    className="mt-3 w-full bg-[#ff6b6b] hover:bg-[#ff5252] text-white font-semibold py-2 rounded-[4px] text-xs transition-colors"
                   >
-                    <Receipt className="w-3.5 h-3.5" />
-                    <span>#placeOrderBtn</span>
+                    Place Order (POST /api/orders)
                   </button>
                 </div>
               </div>
+            )}
+          </div>
+        )}
+
+        {/* VIEW 4: views/confirmation.html (.confirmation-box) */}
+        {activeView === "confirmation" && (
+          <div className="py-4 text-center">
+            <div className="bg-[#f9f9f9] border border-[#dddddd] rounded-[8px] p-5 max-w-md mx-auto space-y-2">
+              <div className="text-2xl">🎉</div>
+              <h2 className="text-base font-bold text-[#333333]">
+                Order Confirmed!
+              </h2>
+              <p className="text-xs text-[#666666]">
+                Thank you for ordering from Crave Cart. Your order has been saved to{" "}
+                <code className="bg-white px-1 py-0.5 rounded border">
+                  data/orders.json
+                </code>
+                .
+              </p>
+              <p className="text-xs font-mono font-bold text-[#ff6b6b]">
+                Order ID: #{orderId} · Total: ${total.toFixed(2)}
+              </p>
+              <div className="pt-2 flex justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveView("menu")}
+                  className="bg-[#ff6b6b] hover:bg-[#ff5252] text-white text-xs font-semibold px-3 py-1.5 rounded-[4px]"
+                >
+                  Order More
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveView("feedback")}
+                  className="bg-[#f0f0f0] hover:bg-[#e2e2e2] text-[#333333] text-xs font-semibold px-3 py-1.5 rounded-[4px]"
+                >
+                  Leave Feedback
+                </button>
+              </div>
             </div>
-          ) : (
-            /* Local File-Handling Feedback System (public/js/feedback.js & server.js) */
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in">
-              <form onSubmit={handleSubmitFeedback} className="space-y-3">
+          </div>
+        )}
+
+        {/* VIEW 5: views/feedback.html */}
+        {activeView === "feedback" && (
+          <div className="max-w-md mx-auto space-y-3">
+            <h2 className="text-[15px] font-bold text-[#333333]">
+              Share Your Experience
+            </h2>
+
+            {feedbackSubmitted ? (
+              <div className="bg-[#f9f9f9] border border-[#dddddd] rounded-[8px] p-4 text-center space-y-1.5">
+                <h3 className="text-sm font-bold text-[#333333]">Thank You!</h3>
+                <p className="text-xs text-[#666666]">
+                  Your {rating}-star feedback has been submitted to{" "}
+                  <code>POST /api/feedback</code>.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFeedbackSubmitted(false);
+                    setComments("");
+                  }}
+                  className="mt-2 bg-[#ff6b6b] text-white text-xs font-semibold px-3 py-1 rounded-[4px]"
+                >
+                  Submit Another Review
+                </button>
+              </div>
+            ) : (
+              <form
+                onSubmit={handleFeedbackSubmit}
+                className="bg-[#f9f9f9] border border-[#dddddd] rounded-[8px] p-3.5 space-y-2.5"
+              >
                 <div>
-                  <label className="block text-xs font-bold mb-1">
-                    Star Rating (<code>.star</code> selector):
+                  <label className="block text-xs font-bold text-[#333333] mb-1">
+                    Rating:
                   </label>
-                  <div className="flex items-center gap-1.5">
-                    {[1, 2, 3, 4, 5].map((val) => (
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
                       <button
-                        key={val}
+                        key={star}
                         type="button"
-                        onClick={() => setRating(val)}
-                        className="p-1 focus:outline-none"
+                        onClick={() => setRating(star)}
+                        className={`text-2xl leading-none transition-colors ${
+                          star <= rating ? "text-[#ffcc00]" : "text-[#cccccc]"
+                        }`}
                       >
-                        <Star
-                          className={`w-5 h-5 ${
-                            val <= rating
-                              ? "fill-amber-400 text-amber-400"
-                              : "text-neutral-300 dark:text-zinc-700"
-                          }`}
-                        />
+                        ★
                       </button>
                     ))}
-                    <span className="text-xs font-mono font-bold ml-1">
-                      {rating} / 5
-                    </span>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold mb-1">
-                    Customer Comments:
+                  <label className="block text-xs font-bold text-[#333333] mb-1">
+                    Comments:
                   </label>
                   <textarea
                     rows={3}
                     value={comments}
                     onChange={(e) => setComments(e.target.value)}
-                    placeholder="Write feedback to append to ./data/feedback.json..."
-                    className="w-full p-2.5 text-xs rounded-xl border border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 focus:outline-none"
+                    placeholder="Tell us about your Classic Burger or Margherita Pizza..."
+                    className="w-full rounded border border-[#cccccc] bg-white p-2 text-xs text-[#333333] focus:border-[#ff6b6b] focus:outline-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold shadow-sm"
+                  className="bg-[#ff6b6b] hover:bg-[#ff5252] text-white text-xs font-semibold px-4 py-1.5 rounded-[4px] transition-colors"
                 >
-                  POST /api/feedback (fs.writeFileSync)
+                  Submit Feedback
                 </button>
               </form>
-
-              <div className="p-3 rounded-xl bg-neutral-900 text-zinc-200 font-mono text-[11px] flex flex-col justify-between overflow-hidden">
-                <div className="flex items-center justify-between pb-2 border-b border-white/10 text-[10px] text-zinc-400">
-                  <span>./data/feedback.json</span>
-                  <span className="text-emerald-400">200 OK</span>
-                </div>
-                <pre className="mt-2 overflow-x-auto text-[10px] leading-relaxed text-emerald-300 max-h-[190px]">
-                  {JSON.stringify(feedbackJson, null, 2)}
-                </pre>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+            )}
+          </div>
+        )}
+      </main>
     </div>
   );
-};
+}

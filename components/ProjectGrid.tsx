@@ -41,7 +41,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
   );
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isBreakdownExpanded, setIsBreakdownExpanded] = useState(false);
-  const [isLiveDemoView, setIsLiveDemoView] = useState(false);
+  const [isLiveDemoView, setIsLiveDemoView] = useState(true);
   const [likedIds, setLikedIds] = useState<Record<string, boolean>>({});
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
@@ -242,23 +242,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
 
               {/* Mode Toggle & Slide Counter Badge */}
               <div className="flex items-center gap-2 flex-shrink-0">
-                {/* Visual Preview vs Live Interactive App Switcher */}
+                {/* Live Interactive Real UI vs Static Poster Switcher */}
                 <div className="flex items-center bg-neutral-100 dark:bg-zinc-800 p-0.5 rounded-full border border-neutral-200 dark:border-zinc-700/60 text-xs">
                   <button
-                    onClick={() => setIsLiveDemoView(false)}
-                    aria-label="View static image preview"
-                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all flex items-center gap-1 ${
-                      !isLiveDemoView
-                        ? "bg-white dark:bg-zinc-700 text-neutral-900 dark:text-white shadow-sm"
-                        : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
-                    }`}
-                  >
-                    <Layers className="w-3 h-3 text-ig-pink" />
-                    <span className="hidden sm:inline">Preview</span>
-                  </button>
-                  <button
                     onClick={() => setIsLiveDemoView(true)}
-                    aria-label="Launch live interactive sandbox"
+                    aria-label="Launch live interactive real UI"
                     className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all flex items-center gap-1.5 ${
                       isLiveDemoView
                         ? "bg-ig-gradient text-white shadow-sm"
@@ -266,8 +254,20 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
                     }`}
                   >
                     <Play className="w-2.5 h-2.5 fill-current" />
-                    <span>Try Live</span>
+                    <span>Live UI</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  </button>
+                  <button
+                    onClick={() => setIsLiveDemoView(false)}
+                    aria-label="View static poster preview"
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all flex items-center gap-1 ${
+                      !isLiveDemoView
+                        ? "bg-white dark:bg-zinc-700 text-neutral-900 dark:text-white shadow-sm"
+                        : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+                    }`}
+                  >
+                    <Layers className="w-3 h-3 text-ig-pink" />
+                    <span className="hidden sm:inline">Poster</span>
                   </button>
                 </div>
 

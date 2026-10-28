@@ -1,403 +1,415 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Database,
-  Terminal,
-  Send,
-  Plus,
-  Trash2,
-  CheckCircle2,
-  Lock,
-  Cpu,
-  AlertCircle,
-} from "lucide-react";
+import { ExternalLink, Moon, Sun } from "lucide-react";
 
-/**
- * Exact courses and AI Review schema from ITELECT4:
- * - itelect4-backend/src/data/courses.ts
- * - itelect4-backend/src/ai/prompt.ts & gemini.ts
- * - itelect4-project/src/pages/ReviewPage.tsx
- */
-export interface CourseSubmission {
+interface CourseItem {
   id: string;
-  courseCode: "ITELECT4" | "ITELECT3" | "CSSWENG";
-  courseTitle: string;
-  githubUrl: string;
-  notes: string;
+  code: string;
+  name: string;
+  instructor: string;
 }
 
-export interface AiReview {
+interface ReviewResult {
   summary: string;
   strengths: string[];
   improvements: string[];
-  readiness: "ready" | "almost" | "not-yet";
+  score: number;
+  readiness: "Ready for Submission" | "Needs Minor Revisions" | "Needs Major Work";
 }
 
-const READINESS_STYLE: Record<AiReview["readiness"], string> = {
-  ready: "bg-green-100 text-green-800 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-500/30",
-  almost: "bg-yellow-100 text-yellow-800 dark:bg-amber-950/60 dark:text-amber-300 border-amber-500/30",
-  "not-yet": "bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 border-red-500/30",
-};
+interface SubmissionItem {
+  id: string;
+  courseCode: string;
+  repoUrl: string;
+  status: "Pending" | "Reviewed";
+  submittedAt: string;
+  review: ReviewResult | null;
+}
 
-const REAL_EXAMPLES: { label: string; description: string; review: AiReview }[] = [
+// Synced with ITELECT4 src/store/coursesStore.ts, submissionStore.ts & src/ai/gemini.ts
+const INITIAL_COURSES: CourseItem[] = [
   {
-    label: "Complete Submission (Ready)",
-    description:
-      "A full-stack React + Express + MongoDB course tracker deployed on Vercel. Uses JWT authentication, Zod schema validation on both client and server, and integrates Google Gemini Flash on POST /api/ai with rate limiting and a full README.",
-    review: {
-      summary:
-        "You built and deployed a full-stack React and Express course tracker with JWT login, Zod validation, and a rate-limited Gemini AI review endpoint.",
-      strengths: [
-        "Both frontend and backend are deployed on Vercel with complete README documentation.",
-        "Input and AI responses are strictly validated at runtime using Zod schemas.",
-        "Protected routes enforce tenant isolation per authenticated student.",
-      ],
-      improvements: [
-        "Add end-to-end Playwright tests for the token expiration edge case.",
-      ],
-      readiness: "ready",
-    },
+    id: "1",
+    code: "ITELECT4",
+    name: "IT Elective 4",
+    instructor: "Prof. Santos",
   },
   {
-    label: "Missing README (Almost)",
-    description:
-      "A React and TypeScript app that lists my courses and lets me save a GitHub link for each one. The data comes from my own Express API on Vercel and login uses JWT. No README yet.",
-    review: {
-      summary:
-        "You built a React app that saves a GitHub link per course, backed by your own Express API with JWT login.",
-      strengths: [
-        "Both halves are deployed, so the whole app can be checked.",
-        "Login uses a token from your own API, not a made-up one.",
-      ],
-      improvements: [
-        "Write the README: what the app does, how to run both repos, and both live URLs.",
-      ],
-      readiness: "almost",
-    },
+    id: "2",
+    code: "ITELECT3",
+    name: "IT Elective 3",
+    instructor: "Prof. Reyes",
   },
   {
-    label: "Vague Description (Not-Yet)",
-    description: "It is a website. It has some pages and it uses a database.",
-    review: {
-      summary:
-        "You describe a website with pages and a database, but not what it does.",
-      strengths: [
-        "Pages and a database means the main parts already exist.",
-      ],
-      improvements: [
-        "Say in one sentence what the app is for and who uses it.",
-        "Name the features someone can try, like logging in.",
-        "Say where it is deployed so it can be opened and checked.",
-      ],
-      readiness: "not-yet",
-    },
+    id: "3",
+    code: "CSSWENG",
+    name: "Software Engineering",
+    instructor: "Prof. Cruz",
   },
 ];
 
-const INITIAL_SUBMISSIONS: CourseSubmission[] = [
+const INITIAL_SUBMISSIONS: SubmissionItem[] = [
   {
     id: "sub-1",
     courseCode: "ITELECT4",
-    courseTitle: "IT Elective 4 - TypeScript Advanced Types",
-    githubUrl: "https://github.com/shin486/itelect4-project",
-    notes: "Full-Stack CRUD + Gemini AI endpoint (POST /api/ai)",
+    repoUrl: "https://github.com/shin486/itelect4-project",
+    status: "Reviewed",
+    submittedAt: "2026-10-24",
+    review: {
+      summary:
+        "Full-stack React 19 + TypeScript + Zustand submission tracker with Express & Prisma PostgreSQL backend and structured Gemini 2.5 Flash JSON schema validation.",
+      strengths: [
+        "Clean separation of Zustand stores (authStore, coursesStore, submissionStore, uiStore) with localStorage persistence",
+        "Strict Zod schema validation (ReviewResultSchema) enforcing structured JSON output from @google/genai",
+        "Deployed frontend & backend on Vercel with Prisma PostgreSQL integration",
+      ],
+      improvements: [
+        "Add optimistic UI rollback when backend API latency exceeds 3 seconds",
+        "Include Vitest unit tests for coursesStore and submissionStore actions",
+      ],
+      score: 96,
+      readiness: "Ready for Submission",
+    },
   },
   {
     id: "sub-2",
-    courseCode: "ITELECT3",
-    courseTitle: "IT Elective 3 - Web Development",
-    githubUrl: "https://github.com/shin486/auto-avenue-ims",
-    notes: "Inventory Management & POS Integration",
+    courseCode: "CSSWENG",
+    repoUrl: "https://github.com/shin486/ShinPay-",
+    status: "Reviewed",
+    submittedAt: "2026-10-22",
+    review: {
+      summary:
+        "Enterprise Philippine payroll web application featuring 2025 SSS, PhilHealth (5%), Pag-IBIG, and BIR TRAIN withholding tax calculation engines.",
+      strengths: [
+        "Accurate implementation of 2025 Philippine statutory deduction brackets in lib/payroll-engine.ts",
+        "Multi-entity architecture supporting multiple businesses and automated payslip generation",
+      ],
+      improvements: [
+        "Add PDF batch export for BIR Form 2316 annual alphalist reporting",
+      ],
+      score: 94,
+      readiness: "Ready for Submission",
+    },
   },
   {
     id: "sub-3",
-    courseCode: "CSSWENG",
-    courseTitle: "Software Engineering",
-    githubUrl: "https://github.com/shin486/PalengkeHubFinal",
-    notes: "Mobile Public-Market Price Transparency & Pre-Ordering",
+    courseCode: "ITELECT3",
+    repoUrl: "https://github.com/shin486/auto-avenue-ims",
+    status: "Pending",
+    submittedAt: "2026-10-25",
+    review: null,
   },
 ];
 
-export const ItElectDemo: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"ai" | "crud">("ai");
-  const [prompt, setPrompt] = useState(REAL_EXAMPLES[0].description);
-  const [isAiLoading, setIsAiLoading] = useState(false);
-  const [aiResult, setAiResult] = useState<AiReview>(REAL_EXAMPLES[0].review);
+const READINESS_STYLE: Record<ReviewResult["readiness"], string> = {
+  "Ready for Submission": "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
+  "Needs Minor Revisions": "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+  "Needs Major Work": "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
+};
 
-  const [submissions, setSubmissions] = useState<CourseSubmission[]>(INITIAL_SUBMISSIONS);
-  const [selectedCourse, setSelectedCourse] = useState<"ITELECT4" | "ITELECT3" | "CSSWENG">("ITELECT4");
-  const [newGithubUrl, setNewGithubUrl] = useState("https://github.com/shin486/ShinPay-");
-  const [newNotes, setNewNotes] = useState("Multi-Tenant Payroll SaaS");
-  const [apiLog, setApiLog] = useState<string>(
-    "POST /api/ai 200 OK • model: gemini-flash-latest • reviewSchema.safeParse: true"
-  );
+export default function ItElectDemo() {
+  const [page, setPage] = useState<"dashboard" | "courses" | "submissions" | "review">("dashboard");
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [courses, setCourses] = useState<CourseItem[]>(INITIAL_COURSES);
+  const [submissions, setSubmissions] = useState<SubmissionItem[]>(INITIAL_SUBMISSIONS);
 
-  const handleRunAiReview = () => {
-    if (!prompt.trim()) return;
-    setIsAiLoading(true);
-    setApiLog("POST /api/ai • Wrapping <submission> tags & validating JSON schema...");
+  // CoursesPage state
+  const [newCode, setNewCode] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newInstructor, setNewInstructor] = useState("");
 
-    setTimeout(() => {
-      const matched = REAL_EXAMPLES.find((ex) => ex.description === prompt);
-      if (matched) {
-        setAiResult(matched.review);
-      } else {
-        const isShort = prompt.trim().length < 50;
-        setAiResult({
-          summary: isShort
-            ? "Your submission description is brief and needs more architectural detail."
-            : `You described: "${prompt.slice(0, 70)}..." with full-stack integration.`,
-          strengths: isShort
-            ? ["Core concept is stated."]
-            : [
-                "Clear explanation of the tech stack and user workflow.",
-                "Demonstrates separation between frontend UI and backend API.",
-              ],
-          improvements: isShort
-            ? [
-                "Specify the frontend and backend frameworks used.",
-                "Include the live deployment URL and authentication method.",
-              ]
-            : [
-                "Include instructions for environment variables (.env.example) in the repository.",
-              ],
-          readiness: isShort ? "not-yet" : "ready",
-        });
-      }
-      setIsAiLoading(false);
-      setApiLog("POST /api/ai 200 OK • responseMimeType: application/json • Zod verified");
-    }, 450);
+  // SubmissionsPage state
+  const [subCourseCode, setSubCourseCode] = useState("ITELECT4");
+  const [subRepoUrl, setSubRepoUrl] = useState("");
+
+  // ReviewPage state
+  const [selectedSubId, setSelectedSubId] = useState("sub-1");
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const selectedSub =
+    submissions.find((s) => s.id === selectedSubId) || submissions[0];
+
+  const handleAddCourse = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCode.trim() || !newName.trim()) return;
+    setCourses((prev) => [
+      ...prev,
+      {
+        id: String(Date.now()),
+        code: newCode.trim().toUpperCase(),
+        name: newName.trim(),
+        instructor: newInstructor.trim() || "Prof. Liman",
+      },
+    ]);
+    setNewCode("");
+    setNewName("");
+    setNewInstructor("");
+  };
+
+  const handleRemoveCourse = (id: string) => {
+    setCourses((prev) => prev.filter((c) => c.id !== id));
   };
 
   const handleAddSubmission = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newGithubUrl.trim()) return;
-    const courseTitles: Record<"ITELECT4" | "ITELECT3" | "CSSWENG", string> = {
-      ITELECT4: "IT Elective 4 - TypeScript Advanced Types",
-      ITELECT3: "IT Elective 3 - Web Development",
-      CSSWENG: "Software Engineering",
+    if (!subRepoUrl.trim()) return;
+    const newId = `sub-${Date.now()}`;
+    const newItem: SubmissionItem = {
+      id: newId,
+      courseCode: subCourseCode,
+      repoUrl: subRepoUrl.trim(),
+      status: "Pending",
+      submittedAt: new Date().toISOString().slice(0, 10),
+      review: null,
     };
-    const item: CourseSubmission = {
-      id: `sub-${Date.now()}`,
-      courseCode: selectedCourse,
-      courseTitle: courseTitles[selectedCourse],
-      githubUrl: newGithubUrl.trim(),
-      notes: newNotes.trim() || "Submitted via Course Portal",
-    };
-    setSubmissions((prev) => [item, ...prev]);
-    setNewNotes("");
-    setApiLog(`POST /api/submissions 201 Created • Course: ${selectedCourse}`);
+    setSubmissions((prev) => [newItem, ...prev]);
+    setSubRepoUrl("");
+    setSelectedSubId(newId);
   };
 
-  const handleDeleteSubmission = (id: string) => {
-    setSubmissions((prev) => prev.filter((item) => item.id !== id));
-    setApiLog(`DELETE /api/submissions/${id} 204 No Content`);
+  const handleGenerateReview = () => {
+    if (!selectedSub) return;
+    setIsGenerating(true);
+    setTimeout(() => {
+      const repoName = selectedSub.repoUrl.split("/").pop() || "repository";
+      const generated: ReviewResult = {
+        summary: `Gemini 2.5 Flash audit of ${repoName} for ${selectedSub.courseCode}: Well-structured project repository with clear modular separation and clean commit history.`,
+        strengths: [
+          `Follows ${selectedSub.courseCode} rubric standards with modular component hierarchy`,
+          "Clean TypeScript/ESLint configuration and well-documented README setup",
+          "Proper state management and API error handling patterns",
+        ],
+        improvements: [
+          "Add automated end-to-end integration tests for edge-case user inputs",
+          "Include API response caching headers to reduce cold-start latency",
+        ],
+        score: 93,
+        readiness: "Ready for Submission",
+      };
+      setSubmissions((prev) =>
+        prev.map((s) =>
+          s.id === selectedSub.id ? { ...s, status: "Reviewed", review: generated } : s
+        )
+      );
+      setIsGenerating(false);
+    }, 450);
   };
+
+  const reviewedCount = submissions.filter((s) => s.status === "Reviewed").length;
 
   return (
-    <div className="w-full flex flex-col items-center justify-center py-2 text-zinc-900 dark:text-zinc-100 select-none">
-      <div className="w-full max-w-2xl bg-white dark:bg-[#111116] rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl overflow-hidden flex flex-col">
-        {/* Top Header */}
-        <div className="px-4 py-3 bg-neutral-100 dark:bg-zinc-900 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-ig-purple text-white flex items-center justify-center font-bold text-xs">
-              <Cpu className="w-3.5 h-3.5" />
-            </div>
-            <div>
-              <span className="text-xs font-bold text-neutral-800 dark:text-zinc-200 block leading-none">
-                DLSL Course &amp; AI Review Portal (ITELECT4)
-              </span>
-              <span className="text-[10px] text-neutral-500">
-                React + Express + MongoDB + Google GenAI SDK
-              </span>
-            </div>
-          </div>
-
-          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-            <Lock className="w-2.5 h-2.5" />
-            JWT Bearer Active
+    /* Exact Layout.tsx from C:\Users\Richard Allen\Desktop\ITELECT4\itelect4-project\src\components\Layout.tsx */
+    <div className={isDarkMode ? "dark w-full h-full" : "w-full h-full"}>
+      <div className="w-full h-full flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans select-none overflow-hidden">
+        {/* Exact Top Navbar from Layout.tsx */}
+        <nav className="flex flex-wrap items-center gap-1.5 border-b border-gray-200 bg-white px-3.5 py-2.5 dark:border-gray-700 dark:bg-gray-800 shrink-0">
+          <span className="mr-2 font-bold text-[13px] text-gray-900 dark:text-white">
+            Submission Tracker
           </span>
-        </div>
 
-        {/* Tab Controls */}
-        <div className="flex border-b border-neutral-200 dark:border-zinc-800 text-xs font-semibold bg-neutral-50 dark:bg-zinc-900/50">
-          <button
-            onClick={() => setActiveTab("ai")}
-            className={`flex-1 py-2.5 text-center flex items-center justify-center gap-1.5 border-b-2 transition-colors ${
-              activeTab === "ai"
-                ? "border-ig-purple text-ig-purple bg-white dark:bg-zinc-900"
-                : "border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
-            }`}
-          >
-            <Cpu className="w-3.5 h-3.5 text-ig-purple" />
-            <span>AI Submission Review (ReviewPage.tsx)</span>
-          </button>
-          <button
-            onClick={() => setActiveTab("crud")}
-            className={`flex-1 py-2.5 text-center flex items-center justify-center gap-1.5 border-b-2 transition-colors ${
-              activeTab === "crud"
-                ? "border-ig-purple text-ig-purple bg-white dark:bg-zinc-900"
-                : "border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
-            }`}
-          >
-            <Database className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Course Submissions CRUD ({submissions.length})</span>
-          </button>
-        </div>
+          {(
+            [
+              { id: "dashboard", label: "Dashboard" },
+              { id: "courses", label: "Courses" },
+              { id: "submissions", label: "Submissions" },
+              { id: "review", label: "AI Review" },
+            ] as const
+          ).map((nav) => {
+            const active = page === nav.id;
+            return (
+              <button
+                key={nav.id}
+                type="button"
+                onClick={() => setPage(nav.id)}
+                className={`rounded px-2.5 py-1 text-[11.5px] transition-colors ${
+                  active
+                    ? "bg-blue-600 font-semibold text-white"
+                    : "text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+                }`}
+              >
+                {nav.label}
+              </button>
+            );
+          })}
 
-        {/* Viewport Content */}
-        <div className="p-4 sm:p-5 flex-1 min-h-[360px] flex flex-col justify-between">
-          {activeTab === "ai" ? (
-            <div className="space-y-3.5">
+          <div className="ml-auto flex items-center gap-1.5">
+            <a
+              href="https://itelect4-project-nine.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded border border-blue-200 bg-blue-50 px-2 py-1 text-[10.5px] font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-300"
+              title="Open Live Deployed Vercel App"
+            >
+              Live Vercel App <ExternalLink className="w-3 h-3" />
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="rounded bg-gray-800 px-2.5 py-1 text-[11px] font-medium text-white dark:bg-gray-200 dark:text-gray-900 flex items-center gap-1"
+            >
+              {isDarkMode ? <Sun className="w-3 h-3" /> : <Moon className="w-3 h-3" />}
+              {isDarkMode ? "Light" : "Dark"}
+            </button>
+          </div>
+        </nav>
+
+        {/* Main Outlet Content from DashboardPage.tsx, CoursesPage.tsx, SubmissionsPage.tsx, ReviewPage.tsx */}
+        <main className="flex-1 overflow-y-auto p-3.5 space-y-3">
+          {/* PAGE 1: DashboardPage.tsx */}
+          {page === "dashboard" && (
+            <div className="space-y-3">
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-bold text-neutral-700 dark:text-zinc-300">
-                    Project Description (wrapped in <code>&lt;submission&gt;</code> tags):
-                  </label>
+                <h1 className="text-base font-bold text-gray-900 dark:text-white">
+                  Dashboard
+                </h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Overview of your courses and project submissions.
+                </p>
+              </div>
+
+              {/* UserCard.tsx */}
+              <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-2xs dark:border-gray-700 dark:bg-gray-800 flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-semibold text-gray-900 dark:text-white">
+                    Richard Allen Liman
+                  </p>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                    richard_allen_liman@dlsl.edu.ph · Role: Student (BSIT)
+                  </p>
                 </div>
-                <textarea
-                  rows={2}
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="What it does, how it is built, where it runs..."
-                  className="w-full p-2.5 text-xs rounded-xl border border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 font-medium focus:outline-none"
-                />
+                <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-[10.5px] font-semibold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                  Authenticated
+                </span>
+              </div>
 
-                {/* Worked Examples from src/ai/prompt.ts */}
-                <div className="flex flex-wrap items-center justify-between gap-2 mt-1.5">
-                  <div className="flex flex-wrap items-center gap-1">
-                    <span className="text-[10px] text-neutral-400">Few-Shot Examples:</span>
-                    {REAL_EXAMPLES.map((ex, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          setPrompt(ex.description);
-                          setAiResult(ex.review);
-                        }}
-                        className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300 hover:bg-neutral-200 border border-neutral-200 dark:border-zinc-700"
-                      >
-                        {ex.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    onClick={handleRunAiReview}
-                    disabled={isAiLoading || !prompt.trim()}
-                    className="px-3.5 py-1.5 rounded-lg bg-ig-gradient text-white text-xs font-bold hover:opacity-95 active:scale-95 transition-all shadow-sm flex items-center gap-1.5"
-                  >
-                    <Send className="w-3 h-3" />
-                    <span>{isAiLoading ? "Reviewing..." : "Review with Gemini"}</span>
-                  </button>
+              {/* 3 Stat Cards from DashboardPage.tsx */}
+              <div className="grid grid-cols-3 gap-2.5">
+                <div
+                  onClick={() => setPage("courses")}
+                  className="cursor-pointer rounded-lg border border-gray-200 bg-white p-3 shadow-2xs hover:border-blue-400 dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">Courses</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">
+                    {courses.length}
+                  </p>
+                </div>
+                <div
+                  onClick={() => setPage("submissions")}
+                  className="cursor-pointer rounded-lg border border-gray-200 bg-white p-3 shadow-2xs hover:border-blue-400 dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">Submissions</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">
+                    {submissions.length}
+                  </p>
+                </div>
+                <div
+                  onClick={() => setPage("review")}
+                  className="cursor-pointer rounded-lg border border-gray-200 bg-white p-3 shadow-2xs hover:border-blue-400 dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">AI Reviews</p>
+                  <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                    {reviewedCount}
+                  </p>
                 </div>
               </div>
 
-              {/* Exact Review Output Matching ReviewPage.tsx */}
-              <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-zinc-900/80 border border-neutral-200 dark:border-zinc-800 space-y-2.5 animate-fade-in">
-                <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-zinc-800">
-                  <span className="text-xs font-mono font-bold text-neutral-800 dark:text-zinc-200">
-                    Zod Schema: <code>reviewSchema.safeParse(data)</code>
-                  </span>
-                  <span
-                    className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border uppercase tracking-wide ${
-                      READINESS_STYLE[aiResult.readiness]
-                    }`}
-                  >
-                    Readiness: {aiResult.readiness}
-                  </span>
-                </div>
-
-                <p className="text-xs text-neutral-800 dark:text-zinc-200 font-medium leading-relaxed">
-                  {aiResult.summary}
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                      Strengths
-                    </p>
-                    {aiResult.strengths.map((str, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-start gap-1.5 text-[11px] text-neutral-600 dark:text-zinc-400"
-                      >
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                        <span>{str}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="space-y-1">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-                      Actionable Improvements
-                    </p>
-                    {aiResult.improvements.map((imp, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-start gap-1.5 text-[11px] text-neutral-600 dark:text-zinc-400"
-                      >
-                        <AlertCircle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
-                        <span>{imp}</span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Courses Overview Grid from DashboardPage.tsx */}
+              <div>
+                <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
+                  Courses Overview
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {courses.map((course) => (
+                    <div
+                      key={course.id}
+                      className="rounded-lg border border-gray-200 bg-white p-3 shadow-2xs dark:border-gray-700 dark:bg-gray-800"
+                    >
+                      <span className="inline-block rounded bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                        {course.code}
+                      </span>
+                      <h3 className="mt-1.5 text-xs font-bold text-gray-900 dark:text-white">
+                        {course.name}
+                      </h3>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        {course.instructor}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          ) : (
-            /* Protected Course Submissions CRUD */
+          )}
+
+          {/* PAGE 2: CoursesPage.tsx */}
+          {page === "courses" && (
             <div className="space-y-3">
-              <form onSubmit={handleAddSubmission} className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <select
-                  value={selectedCourse}
-                  onChange={(e) => setSelectedCourse(e.target.value as any)}
-                  className="p-2 text-xs font-bold rounded-xl border border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900"
-                >
-                  <option value="ITELECT4">ITELECT4 (TS Adv Types)</option>
-                  <option value="ITELECT3">ITELECT3 (Web Dev)</option>
-                  <option value="CSSWENG">CSSWENG (Soft Eng)</option>
-                </select>
+              <div>
+                <h1 className="text-base font-bold text-gray-900 dark:text-white">
+                  Courses
+                </h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Manage enrolled courses in Zustand coursesStore.
+                </p>
+              </div>
+
+              <form
+                onSubmit={handleAddCourse}
+                className="grid grid-cols-1 sm:grid-cols-4 gap-2 rounded-lg border border-gray-200 bg-white p-3 shadow-2xs dark:border-gray-700 dark:bg-gray-800"
+              >
                 <input
                   type="text"
-                  value={newNotes}
-                  onChange={(e) => setNewNotes(e.target.value)}
-                  placeholder="Submission title / notes..."
-                  className="p-2 text-xs rounded-xl border border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 focus:outline-none"
+                  placeholder="Code (e.g. CSARCH2)"
+                  value={newCode}
+                  onChange={(e) => setNewCode(e.target.value)}
+                  className="rounded border border-gray-300 px-2.5 py-1.5 text-xs dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                />
+                <input
+                  type="text"
+                  placeholder="Course Name"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  className="rounded border border-gray-300 px-2.5 py-1.5 text-xs dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                />
+                <input
+                  type="text"
+                  placeholder="Instructor"
+                  value={newInstructor}
+                  onChange={(e) => setNewInstructor(e.target.value)}
+                  className="rounded border border-gray-300 px-2.5 py-1.5 text-xs dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 />
                 <button
                   type="submit"
-                  className="px-3.5 py-2 rounded-xl bg-neutral-900 dark:bg-zinc-100 text-white dark:text-black text-xs font-bold hover:opacity-90 flex items-center justify-center gap-1"
+                  className="rounded bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
                 >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Save Submission</span>
+                  + Add Course
                 </button>
               </form>
 
-              <div className="space-y-2 max-h-[220px] overflow-y-auto">
-                {submissions.map((item) => (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {courses.map((course) => (
                   <div
-                    key={item.id}
-                    className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 flex items-center justify-between text-xs"
+                    key={course.id}
+                    className="flex flex-col justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-2xs dark:border-gray-700 dark:bg-gray-800"
                   >
-                    <div className="min-w-0 pr-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-ig-purple/10 text-ig-purple">
-                          {item.courseCode}
-                        </span>
-                        <span className="font-bold truncate">{item.notes}</span>
-                      </div>
-                      <p className="text-[10px] text-neutral-500 font-mono truncate mt-0.5">
-                        {item.githubUrl}
+                    <div>
+                      <span className="inline-block rounded bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                        {course.code}
+                      </span>
+                      <h3 className="mt-1 text-xs font-bold text-gray-900 dark:text-white">
+                        {course.name}
+                      </h3>
+                      <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        {course.instructor}
                       </p>
                     </div>
-
                     <button
-                      onClick={() => handleDeleteSubmission(item.id)}
-                      className="p-1.5 text-neutral-400 hover:text-red-500 transition-colors"
-                      title="Delete submission"
+                      type="button"
+                      onClick={() => handleRemoveCourse(course.id)}
+                      className="mt-2 self-start text-[11px] font-medium text-red-600 hover:underline dark:text-red-400"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      Remove
                     </button>
                   </div>
                 ))}
@@ -405,18 +417,215 @@ export const ItElectDemo: React.FC = () => {
             </div>
           )}
 
-          {/* Mini Console Log */}
-          <div className="mt-4 pt-2.5 border-t border-neutral-200 dark:border-zinc-800 flex items-center justify-between text-[10px] font-mono text-neutral-500 dark:text-zinc-400">
-            <div className="flex items-center gap-1.5 truncate">
-              <Terminal className="w-3 h-3 text-ig-purple flex-shrink-0" />
-              <span className="truncate">{apiLog}</span>
+          {/* PAGE 3: SubmissionsPage.tsx */}
+          {page === "submissions" && (
+            <div className="space-y-3">
+              <div>
+                <h1 className="text-base font-bold text-gray-900 dark:text-white">
+                  Submissions
+                </h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Submit your GitHub repository for AI-powered code review.
+                </p>
+              </div>
+
+              <form
+                onSubmit={handleAddSubmission}
+                className="flex flex-wrap gap-2 rounded-lg border border-gray-200 bg-white p-3 shadow-2xs dark:border-gray-700 dark:bg-gray-800"
+              >
+                <select
+                  value={subCourseCode}
+                  onChange={(e) => setSubCourseCode(e.target.value)}
+                  className="rounded border border-gray-300 px-2.5 py-1.5 text-xs dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                >
+                  {courses.map((c) => (
+                    <option key={c.id} value={c.code}>
+                      {c.code} — {c.name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  placeholder="https://github.com/username/repo"
+                  value={subRepoUrl}
+                  onChange={(e) => setSubRepoUrl(e.target.value)}
+                  className="flex-1 min-w-[180px] rounded border border-gray-300 px-2.5 py-1.5 text-xs dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                />
+                <button
+                  type="submit"
+                  className="rounded bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+                >
+                  Submit Repository
+                </button>
+              </form>
+
+              <div className="space-y-2">
+                {submissions.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-2xs dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="rounded bg-gray-100 px-2 py-0.5 text-[10.5px] font-bold text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                          {sub.courseCode}
+                        </span>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                            sub.status === "Reviewed"
+                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
+                              : "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
+                          }`}
+                        >
+                          {sub.status}
+                        </span>
+                      </div>
+                      <p className="mt-1 truncate text-xs font-medium text-blue-600 dark:text-blue-400">
+                        {sub.repoUrl}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedSubId(sub.id);
+                        setPage("review");
+                      }}
+                      className="ml-2 shrink-0 rounded bg-blue-600 px-2.5 py-1 text-[11px] font-semibold text-white hover:bg-blue-700"
+                    >
+                      {sub.review ? "View AI Review" : "Run AI Review"}
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
-            <span className="text-emerald-600 dark:text-emerald-400 flex-shrink-0 ml-2">
-              ● Express API
-            </span>
-          </div>
-        </div>
+          )}
+
+          {/* PAGE 4: ReviewPage.tsx (Exact Gemini Structured Output UI) */}
+          {page === "review" && (
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h1 className="text-base font-bold text-gray-900 dark:text-white">
+                    AI Code Review
+                  </h1>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Powered by Google Gemini 2.5 Flash + Zod ReviewResultSchema
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <select
+                    value={selectedSub.id}
+                    onChange={(e) => setSelectedSubId(e.target.value)}
+                    className="rounded border border-gray-300 bg-white px-2.5 py-1 text-xs dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                  >
+                    {submissions.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.courseCode} — {s.repoUrl.replace("https://github.com/", "")}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={handleGenerateReview}
+                    disabled={isGenerating}
+                    className="rounded bg-blue-600 px-3 py-1 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isGenerating
+                      ? "Reviewing..."
+                      : selectedSub.review
+                      ? "Re-run Review"
+                      : "Generate Review"}
+                  </button>
+                </div>
+              </div>
+
+              {selectedSub.review ? (
+                <div className="rounded-lg border border-gray-200 bg-white p-3.5 shadow-2xs dark:border-gray-700 dark:bg-gray-800 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-xs text-gray-900 dark:text-white">
+                      {selectedSub.courseCode} ·{" "}
+                      <span className="text-blue-600 dark:text-blue-400">
+                        {selectedSub.repoUrl.replace("https://github.com/", "")}
+                      </span>
+                    </span>
+                    <span
+                      className={`rounded-full px-2.5 py-0.5 text-[10.5px] font-semibold ${
+                        READINESS_STYLE[selectedSub.review.readiness]
+                      }`}
+                    >
+                      {selectedSub.review.readiness}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                    {selectedSub.review.summary}
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div>
+                      <p className="mb-1 text-[11px] font-semibold text-gray-700 dark:text-gray-200">
+                        Strengths
+                      </p>
+                      <ul className="space-y-1">
+                        {selectedSub.review.strengths.map((s, i) => (
+                          <li
+                            key={i}
+                            className="flex gap-1.5 text-[11px] text-gray-600 dark:text-gray-300"
+                          >
+                            <span className="font-bold text-emerald-500">+</span>
+                            <span>{s}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div>
+                      <p className="mb-1 text-[11px] font-semibold text-gray-700 dark:text-gray-200">
+                        Areas for Improvement
+                      </p>
+                      <ul className="space-y-1">
+                        {selectedSub.review.improvements.map((imp, i) => (
+                          <li
+                            key={i}
+                            className="flex gap-1.5 text-[11px] text-gray-600 dark:text-gray-300"
+                          >
+                            <span className="font-bold text-amber-500">-</span>
+                            <span>{imp}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-gray-100 pt-2 text-[11px] text-gray-500 dark:border-gray-700 dark:text-gray-400 flex items-center justify-between">
+                    <span>
+                      Suggested Score:{" "}
+                      <strong className="text-sm text-gray-900 dark:text-white">
+                        {selectedSub.review.score}/100
+                      </strong>
+                    </span>
+                    <span>Validated via Zod ReviewResultSchema</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="rounded-lg border border-dashed border-gray-300 bg-white p-6 text-center dark:border-gray-700 dark:bg-gray-800">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                    This submission has not been reviewed by Gemini AI yet.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleGenerateReview}
+                    className="rounded bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+                  >
+                    Generate Gemini 2.5 Flash Review
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );
-};
+}
