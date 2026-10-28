@@ -155,43 +155,24 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
   const [subMode, setSubMode] = useState<"app" | "code">("app");
   const [isPhoneMode, setIsPhoneMode] = useState<boolean>(projectId === "palengkehub");
 
-  // 3D Magnetic Micro-Tilt & Glass Glare state
+  // Direct 1:1 pixel-accurate cursor spotlight (zero React re-renders, never inverted)
   const chassisRef = useRef<HTMLDivElement>(null);
-  const [tiltStyle, setTiltStyle] = useState<React.CSSProperties>({});
-  const [glarePos, setGlarePos] = useState<{ x: number; y: number; active: boolean }>({
-    x: 50,
-    y: 50,
-    active: false,
-  });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = chassisRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
-
-    // Subtle micro-tilt capped at ±2.6 degrees for professional hardware depth
-    const rotateY = (px - 0.5) * 5.2;
-    const rotateX = (0.5 - py) * 4.2;
-
-    setTiltStyle({
-      transform: `perspective(1400px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`,
-      transition: "transform 0.12s cubic-bezier(0.22, 1, 0.36, 1)",
-    });
-    setGlarePos({
-      x: Math.round((1 - px) * 100),
-      y: Math.round((1 - py) * 100),
-      active: true,
-    });
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    el.style.setProperty("--spot-x", `${x}px`);
+    el.style.setProperty("--spot-y", `${y}px`);
+    el.style.setProperty("--spot-opacity", "1");
   };
 
   const handleMouseLeave = () => {
-    setTiltStyle({
-      transform: "perspective(1400px) rotateX(0deg) rotateY(0deg)",
-      transition: "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
-    });
-    setGlarePos((prev) => ({ ...prev, active: false }));
+    const el = chassisRef.current;
+    if (!el) return;
+    el.style.setProperty("--spot-opacity", "0");
   };
 
   const renderDemo = () => {
@@ -309,21 +290,21 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
         </div>
       </div>
 
-      {/* 3D Magnetic Parallax Wrapper */}
+      {/* 1:1 Pixel-Locked Cursor Spotlight Wrapper */}
       <div
         ref={chassisRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={tiltStyle}
         className="w-full relative"
       >
-        {/* Subtle Glass Glare Overlay (pointer-events-none so all inner controls remain 100% interactive) */}
+        {/* Subtle Cursor Spotlight Overlay (100% locked to exact mouse coordinates, pointer-events-none) */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-2xl z-30 transition-opacity duration-300"
+          className="pointer-events-none absolute inset-0 rounded-2xl z-30 transition-opacity duration-200"
           style={{
-            opacity: glarePos.active ? 1 : 0,
-            background: `radial-gradient(360px circle at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, 0.08), transparent 70%)`,
+            opacity: "var(--spot-opacity, 0)",
+            background:
+              "radial-gradient(280px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255, 255, 255, 0.08), rgba(221, 42, 123, 0.04) 45%, transparent 75%)",
           }}
         />
 
