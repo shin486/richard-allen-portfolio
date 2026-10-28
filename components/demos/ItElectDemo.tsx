@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import {
-  Sparkles,
   Database,
   Terminal,
   Send,
@@ -10,125 +9,194 @@ import {
   Trash2,
   CheckCircle2,
   Lock,
-  Code2,
   Cpu,
-  Layers,
-  RotateCcw,
+  AlertCircle,
 } from "lucide-react";
 
-interface CrudItem {
+/**
+ * Exact courses and AI Review schema from ITELECT4:
+ * - itelect4-backend/src/data/courses.ts
+ * - itelect4-backend/src/ai/prompt.ts & gemini.ts
+ * - itelect4-project/src/pages/ReviewPage.tsx
+ */
+export interface CourseSubmission {
   id: string;
-  title: string;
-  status: "pending" | "in-progress" | "approved";
-  score?: number;
+  courseCode: "ITELECT4" | "ITELECT3" | "CSSWENG";
+  courseTitle: string;
+  githubUrl: string;
+  notes: string;
 }
 
-const SAMPLE_PROMPTS = [
-  "Supabase Row-Level Security policy for tenant data isolation",
-  "React Native offline SQLite cache with background sync",
-  "JWT access token rotation with Redis blacklist",
+export interface AiReview {
+  summary: string;
+  strengths: string[];
+  improvements: string[];
+  readiness: "ready" | "almost" | "not-yet";
+}
+
+const READINESS_STYLE: Record<AiReview["readiness"], string> = {
+  ready: "bg-green-100 text-green-800 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-500/30",
+  almost: "bg-yellow-100 text-yellow-800 dark:bg-amber-950/60 dark:text-amber-300 border-amber-500/30",
+  "not-yet": "bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 border-red-500/30",
+};
+
+const REAL_EXAMPLES: { label: string; description: string; review: AiReview }[] = [
+  {
+    label: "Complete Submission (Ready)",
+    description:
+      "A full-stack React + Express + MongoDB course tracker deployed on Vercel. Uses JWT authentication, Zod schema validation on both client and server, and integrates Google Gemini Flash on POST /api/ai with rate limiting and a full README.",
+    review: {
+      summary:
+        "You built and deployed a full-stack React and Express course tracker with JWT login, Zod validation, and a rate-limited Gemini AI review endpoint.",
+      strengths: [
+        "Both frontend and backend are deployed on Vercel with complete README documentation.",
+        "Input and AI responses are strictly validated at runtime using Zod schemas.",
+        "Protected routes enforce tenant isolation per authenticated student.",
+      ],
+      improvements: [
+        "Add end-to-end Playwright tests for the token expiration edge case.",
+      ],
+      readiness: "ready",
+    },
+  },
+  {
+    label: "Missing README (Almost)",
+    description:
+      "A React and TypeScript app that lists my courses and lets me save a GitHub link for each one. The data comes from my own Express API on Vercel and login uses JWT. No README yet.",
+    review: {
+      summary:
+        "You built a React app that saves a GitHub link per course, backed by your own Express API with JWT login.",
+      strengths: [
+        "Both halves are deployed, so the whole app can be checked.",
+        "Login uses a token from your own API, not a made-up one.",
+      ],
+      improvements: [
+        "Write the README: what the app does, how to run both repos, and both live URLs.",
+      ],
+      readiness: "almost",
+    },
+  },
+  {
+    label: "Vague Description (Not-Yet)",
+    description: "It is a website. It has some pages and it uses a database.",
+    review: {
+      summary:
+        "You describe a website with pages and a database, but not what it does.",
+      strengths: [
+        "Pages and a database means the main parts already exist.",
+      ],
+      improvements: [
+        "Say in one sentence what the app is for and who uses it.",
+        "Name the features someone can try, like logging in.",
+        "Say where it is deployed so it can be opened and checked.",
+      ],
+      readiness: "not-yet",
+    },
+  },
+];
+
+const INITIAL_SUBMISSIONS: CourseSubmission[] = [
+  {
+    id: "sub-1",
+    courseCode: "ITELECT4",
+    courseTitle: "IT Elective 4 - TypeScript Advanced Types",
+    githubUrl: "https://github.com/shin486/itelect4-project",
+    notes: "Full-Stack CRUD + Gemini AI endpoint (POST /api/ai)",
+  },
+  {
+    id: "sub-2",
+    courseCode: "ITELECT3",
+    courseTitle: "IT Elective 3 - Web Development",
+    githubUrl: "https://github.com/shin486/auto-avenue-ims",
+    notes: "Inventory Management & POS Integration",
+  },
+  {
+    id: "sub-3",
+    courseCode: "CSSWENG",
+    courseTitle: "Software Engineering",
+    githubUrl: "https://github.com/shin486/PalengkeHubFinal",
+    notes: "Mobile Public-Market Price Transparency & Pre-Ordering",
+  },
 ];
 
 export const ItElectDemo: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"ai" | "crud">("ai");
-  const [prompt, setPrompt] = useState(SAMPLE_PROMPTS[0]);
+  const [prompt, setPrompt] = useState(REAL_EXAMPLES[0].description);
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [aiResult, setAiResult] = useState<{
-    score: number;
-    verdict: string;
-    strengths: string[];
-    improvements: string[];
-    zodValidated: boolean;
-  } | null>({
-    score: 9.6,
-    verdict: "Enterprise-grade multi-tenant architecture with zero data leakage risk.",
-    strengths: [
-      "Strict auth.uid() check prevents cross-tenant data traversal",
-      "Indexed tenant_id column ensures sub-10ms query execution",
-      "Defends against IDOR (Insecure Direct Object Reference) vulnerabilities",
-    ],
-    improvements: [
-      "Ensure service_role key is strictly confined to server-side edge functions",
-    ],
-    zodValidated: true,
-  });
+  const [aiResult, setAiResult] = useState<AiReview>(REAL_EXAMPLES[0].review);
 
-  const [crudItems, setCrudItems] = useState<CrudItem[]>([
-    { id: "c1", title: "Implement Supabase RLS Schema", status: "approved", score: 9.6 },
-    { id: "c2", title: "Zod Schema Validation for /api/ai", status: "approved", score: 9.8 },
-    { id: "c3", title: "Rate Limiting with Upstash Redis", status: "in-progress", score: 9.2 },
-  ]);
-  const [newTitle, setNewTitle] = useState("");
+  const [submissions, setSubmissions] = useState<CourseSubmission[]>(INITIAL_SUBMISSIONS);
+  const [selectedCourse, setSelectedCourse] = useState<"ITELECT4" | "ITELECT3" | "CSSWENG">("ITELECT4");
+  const [newGithubUrl, setNewGithubUrl] = useState("https://github.com/shin486/ShinPay-");
+  const [newNotes, setNewNotes] = useState("Multi-Tenant Payroll SaaS");
   const [apiLog, setApiLog] = useState<string>(
-    "POST /api/ai 200 OK • Token verify: valid • Response time: 240ms"
+    "POST /api/ai 200 OK • model: gemini-flash-latest • reviewSchema.safeParse: true"
   );
 
-  const handleRunAiReview = async () => {
+  const handleRunAiReview = () => {
     if (!prompt.trim()) return;
     setIsAiLoading(true);
-    setApiLog(`POST /api/ai • Processing prompt through Gemini AI...`);
+    setApiLog("POST /api/ai • Wrapping <submission> tags & validating JSON schema...");
 
-    // Simulate smart dynamic Zod-validated response tailored to the prompt
     setTimeout(() => {
-      const generatedScore = (9.2 + Math.random() * 0.7).toFixed(1);
-      setAiResult({
-        score: parseFloat(generatedScore),
-        verdict: `Evaluated "${prompt.slice(0, 45)}...": High architectural viability with clean separation of concerns.`,
-        strengths: [
-          "Follows 12-factor application guidelines and decoupled design",
-          "Zod schema validation guarantees deterministic runtime typing",
-          "REST endpoint adheres to idempotent HTTP semantics",
-        ],
-        improvements: [
-          "Maintain automated unit test coverage across edge-case payloads",
-        ],
-        zodValidated: true,
-      });
+      const matched = REAL_EXAMPLES.find((ex) => ex.description === prompt);
+      if (matched) {
+        setAiResult(matched.review);
+      } else {
+        const isShort = prompt.trim().length < 50;
+        setAiResult({
+          summary: isShort
+            ? "Your submission description is brief and needs more architectural detail."
+            : `You described: "${prompt.slice(0, 70)}..." with full-stack integration.`,
+          strengths: isShort
+            ? ["Core concept is stated."]
+            : [
+                "Clear explanation of the tech stack and user workflow.",
+                "Demonstrates separation between frontend UI and backend API.",
+              ],
+          improvements: isShort
+            ? [
+                "Specify the frontend and backend frameworks used.",
+                "Include the live deployment URL and authentication method.",
+              ]
+            : [
+                "Include instructions for environment variables (.env.example) in the repository.",
+              ],
+          readiness: isShort ? "not-yet" : "ready",
+        });
+      }
       setIsAiLoading(false);
-      setApiLog(`POST /api/ai 200 OK • Zod schema valid • Output: 462 bytes`);
-    }, 600);
+      setApiLog("POST /api/ai 200 OK • responseMimeType: application/json • Zod verified");
+    }, 450);
   };
 
-  const handleAddCrud = (e: React.FormEvent) => {
+  const handleAddSubmission = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle.trim()) return;
-    const newItem: CrudItem = {
-      id: `c-${Date.now()}`,
-      title: newTitle.trim(),
-      status: "pending",
+    if (!newGithubUrl.trim()) return;
+    const courseTitles: Record<"ITELECT4" | "ITELECT3" | "CSSWENG", string> = {
+      ITELECT4: "IT Elective 4 - TypeScript Advanced Types",
+      ITELECT3: "IT Elective 3 - Web Development",
+      CSSWENG: "Software Engineering",
     };
-    setCrudItems((prev) => [newItem, ...prev]);
-    setNewTitle("");
-    setApiLog(`POST /api/items 201 Created • Item ID: ${newItem.id}`);
+    const item: CourseSubmission = {
+      id: `sub-${Date.now()}`,
+      courseCode: selectedCourse,
+      courseTitle: courseTitles[selectedCourse],
+      githubUrl: newGithubUrl.trim(),
+      notes: newNotes.trim() || "Submitted via Course Portal",
+    };
+    setSubmissions((prev) => [item, ...prev]);
+    setNewNotes("");
+    setApiLog(`POST /api/submissions 201 Created • Course: ${selectedCourse}`);
   };
 
-  const handleDeleteCrud = (id: string) => {
-    setCrudItems((prev) => prev.filter((item) => item.id !== id));
-    setApiLog(`DELETE /api/items/${id} 204 No Content`);
-  };
-
-  const handleToggleStatus = (id: string) => {
-    setCrudItems((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              status:
-                item.status === "pending"
-                  ? "in-progress"
-                  : item.status === "in-progress"
-                  ? "approved"
-                  : "pending",
-            }
-          : item
-      )
-    );
-    setApiLog(`PATCH /api/items/${id} 200 OK • Status updated`);
+  const handleDeleteSubmission = (id: string) => {
+    setSubmissions((prev) => prev.filter((item) => item.id !== id));
+    setApiLog(`DELETE /api/submissions/${id} 204 No Content`);
   };
 
   return (
     <div className="w-full flex flex-col items-center justify-center py-2 text-zinc-900 dark:text-zinc-100 select-none">
-      {/* Workbench Container */}
       <div className="w-full max-w-2xl bg-white dark:bg-[#111116] rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl overflow-hidden flex flex-col">
         {/* Top Header */}
         <div className="px-4 py-3 bg-neutral-100 dark:bg-zinc-900 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between">
@@ -136,17 +204,20 @@ export const ItElectDemo: React.FC = () => {
             <div className="w-6 h-6 rounded-md bg-ig-purple text-white flex items-center justify-center font-bold text-xs">
               <Cpu className="w-3.5 h-3.5" />
             </div>
-            <span className="text-xs font-bold text-neutral-800 dark:text-zinc-200">
-              IT Elective 4 Workbench
-            </span>
+            <div>
+              <span className="text-xs font-bold text-neutral-800 dark:text-zinc-200 block leading-none">
+                DLSL Course &amp; AI Review Portal (ITELECT4)
+              </span>
+              <span className="text-[10px] text-neutral-500">
+                React + Express + MongoDB + Google GenAI SDK
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-              <Lock className="w-2.5 h-2.5" />
-              JWT Auth Active
-            </span>
-          </div>
+          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <Lock className="w-2.5 h-2.5" />
+            JWT Bearer Active
+          </span>
         </div>
 
         {/* Tab Controls */}
@@ -160,7 +231,7 @@ export const ItElectDemo: React.FC = () => {
             }`}
           >
             <Cpu className="w-3.5 h-3.5 text-ig-purple" />
-            <span>Live Gemini AI Reviewer (POST /api/ai)</span>
+            <span>AI Submission Review (ReviewPage.tsx)</span>
           </button>
           <button
             onClick={() => setActiveTab("crud")}
@@ -171,179 +242,177 @@ export const ItElectDemo: React.FC = () => {
             }`}
           >
             <Database className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Protected REST CRUD</span>
+            <span>Course Submissions CRUD ({submissions.length})</span>
           </button>
         </div>
 
         {/* Viewport Content */}
         <div className="p-4 sm:p-5 flex-1 min-h-[360px] flex flex-col justify-between">
           {activeTab === "ai" ? (
-            /* Gemini AI Endpoint Tester */
-            <div className="space-y-4">
+            <div className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-neutral-700 dark:text-zinc-300 mb-1.5">
-                  Input Code / Feature Spec to Review:
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Enter an architecture feature or API endpoint..."
-                    className="flex-1 p-2.5 text-xs rounded-xl border border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 font-medium focus:outline-none"
-                  />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-bold text-neutral-700 dark:text-zinc-300">
+                    Project Description (wrapped in <code>&lt;submission&gt;</code> tags):
+                  </label>
+                </div>
+                <textarea
+                  rows={2}
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="What it does, how it is built, where it runs..."
+                  className="w-full p-2.5 text-xs rounded-xl border border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 font-medium focus:outline-none"
+                />
+
+                {/* Worked Examples from src/ai/prompt.ts */}
+                <div className="flex flex-wrap items-center justify-between gap-2 mt-1.5">
+                  <div className="flex flex-wrap items-center gap-1">
+                    <span className="text-[10px] text-neutral-400">Few-Shot Examples:</span>
+                    {REAL_EXAMPLES.map((ex, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setPrompt(ex.description);
+                          setAiResult(ex.review);
+                        }}
+                        className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300 hover:bg-neutral-200 border border-neutral-200 dark:border-zinc-700"
+                      >
+                        {ex.label}
+                      </button>
+                    ))}
+                  </div>
+
                   <button
                     onClick={handleRunAiReview}
                     disabled={isAiLoading || !prompt.trim()}
-                    className="px-4 py-2.5 rounded-xl bg-ig-gradient text-white text-xs font-bold hover:opacity-95 active:scale-95 transition-all shadow-sm flex items-center gap-1.5 flex-shrink-0 disabled:opacity-50"
+                    className="px-3.5 py-1.5 rounded-lg bg-ig-gradient text-white text-xs font-bold hover:opacity-95 active:scale-95 transition-all shadow-sm flex items-center gap-1.5"
                   >
-                    {isAiLoading ? (
-                      <span className="animate-spin">⏳</span>
-                    ) : (
-                      <Send className="w-3.5 h-3.5" />
-                    )}
-                    <span>Run /api/ai</span>
+                    <Send className="w-3 h-3" />
+                    <span>{isAiLoading ? "Reviewing..." : "Review with Gemini"}</span>
                   </button>
-                </div>
-
-                {/* Quick Presets */}
-                <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                  <span className="text-[10px] text-neutral-400">Presets:</span>
-                  {SAMPLE_PROMPTS.map((p, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setPrompt(p)}
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-400 hover:text-black dark:hover:text-white border border-neutral-200 dark:border-zinc-700"
-                    >
-                      {p.slice(0, 26)}...
-                    </button>
-                  ))}
                 </div>
               </div>
 
-              {/* AI Structured Response Container */}
-              {aiResult && (
-                <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-zinc-900/80 border border-neutral-200 dark:border-zinc-800 space-y-2.5 animate-fade-in">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-zinc-800">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                      <span className="text-xs font-mono font-bold text-neutral-800 dark:text-zinc-200">
-                        Zod Validated Output
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs font-bold font-mono text-emerald-600 dark:text-emerald-400">
-                      <span>Viability:</span>
-                      <span className="text-sm px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">
-                        {aiResult.score} / 10
-                      </span>
-                    </div>
-                  </div>
+              {/* Exact Review Output Matching ReviewPage.tsx */}
+              <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-zinc-900/80 border border-neutral-200 dark:border-zinc-800 space-y-2.5 animate-fade-in">
+                <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-zinc-800">
+                  <span className="text-xs font-mono font-bold text-neutral-800 dark:text-zinc-200">
+                    Zod Schema: <code>reviewSchema.safeParse(data)</code>
+                  </span>
+                  <span
+                    className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border uppercase tracking-wide ${
+                      READINESS_STYLE[aiResult.readiness]
+                    }`}
+                  >
+                    Readiness: {aiResult.readiness}
+                  </span>
+                </div>
 
-                  <p className="text-xs text-neutral-700 dark:text-zinc-300 font-medium leading-relaxed">
-                    {aiResult.verdict}
-                  </p>
+                <p className="text-xs text-neutral-800 dark:text-zinc-200 font-medium leading-relaxed">
+                  {aiResult.summary}
+                </p>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                   <div className="space-y-1">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-                      Validated Strengths
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      Strengths
                     </p>
                     {aiResult.strengths.map((str, idx) => (
                       <div
                         key={idx}
-                        className="flex items-start gap-1.5 text-xs text-neutral-600 dark:text-zinc-400"
+                        className="flex items-start gap-1.5 text-[11px] text-neutral-600 dark:text-zinc-400"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" />
                         <span>{str}</span>
                       </div>
                     ))}
                   </div>
+
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                      Actionable Improvements
+                    </p>
+                    {aiResult.improvements.map((imp, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-start gap-1.5 text-[11px] text-neutral-600 dark:text-zinc-400"
+                      >
+                        <AlertCircle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
+                        <span>{imp}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           ) : (
-            /* Protected CRUD Manager */
+            /* Protected Course Submissions CRUD */
             <div className="space-y-3">
-              <form onSubmit={handleAddCrud} className="flex gap-2">
+              <form onSubmit={handleAddSubmission} className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <select
+                  value={selectedCourse}
+                  onChange={(e) => setSelectedCourse(e.target.value as any)}
+                  className="p-2 text-xs font-bold rounded-xl border border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900"
+                >
+                  <option value="ITELECT4">ITELECT4 (TS Adv Types)</option>
+                  <option value="ITELECT3">ITELECT3 (Web Dev)</option>
+                  <option value="CSSWENG">CSSWENG (Soft Eng)</option>
+                </select>
                 <input
                   type="text"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="New feature task (e.g. Add rate limit middleware)..."
-                  className="flex-1 p-2 text-xs rounded-xl border border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 focus:outline-none"
+                  value={newNotes}
+                  onChange={(e) => setNewNotes(e.target.value)}
+                  placeholder="Submission title / notes..."
+                  className="p-2 text-xs rounded-xl border border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="px-3.5 py-2 rounded-xl bg-neutral-900 dark:bg-zinc-100 text-white dark:text-black text-xs font-bold hover:opacity-90 transition-opacity flex items-center gap-1"
+                  className="px-3.5 py-2 rounded-xl bg-neutral-900 dark:bg-zinc-100 text-white dark:text-black text-xs font-bold hover:opacity-90 flex items-center justify-center gap-1"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Create</span>
+                  <span>Save Submission</span>
                 </button>
               </form>
 
               <div className="space-y-2 max-h-[220px] overflow-y-auto">
-                {crudItems.map((item) => (
+                {submissions.map((item) => (
                   <div
                     key={item.id}
                     className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 flex items-center justify-between text-xs"
                   >
-                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                      <button
-                        onClick={() => handleToggleStatus(item.id)}
-                        className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-                          item.status === "approved"
-                            ? "bg-emerald-500 border-emerald-500 text-white"
-                            : "border-neutral-400"
-                        }`}
-                        title="Click to toggle status"
-                      >
-                        {item.status === "approved" && <CheckCircle2 className="w-3 h-3" />}
-                      </button>
-                      <span
-                        className={`truncate font-medium ${
-                          item.status === "approved"
-                            ? "line-through text-neutral-400"
-                            : "text-neutral-900 dark:text-zinc-100"
-                        }`}
-                      >
-                        {item.title}
-                      </span>
+                    <div className="min-w-0 pr-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-ig-purple/10 text-ig-purple">
+                          {item.courseCode}
+                        </span>
+                        <span className="font-bold truncate">{item.notes}</span>
+                      </div>
+                      <p className="text-[10px] text-neutral-500 font-mono truncate mt-0.5">
+                        {item.githubUrl}
+                      </p>
                     </div>
 
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <span
-                        onClick={() => handleToggleStatus(item.id)}
-                        className={`cursor-pointer px-2 py-0.5 rounded text-[10px] font-semibold capitalize ${
-                          item.status === "approved"
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                            : item.status === "in-progress"
-                            ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                            : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500"
-                        }`}
-                      >
-                        {item.status}
-                      </span>
-                      <button
-                        onClick={() => handleDeleteCrud(item.id)}
-                        className="p-1 text-neutral-400 hover:text-red-500 transition-colors"
-                        title="Delete task"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleDeleteSubmission(item.id)}
+                      className="p-1.5 text-neutral-400 hover:text-red-500 transition-colors"
+                      title="Delete submission"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Mini REST API Console Log Bar */}
+          {/* Mini Console Log */}
           <div className="mt-4 pt-2.5 border-t border-neutral-200 dark:border-zinc-800 flex items-center justify-between text-[10px] font-mono text-neutral-500 dark:text-zinc-400">
             <div className="flex items-center gap-1.5 truncate">
               <Terminal className="w-3 h-3 text-ig-purple flex-shrink-0" />
               <span className="truncate">{apiLog}</span>
             </div>
             <span className="text-emerald-600 dark:text-emerald-400 flex-shrink-0 ml-2">
-              ● API Online
+              ● Express API
             </span>
           </div>
         </div>

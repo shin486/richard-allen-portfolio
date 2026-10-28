@@ -83,10 +83,11 @@ export const projectsData: Project[] = [
       "Vercel",
     ],
     image: "/projects/shinpay-plus.svg",
+    githubUrl: "https://github.com/shin486/ShinPay-",
     featured: false,
     badge: "In Progress",
     hasLiveDemo: true,
-    demoSummary: "Calculate Philippine statutory payroll (SSS, PhilHealth, Pag-IBIG, TRAIN Tax) and test tenant RLS.",
+    demoSummary: "Run payroll across your 5 real businesses (R'S Place, AutoAvenue, DVL Pharmacy, RA's Shuttle) with PH statutory math.",
     keyFeatures: [
       "Multi-tenant payroll processing, employee management, and Philippine statutory compliance",
       "Full-stack Next.js 14 App Router and TypeScript architecture deployed on Vercel",
