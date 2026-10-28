@@ -155,24 +155,40 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
   const [subMode, setSubMode] = useState<"app" | "code">("app");
   const [isPhoneMode, setIsPhoneMode] = useState<boolean>(projectId === "palengkehub");
 
-  // Direct 1:1 pixel-accurate cursor spotlight (zero React re-renders, never inverted)
+  // Stationary outer measurement ref + 3D tilting inner chassis ref
+  // Measuring on the stationary wrapper guarantees 1:1 cursor accuracy even while tilting in 3D
+  const measureRef = useRef<HTMLDivElement>(null);
   const chassisRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = chassisRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
+    const measureEl = measureRef.current;
+    const chassisEl = chassisRef.current;
+    if (!measureEl || !chassisEl) return;
+
+    const rect = measureEl.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    el.style.setProperty("--spot-x", `${x}px`);
-    el.style.setProperty("--spot-y", `${y}px`);
-    el.style.setProperty("--spot-opacity", "1");
+    const px = x / rect.width;
+    const py = y / rect.height;
+
+    // 1:1 pixel-locked cursor light (never inverted)
+    chassisEl.style.setProperty("--spot-x", `${x}px`);
+    chassisEl.style.setProperty("--spot-y", `${y}px`);
+    chassisEl.style.setProperty("--spot-opacity", "1");
+
+    // Smooth 3D magnetic micro-tilt (direct DOM update for zero React state lag)
+    const rotateY = (px - 0.5) * 5.2;
+    const rotateX = (0.5 - py) * 4.2;
+    chassisEl.style.transform = `perspective(1400px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+    chassisEl.style.transition = "transform 0.1s cubic-bezier(0.22, 1, 0.36, 1)";
   };
 
   const handleMouseLeave = () => {
-    const el = chassisRef.current;
-    if (!el) return;
-    el.style.setProperty("--spot-opacity", "0");
+    const chassisEl = chassisRef.current;
+    if (!chassisEl) return;
+    chassisEl.style.setProperty("--spot-opacity", "0");
+    chassisEl.style.transform = "perspective(1400px) rotateX(0deg) rotateY(0deg)";
+    chassisEl.style.transition = "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1)";
   };
 
   const renderDemo = () => {
@@ -290,118 +306,120 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
         </div>
       </div>
 
-      {/* 1:1 Pixel-Locked Cursor Spotlight Wrapper */}
+      {/* Stationary Measurement Wrapper -> 3D Tilting Chassis + 1:1 Pixel-Locked Cursor Spotlight */}
       <div
-        ref={chassisRef}
+        ref={measureRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         className="w-full relative"
       >
-        {/* Subtle Cursor Spotlight Overlay (100% locked to exact mouse coordinates, pointer-events-none) */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-2xl z-30 transition-opacity duration-200"
-          style={{
-            opacity: "var(--spot-opacity, 0)",
-            background:
-              "radial-gradient(280px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255, 255, 255, 0.08), rgba(221, 42, 123, 0.04) 45%, transparent 75%)",
-          }}
-        />
+        <div ref={chassisRef} className="w-full relative will-change-transform">
+          {/* Subtle Cursor Spotlight Overlay (100% locked to exact mouse coordinates, pointer-events-none) */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-2xl z-30 transition-opacity duration-200"
+            style={{
+              opacity: "var(--spot-opacity, 0)",
+              background:
+                "radial-gradient(280px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255, 255, 255, 0.08), rgba(221, 42, 123, 0.04) 45%, transparent 75%)",
+            }}
+          />
 
-        {/* Render either Code or Authentic Hardware Device Viewport */}
-        {subMode === "code" && codeEntry ? (
-          <div className="w-full rounded-2xl bg-[#0d0d12] border border-zinc-800 milled-card shadow-xl overflow-hidden stagger-item">
-            <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs text-zinc-300 font-mono">
-              <span className="truncate">{codeEntry.filePath}</span>
-              {codeEntry.repoUrl && (
-                <a
-                  href={codeEntry.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[11px] text-ig-pink hover:underline flex items-center gap-1 flex-shrink-0 ml-2"
-                >
-                  <span>Open Repo</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              )}
-            </div>
-            <pre className="p-4 text-[11px] sm:text-xs font-mono text-zinc-200 overflow-x-auto leading-relaxed h-[470px]">
-              <code>{codeEntry.code}</code>
-            </pre>
-          </div>
-        ) : projectId === "palengkehub" && isPhoneMode ? (
-          /* Authentic Mobile Phone Frame Chassis for PalengkeHub */
-          <div className="w-full h-[510px] sm:h-[530px] rounded-2xl border border-neutral-200 dark:border-zinc-800 milled-card shadow-xl overflow-hidden bg-neutral-100/70 dark:bg-[#0c0c10] p-2 sm:p-3 flex items-center justify-center relative">
-            {/* Chassis Top Controls */}
-            <div className="absolute top-2.5 right-3.5 z-30 flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={() => setIsPhoneMode(false)}
-                className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/90 dark:bg-zinc-850/90 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white flex items-center gap-1 shadow-2xs transition-transform active:scale-95"
-                title="Expand to Full Width"
-              >
-                <Laptop className="w-3 h-3" />
-                <span>Full View</span>
-              </button>
-            </div>
-
-            {/* Curved Phone Chassis */}
-            <div className="w-full max-w-[340px] sm:max-w-[350px] h-full rounded-[38px] border-[4px] border-zinc-800 dark:border-zinc-700 bg-[#F7F5F0] shadow-2xl relative flex flex-col overflow-hidden">
-              {/* Dynamic Island Pill */}
-              <div className="absolute top-1.5 inset-x-0 mx-auto w-24 h-3.5 bg-black rounded-full flex items-center justify-end pr-2 z-30 shadow-xs pointer-events-none">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500/80" />
-              </div>
-
-              {/* Inner Mobile Screen */}
-              <div className="flex-1 w-full overflow-hidden pt-1.5">
-                <PalengkeHubDemo />
-              </div>
-
-              {/* Home Indicator Bar */}
-              <div className="w-24 h-1 bg-zinc-400 dark:bg-zinc-600 rounded-full mx-auto my-1 shrink-0 pointer-events-none" />
-            </div>
-          </div>
-        ) : (
-          /* Authentic macOS / Desktop Browser Chrome Window */
-          <div className="w-full h-[490px] sm:h-[520px] rounded-2xl border border-neutral-200 dark:border-zinc-800 milled-card shadow-xl overflow-hidden bg-white dark:bg-zinc-950 flex flex-col">
-            {/* macOS Window Header */}
-            <div className="px-3 py-2 bg-neutral-100 dark:bg-zinc-900 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between gap-2 shrink-0">
-              {/* Traffic Lights */}
-              <div className="flex items-center gap-1.5 shrink-0">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f] border border-[#1aab29]" />
-              </div>
-
-              {/* Center SSL Address Bar */}
-              <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-[10.5px] font-mono text-neutral-600 dark:text-zinc-300 max-w-xs truncate shadow-2xs">
-                <Lock className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                <span className="truncate">{activeUrl}</span>
-              </div>
-
-              {/* Right Controls */}
-              <div className="flex items-center gap-1.5 shrink-0">
-                {projectId === "palengkehub" && (
-                  <button
-                    type="button"
-                    onClick={() => setIsPhoneMode(true)}
-                    className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white flex items-center gap-1 transition-transform active:scale-95"
-                    title="Switch to Mobile Chassis"
+          {/* Render either Code or Authentic Hardware Device Viewport */}
+          {subMode === "code" && codeEntry ? (
+            <div className="w-full rounded-2xl bg-[#0d0d12] border border-zinc-800 milled-card shadow-xl overflow-hidden stagger-item">
+              <div className="px-4 py-2.5 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between text-xs text-zinc-300 font-mono">
+                <span className="truncate">{codeEntry.filePath}</span>
+                {codeEntry.repoUrl && (
+                  <a
+                    href={codeEntry.repoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-ig-pink hover:underline flex items-center gap-1 flex-shrink-0 ml-2"
                   >
-                    <Smartphone className="w-3 h-3" />
-                    <span>Phone Frame</span>
-                  </button>
+                    <span>Open Repo</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                 )}
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Live System Online" />
+              </div>
+              <pre className="p-4 text-[11px] sm:text-xs font-mono text-zinc-200 overflow-x-auto leading-relaxed h-[470px]">
+                <code>{codeEntry.code}</code>
+              </pre>
+            </div>
+          ) : projectId === "palengkehub" && isPhoneMode ? (
+            /* Authentic Mobile Phone Frame Chassis for PalengkeHub */
+            <div className="w-full h-[510px] sm:h-[530px] rounded-2xl border border-neutral-200 dark:border-zinc-800 milled-card shadow-xl overflow-hidden bg-neutral-100/70 dark:bg-[#0c0c10] p-2 sm:p-3 flex items-center justify-center relative">
+              {/* Chassis Top Controls */}
+              <div className="absolute top-2.5 right-3.5 z-30 flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setIsPhoneMode(false)}
+                  className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/90 dark:bg-zinc-850/90 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white flex items-center gap-1 shadow-2xs transition-transform active:scale-95"
+                  title="Expand to Full Width"
+                >
+                  <Laptop className="w-3 h-3" />
+                  <span>Full View</span>
+                </button>
+              </div>
+
+              {/* Curved Phone Chassis */}
+              <div className="w-full max-w-[340px] sm:max-w-[350px] h-full rounded-[38px] border-[4px] border-zinc-800 dark:border-zinc-700 bg-[#F7F5F0] shadow-2xl relative flex flex-col overflow-hidden">
+                {/* Dynamic Island Pill */}
+                <div className="absolute top-1.5 inset-x-0 mx-auto w-24 h-3.5 bg-black rounded-full flex items-center justify-end pr-2 z-30 shadow-xs pointer-events-none">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500/80" />
+                </div>
+
+                {/* Inner Mobile Screen */}
+                <div className="flex-1 w-full overflow-hidden pt-1.5">
+                  <PalengkeHubDemo />
+                </div>
+
+                {/* Home Indicator Bar */}
+                <div className="w-24 h-1 bg-zinc-400 dark:bg-zinc-600 rounded-full mx-auto my-1 shrink-0 pointer-events-none" />
               </div>
             </div>
+          ) : (
+            /* Authentic macOS / Desktop Browser Chrome Window */
+            <div className="w-full h-[490px] sm:h-[520px] rounded-2xl border border-neutral-200 dark:border-zinc-800 milled-card shadow-xl overflow-hidden bg-white dark:bg-zinc-950 flex flex-col">
+              {/* macOS Window Header */}
+              <div className="px-3 py-2 bg-neutral-100 dark:bg-zinc-900 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between gap-2 shrink-0">
+                {/* Traffic Lights */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f] border border-[#1aab29]" />
+                </div>
 
-            {/* Main Demo Content */}
-            <div className="flex-1 w-full overflow-hidden">
-              {renderDemo()}
+                {/* Center SSL Address Bar */}
+                <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-[10.5px] font-mono text-neutral-600 dark:text-zinc-300 max-w-xs truncate shadow-2xs">
+                  <Lock className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span className="truncate">{activeUrl}</span>
+                </div>
+
+                {/* Right Controls */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {projectId === "palengkehub" && (
+                    <button
+                      type="button"
+                      onClick={() => setIsPhoneMode(true)}
+                      className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white flex items-center gap-1 transition-transform active:scale-95"
+                      title="Switch to Mobile Chassis"
+                    >
+                      <Smartphone className="w-3 h-3" />
+                      <span>Phone Frame</span>
+                    </button>
+                  )}
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Live System Online" />
+                </div>
+              </div>
+
+              {/* Main Demo Content */}
+              <div className="flex-1 w-full overflow-hidden">
+                {renderDemo()}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
