@@ -19,11 +19,14 @@ import {
   MessageCircle,
   Calendar,
   User,
+  Play,
+  Sparkles,
 } from "lucide-react";
 import { Project, projectsData } from "@/data/projects";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 import { ProjectModal } from "./ProjectModal";
+import { ProjectDemoHost } from "./demos/ProjectDemoHost";
 
 interface ProjectGridProps {
   searchQuery: string;
@@ -38,6 +41,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
   );
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isBreakdownExpanded, setIsBreakdownExpanded] = useState(false);
+  const [isLiveDemoView, setIsLiveDemoView] = useState(false);
   const [likedIds, setLikedIds] = useState<Record<string, boolean>>({});
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
@@ -236,109 +240,178 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
                 </div>
               </div>
 
-              {/* Instagram Multi-Photo Slide Counter Badge (e.g. 1 / 6) */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900/90 dark:bg-zinc-800 text-white text-xs font-semibold tracking-wider flex-shrink-0">
-                <Layers className="w-3.5 h-3.5 text-ig-pink" />
-                <span>
-                  {safeSlideIndex + 1} / {totalSlides}
-                </span>
-              </div>
-            </div>
+              {/* Mode Toggle & Slide Counter Badge */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {/* Visual Preview vs Live Interactive App Switcher */}
+                <div className="flex items-center bg-neutral-100 dark:bg-zinc-800 p-0.5 rounded-full border border-neutral-200 dark:border-zinc-700/60 text-xs">
+                  <button
+                    onClick={() => setIsLiveDemoView(false)}
+                    aria-label="View static image preview"
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all flex items-center gap-1 ${
+                      !isLiveDemoView
+                        ? "bg-white dark:bg-zinc-700 text-neutral-900 dark:text-white shadow-sm"
+                        : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+                    }`}
+                  >
+                    <Layers className="w-3 h-3 text-ig-pink" />
+                    <span className="hidden sm:inline">Preview</span>
+                  </button>
+                  <button
+                    onClick={() => setIsLiveDemoView(true)}
+                    aria-label="Launch live interactive sandbox"
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-bold transition-all flex items-center gap-1.5 ${
+                      isLiveDemoView
+                        ? "bg-ig-gradient text-white shadow-sm"
+                        : "text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white"
+                    }`}
+                  >
+                    <Play className="w-2.5 h-2.5 fill-current" />
+                    <span>Try Live</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  </button>
+                </div>
 
-            {/* Swipeable Slide Track Viewport */}
-            <div
-              className="relative w-full aspect-[4/3] sm:aspect-[16/9] bg-slate-950 overflow-hidden group select-none"
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-            >
-              {/* Horizontal Sliding Track */}
-              <div
-                className="w-full h-full flex transition-transform duration-500 ease-out"
-                style={{
-                  transform: `translateX(-${safeSlideIndex * 100}%)`,
-                }}
-              >
-                {filteredProjects.map((project) => {
-                  const imgSrc = imgErrors[project.id]
-                    ? "/placeholder-project.svg"
-                    : project.image;
-
-                  return (
-                    <div
-                      key={project.id}
-                      onClick={() => setIsBreakdownExpanded((prev) => !prev)}
-                      className="w-full h-full flex-shrink-0 relative cursor-pointer overflow-hidden"
-                    >
-                      <Image
-                        src={imgSrc}
-                        alt={project.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 768px"
-                        className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                        onError={() =>
-                          setImgErrors((prev) => ({
-                            ...prev,
-                            [project.id]: true,
-                          }))
-                        }
-                        priority={project.featured}
-                      />
-
-                      {/* Subtle Bottom Gradient Overlay for readability */}
-                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Top-Left Category & Project Status Badges */}
-              <div className="absolute top-3.5 left-3.5 z-10 flex items-center gap-2 pointer-events-none">
-                {activeProject.badge && (
-                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-ig-gradient text-white shadow-md">
-                    {activeProject.badge}
+                {/* Instagram Slide Counter */}
+                <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900/90 dark:bg-zinc-800 text-white text-xs font-semibold tracking-wider">
+                  <span>
+                    {safeSlideIndex + 1} / {totalSlides}
                   </span>
-                )}
-                <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-black/65 text-white backdrop-blur-md border border-white/15">
-                  {activeProject.category}
-                </span>
-              </div>
-
-              {/* Previous Slide Arrow Button */}
-              {safeSlideIndex > 0 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    goPrev();
-                  }}
-                  aria-label="Previous project"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/15 flex items-center justify-center backdrop-blur-md transition-all active:scale-95 shadow-lg"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-              )}
-
-              {/* Next Slide Arrow Button */}
-              {safeSlideIndex < totalSlides - 1 && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    goNext();
-                  }}
-                  aria-label="Next project"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/15 flex items-center justify-center backdrop-blur-md transition-all active:scale-95 shadow-lg"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              )}
-
-              {/* Bottom Overlay Bar: Date */}
-              <div className="absolute bottom-3.5 left-3.5 z-10 pointer-events-none">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-black/65 text-zinc-200 backdrop-blur-md border border-white/10">
-                  <Calendar className="w-3.5 h-3.5 text-ig-pink" />
-                  {activeProject.year}
-                </span>
+                </div>
               </div>
             </div>
+
+            {/* Viewport: Live Interactive Sandbox vs Image Carousel */}
+            {isLiveDemoView ? (
+              <div className="relative w-full bg-neutral-100/70 dark:bg-[#0c0c10] p-3 sm:p-5 border-b border-neutral-100 dark:border-zinc-800 flex flex-col items-center">
+                {/* Project Switcher Navigation Rail in Sandbox Mode */}
+                <div className="w-full max-w-2xl flex items-center justify-between pb-3 text-xs font-semibold text-neutral-600 dark:text-zinc-400">
+                  <button
+                    onClick={goPrev}
+                    disabled={safeSlideIndex === 0}
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-850 border border-neutral-200 dark:border-zinc-700/80 flex items-center gap-1 disabled:opacity-30 hover:text-black dark:hover:text-white transition-all shadow-xs"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                    <span>Previous</span>
+                  </button>
+
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-neutral-900 dark:text-zinc-100">
+                      {activeProject.title}
+                    </span>
+                    <span className="text-[10px] text-neutral-400 font-mono">
+                      ({safeSlideIndex + 1}/{totalSlides})
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={goNext}
+                    disabled={safeSlideIndex === totalSlides - 1}
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-850 border border-neutral-200 dark:border-zinc-700/80 flex items-center gap-1 disabled:opacity-30 hover:text-black dark:hover:text-white transition-all shadow-xs"
+                  >
+                    <span>Next</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                {/* Functional Interactive Demo Host */}
+                <ProjectDemoHost projectId={activeProject.id} />
+              </div>
+            ) : (
+              /* Swipeable Slide Track Viewport */
+              <div
+                className="relative w-full aspect-[4/3] sm:aspect-[16/9] bg-slate-950 overflow-hidden group select-none"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                {/* Horizontal Sliding Track */}
+                <div
+                  className="w-full h-full flex transition-transform duration-500 ease-out"
+                  style={{
+                    transform: `translateX(-${safeSlideIndex * 100}%)`,
+                  }}
+                >
+                  {filteredProjects.map((project) => {
+                    const imgSrc = imgErrors[project.id]
+                      ? "/placeholder-project.svg"
+                      : project.image;
+
+                    return (
+                      <div
+                        key={project.id}
+                        onClick={() => setIsBreakdownExpanded((prev) => !prev)}
+                        className="w-full h-full flex-shrink-0 relative cursor-pointer overflow-hidden"
+                      >
+                        <Image
+                          src={imgSrc}
+                          alt={project.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 768px"
+                          className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                          onError={() =>
+                            setImgErrors((prev) => ({
+                              ...prev,
+                              [project.id]: true,
+                            }))
+                          }
+                          priority={project.featured}
+                        />
+
+                        {/* Subtle Bottom Gradient Overlay for readability */}
+                        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Top-Left Category & Project Status Badges */}
+                <div className="absolute top-3.5 left-3.5 z-10 flex items-center gap-2 pointer-events-none">
+                  {activeProject.badge && (
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-ig-gradient text-white shadow-md">
+                      {activeProject.badge}
+                    </span>
+                  )}
+                  <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-black/65 text-white backdrop-blur-md border border-white/15">
+                    {activeProject.category}
+                  </span>
+                </div>
+
+                {/* Previous Slide Arrow Button */}
+                {safeSlideIndex > 0 && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goPrev();
+                    }}
+                    aria-label="Previous project"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/15 flex items-center justify-center backdrop-blur-md transition-all active:scale-95 shadow-lg"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                )}
+
+                {/* Next Slide Arrow Button */}
+                {safeSlideIndex < totalSlides - 1 && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goNext();
+                    }}
+                    aria-label="Next project"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/15 flex items-center justify-center backdrop-blur-md transition-all active:scale-95 shadow-lg"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                )}
+
+                {/* Bottom Overlay Bar: Date */}
+                <div className="absolute bottom-3.5 left-3.5 z-10 pointer-events-none">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-black/65 text-zinc-200 backdrop-blur-md border border-white/10">
+                    <Calendar className="w-3.5 h-3.5 text-ig-pink" />
+                    {activeProject.year}
+                  </span>
+                </div>
+              </div>
+            )}
 
             {/* Instagram Action Bar & Pagination Dots */}
             <div className="px-4 sm:px-6 pt-3.5 pb-5">
@@ -537,13 +610,29 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
                 <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
                   <div className="flex flex-wrap items-center gap-2">
                     <button
+                      onClick={() => setIsLiveDemoView((prev) => !prev)}
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold active:scale-95 transition-all shadow-sm ${
+                        isLiveDemoView
+                          ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-black hover:opacity-90"
+                          : "bg-ig-gradient text-white hover:opacity-95"
+                      }`}
+                    >
+                      <Play className="w-3.5 h-3.5 fill-current" />
+                      <span>
+                        {isLiveDemoView
+                          ? "View Photo Preview"
+                          : "⚡ Use Project in Portfolio"}
+                      </span>
+                    </button>
+
+                    <button
                       onClick={() => setIsBreakdownExpanded((prev) => !prev)}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-ig-gradient hover:opacity-90 active:scale-95 transition-all shadow-sm"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
                     >
                       <span>
                         {isBreakdownExpanded
                           ? "Hide Breakdown"
-                          : "View Project Breakdown"}
+                          : "View Specs & Breakdown"}
                       </span>
                       <ChevronDown
                         className={`w-3.5 h-3.5 transition-transform duration-200 ${

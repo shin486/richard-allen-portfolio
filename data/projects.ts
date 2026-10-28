@@ -26,6 +26,10 @@ export interface Project {
   featured?: boolean;
   badge?: string;
   keyFeatures?: string[];
+  /** True when an in-portfolio interactive sandbox is available */
+  hasLiveDemo?: boolean;
+  /** 1-sentence prompt for what recruiters can test in the interactive demo */
+  demoSummary?: string;
 }
 
 /**
@@ -51,6 +55,8 @@ export const projectsData: Project[] = [
     liveDemoUrl: "",
     featured: true,
     badge: "Capstone",
+    hasLiveDemo: true,
+    demoSummary: "Test public-market price transparency & pre-ordering in a simulated mobile device.",
     keyFeatures: [
       "Consumer mobile marketplace for viewing product prices, locating stalls, and placing pre-orders",
       "Supabase authentication and database operations across consumer, vendor, and administrator workflows",
@@ -79,6 +85,8 @@ export const projectsData: Project[] = [
     image: "/projects/shinpay-plus.svg",
     featured: false,
     badge: "In Progress",
+    hasLiveDemo: true,
+    demoSummary: "Calculate Philippine statutory payroll (SSS, PhilHealth, Pag-IBIG, TRAIN Tax) and test tenant RLS.",
     keyFeatures: [
       "Multi-tenant payroll processing, employee management, and Philippine statutory compliance",
       "Full-stack Next.js 14 App Router and TypeScript architecture deployed on Vercel",
@@ -101,6 +109,8 @@ export const projectsData: Project[] = [
     githubUrl: "https://github.com/shin486/itelect4-project",
     featured: false,
     badge: "Full-Stack",
+    hasLiveDemo: true,
+    demoSummary: "Test live Google Gemini AI prompt evaluation (POST /api/ai) and authenticated REST CRUD operations.",
     keyFeatures: [
       "JWT-authenticated CRUD with protected routes and tenant-isolated data across a REST API",
       "Live Google Gemini AI endpoint (POST /api/ai) returning Zod-validated JSON reviews with rate limiting",
@@ -122,6 +132,8 @@ export const projectsData: Project[] = [
     githubUrl: "https://github.com/shin486/auto-avenue-ims",
     featured: false,
     badge: "IMS / POS",
+    hasLiveDemo: true,
+    demoSummary: "Simulate a live POS checkout and watch real-time stock deduction trigger automated vendor reorder POs.",
     keyFeatures: [
       "Centralized web-based Inventory Management System for Auto Avenue Car Care Center",
       "Direct Point of Sale (POS) system integration for real-time inventory updates",
@@ -150,6 +162,8 @@ export const projectsData: Project[] = [
     image: "/projects/avms.svg",
     featured: false,
     badge: "ITSM Project",
+    hasLiveDemo: true,
+    demoSummary: "Issue encrypted campus visitor QR gate passes and inspect the 99.9% uptime SLA ITSM operations log.",
     keyFeatures: [
       "Online pre-registration, QR-coded badges, and customizable access levels by visitor category",
       "Automated SMS and email host notifications for campus security and visitor tracking",
@@ -177,6 +191,8 @@ export const projectsData: Project[] = [
     githubUrl: "https://github.com/shin486/food-ordering-system",
     featured: false,
     badge: "Web App",
+    hasLiveDemo: true,
+    demoSummary: "Customize dishes in an interactive food kiosk, apply coupons, and print a formatted Node.js order receipt.",
     keyFeatures: [
       "Digital menu browser, interactive cart management, and order placement confirmation",
       "Promotional banners and embedded Google Map for store location",

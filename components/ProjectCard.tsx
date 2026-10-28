@@ -44,14 +44,22 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           onError={() => setImgSrc("/placeholder-project.svg")}
         />
 
+        {/* Top Live Demo Badge */}
+        <div className="absolute top-2 left-2 z-10 pointer-events-none">
+          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/70 text-white backdrop-blur-md border border-white/20 shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Live Demo
+          </span>
+        </div>
+
         {/* Desktop Hover Overlay */}
         <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center gap-2.5 p-4 text-white z-20">
           <span className="flex items-center gap-1.5 text-sm font-bold">
             <Heart className={`w-4 h-4 ${isLiked ? "fill-red-500 text-red-500" : "fill-white text-white"}`} />
             <span>View Details</span>
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md">
-            View Project
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-full bg-ig-gradient text-white shadow-md">
+            ⚡ Test App Live
             <ArrowUpRight className="w-3.5 h-3.5" />
           </span>
         </div>

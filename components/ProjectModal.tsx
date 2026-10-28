@@ -13,8 +13,11 @@ import {
   Calendar,
   User,
   Tag,
+  Play,
+  RotateCcw,
 } from "lucide-react";
 import { Project } from "@/data/projects";
+import { ProjectDemoHost } from "./demos/ProjectDemoHost";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -27,6 +30,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [isLiveDemo, setIsLiveDemo] = useState(false);
   const [imgSrc, setImgSrc] = useState(project?.image || "");
 
   useEffect(() => {
@@ -34,6 +38,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
       setImgSrc(project.image);
       setIsLiked(false);
       setIsSaved(false);
+      setIsLiveDemo(false);
     }
   }, [project]);
 
@@ -78,7 +83,54 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           <X className="w-5 h-5" />
         </button>
 
-        {/* Left: Project Image */}
+        {isLiveDemo ? (
+          /* Full-Modal Live Interactive Sandbox Mode */
+          <div className="w-full flex-1 flex flex-col min-h-0 overflow-hidden bg-white dark:bg-[#111116] animate-fade-in">
+            {/* Modal Demo Top Bar */}
+            <div className="px-5 py-3.5 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between pr-14 bg-neutral-50/50 dark:bg-zinc-900/40">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-bold text-base sm:text-lg text-neutral-900 dark:text-zinc-100 truncate">
+                    {project.title}
+                  </h3>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-bold flex-shrink-0">
+                    Live Sandbox
+                  </span>
+                </div>
+                <p className="text-xs text-neutral-500 dark:text-zinc-400 truncate">
+                  {project.subtitle}
+                </p>
+              </div>
+
+              <button
+                onClick={() => setIsLiveDemo(false)}
+                className="px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-zinc-800 text-xs font-semibold text-neutral-700 dark:text-zinc-300 hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors flex-shrink-0"
+              >
+                Back to Details
+              </button>
+            </div>
+
+            {/* Scrollable Demo Container */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col items-center">
+              <ProjectDemoHost projectId={project.id} />
+            </div>
+
+            {/* Bottom Controls */}
+            <div className="border-t border-neutral-200 dark:border-zinc-800 p-3 sm:p-4 flex items-center justify-between bg-neutral-50 dark:bg-zinc-900/60">
+              <span className="text-xs text-neutral-500">
+                Functional demo running directly in client sandbox.
+              </span>
+              <button
+                onClick={() => setIsLiveDemo(false)}
+                className="px-4 py-2 rounded-lg bg-neutral-900 dark:bg-zinc-100 text-white dark:text-black text-xs font-bold hover:opacity-90 transition-opacity"
+              >
+                Return to Overview &amp; Specs
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Left: Project Image */}
         <div className="relative w-full md:w-[45%] aspect-video md:aspect-auto md:h-full bg-slate-950 flex items-center justify-center overflow-hidden flex-shrink-0">
           <Image
             src={imgSrc}
@@ -226,36 +278,44 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               </button>
             </div>
 
-            {/* Action Buttons: Only shown if links exist */}
-            {(project.githubUrl || project.liveDemoUrl) && (
-              <div className="flex items-center gap-2">
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold text-neutral-900 dark:text-zinc-100 bg-neutral-100 dark:bg-zinc-800 hover:bg-neutral-200 dark:hover:bg-zinc-700 border border-neutral-200 dark:border-zinc-700/60 transition-colors flex items-center justify-center gap-1.5"
-                  >
-                    <Github className="w-4 h-4" />
-                    <span>GitHub</span>
-                  </a>
-                )}
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setIsLiveDemo(true)}
+                className="flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-bold text-white bg-ig-gradient hover:opacity-95 active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-sm"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>⚡ Use Project Live</span>
+              </button>
 
-                {project.liveDemoUrl && (
-                  <a
-                    href={project.liveDemoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold text-white bg-ig-gradient hover:opacity-95 transition-opacity flex items-center justify-center gap-1.5 shadow-sm"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    <span>Live Demo</span>
-                  </a>
-                )}
-              </div>
-            )}
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-2 px-3.5 rounded-lg text-xs sm:text-sm font-semibold text-neutral-900 dark:text-zinc-100 bg-neutral-100 dark:bg-zinc-800 hover:bg-neutral-200 dark:hover:bg-zinc-700 border border-neutral-200 dark:border-zinc-700/60 transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <Github className="w-4 h-4" />
+                  <span>GitHub</span>
+                </a>
+              )}
+
+              {project.liveDemoUrl && (
+                <a
+                  href={project.liveDemoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-2 px-3.5 rounded-lg text-xs sm:text-sm font-semibold text-neutral-900 dark:text-zinc-100 bg-neutral-100 dark:bg-zinc-800 hover:bg-neutral-200 dark:hover:bg-zinc-700 border border-neutral-200 dark:border-zinc-700/60 transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Demo</span>
+                </a>
+              )}
+            </div>
           </div>
         </div>
+      </>
+    )}
       </div>
     </div>
   );
