@@ -21,6 +21,9 @@ import {
   User,
   Play,
   Sparkles,
+  Smartphone,
+  Database,
+  Server,
 } from "lucide-react";
 import { Project, projectsData } from "@/data/projects";
 import { profileData } from "@/data/profile";
@@ -568,17 +571,108 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </div>
                 )}
 
-                {/* Tech Stack Chips */}
+                {/* Tech Stack Chips with Branded Micro-Halos & 3D Keyboard Reactive Link */}
                 <div className="flex flex-wrap gap-1.5 pt-2 border-t border-neutral-100 dark:border-zinc-800/80">
-                  {activeProject.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2.5 py-1 bg-neutral-100 dark:bg-zinc-800/80 text-neutral-700 dark:text-zinc-300 text-xs font-medium rounded-md border border-neutral-200/60 dark:border-zinc-700/60 flex items-center gap-1"
-                    >
-                      <Code2 className="w-3 h-3 text-ig-pink" />
-                      {tech}
-                    </span>
-                  ))}
+                  {activeProject.technologies.map((tech) => {
+                    const t = tech.toLowerCase();
+
+                    let brandColor = "hover:border-zinc-500 hover:text-white";
+                    let haloGlow = "hover:shadow-[0_0_12px_rgba(255,255,255,0.15)]";
+                    let icon = <Code2 className="w-3 h-3 text-ig-pink" />;
+                    let note = `${tech} in production architecture.`;
+
+                    if (t.includes("react native") || t === "react") {
+                      brandColor = "hover:border-cyan-500/60 hover:bg-cyan-950/20 hover:text-cyan-300";
+                      haloGlow = "hover:shadow-[0_0_12px_rgba(6,182,212,0.25)]";
+                      icon = (
+                        <svg className="w-3 h-3 text-cyan-400 group-hover/tech:rotate-45 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(30 12 12)" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(90 12 12)" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(150 12 12)" />
+                          <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                        </svg>
+                      );
+                      note = "React Native: Smooth cross-platform mobile apps for iOS and Android.";
+                    } else if (t.includes("expo")) {
+                      brandColor = "hover:border-white/60 hover:bg-zinc-800/40 hover:text-white";
+                      haloGlow = "hover:shadow-[0_0_12px_rgba(255,255,255,0.2)]";
+                      icon = (
+                        <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13H5.5L12 6.5z" />
+                        </svg>
+                      );
+                      note = "Expo: EAS updates, camera, geolocation, and native mobile modules.";
+                    } else if (t.includes("typescript")) {
+                      brandColor = "hover:border-blue-500/60 hover:bg-blue-950/20 hover:text-blue-300";
+                      haloGlow = "hover:shadow-[0_0_12px_rgba(59,130,246,0.25)]";
+                      icon = (
+                        <span className="w-3 h-3 rounded-[2.5px] bg-[#3178C6] text-[8px] font-black text-white flex items-center justify-center font-mono leading-none">
+                          TS
+                        </span>
+                      );
+                      note = "TypeScript: Strict type safety, generics, and zero runtime surprises.";
+                    } else if (t.includes("supabase")) {
+                      brandColor = "hover:border-emerald-500/60 hover:bg-emerald-950/20 hover:text-emerald-300";
+                      haloGlow = "hover:shadow-[0_0_12px_rgba(16,185,129,0.25)]";
+                      icon = (
+                        <svg className="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M13.5 2L3 14.5h7.5L9 22l12-13.5h-8.5L13.5 2z" />
+                        </svg>
+                      );
+                      note = "Supabase: Realtime subscriptions, Auth, Storage, and PostgreSQL RLS.";
+                    } else if (t.includes("postgres") || t.includes("sql")) {
+                      brandColor = "hover:border-sky-500/60 hover:bg-sky-950/20 hover:text-sky-300";
+                      haloGlow = "hover:shadow-[0_0_12px_rgba(14,165,233,0.25)]";
+                      icon = (
+                        <svg className="w-3 h-3 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <ellipse cx="12" cy="7" rx="8" ry="3" />
+                          <path d="M4 7v10c0 1.66 3.58 3 8 3s8-1.34 8-3V7" />
+                          <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
+                        </svg>
+                      );
+                      note = "PostgreSQL: ACID-compliant relational schemas, indexed queries, and foreign keys.";
+                    } else if (t.includes("next")) {
+                      brandColor = "hover:border-white/60 hover:bg-zinc-800/40 hover:text-white";
+                      haloGlow = "hover:shadow-[0_0_12px_rgba(255,255,255,0.2)]";
+                      icon = <span className="font-mono font-black text-[9px] text-white">N</span>;
+                      note = "Next.js App Router: Server Components, Server Actions, and lightning SSR.";
+                    } else if (t.includes("node") || t.includes("express")) {
+                      brandColor = "hover:border-green-500/60 hover:bg-green-950/20 hover:text-green-300";
+                      haloGlow = "hover:shadow-[0_0_12px_rgba(34,197,94,0.25)]";
+                      icon = <Server className="w-3 h-3 text-green-400" />;
+                      note = "Node.js & Express: Lightweight REST APIs, middleware, and route handlers.";
+                    } else if (t.includes("mongo")) {
+                      brandColor = "hover:border-emerald-500/60 hover:bg-emerald-950/20 hover:text-emerald-300";
+                      haloGlow = "hover:shadow-[0_0_12px_rgba(16,185,129,0.25)]";
+                      icon = <Database className="w-3 h-3 text-emerald-400" />;
+                      note = "MongoDB: NoSQL document store with Mongoose ODM schemas.";
+                    } else if (t.includes("tailwind") || t.includes("css")) {
+                      brandColor = "hover:border-teal-400/60 hover:bg-teal-950/20 hover:text-teal-300";
+                      haloGlow = "hover:shadow-[0_0_12px_rgba(45,212,191,0.25)]";
+                      icon = <Sparkles className="w-3 h-3 text-teal-400" />;
+                      note = "Tailwind CSS: Utility-first styling with dark-mode responsiveness.";
+                    }
+
+                    const handleMouseEnter = () => {
+                      if (typeof window !== "undefined") {
+                        window.dispatchEvent(
+                          new CustomEvent("shin-tech-hover", { detail: { tech } })
+                        );
+                      }
+                    };
+
+                    return (
+                      <span
+                        key={tech}
+                        data-note={note}
+                        onMouseEnter={handleMouseEnter}
+                        className={`group/tech px-2.5 py-1 bg-neutral-100 dark:bg-zinc-900/90 text-neutral-700 dark:text-zinc-300 text-xs font-medium rounded-md border border-neutral-200/80 dark:border-zinc-800 transition-all duration-200 cursor-default flex items-center gap-1.5 active:scale-95 hover:-translate-y-0.5 ${brandColor} ${haloGlow}`}
+                      >
+                        {icon}
+                        <span>{tech}</span>
+                      </span>
+                    );
+                  })}
                 </div>
 
                 {/* Inline Project Breakdown (Expands directly on the page, no modal layer lock) */}
@@ -609,47 +703,68 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 )}
 
                 {/* Action Footer Buttons */}
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
+                <div className="flex flex-wrap items-center justify-between gap-2.5 pt-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    {/* Primary CTA: Clean high-contrast Live Demo */}
+                    {/* Primary CTA: Linear/Apple Specular Shimmer Beam Button */}
                     <button
                       type="button"
                       onClick={launchInteractiveDemo}
-                      className="bg-white text-zinc-950 hover:bg-zinc-200 font-medium px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 text-xs sm:text-sm shadow-sm"
+                      data-note="Launch the interactive in-browser phone simulator. No setup needed."
+                      className="specular-beam beacon-pulse bg-white text-zinc-950 hover:bg-zinc-100 active:scale-95 font-bold px-4 py-2 rounded-lg transition-all inline-flex items-center gap-2 text-xs sm:text-sm shadow-sm"
                     >
                       <Play className="w-4 h-4 fill-current" />
                       <span>Live Demo</span>
                     </button>
 
-                    {/* Secondary CTA: Clean bordered GitHub */}
+                    {/* Secondary CTA: Clean Bordered GitHub */}
                     {activeProject.githubUrl && (
                       <a
                         href={activeProject.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 text-xs sm:text-sm font-medium"
+                        data-note="Explore raw commits, clean architecture, and modular code on GitHub."
+                        className="bg-zinc-900 hover:bg-zinc-850 text-zinc-200 hover:text-white border border-zinc-800 hover:border-zinc-700 active:scale-95 px-3.5 py-2 rounded-lg transition-all inline-flex items-center gap-2 text-xs sm:text-sm font-medium"
                       >
                         <Github className="w-4 h-4" />
                         <span>GitHub</span>
                       </a>
                     )}
 
-                    <button
-                      type="button"
-                      onClick={() => setIsLiveDemoView((prev) => !prev)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-800/80 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
-                    >
-                      <Layers className="w-3.5 h-3.5 text-ig-pink" />
-                      <span>
-                        {isLiveDemoView
-                          ? "Photo Preview"
-                          : "Live UI"}
-                      </span>
-                    </button>
+                    {/* Segmented View Mode Switcher: Eliminates "Live UI" ambiguity! */}
+                    <div className="inline-flex items-center p-0.5 rounded-lg bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-xs font-semibold">
+                      <button
+                        type="button"
+                        onClick={() => setIsLiveDemoView(true)}
+                        data-note="Switch to in-browser mobile phone simulator."
+                        className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
+                          isLiveDemoView
+                            ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-xs"
+                            : "text-neutral-500 hover:text-neutral-900 dark:hover:text-zinc-200"
+                        }`}
+                      >
+                        <Smartphone className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>App UI</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsLiveDemoView(false)}
+                        data-note="Switch to high-resolution poster photo preview."
+                        className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
+                          !isLiveDemoView
+                            ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-xs"
+                            : "text-neutral-500 hover:text-neutral-900 dark:hover:text-zinc-200"
+                        }`}
+                      >
+                        <Layers className="w-3.5 h-3.5 text-ig-pink" />
+                        <span>Poster</span>
+                      </button>
+                    </div>
 
+                    {/* Specs & Breakdown Button with smooth rotating chevron */}
                     <button
                       onClick={() => setIsBreakdownExpanded((prev) => !prev)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-800/80 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
+                      data-note="Inspect architecture breakdown, database models, and key features."
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-900 hover:bg-neutral-200 dark:hover:bg-zinc-800 border border-neutral-200 dark:border-zinc-800 active:scale-95 transition-all"
                     >
                       <span>
                         {isBreakdownExpanded
@@ -658,7 +773,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       </span>
                       <ChevronDown
                         className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          isBreakdownExpanded ? "rotate-180" : ""
+                          isBreakdownExpanded ? "rotate-180 text-ig-pink" : ""
                         }`}
                       />
                     </button>

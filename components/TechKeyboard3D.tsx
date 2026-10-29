@@ -807,7 +807,31 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+
+    const handleTechHover = (e: Event) => {
+      const customEvent = e as CustomEvent<{ tech: string }>;
+      const techName = customEvent.detail?.tech?.toLowerCase();
+      if (!techName) return;
+
+      const matchedIndex = KEYCAP_SKILLS.findIndex(
+        (s) =>
+          s.id.toLowerCase() === techName ||
+          s.name.toLowerCase() === techName ||
+          s.name.toLowerCase().includes(techName) ||
+          techName.includes(s.name.toLowerCase())
+      );
+
+      if (matchedIndex !== -1 && KEYCAP_SKILLS[matchedIndex].category !== "macro") {
+        triggerKeycap(KEYCAP_SKILLS[matchedIndex], matchedIndex);
+      }
+    };
+
+    window.addEventListener("shin-tech-hover", handleTechHover);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("shin-tech-hover", handleTechHover);
+    };
   }, [triggerKeycap]);
 
   // Check if a keycap belongs to the currently active project in the feed
