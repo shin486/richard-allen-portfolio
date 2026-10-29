@@ -33,9 +33,15 @@ interface ProjectGridProps {
   onSearchChange: (query: string) => void;
   /** When set (e.g. from the Journey Timeline), the carousel jumps to this project */
   focusRequest?: { projectId: string; nonce: number } | null;
+  /** Notifies parent when the active slide project changes (e.g. to sync the 3D keyboard) */
+  onActiveProjectChange?: (project: Project | null) => void;
 }
 
-export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequest }) => {
+export const ProjectGrid: React.FC<ProjectGridProps> = ({
+  searchQuery,
+  focusRequest,
+  onActiveProjectChange,
+}) => {
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(
     null
   );
@@ -85,6 +91,10 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({ searchQuery, focusRequ
     totalSlides > 0 ? Math.min(currentSlide, totalSlides - 1) : 0;
   const activeProject =
     totalSlides > 0 ? filteredProjects[safeSlideIndex] : null;
+
+  useEffect(() => {
+    onActiveProjectChange?.(activeProject);
+  }, [activeProject, onActiveProjectChange]);
 
   const goNext = useCallback(() => {
     setCurrentSlide((prev) =>

@@ -11,6 +11,7 @@ import {
   FolderCode,
 } from "lucide-react";
 import { skillsData, SkillItem } from "@/data/skills";
+import { TechKeyboard3D } from "./TechKeyboard3D";
 
 type FilterKey = "all" | "core" | "languages" | "frontend" | "backend" | "tools";
 
@@ -19,7 +20,13 @@ interface FlattenedSkill extends SkillItem {
   categoryKey: string;
 }
 
-export const SkillsSection: React.FC = () => {
+interface SkillsSectionProps {
+  onSelectProject?: (projectId: string) => void;
+}
+
+export const SkillsSection: React.FC<SkillsSectionProps> = ({
+  onSelectProject,
+}) => {
   const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
 
   const allSkills: FlattenedSkill[] = useMemo(() => {
@@ -104,6 +111,11 @@ export const SkillsSection: React.FC = () => {
 
   return (
     <section id="skills-section" className="py-6 sm:py-8">
+      {/* On screens < xl where the right sidebar is hidden, show the 3D Keyboard inline here */}
+      <div className="xl:hidden mb-8">
+        <TechKeyboard3D onSelectProject={onSelectProject} variant="inline" />
+      </div>
+
       {/* Section Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
         <div className="flex items-center gap-2.5">
