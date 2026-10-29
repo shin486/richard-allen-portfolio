@@ -31,7 +31,6 @@ export interface KeycapSkill {
 }
 
 type SoundProfile = "thocky" | "clicky" | "linear" | "mute";
-type GlowTheme = "instagram" | "cyber" | "emerald" | "stealth";
 
 interface TechKeyboard3DProps {
   activeProject?: Project | null;
@@ -41,7 +40,7 @@ interface TechKeyboard3DProps {
 
 /**
  * Custom crisp SVG icons for all 28 technologies + 1 mechanical 2U Wave keycap
- * (Non-relevant RGB sparkle key removed per user request)
+ * Automatically matches system / site Dark Mode and Light Mode
  */
 export const KEYCAP_SKILLS: KeycapSkill[] = [
   // ================= ROW 1: CORE LANGUAGES & WEB =================
@@ -596,7 +595,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       </span>
     ),
   },
-  // 2U Wide Mechanical Wave Keycap (replaces the non-relevant RGB key)
+  // 2U Wide Mechanical Wave Keycap (completes the 6-column matrix)
   {
     id: "macro-play",
     name: "Auto-Demo Wave",
@@ -627,7 +626,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
   const [selectedSkill, setSelectedSkill] = useState<KeycapSkill>(KEYCAP_SKILLS[4]); // Default: React
   const [pressedIds, setPressedIds] = useState<Record<string, boolean>>({});
   const [soundProfile, setSoundProfile] = useState<SoundProfile>("thocky");
-  const [glowTheme, setGlowTheme] = useState<GlowTheme>("instagram");
+  const [isDark, setIsDark] = useState(true);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [tilt, setTilt] = useState({ x: 25, z: -14, y: 5 });
@@ -635,6 +634,25 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+
+  // Synchronize design directly with Dark Mode and Light Mode (zero manual color buttons)
+  useEffect(() => {
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+    checkTheme();
+
+    const observer = new MutationObserver(() => {
+      checkTheme();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   // Check screen width for mobile-friendly initial rotation
   useEffect(() => {
@@ -726,11 +744,6 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
     },
     []
   );
-
-  const cycleGlowTheme = useCallback(() => {
-    const order: GlowTheme[] = ["instagram", "cyber", "emerald", "stealth"];
-    setGlowTheme((prev) => order[(order.indexOf(prev) + 1) % order.length]);
-  }, []);
 
   const triggerKeycap = useCallback(
     (skill: KeycapSkill, index = 0) => {
@@ -836,17 +849,6 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
     }
   };
 
-  const glowStyles: Record<GlowTheme, string> = {
-    instagram:
-      "radial-gradient(circle, rgba(221,42,123,0.36) 0%, rgba(245,133,41,0.16) 45%, transparent 75%)",
-    cyber:
-      "radial-gradient(circle, rgba(6,182,212,0.38) 0%, rgba(59,130,246,0.16) 45%, transparent 75%)",
-    emerald:
-      "radial-gradient(circle, rgba(16,185,129,0.36) 0%, rgba(5,150,105,0.15) 45%, transparent 75%)",
-    stealth:
-      "radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)",
-  };
-
   if (variant === "sidebar" && isMinimized) {
     return (
       <div className="flex justify-end pr-1">
@@ -864,7 +866,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
   return (
     <div className="w-full select-none">
-      {/* Top Floating Header — Clean spacing */}
+      {/* Top Floating Header — Clean & minimal (zero unwanted buttons) */}
       <div className="flex items-center justify-between mb-2 px-1 gap-2">
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
@@ -882,20 +884,11 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
           </p>
         </div>
 
-        {/* Sound & Controls */}
+        {/* Minimal Audio & Minimize Controls */}
         <div className="flex items-center gap-1 flex-shrink-0">
           <button
-            onClick={cycleGlowTheme}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-white/80 dark:bg-zinc-900/90 border border-neutral-200/80 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300 hover:border-ig-pink transition-colors capitalize"
-            title="Cycle underglow lighting"
-          >
-            <span>🎨</span>
-            <span>{glowTheme}</span>
-          </button>
-
-          <button
             onClick={cycleSoundProfile}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-white/80 dark:bg-zinc-900/90 border border-neutral-200/80 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300 hover:border-ig-pink transition-colors"
+            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-mono font-medium bg-neutral-100 dark:bg-zinc-900/90 border border-neutral-200/90 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300 hover:border-ig-pink transition-colors"
             title="Cycle mechanical switch sound profile"
           >
             {soundProfile === "mute" ? (
@@ -909,7 +902,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
           {variant === "sidebar" && (
             <button
               onClick={() => setIsMinimized(true)}
-              className="p-1 rounded-md bg-white/80 dark:bg-zinc-900/90 border border-neutral-200/80 dark:border-zinc-800 text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+              className="p-1 rounded-md bg-neutral-100 dark:bg-zinc-900/90 border border-neutral-200/90 dark:border-zinc-800 text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
               title="Minimize 3D Keyboard"
               aria-label="Minimize 3D Keyboard"
             >
@@ -919,7 +912,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         </div>
       </div>
 
-      {/* 3D Isometric Mechanical Keypad Stage — Generous bottom clearance so it NEVER touches the card below */}
+      {/* 3D Isometric Mechanical Keypad Stage — Generous bottom clearance */}
       <div
         ref={stageRef}
         onMouseMove={handleStageMouseMove}
@@ -927,30 +920,53 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         className="relative w-full pt-2 pb-6 sm:pb-8 flex items-center justify-center touch-manipulation overflow-visible"
         style={{ perspective: "1000px" }}
       >
-        {/* Dynamic Ambient Underglow */}
+        {/* Dynamic Ambient Underglow — Matches Dark Mode vs Light Mode */}
         <div
           className="absolute w-56 h-40 sm:w-64 sm:h-48 rounded-full blur-2xl pointer-events-none transition-all duration-500"
-          style={{ background: glowStyles[glowTheme] }}
+          style={{
+            background: isDark
+              ? "radial-gradient(circle, rgba(221,42,123,0.34) 0%, rgba(245,133,41,0.15) 45%, transparent 75%)"
+              : "radial-gradient(circle, rgba(221,42,123,0.18) 0%, rgba(59,130,246,0.12) 45%, transparent 70%)",
+          }}
         />
 
-        {/* Sculpted Anodized Aluminum 3D Keyboard Case */}
+        {/* Sculpted Anodized Aluminum 3D Keyboard Case (Dark Obsidian in Dark Mode / Frosted Silver in Light Mode) */}
         <div
-          className="relative p-2 rounded-[16px] sm:rounded-[20px] bg-[#14151c] border border-white/15 transition-transform duration-200 ease-out origin-center"
+          className={`relative p-2 rounded-[16px] sm:rounded-[20px] transition-all duration-300 ease-out origin-center ${
+            isDark
+              ? "bg-[#14151c] border border-white/15"
+              : "bg-white border border-neutral-200 shadow-md"
+          }`}
           style={{
             transform: `rotateX(${tilt.x}deg) rotateZ(${tilt.z}deg) rotateY(${tilt.y}deg)`,
             transformStyle: "preserve-3d",
-            boxShadow: `
-              -2px 2px 0 #0b0c10,
-              -3px 3px 0 #0b0c10,
-              -4px 5px 0 #090a0e,
-              -5px 7px 0 #08090c,
-              -7px 9px 0 #060709,
-              -8px 14px 20px rgba(0, 0, 0, 0.7)
-            `,
+            boxShadow: isDark
+              ? `
+                -2px 2px 0 #0b0c10,
+                -3px 3px 0 #0b0c10,
+                -4px 5px 0 #090a0e,
+                -5px 7px 0 #08090c,
+                -7px 9px 0 #060709,
+                -8px 14px 20px rgba(0, 0, 0, 0.7)
+              `
+              : `
+                -2px 2px 0 #cbd5e1,
+                -3px 3px 0 #cbd5e1,
+                -4px 5px 0 #94a3b8,
+                -5px 7px 0 #64748b,
+                -7px 9px 0 #475569,
+                -8px 14px 22px rgba(0, 0, 0, 0.16)
+              `,
           }}
         >
-          {/* Recessed Switch Plate */}
-          <div className="p-1.5 rounded-[13px] sm:rounded-[15px] bg-[#090a0f] border border-white/5 shadow-inner">
+          {/* Recessed Switch Plate (Dark in Dark Mode / Clean Light in Light Mode) */}
+          <div
+            className={`p-1.5 rounded-[13px] sm:rounded-[15px] border shadow-inner transition-colors duration-300 ${
+              isDark
+                ? "bg-[#090a0f] border-white/5"
+                : "bg-[#f1f5f9] border-neutral-200"
+            }`}
+          >
             {/* 6 Columns Grid: Rows 1-4 = 24 skills, Row 5 = 4 skills + 1 2U Wave Keycap */}
             <div className="grid grid-cols-6 gap-1 xs:gap-1.5 sm:gap-1.5">
               {KEYCAP_SKILLS.map((skill, idx) => {
@@ -978,13 +994,20 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                       boxShadow: isPressed
                         ? `
                           -1px 1px 0 ${skill.wallColor},
-                          0 0 8px rgba(255,255,255,0.3)
+                          0 0 8px ${isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.2)"}
                         `
-                        : `
+                        : isDark
+                        ? `
                           -1px 1px 0 ${skill.wallColor},
                           -2px 2px 0 ${skill.wallColor},
                           -2.5px 3px 0 #050608,
                           -4px 5px 6px rgba(0,0,0,0.55)
+                        `
+                        : `
+                          -1px 1px 0 ${skill.wallColor},
+                          -2px 2px 0 ${skill.wallColor},
+                          -2.5px 3px 0 rgba(0,0,0,0.25),
+                          -4px 5px 6px rgba(0,0,0,0.2)
                         `,
                     }}
                   >
@@ -1003,9 +1026,12 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                     <div
                       className="absolute inset-[2px] rounded-[5px] sm:rounded-[6px] flex flex-col items-center justify-center p-0.5 overflow-hidden"
                       style={{
-                        background:
-                          "linear-gradient(145deg, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.18) 100%)",
-                        borderTop: "1px solid rgba(255,255,255,0.28)",
+                        background: isDark
+                          ? "linear-gradient(145deg, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.18) 100%)"
+                          : "linear-gradient(145deg, rgba(255,255,255,0.3) 0%, rgba(0,0,0,0.1) 100%)",
+                        borderTop: isDark
+                          ? "1px solid rgba(255,255,255,0.28)"
+                          : "1px solid rgba(255,255,255,0.45)",
                       }}
                     >
                       {/* Keycap Icon / Label */}
@@ -1038,19 +1064,29 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
             </div>
           </div>
 
-          {/* Bottom Metallic Chassis Status Strip */}
-          <div className="mt-1 px-0.5 flex items-center justify-between text-[8px] font-mono text-zinc-400">
-            <span className="inline-flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          {/* Bottom Metallic Chassis Status Strip — Automatically shows Dark Mode / Light Mode */}
+          <div className="mt-1 px-0.5 flex items-center justify-between text-[8px] font-mono">
+            <span
+              className={`inline-flex items-center gap-1 transition-colors ${
+                isDark ? "text-zinc-400" : "text-neutral-600 font-semibold"
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>SHIN-28</span>
             </span>
-            <span className="uppercase tracking-tight">{glowTheme} GLOW</span>
+            <span
+              className={`uppercase tracking-tight transition-colors ${
+                isDark ? "text-zinc-500" : "text-neutral-500"
+              }`}
+            >
+              {isDark ? "DARK CHASSIS" : "SILVER CHASSIS"}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Streamlined, Compact Skill Inspector HUD — Separated by spacious margin */}
-      <div className="mt-6 sm:mt-8 rounded-xl bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200/80 dark:border-zinc-800/90 p-2.5 shadow-md transition-all">
+      {/* Streamlined, Compact Skill Inspector HUD — Dark/Light responsive */}
+      <div className="mt-6 sm:mt-8 rounded-xl bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200/90 dark:border-zinc-800/90 p-2.5 shadow-md transition-all">
         {/* Row 1: Skill Icon + Name + Key badge + Wave button */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
