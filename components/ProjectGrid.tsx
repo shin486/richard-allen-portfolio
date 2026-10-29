@@ -181,22 +181,32 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
           </p>
         </div>
       ) : (
-        <div className="max-w-3xl mx-auto">
-          {/* Quick Project Jump Pills */}
+        <div className="w-full">
+          {/* Quick Project Jump Pills (Wraps cleanly so no project pill gets cut off) */}
           <div
-            className="flex items-center gap-1.5 overflow-x-auto pb-3 no-scrollbar"
+            className="flex flex-wrap items-center gap-1.5 pb-3"
             role="tablist"
             aria-label="Select project slide"
           >
             {filteredProjects.map((proj, index) => {
               const isCurrent = index === safeSlideIndex;
+              const pillLabel =
+                proj.id === "avms"
+                  ? "AVMS"
+                  : proj.id === "auto-avenue-ims"
+                  ? "Auto Avenue"
+                  : proj.id === "itelect4-project"
+                  ? "IT Elective 4"
+                  : proj.title;
+
               return (
                 <button
                   key={proj.id}
                   onClick={() => setCurrentSlide(index)}
                   role="tab"
                   aria-selected={isCurrent}
-                  className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
+                  title={`${proj.title} — ${proj.subtitle}`}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
                     isCurrent
                       ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 border-neutral-900 dark:border-zinc-100 shadow-sm"
                       : "bg-white dark:bg-[#111116] text-neutral-600 dark:text-zinc-400 border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 hover:text-neutral-900 dark:hover:text-zinc-200"
@@ -211,7 +221,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   >
                     0{index + 1}
                   </span>
-                  <span>{proj.title}</span>
+                  <span className="whitespace-nowrap">{pillLabel}</span>
                 </button>
               );
             })}
