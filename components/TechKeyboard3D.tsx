@@ -985,79 +985,127 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                       isWideKey
                         ? "col-span-2 w-full"
                         : "w-[34px] xs:w-[37px] sm:w-[40px] xl:w-[36px] 2xl:w-[40px]"
-                    } h-[34px] xs:h-[37px] sm:h-[40px] xl:h-[36px] 2xl:h-[40px] rounded-[7px] sm:rounded-[8px] focus:outline-none transition-transform duration-75 active:scale-95`}
-                    style={{
-                      backgroundColor: skill.color,
-                      transform: isPressed
-                        ? "translate(-1px, 3px)"
-                        : "translate(0px, 0px)",
-                      boxShadow: isPressed
-                        ? `
-                          -1px 1px 0 ${skill.wallColor},
-                          0 0 8px ${isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.2)"}
-                        `
-                        : isDark
-                        ? `
-                          -1px 1px 0 ${skill.wallColor},
-                          -2px 2px 0 ${skill.wallColor},
-                          -2.5px 3px 0 #050608,
-                          -4px 5px 6px rgba(0,0,0,0.55)
-                        `
-                        : `
-                          -1px 1px 0 ${skill.wallColor},
-                          -2px 2px 0 ${skill.wallColor},
-                          -2.5px 3px 0 rgba(0,0,0,0.25),
-                          -4px 5px 6px rgba(0,0,0,0.2)
-                        `,
-                    }}
+                    } h-[36px] xs:h-[39px] sm:h-[42px] xl:h-[38px] 2xl:h-[42px] rounded-[7px] sm:rounded-[8px] focus:outline-none select-none`}
                   >
+                    {/* Recessed Switch Plate Socket (Visible around keycap base) */}
+                    <div
+                      className={`absolute inset-0 rounded-[7px] sm:rounded-[8px] pointer-events-none transition-colors duration-300 ${
+                        isDark
+                          ? "bg-[#050608] shadow-[inset_0_2px_4px_rgba(0,0,0,0.9)] border border-white/5"
+                          : "bg-[#e2e8f0] shadow-[inset_0_2px_4px_rgba(0,0,0,0.18)] border border-neutral-300/80"
+                      }`}
+                    />
+
+                    {/* Physical 3D Keycap Body (Depresses 3px into the socket on press) */}
+                    <div
+                      className="absolute inset-0 rounded-[7px] sm:rounded-[8px] pointer-events-none transition-transform duration-75 group-hover:brightness-105"
+                      style={{
+                        transform: isPressed
+                          ? "translateY(3px)"
+                          : "translateY(0px)",
+                        boxShadow: isPressed
+                          ? isDark
+                            ? "0 1px 3px rgba(0,0,0,0.7), -1px 1px 2px rgba(0,0,0,0.5)"
+                            : "0 1px 3px rgba(0,0,0,0.2), -1px 1px 2px rgba(0,0,0,0.15)"
+                          : isDark
+                          ? `
+                            -1.5px 2px 0 ${skill.wallColor},
+                            -2.5px 4px 6px rgba(0,0,0,0.65),
+                            0 3px 6px rgba(0,0,0,0.5)
+                          `
+                          : `
+                            -1.5px 2px 0 ${skill.wallColor},
+                            -2.5px 4px 6px rgba(0,0,0,0.18),
+                            0 3px 6px rgba(0,0,0,0.12)
+                          `,
+                      }}
+                    >
+                      {/* Visible Left Side Wall (Isometric depth facet) */}
+                      <div
+                        className="absolute top-0 left-0 bottom-[2px] pointer-events-none rounded-l-[7px] sm:rounded-l-[8px]"
+                        style={{
+                          width: "4px",
+                          background:
+                            "linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)",
+                        }}
+                      />
+
+                      {/* Visible Front Wall (South face facing viewer with realistic gradient & bevel) */}
+                      <div
+                        className="absolute left-0 right-0 bottom-0 pointer-events-none rounded-b-[7px] sm:rounded-b-[8px] transition-all duration-75 overflow-hidden"
+                        style={{
+                          height: isPressed ? "3.5px" : "7px",
+                          background: `linear-gradient(to bottom, ${skill.wallColor} 0%, rgba(0,0,0,0.45) 100%)`,
+                          boxShadow: isDark
+                            ? "inset 0 1px 0 rgba(255,255,255,0.22)"
+                            : "inset 0 1px 0 rgba(255,255,255,0.35)",
+                          borderBottom: isDark
+                            ? "1px solid rgba(0,0,0,0.6)"
+                            : "1px solid rgba(0,0,0,0.22)",
+                        }}
+                      />
+
+                      {/* Sculpted Concave Top Dish (Holding Icon & Sub-Legend) */}
+                      <div
+                        className="absolute left-[1.5px] right-[1px] top-0 rounded-[5.5px] sm:rounded-[6.5px] flex flex-col items-center justify-center p-0.5 overflow-hidden transition-all duration-75"
+                        style={{
+                          bottom: isPressed ? "3px" : "6px",
+                          backgroundColor: skill.color,
+                          background: `linear-gradient(150deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.02) 40%, rgba(0,0,0,0.2) 100%), ${skill.color}`,
+                          boxShadow: `
+                            inset 0 1px 1px rgba(255,255,255,0.45),
+                            inset 0 -1px 2px rgba(0,0,0,0.32)
+                          `,
+                          borderTop: "1px solid rgba(255,255,255,0.42)",
+                          borderLeft: "1px solid rgba(255,255,255,0.24)",
+                          borderRight: "1px solid rgba(0,0,0,0.18)",
+                        }}
+                      >
+                        {/* Subtle Concave Radial Reflection Dent */}
+                        <div
+                          className="pointer-events-none absolute inset-0.5 rounded-[4.5px] sm:rounded-[5.5px]"
+                          style={{
+                            background:
+                              "radial-gradient(ellipse at 48% 32%, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 80%)",
+                          }}
+                        />
+
+                        {/* Keycap Icon */}
+                        <div className="relative z-10 transform group-hover:scale-105 transition-transform flex items-center justify-center">
+                          {isWideKey && isAutoPlaying ? (
+                            <div className="flex items-center gap-1">
+                              <Square className="w-2.5 h-2.5 text-rose-400 fill-rose-400" />
+                              <span className="text-[7.5px] font-mono font-bold text-rose-400">
+                                STOP
+                              </span>
+                            </div>
+                          ) : (
+                            skill.renderIcon()
+                          )}
+                        </div>
+
+                        {/* Tiny Sub-Legend (for normal keys only) */}
+                        {!isWideKey && (
+                          <span
+                            className="relative z-10 text-[6px] xs:text-[6.5px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
+                            style={{ color: skill.textColor || "#ffffff" }}
+                          >
+                            {skill.shortLabel}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
                     {/* Active Selection / Synced Project Halo Ring */}
                     {(isSelected || isProjectMatch) && (
                       <span
-                        className={`pointer-events-none absolute -inset-[2px] rounded-[8px] sm:rounded-[9px] ${
+                        className={`pointer-events-none absolute -inset-[2px] rounded-[9px] z-20 ${
                           isSelected
-                            ? "ring-2 ring-white shadow-[0_0_8px_rgba(255,255,255,0.55)]"
-                            : "ring-1 ring-amber-300/80 animate-pulse"
+                            ? "ring-2 ring-white shadow-[0_0_10px_rgba(255,255,255,0.7)]"
+                            : "ring-1.5 ring-amber-300 animate-pulse shadow-[0_0_8px_rgba(251,191,36,0.6)]"
                         }`}
                       />
                     )}
-
-                    {/* Sculpted Concave Keycap Dish */}
-                    <div
-                      className="absolute inset-[2px] rounded-[5px] sm:rounded-[6px] flex flex-col items-center justify-center p-0.5 overflow-hidden"
-                      style={{
-                        background: isDark
-                          ? "linear-gradient(145deg, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.18) 100%)"
-                          : "linear-gradient(145deg, rgba(255,255,255,0.3) 0%, rgba(0,0,0,0.1) 100%)",
-                        borderTop: isDark
-                          ? "1px solid rgba(255,255,255,0.28)"
-                          : "1px solid rgba(255,255,255,0.45)",
-                      }}
-                    >
-                      {/* Keycap Icon / Label */}
-                      <div className="transform group-hover:scale-105 transition-transform flex items-center justify-center">
-                        {isWideKey && isAutoPlaying ? (
-                          <div className="flex items-center gap-1">
-                            <Square className="w-2.5 h-2.5 text-rose-400 fill-rose-400" />
-                            <span className="text-[7.5px] font-mono font-bold text-rose-400">
-                              STOP
-                            </span>
-                          </div>
-                        ) : (
-                          skill.renderIcon()
-                        )}
-                      </div>
-
-                      {/* Tiny Sub-Legend (for normal keys only) */}
-                      {!isWideKey && (
-                        <span
-                          className="text-[6px] xs:text-[6.5px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
-                          style={{ color: skill.textColor || "#ffffff" }}
-                        >
-                          {skill.shortLabel}
-                        </span>
-                      )}
-                    </div>
                   </button>
                 );
               })}
