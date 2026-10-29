@@ -108,18 +108,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   }, []);
 
   return (
-    <section id="profile-header" className="pt-6 sm:pt-16 md:pt-20 pb-3 sm:pb-6">
+    <section id="profile-header" className="pt-14 sm:pt-16 md:pt-20 pb-3 sm:pb-6">
       {/* Unified Responsive Instagram Profile Header */}
       <div className="grid grid-cols-[auto_1fr] items-start gap-x-4 sm:gap-x-8 md:gap-x-12">
-        {/* Mobile-only thought bubble row above header */}
-        <div className="col-span-2 row-start-1 sm:hidden flex items-end justify-start px-0.5 pb-3 min-h-[48px] max-w-full min-w-0">
-          <ProfileNote tailAlign="left" />
-        </div>
-
-        {/* Column 1: Avatar with Instagram Animated Story Ring + Desktop Thought Bubble + Role underneath */}
-        <div className="col-start-1 row-start-2 sm:row-start-1 sm:row-span-2 relative flex flex-col items-start flex-shrink-0">
-          {/* Desktop Thought Bubble Note anchored cleanly above avatar */}
-          <div className="hidden sm:block absolute bottom-[calc(100%+12px)] left-0 sm:left-2 z-30 pointer-events-auto">
+        {/* Column 1: Circular Avatar with Animated Instagram Story Ring + Thought Bubble Note */}
+        <div className="col-start-1 row-start-1 sm:row-span-3 relative flex flex-col items-start flex-shrink-0">
+          {/* Retro Pixel Speech Bubble anchored cleanly above avatar container */}
+          <div className="absolute bottom-[calc(100%+8px)] sm:bottom-[calc(100%+12px)] left-0 sm:left-2 z-30 pointer-events-auto">
             <ProfileNote tailAlign="left" />
           </div>
 
@@ -149,18 +144,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
             </div>
           </div>
-
-          {/* Under Avatar Photo: Full-Stack Developer Title ("its like a bio") */}
-          <div className="mt-2 sm:mt-2.5 text-left">
-            <h1 className="text-xs sm:text-sm md:text-[15px] font-semibold text-neutral-900 dark:text-zinc-100 tracking-tight leading-tight whitespace-nowrap">
-              Full-Stack Developer
-            </h1>
-          </div>
         </div>
 
-        {/* Column 2: Username & Stats ("Followers" theme directly below username) */}
-        <div className="col-start-2 row-start-2 sm:row-start-1 flex flex-col justify-center gap-1.5 sm:gap-3.5 min-w-0 pt-0.5 sm:pt-1">
-          {/* Username & Verified Rosette (Upper Right on mobile & desktop) */}
+        {/* Column 2: Username & Stats (Row 1 beside Avatar on mobile & desktop) */}
+        <div className="col-start-2 row-start-1 flex flex-col justify-center gap-1.5 sm:gap-3.5 min-w-0 pt-0.5 sm:pt-1">
+          {/* Username & Verified Rosette */}
           <div className="flex items-center gap-1.5">
             <span className="font-bold sm:font-semibold text-base sm:text-xl md:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
               {profileData.username}
@@ -175,7 +163,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
 
           {/* Stats Row ("Followers" theme directly below username) */}
-          <div className="min-w-0">
+          <div className="min-w-0 w-full">
             <ProfileStats
               onStatClick={(sectionId, tabName) => {
                 if (tabName) onSelectTab(tabName);
@@ -185,8 +173,24 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
         </div>
 
-        {/* 8-Bit Graduation XP Bar with Blinking Progress */}
-        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-3 sm:row-start-2 pt-2.5 sm:pt-3 max-w-md w-full">
+        {/* Bio & Identity Block (Stacked underneath Avatar/Stats in mobile view, Column 2 on desktop) */}
+        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-2 sm:row-start-2 flex flex-col gap-0.5 sm:gap-1 pt-3 sm:pt-2">
+          <h1 className="font-bold text-xs sm:text-base text-neutral-900 dark:text-zinc-100 leading-snug">
+            {profileData.name}
+          </h1>
+          <p className="text-neutral-600 dark:text-zinc-400 font-normal text-xs sm:text-sm leading-snug">
+            {profileData.title}
+          </p>
+          <p className="text-neutral-700 dark:text-zinc-300 text-xs sm:text-sm leading-snug">
+            4th-year BSIT @{" "}
+            <span className="font-semibold text-neutral-900 dark:text-zinc-100">
+              De La Salle Lipa
+            </span>
+          </p>
+        </div>
+
+        {/* Custom Graduation XP Bar with Synchronized Blinking Progress */}
+        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-3 sm:row-start-3 mt-3.5 sm:mt-4 max-w-md w-full">
           <div
             onClick={handleReplayXp}
             role="button"
