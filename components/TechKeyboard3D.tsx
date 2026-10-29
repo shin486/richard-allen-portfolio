@@ -1025,8 +1025,9 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                         className="absolute top-0 left-0 bottom-[2px] pointer-events-none rounded-l-[7px] sm:rounded-l-[8px]"
                         style={{
                           width: "4px",
-                          background:
-                            "linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)",
+                          background: isDark
+                            ? "linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)"
+                            : "linear-gradient(to right, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.06) 60%, transparent 100%)",
                         }}
                       />
 
@@ -1035,7 +1036,9 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                         className="absolute left-0 right-0 bottom-0 pointer-events-none rounded-b-[7px] sm:rounded-b-[8px] transition-all duration-75 overflow-hidden"
                         style={{
                           height: isPressed ? "3.5px" : "7px",
-                          background: `linear-gradient(to bottom, ${skill.wallColor} 0%, rgba(0,0,0,0.45) 100%)`,
+                          background: isDark
+                            ? `linear-gradient(to bottom, ${skill.wallColor} 0%, rgba(0,0,0,0.45) 100%)`
+                            : `linear-gradient(to bottom, ${skill.wallColor} 0%, rgba(0,0,0,0.18) 100%)`,
                           boxShadow: isDark
                             ? "inset 0 1px 0 rgba(255,255,255,0.22)"
                             : "inset 0 1px 0 rgba(255,255,255,0.35)",

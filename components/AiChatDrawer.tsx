@@ -478,8 +478,8 @@ export const AiChatDrawer: React.FC = () => {
 
   return (
     <>
-      {/* Floating AI Dog Mascot Button + Callout Pill */}
-      <div className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 flex items-center gap-3">
+      {/* Floating AI Dog Mascot Button + Callout Pill (Stacked vertically to prevent overlapping page content) */}
+      <div className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 flex flex-col items-end gap-2 pointer-events-auto">
         {/* Dismissible Speech Bubble Teaser */}
         {!isOpen && showGreetingBubble && (
           <div className="hidden sm:flex items-center gap-2 pl-3.5 pr-2.5 py-2 rounded-2xl rounded-br-sm bg-white dark:bg-[#16161D] border border-neutral-200 dark:border-zinc-800 shadow-lg text-xs text-neutral-800 dark:text-zinc-200 animate-fade-in">
