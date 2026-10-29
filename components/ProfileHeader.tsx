@@ -23,13 +23,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   };
 
   return (
-    <section id="profile-header" className="pt-6 sm:pt-14 pb-3 sm:pb-6">
+    <section id="profile-header" className="pt-6 sm:pt-14 md:pt-16 pb-3 sm:pb-6">
       {/* DESKTOP LAYOUT (sm and up): Clean Instagram Web 2-Column Structure */}
       <div className="hidden sm:flex items-start gap-8 md:gap-12">
         {/* Left Column: Avatar with Instagram Animated Story Ring + Floating Note */}
         <div className="relative flex flex-col items-start flex-shrink-0">
           {/* Floating Interactive Instagram Thought Bubble Note (anchored to avatar, extends rightward) */}
-          <div className="absolute -top-11 left-0 sm:left-2 z-30 pointer-events-auto">
+          <div className="absolute bottom-[calc(100%+12px)] left-0 sm:left-2 z-30 pointer-events-auto">
             <ProfileNote tailAlign="left" />
           </div>
 
@@ -127,20 +127,20 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
 
         {/* Mobile Top Row: Avatar on Left, Stats on Right */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <div
             className="relative group cursor-pointer flex-shrink-0"
             onClick={handleViewProjects}
             data-note="Why are you staring at my 2x2 ID photo? Just hire me already."
           >
-            <div className="w-[74px] h-[74px] rounded-full p-[2.5px] animated-ig-ring shadow-sm">
+            <div className="w-[72px] h-[72px] rounded-full p-[2.5px] animated-ig-ring shadow-sm">
               <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px]">
                 <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900">
                   <Image
                     src={profilePic}
                     alt={profileData.name}
                     fill
-                    sizes="74px"
+                    sizes="72px"
                     className="object-cover"
                     priority
                   />
@@ -153,7 +153,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
 
           {/* Stats on the right */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <ProfileStats
               onStatClick={(sectionId, tabName) => {
                 if (tabName) onSelectTab(tabName);

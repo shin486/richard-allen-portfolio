@@ -115,7 +115,7 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
     <div
       onClick={handleNoteClick}
       title="Click to cycle thoughts"
-      className={`group/note cursor-pointer select-none transition-all duration-200 max-w-[calc(100vw-32px)] sm:max-w-md ${className}`}
+      className={`group/note cursor-pointer select-none transition-all duration-200 max-w-[calc(100vw-32px)] sm:max-w-xl ${className}`}
     >
       <div
         className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-2xl sm:rounded-full bg-white dark:bg-[#18181f] text-neutral-900 dark:text-neutral-100 text-[11px] sm:text-[11.5px] font-semibold leading-snug shadow-md dark:shadow-xl border border-neutral-200/90 dark:border-zinc-700/80 transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
@@ -133,12 +133,12 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
           {currentNote}
         </span>
 
-        {/* Authentic Instagram thought bubble tails leading down to avatar */}
+        {/* Authentic Instagram thought bubble tails leading down directly to avatar center */}
         <span
           aria-hidden="true"
           className={`absolute -bottom-1.5 w-2 h-2 rounded-full bg-white dark:bg-[#18181f] border-b border-r border-neutral-200/90 dark:border-zinc-700/80 shadow-xs pointer-events-none ${
             isLeft
-              ? "left-10 sm:left-14"
+              ? "left-9 sm:left-14 md:left-16"
               : "left-1/2 -translate-x-1/2"
           }`}
         />
@@ -146,7 +146,7 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
           aria-hidden="true"
           className={`absolute -bottom-3 w-1 h-1 rounded-full bg-white dark:bg-[#18181f] border-b border-r border-neutral-200/90 dark:border-zinc-700/80 shadow-2xs pointer-events-none ${
             isLeft
-              ? "left-12 sm:left-16"
+              ? "left-[38px] sm:left-14 md:left-16"
               : "left-1/2 -translate-x-1/2"
           }`}
         />
