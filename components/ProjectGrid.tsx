@@ -157,24 +157,6 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
             Projects
           </h2>
         </div>
-
-        <div className="text-xs text-neutral-500 dark:text-zinc-400 font-medium flex items-center gap-1.5">
-          {totalSlides > 0 ? (
-            <span>
-              Viewing{" "}
-              <strong className="text-neutral-900 dark:text-zinc-100">
-                {safeSlideIndex + 1}
-              </strong>{" "}
-              of{" "}
-              <strong className="text-neutral-900 dark:text-zinc-100">
-                {totalSlides}
-              </strong>{" "}
-              projects
-            </span>
-          ) : (
-            <span>0 of {projectsData.length} projects</span>
-          )}
-        </div>
       </div>
 
       {!activeProject ? (
@@ -269,9 +251,6 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       {activeProject.role}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-[11px] text-neutral-500 dark:text-zinc-400">
-                    <span className="truncate">{activeProject.subtitle}</span>
-                  </div>
                 </div>
               </div>
 
@@ -283,7 +262,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                     aria-hidden="true"
                     className={`spring-pill absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] rounded-full shadow-xs pointer-events-none ${
                       isLiveDemoView
-                        ? "bg-ig-gradient"
+                        ? "bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950"
                         : "bg-white dark:bg-zinc-700"
                     }`}
                     style={{
@@ -295,17 +274,15 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsLiveDemoView(true)}
-                    title="Simulate live in-browser — no setup or download required"
                     aria-label="Launch live interactive UI"
                     className={`relative z-10 px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors duration-200 flex items-center justify-center gap-1.5 ${
                       isLiveDemoView
-                        ? "text-white"
+                        ? "text-white dark:text-zinc-950"
                         : "text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white"
                     }`}
                   >
                     <Play className="w-2.5 h-2.5 fill-current" />
                     <span>Live UI</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   </button>
                   <button
                     type="button"
@@ -323,7 +300,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 </div>
 
                 {/* Instagram Slide Counter */}
-                <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900/90 dark:bg-zinc-800 text-white text-xs font-semibold tabular-nums tracking-wider">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900/90 dark:bg-zinc-800 text-white text-xs font-semibold tabular-nums tracking-wider">
                   <span>
                     {safeSlideIndex + 1} / {totalSlides}
                   </span>
@@ -335,46 +312,10 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
             {isLiveDemoView ? (
               <div
                 ref={demoStageRef}
-                className={`relative w-full bg-neutral-100/70 dark:bg-[#0c0c10] p-3 sm:p-5 border-b border-neutral-100 dark:border-zinc-800 flex flex-col items-center transition-shadow duration-300 ${
+                className={`relative w-full bg-neutral-100/70 dark:bg-[#0c0c10] p-3 sm:p-5 border-b border-neutral-100 dark:border-zinc-800 flex flex-col items-center justify-center transition-shadow duration-300 ${
                   demoSpotlit ? "ring-2 ring-inset ring-pink-500/60" : ""
                 }`}
               >
-                {/* Project Switcher Navigation Rail in Sandbox Mode */}
-                <div className="w-full max-w-2xl flex items-center justify-between pb-3 text-xs font-semibold text-neutral-600 dark:text-zinc-400">
-                  <button
-                    onClick={goPrev}
-                    disabled={safeSlideIndex === 0}
-                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-850 border border-neutral-200 dark:border-zinc-700/80 flex items-center gap-1 disabled:opacity-30 hover:text-black dark:hover:text-white transition-all shadow-xs"
-                  >
-                    <ChevronLeft className="w-3.5 h-3.5" />
-                    <span>Previous</span>
-                  </button>
-
-                  <div className="flex flex-col items-center text-center">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="font-bold text-neutral-900 dark:text-zinc-100">
-                        {activeProject.title}
-                      </span>
-                      <span className="text-[10px] text-neutral-400 font-mono">
-                        ({safeSlideIndex + 1}/{totalSlides})
-                      </span>
-                    </div>
-                    <span className="hidden sm:inline-block text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
-                      Simulate live in-browser — no setup or download required
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={goNext}
-                    disabled={safeSlideIndex === totalSlides - 1}
-                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-850 border border-neutral-200 dark:border-zinc-700/80 flex items-center gap-1 disabled:opacity-30 hover:text-black dark:hover:text-white transition-all shadow-xs"
-                  >
-                    <span>Next</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
                 {/* Functional Interactive Demo Host */}
                 <ProjectDemoHost projectId={activeProject.id} />
               </div>
@@ -478,11 +419,10 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       e.stopPropagation();
                       launchInteractiveDemo();
                     }}
-                    title="Simulate live in-browser — no setup or download required"
-                    className="pointer-events-auto inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-ig-gradient text-white shadow-lg shadow-pink-500/30 border border-white/25 hover:opacity-95 active:scale-95 transition-all"
+                    className="pointer-events-auto inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-zinc-950 hover:bg-zinc-200 shadow-md transition-colors"
                   >
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
-                    <span>⚡ Try Interactive Live Demo</span>
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>Live Demo</span>
                   </button>
                 </div>
               </div>
@@ -536,19 +476,6 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   >
                     <MessageCircle className="w-5 h-5" />
                   </button>
-
-                  {activeProject.githubUrl && (
-                    <a
-                      href={activeProject.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-neutral-900 dark:hover:text-white transition-colors"
-                      aria-label="Open GitHub repository"
-                      title="View on GitHub"
-                    >
-                      <Github className="w-5 h-5" />
-                    </a>
-                  )}
                 </div>
 
                 {/* Authentic Instagram Carousel Dots */}
@@ -684,45 +611,50 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 {/* Action Footer Buttons */}
                 <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <div className="relative group/demo-cta inline-flex">
-                      <button
-                        type="button"
-                        onClick={launchInteractiveDemo}
-                        title="Simulate live in-browser — no setup or download required"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold bg-ig-gradient text-white shadow-md shadow-pink-500/20 hover:opacity-95 active:scale-95 transition-all"
+                    {/* Primary CTA: Clean high-contrast Live Demo */}
+                    <button
+                      type="button"
+                      onClick={launchInteractiveDemo}
+                      className="bg-white text-zinc-950 hover:bg-zinc-200 font-medium px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 text-xs sm:text-sm shadow-sm"
+                    >
+                      <Play className="w-4 h-4 fill-current" />
+                      <span>Live Demo</span>
+                    </button>
+
+                    {/* Secondary CTA: Clean bordered GitHub */}
+                    {activeProject.githubUrl && (
+                      <a
+                        href={activeProject.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 text-xs sm:text-sm font-medium"
                       >
-                        <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse shadow-[0_0_8px_#6ee7b7]" />
-                        <span>⚡ Try Interactive Live Demo</span>
-                      </button>
-                      <span
-                        role="tooltip"
-                        className="pointer-events-none absolute -top-9 left-0 whitespace-nowrap rounded-md bg-neutral-900 dark:bg-zinc-100 px-2.5 py-1 text-[11px] font-medium text-white dark:text-neutral-900 opacity-0 shadow-md transition-opacity duration-150 group-hover/demo-cta:opacity-100 z-20"
-                      >
-                        Simulate live in-browser — no setup or download required
-                      </span>
-                    </div>
+                        <Github className="w-4 h-4" />
+                        <span>GitHub</span>
+                      </a>
+                    )}
 
                     <button
                       type="button"
                       onClick={() => setIsLiveDemoView((prev) => !prev)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-800/80 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
                     >
                       <Layers className="w-3.5 h-3.5 text-ig-pink" />
                       <span>
                         {isLiveDemoView
-                          ? "View Photo Preview"
-                          : "Back to Live UI"}
+                          ? "Photo Preview"
+                          : "Live UI"}
                       </span>
                     </button>
 
                     <button
                       onClick={() => setIsBreakdownExpanded((prev) => !prev)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-800/80 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
                     >
                       <span>
                         {isBreakdownExpanded
-                          ? "Hide Breakdown"
-                          : "View Specs & Breakdown"}
+                          ? "Hide Specs"
+                          : "Specs & Breakdown"}
                       </span>
                       <ChevronDown
                         className={`w-3.5 h-3.5 transition-transform duration-200 ${
@@ -730,30 +662,6 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                         }`}
                       />
                     </button>
-
-                    {activeProject.githubUrl && (
-                      <a
-                        href={activeProject.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-900 dark:text-zinc-100 bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
-                      >
-                        <Github className="w-3.5 h-3.5" />
-                        <span>GitHub</span>
-                      </a>
-                    )}
-
-                    {activeProject.liveDemoUrl && (
-                      <a
-                        href={activeProject.liveDemoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-900 dark:text-zinc-100 bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        <span>Live Demo</span>
-                      </a>
-                    )}
                   </div>
                 </div>
               </div>

@@ -33,9 +33,6 @@ export const ContactSection: React.FC = () => {
           <h2 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-zinc-100 tracking-tight">
             Let&apos;s Connect
           </h2>
-          <p className="text-xs text-neutral-500 dark:text-zinc-400">
-            Send a direct message or connect across professional networks
-          </p>
         </div>
       </div>
 
@@ -65,7 +62,7 @@ export const ContactSection: React.FC = () => {
                 @{profileData.username}
               </p>
               <p className="text-xs text-neutral-600 dark:text-zinc-300 mt-2 leading-relaxed font-normal">
-                I&apos;m always open to discussing new projects, learning opportunities, and OJT / internship roles.
+                Open to software engineering internships, full-stack roles, and collaborative projects.
               </p>
             </div>
 

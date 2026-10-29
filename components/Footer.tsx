@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
         {/* Left: Branding & School */}
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
           <span className="font-bold text-neutral-900 dark:text-zinc-100">
-            {profileData.name} ({profileData.preferredName})
+            {profileData.name}
           </span>
           <span className="hidden sm:inline text-neutral-300 dark:text-zinc-700">•</span>
           <span className="font-mono">@{profileData.username}</span>
@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
       </div>
 
       <div className="border-t border-neutral-100 dark:border-zinc-800/60 py-3 text-center text-[11px] text-neutral-400 dark:text-zinc-500">
-        Designed with an Instagram-inspired layout for modern developer portfolios • © {new Date().getFullYear()} {profileData.name}
+        © {new Date().getFullYear()} {profileData.name}
       </div>
     </footer>
   );

@@ -58,8 +58,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             <Heart className={`w-4 h-4 ${isLiked ? "fill-red-500 text-red-500" : "fill-white text-white"}`} />
             <span>View Details</span>
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-full bg-ig-gradient text-white shadow-md">
-            ⚡ Test App Live
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-full bg-white text-zinc-950 shadow-md">
+            <span>Test App Live</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </span>
         </div>

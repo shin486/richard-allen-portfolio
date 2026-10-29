@@ -43,7 +43,7 @@ export const profileData: ProfileData = {
   preferredName: "Richard Allen",
   username: "shin486",
 
-  title: "Aspiring Full-Stack & Mobile Developer",
+  title: "Full-Stack & Mobile Developer",
 
   bio:
     "4th-year BS IT student building scalable web and cross-platform mobile apps focused on performance and clean architecture.",
