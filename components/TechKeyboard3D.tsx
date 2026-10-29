@@ -62,7 +62,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "Crave Cart", projectId: "crave-cart" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs sm:text-sm tracking-tighter text-neutral-950 leading-none">
+      <span className="font-mono font-black text-[11px] sm:text-xs tracking-tighter text-neutral-950 leading-none">
         JS
       </span>
     ),
@@ -83,7 +83,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "IT Elective 4", projectId: "itelect4-project" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs sm:text-sm tracking-tighter text-white leading-none">
+      <span className="font-mono font-black text-[11px] sm:text-xs tracking-tighter text-white leading-none">
         TS
       </span>
     ),
@@ -104,7 +104,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "AVMS", projectId: "avms" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-white">
         <path d="M4 2h16l-1.4 16.2L12 22l-6.6-3.8L4 2zm12.7 5.3H7.2l.2 2.4h9.1l-.7 7.3-3.8 1.1-3.8-1.1-.3-3h2.4l.1 1.5 1.6.4 1.6-.4.2-2.5H7.7l-.5-5.7h9.7l-.2 2z" />
       </svg>
     ),
@@ -121,7 +121,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Responsive UI components, modals, and layout grid systems.",
     usedIn: [{ label: "Auto Avenue", projectId: "auto-avenue-ims" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs sm:text-sm text-white leading-none">
+      <span className="font-mono font-black text-[11px] sm:text-xs text-white leading-none">
         B
       </span>
     ),
@@ -142,7 +142,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "ShinPay+", projectId: "shinpay-plus" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-cyan-200 fill-none" strokeWidth="1.8">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-cyan-200 fill-none" strokeWidth="1.8">
         <circle cx="12" cy="12" r="2.2" className="fill-cyan-200" />
         <ellipse cx="12" cy="12" rx="10" ry="4.2" />
         <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)" />
@@ -163,7 +163,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Cross-platform mobile marketplace development for Android & iOS.",
     usedIn: [{ label: "PalengkeHub", projectId: "palengkehub" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-white fill-none" strokeWidth="1.8">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-white fill-none" strokeWidth="1.8">
         <rect x="6" y="2" width="12" height="20" rx="2.5" />
         <line x1="10" y1="18.5" x2="14" y2="18.5" />
       </svg>
@@ -184,7 +184,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "App Router, Multi-tenant SaaS architecture, Server Actions & SSR.",
     usedIn: [{ label: "ShinPay+", projectId: "shinpay-plus" }],
     renderIcon: () => (
-      <div className="w-4 h-4 rounded-full bg-white text-black flex items-center justify-center font-mono font-black text-[10px]">
+      <div className="w-3.5 h-3.5 rounded-full bg-white text-black flex items-center justify-center font-mono font-black text-[9px]">
         N
       </div>
     ),
@@ -202,7 +202,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Utility-first responsive design, dark mode tokens & micro-animations.",
     usedIn: [{ label: "ShinPay+", projectId: "shinpay-plus" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-white">
         <path d="M12 6c-2.67 0-4.33 1.33-5 4 1-1.33 2.17-1.83 3.5-1.5.76.19 1.31.74 1.91 1.35.98 1 2.09 2.15 4.59 2.15 2.67 0 4.33-1.33 5-4-1 1.33-2.17 1.83-3.5 1.5-.76-.19-1.31-.74-1.91-1.35C15.61 7.15 14.5 6 12 6zm-5 6c-2.67 0-4.33 1.33-5 4 1-1.33 2.17-1.83 3.5-1.5.76.19 1.31.74 1.91 1.35.98 1 2.09 2.15 4.59 2.15 2.67 0 4.33-1.33 5-4-1 1.33-2.17 1.83-3.5 1.5-.76-.19-1.31-.74-1.91-1.35C10.61 13.15 9.5 12 7 12z" />
       </svg>
     ),
@@ -223,7 +223,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "Crave Cart", projectId: "crave-cart" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-bold text-[10px] px-0.5 py-0.2 rounded border border-white/60 text-white leading-none">
+      <span className="font-mono font-bold text-[9px] px-0.5 py-0.2 rounded border border-white/60 text-white leading-none">
         JS
       </span>
     ),
@@ -244,7 +244,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "ShinPay+", projectId: "shinpay-plus" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-white">
         <path d="M13.5 2L4 14h7.5l-1 8L20 10h-7.5l1-8z" />
       </svg>
     ),
@@ -261,7 +261,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Document data modeling and tenant-isolated CRUD operations.",
     usedIn: [{ label: "IT Elective 4", projectId: "itelect4-project" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-emerald-200">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-emerald-200">
         <path d="M12 2C8 6.5 6.5 10.5 6.5 14.2 6.5 18 9 20.5 12 22c3-1.5 5.5-4 5.5-7.8C17.5 10.5 16 6.5 12 2zm0 17.5v-13" />
       </svg>
     ),
@@ -282,7 +282,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "PalengkeHub", projectId: "palengkehub" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs sm:text-sm text-white leading-none">
+      <span className="font-mono font-black text-[11px] sm:text-xs text-white leading-none">
         PG
       </span>
     ),
@@ -302,7 +302,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Python Essentials 1 & 2 (Cisco certified), automation & data structures.",
     usedIn: [{ label: "Cisco Certifications" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs sm:text-sm text-amber-300 leading-none">
+      <span className="font-mono font-black text-[11px] sm:text-xs text-amber-300 leading-none">
         Py
       </span>
     ),
@@ -319,7 +319,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Server-side scripting and real-time POS / IMS integration.",
     usedIn: [{ label: "Auto Avenue", projectId: "auto-avenue-ims" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-[11px] sm:text-xs italic text-white leading-none">
+      <span className="font-mono font-black text-[10px] sm:text-[11px] italic text-white leading-none">
         php
       </span>
     ),
@@ -341,7 +341,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "Auto Avenue", projectId: "auto-avenue-ims" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-[11px] sm:text-xs text-white leading-none">
+      <span className="font-mono font-black text-[10px] sm:text-[11px] text-white leading-none">
         SQL
       </span>
     ),
@@ -359,7 +359,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Relational inventory and POS database management.",
     usedIn: [{ label: "Auto Avenue", projectId: "auto-avenue-ims" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-white fill-none" strokeWidth="1.8">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-white fill-none" strokeWidth="1.8">
         <ellipse cx="12" cy="5" rx="8" ry="3" />
         <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
         <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
@@ -378,7 +378,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Object-Oriented Programming and core algorithmic design.",
     usedIn: [{ label: "Academic Coursework" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-[11px] sm:text-xs text-white leading-none">
+      <span className="font-mono font-black text-[10px] sm:text-[11px] text-white leading-none">
         JV
       </span>
     ),
@@ -395,7 +395,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Data structures, algorithmic logic, and memory fundamentals.",
     usedIn: [{ label: "Academic Coursework" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-[11px] sm:text-xs text-white leading-none">
+      <span className="font-mono font-black text-[10px] sm:text-[11px] text-white leading-none">
         C++
       </span>
     ),
@@ -419,7 +419,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "PalengkeHub", projectId: "palengkehub" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-white fill-none" strokeWidth="2">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-white fill-none" strokeWidth="2">
         <circle cx="6" cy="6" r="2.5" />
         <circle cx="18" cy="6" r="2.5" />
         <circle cx="6" cy="18" r="2.5" />
@@ -443,7 +443,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "IT Elective 4", projectId: "itelect4-project" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-white">
+      <svg viewBox="0 0 24 24" className="w-3 h-3 fill-white">
         <path d="M12 3l10 18H2L12 3z" />
       </svg>
     ),
@@ -460,7 +460,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Lightning-fast frontend build tooling and HMR dev server.",
     usedIn: [{ label: "IT Elective 4", projectId: "itelect4-project" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-300">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-amber-300">
         <path d="M13 2L4 14h7l-1 8 10-12h-7l0-8z" />
       </svg>
     ),
@@ -478,7 +478,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "REST API testing, endpoint debugging, and payload validation.",
     usedIn: [{ label: "IT Elective 4", projectId: "itelect4-project" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-[10px] sm:text-xs text-white leading-none">
+      <span className="font-mono font-black text-[9px] sm:text-[10px] text-white leading-none">
         API
       </span>
     ),
@@ -499,7 +499,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "ShinPay+", projectId: "shinpay-plus" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-[10px] sm:text-xs text-white leading-none">
+      <span className="font-mono font-black text-[9px] sm:text-[10px] text-white leading-none">
         FIG
       </span>
     ),
@@ -516,7 +516,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Lightweight embedded local relational database.",
     usedIn: [{ label: "Academic Coursework" }],
     renderIcon: () => (
-      <span className="font-mono font-bold text-[10px] sm:text-xs text-sky-200 leading-none">
+      <span className="font-mono font-bold text-[9px] sm:text-[10px] text-sky-200 leading-none">
         Lite
       </span>
     ),
@@ -535,7 +535,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Shell navigation, CLI scripting, and server environment management.",
     usedIn: [{ label: "Development & Servers" }],
     renderIcon: () => (
-      <span className="font-mono font-bold text-[10px] sm:text-xs text-amber-400 leading-none">
+      <span className="font-mono font-bold text-[9px] sm:text-[10px] text-amber-400 leading-none">
         SH
       </span>
     ),
@@ -555,7 +555,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "ShinPay+", projectId: "shinpay-plus" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-[10px] sm:text-xs text-white leading-none">
+      <span className="font-mono font-black text-[9px] sm:text-[10px] text-white leading-none">
         {"</>"}
       </span>
     ),
@@ -591,7 +591,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Business data visualization dashboards & Robotic Process Automation.",
     usedIn: [{ label: "Academic Coursework" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-[10px] sm:text-xs text-neutral-950 leading-none">
+      <span className="font-mono font-black text-[9px] sm:text-[10px] text-neutral-950 leading-none">
         BI
       </span>
     ),
@@ -635,7 +635,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
   const [glowTheme, setGlowTheme] = useState<GlowTheme>("instagram");
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [tilt, setTilt] = useState({ x: 30, z: -20, y: 6 });
+  const [tilt, setTilt] = useState({ x: 25, z: -14, y: 5 });
   const [isMobile, setIsMobile] = useState(false);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -647,9 +647,9 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
       const mobile = window.innerWidth < 640;
       setIsMobile(mobile);
       if (mobile) {
-        setTilt({ x: 22, z: -10, y: 4 });
+        setTilt({ x: 20, z: -8, y: 3 });
       } else {
-        setTilt({ x: 30, z: -20, y: 6 });
+        setTilt({ x: 25, z: -14, y: 5 });
       }
     };
     checkMobile();
@@ -761,10 +761,9 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
     [playMechanicalSound, soundProfile, cycleGlowTheme]
   );
 
-  // FIX: Auto-Demo Wave now ripples across ALL 28 skills (indices 0..27) on the board!
+  // Auto-Demo Wave across ALL 28 skills on the board
   useEffect(() => {
     if (!isAutoPlaying) return;
-    // Get ALL 28 skills (excludes hardware macro keys)
     const allSkills = KEYCAP_SKILLS.filter((s) => s.category !== "macro");
     let step = 0;
 
@@ -774,7 +773,6 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         triggerKeycap(target, step);
         step++;
       } else {
-        // Finished full sweep of all 28 keys
         setIsAutoPlaying(false);
       }
     }, 220);
@@ -818,24 +816,24 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
     [activeProject]
   );
 
-  // Interactive 3D tilt when moving cursor over the stage (desktop only)
+  // Subtle interactive 3D tilt when moving cursor over the stage (desktop only)
   const handleStageMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile || !stageRef.current) return;
     const rect = stageRef.current.getBoundingClientRect();
     const nx = (e.clientX - rect.left) / rect.width - 0.5;
     const ny = (e.clientY - rect.top) / rect.height - 0.5;
     setTilt({
-      x: 30 - ny * 8,
-      z: -20 + nx * 8,
-      y: 6 + nx * 6,
+      x: 25 - ny * 6,
+      z: -14 + nx * 5,
+      y: 5 + nx * 4,
     });
   };
 
   const handleStageMouseLeave = () => {
     if (isMobile) {
-      setTilt({ x: 22, z: -10, y: 4 });
+      setTilt({ x: 20, z: -8, y: 3 });
     } else {
-      setTilt({ x: 30, z: -20, y: 6 });
+      setTilt({ x: 25, z: -14, y: 5 });
     }
   };
 
@@ -850,24 +848,24 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
   const glowStyles: Record<GlowTheme, string> = {
     instagram:
-      "radial-gradient(circle, rgba(221,42,123,0.38) 0%, rgba(245,133,41,0.18) 45%, transparent 75%)",
+      "radial-gradient(circle, rgba(221,42,123,0.36) 0%, rgba(245,133,41,0.16) 45%, transparent 75%)",
     cyber:
-      "radial-gradient(circle, rgba(6,182,212,0.4) 0%, rgba(59,130,246,0.18) 45%, transparent 75%)",
+      "radial-gradient(circle, rgba(6,182,212,0.38) 0%, rgba(59,130,246,0.16) 45%, transparent 75%)",
     emerald:
-      "radial-gradient(circle, rgba(16,185,129,0.38) 0%, rgba(5,150,105,0.16) 45%, transparent 75%)",
+      "radial-gradient(circle, rgba(16,185,129,0.36) 0%, rgba(5,150,105,0.15) 45%, transparent 75%)",
     stealth:
-      "radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 70%)",
+      "radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)",
   };
 
   if (variant === "sidebar" && isMinimized) {
     return (
-      <div className="flex justify-end pr-2">
+      <div className="flex justify-end pr-1">
         <button
           onClick={() => setIsMinimized(false)}
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200 dark:border-zinc-800 shadow-md text-xs font-semibold text-neutral-800 dark:text-zinc-200 hover:border-ig-pink transition-all"
         >
           <Keyboard className="w-3.5 h-3.5 text-ig-pink" />
-          <span>Expand 3D Keyboard (28)</span>
+          <span>Expand 3D Keyboard</span>
           <Maximize2 className="w-3 h-3 text-neutral-400" />
         </button>
       </div>
@@ -875,12 +873,12 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
   }
 
   return (
-    <div className="w-full select-none overflow-x-clip">
-      {/* Top Floating Header — Compact, responsive font size */}
-      <div className="flex items-center justify-between mb-1.5 px-1 gap-2">
+    <div className="w-full select-none">
+      {/* Top Floating Header — Clean spacing, never cut off */}
+      <div className="flex items-center justify-between mb-2 px-1 gap-2">
         <div className="min-w-0">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <h2 className="text-base sm:text-lg xl:text-xl font-black tracking-wider uppercase bg-gradient-to-b from-neutral-900 via-neutral-700 to-neutral-400 dark:from-white dark:via-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent">
+          <div className="flex items-center gap-1.5">
+            <h2 className="text-sm sm:text-base xl:text-lg font-black tracking-wider uppercase bg-gradient-to-b from-neutral-900 via-neutral-700 to-neutral-400 dark:from-white dark:via-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent">
               SKILLS
             </h2>
             <span className="px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold bg-ig-pink/15 text-ig-pink border border-ig-pink/30">
@@ -889,8 +887,8 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
           </div>
           <p className="text-[10px] font-mono text-neutral-500 dark:text-zinc-400 truncate">
             {isMobile
-              ? "(tap any keycap below to explore)"
-              : "(hint: press a key or tap a keycap)"}
+              ? "(tap any keycap below)"
+              : "(press a key or tap below)"}
           </p>
         </div>
 
@@ -922,40 +920,40 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         </div>
       </div>
 
-      {/* 3D Isometric Mechanical Keypad Stage — Compact padding to fit without scrolling */}
+      {/* 3D Isometric Mechanical Keypad Stage — Perfectly centered with zero clipping */}
       <div
         ref={stageRef}
         onMouseMove={handleStageMouseMove}
         onMouseLeave={handleStageMouseLeave}
-        className="relative w-full py-2.5 sm:py-3.5 flex items-center justify-center overflow-visible touch-manipulation"
+        className="relative w-full py-2 flex items-center justify-center touch-manipulation overflow-visible"
         style={{ perspective: "1000px" }}
       >
         {/* Dynamic Ambient Underglow */}
         <div
-          className="absolute w-60 h-44 sm:w-72 sm:h-52 rounded-full blur-2xl pointer-events-none transition-all duration-500"
+          className="absolute w-56 h-40 sm:w-64 sm:h-48 rounded-full blur-2xl pointer-events-none transition-all duration-500"
           style={{ background: glowStyles[glowTheme] }}
         />
 
         {/* Sculpted Anodized Aluminum 3D Keyboard Case */}
         <div
-          className="relative p-2 xs:p-2.5 sm:p-3 rounded-[18px] sm:rounded-[22px] bg-[#14151c] border border-white/15 transition-transform duration-200 ease-out max-w-full"
+          className="relative p-2 rounded-[16px] sm:rounded-[20px] bg-[#14151c] border border-white/15 transition-transform duration-200 ease-out origin-center"
           style={{
             transform: `rotateX(${tilt.x}deg) rotateZ(${tilt.z}deg) rotateY(${tilt.y}deg)`,
             transformStyle: "preserve-3d",
             boxShadow: `
               -2px 2px 0 #0b0c10,
-              -3px 4px 0 #0b0c10,
-              -5px 6px 0 #090a0e,
-              -6px 8px 0 #08090c,
-              -8px 11px 0 #060709,
-              -10px 18px 26px rgba(0, 0, 0, 0.72)
+              -3px 3px 0 #0b0c10,
+              -4px 5px 0 #090a0e,
+              -5px 7px 0 #08090c,
+              -7px 9px 0 #060709,
+              -8px 14px 20px rgba(0, 0, 0, 0.7)
             `,
           }}
         >
           {/* Recessed Switch Plate */}
-          <div className="p-1.5 xs:p-2 rounded-[14px] sm:rounded-[16px] bg-[#090a0f] border border-white/5 shadow-inner">
+          <div className="p-1.5 rounded-[13px] sm:rounded-[15px] bg-[#090a0f] border border-white/5 shadow-inner">
             {/* 6 Columns x 5 Rows = 30 Keycaps (28 Skills + 2 Hardware Macros) */}
-            <div className="grid grid-cols-6 gap-1 xs:gap-1.5 sm:gap-2">
+            <div className="grid grid-cols-6 gap-1 xs:gap-1.5 sm:gap-1.5">
               {KEYCAP_SKILLS.map((skill, idx) => {
                 const isPressed = !!pressedIds[skill.id];
                 const isSelected = selectedSkill.id === skill.id;
@@ -967,33 +965,31 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                     type="button"
                     onClick={() => triggerKeycap(skill, idx)}
                     aria-label={`${skill.name} (${skill.keyTrigger})`}
-                    className="group relative w-[38px] h-[38px] xs:w-[41px] xs:h-[41px] sm:w-[44px] sm:h-[44px] xl:w-[40px] xl:h-[40px] 2xl:w-[44px] 2xl:h-[44px] rounded-[8px] sm:rounded-[9px] focus:outline-none transition-transform duration-75 active:scale-95"
+                    className="group relative w-[34px] h-[34px] xs:w-[37px] xs:h-[37px] sm:w-[40px] sm:h-[40px] xl:w-[36px] xl:h-[36px] 2xl:w-[40px] 2xl:h-[40px] rounded-[7px] sm:rounded-[8px] focus:outline-none transition-transform duration-75 active:scale-95"
                     style={{
                       backgroundColor: skill.color,
                       transform: isPressed
-                        ? "translate(-1px, 4px)"
+                        ? "translate(-1px, 3px)"
                         : "translate(0px, 0px)",
                       boxShadow: isPressed
                         ? `
                           -1px 1px 0 ${skill.wallColor},
-                          -1.5px 1.5px 0 ${skill.wallColor},
-                          0 0 10px rgba(255,255,255,0.3)
+                          0 0 8px rgba(255,255,255,0.3)
                         `
                         : `
                           -1px 1px 0 ${skill.wallColor},
                           -2px 2px 0 ${skill.wallColor},
-                          -3px 3.5px 0 ${skill.wallColor},
-                          -4px 5px 0 #050608,
-                          -5px 7px 8px rgba(0,0,0,0.6)
+                          -2.5px 3px 0 #050608,
+                          -4px 5px 6px rgba(0,0,0,0.55)
                         `,
                     }}
                   >
                     {/* Active Selection / Synced Project Halo Ring */}
                     {(isSelected || isProjectMatch) && (
                       <span
-                        className={`pointer-events-none absolute -inset-[2px] rounded-[9px] sm:rounded-[10px] ${
+                        className={`pointer-events-none absolute -inset-[2px] rounded-[8px] sm:rounded-[9px] ${
                           isSelected
-                            ? "ring-2 ring-white shadow-[0_0_10px_rgba(255,255,255,0.55)]"
+                            ? "ring-2 ring-white shadow-[0_0_8px_rgba(255,255,255,0.55)]"
                             : "ring-1 ring-amber-300/80 animate-pulse"
                         }`}
                       />
@@ -1001,7 +997,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
                     {/* Sculpted Concave Keycap Dish */}
                     <div
-                      className="absolute inset-[2.5px] rounded-[6px] sm:rounded-[7px] flex flex-col items-center justify-center p-0.5 overflow-hidden"
+                      className="absolute inset-[2px] rounded-[5px] sm:rounded-[6px] flex flex-col items-center justify-center p-0.5 overflow-hidden"
                       style={{
                         background:
                           "linear-gradient(145deg, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.18) 100%)",
@@ -1011,7 +1007,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                       {/* Keycap Icon */}
                       <div className="transform group-hover:scale-105 transition-transform flex items-center justify-center">
                         {skill.id === "macro-play" && isAutoPlaying ? (
-                          <Square className="w-3 h-3 text-rose-400 fill-rose-400" />
+                          <Square className="w-2.5 h-2.5 text-rose-400 fill-rose-400" />
                         ) : (
                           skill.renderIcon()
                         )}
@@ -1019,7 +1015,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
                       {/* Tiny Sub-Legend */}
                       <span
-                        className="text-[6.5px] xs:text-[7px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
+                        className="text-[6px] xs:text-[6.5px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
                         style={{ color: skill.textColor || "#ffffff" }}
                       >
                         {skill.shortLabel}
@@ -1031,19 +1027,19 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
             </div>
           </div>
 
-          {/* Bottom Metallic Chassis Status Strip */}
-          <div className="mt-1 px-1 flex items-center justify-between text-[8px] sm:text-[9px] font-mono text-zinc-400">
+          {/* Bottom Metallic Chassis Status Strip — Never cut off */}
+          <div className="mt-1 px-0.5 flex items-center justify-between text-[8px] font-mono text-zinc-400">
             <span className="inline-flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>SHIN-28</span>
             </span>
-            <span className="uppercase">{glowTheme} GLOW</span>
+            <span className="uppercase tracking-tight">{glowTheme} GLOW</span>
           </div>
         </div>
       </div>
 
-      {/* Streamlined, Compact Skill Inspector HUD — Never collides with Byte AI Mascot */}
-      <div className="mt-1 rounded-xl bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200/80 dark:border-zinc-800/90 p-2.5 shadow-md transition-all">
+      {/* Streamlined, Compact Skill Inspector HUD */}
+      <div className="mt-2 rounded-xl bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200/80 dark:border-zinc-800/90 p-2.5 shadow-md transition-all">
         {/* Row 1: Skill Icon + Name + Key badge + Wave button */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
