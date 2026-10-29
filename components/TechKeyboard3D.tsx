@@ -43,7 +43,7 @@ interface TechKeyboard3DProps {
 /**
  * Custom crisp SVG icons for all 28 technologies + 2 hardware macro keys
  */
-const KEYCAP_SKILLS: KeycapSkill[] = [
+export const KEYCAP_SKILLS: KeycapSkill[] = [
   // ================= ROW 1: CORE LANGUAGES & WEB =================
   {
     id: "javascript",
@@ -62,7 +62,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "Crave Cart", projectId: "crave-cart" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-base sm:text-lg tracking-tighter text-neutral-950 leading-none">
+      <span className="font-mono font-black text-xs sm:text-sm tracking-tighter text-neutral-950 leading-none">
         JS
       </span>
     ),
@@ -83,7 +83,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "IT Elective 4", projectId: "itelect4-project" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-base sm:text-lg tracking-tighter text-white leading-none">
+      <span className="font-mono font-black text-xs sm:text-sm tracking-tighter text-white leading-none">
         TS
       </span>
     ),
@@ -104,7 +104,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "AVMS", projectId: "avms" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white">
         <path d="M4 2h16l-1.4 16.2L12 22l-6.6-3.8L4 2zm12.7 5.3H7.2l.2 2.4h9.1l-.7 7.3-3.8 1.1-3.8-1.1-.3-3h2.4l.1 1.5 1.6.4 1.6-.4.2-2.5H7.7l-.5-5.7h9.7l-.2 2z" />
       </svg>
     ),
@@ -121,7 +121,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Responsive UI components, modals, and layout grid systems.",
     usedIn: [{ label: "Auto Avenue", projectId: "auto-avenue-ims" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-base sm:text-lg text-white leading-none">
+      <span className="font-mono font-black text-xs sm:text-sm text-white leading-none">
         B
       </span>
     ),
@@ -142,7 +142,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "ShinPay+", projectId: "shinpay-plus" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-cyan-200 fill-none" strokeWidth="1.8">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-cyan-200 fill-none" strokeWidth="1.8">
         <circle cx="12" cy="12" r="2.2" className="fill-cyan-200" />
         <ellipse cx="12" cy="12" rx="10" ry="4.2" />
         <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)" />
@@ -163,7 +163,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Cross-platform mobile marketplace development for Android & iOS.",
     usedIn: [{ label: "PalengkeHub", projectId: "palengkehub" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-white fill-none" strokeWidth="1.8">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-white fill-none" strokeWidth="1.8">
         <rect x="6" y="2" width="12" height="20" rx="2.5" />
         <line x1="10" y1="18.5" x2="14" y2="18.5" />
       </svg>
@@ -184,7 +184,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "App Router, Multi-tenant SaaS architecture, Server Actions & SSR.",
     usedIn: [{ label: "ShinPay+", projectId: "shinpay-plus" }],
     renderIcon: () => (
-      <div className="w-5 h-5 rounded-full bg-white text-black flex items-center justify-center font-mono font-black text-xs">
+      <div className="w-4 h-4 rounded-full bg-white text-black flex items-center justify-center font-mono font-black text-[10px]">
         N
       </div>
     ),
@@ -202,7 +202,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Utility-first responsive design, dark mode tokens & micro-animations.",
     usedIn: [{ label: "ShinPay+", projectId: "shinpay-plus" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white">
         <path d="M12 6c-2.67 0-4.33 1.33-5 4 1-1.33 2.17-1.83 3.5-1.5.76.19 1.31.74 1.91 1.35.98 1 2.09 2.15 4.59 2.15 2.67 0 4.33-1.33 5-4-1 1.33-2.17 1.83-3.5 1.5-.76-.19-1.31-.74-1.91-1.35C15.61 7.15 14.5 6 12 6zm-5 6c-2.67 0-4.33 1.33-5 4 1-1.33 2.17-1.83 3.5-1.5.76.19 1.31.74 1.91 1.35.98 1 2.09 2.15 4.59 2.15 2.67 0 4.33-1.33 5-4-1 1.33-2.17 1.83-3.5 1.5-.76-.19-1.31-.74-1.91-1.35C10.61 13.15 9.5 12 7 12z" />
       </svg>
     ),
@@ -223,7 +223,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "Crave Cart", projectId: "crave-cart" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-bold text-xs px-1 py-0.5 rounded border border-white/60 text-white leading-none">
+      <span className="font-mono font-bold text-[10px] px-0.5 py-0.2 rounded border border-white/60 text-white leading-none">
         JS
       </span>
     ),
@@ -244,7 +244,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "ShinPay+", projectId: "shinpay-plus" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white">
         <path d="M13.5 2L4 14h7.5l-1 8L20 10h-7.5l1-8z" />
       </svg>
     ),
@@ -261,7 +261,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Document data modeling and tenant-isolated CRUD operations.",
     usedIn: [{ label: "IT Elective 4", projectId: "itelect4-project" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-emerald-200">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-emerald-200">
         <path d="M12 2C8 6.5 6.5 10.5 6.5 14.2 6.5 18 9 20.5 12 22c3-1.5 5.5-4 5.5-7.8C17.5 10.5 16 6.5 12 2zm0 17.5v-13" />
       </svg>
     ),
@@ -282,7 +282,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "PalengkeHub", projectId: "palengkehub" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-sm text-white leading-none">
+      <span className="font-mono font-black text-xs sm:text-sm text-white leading-none">
         PG
       </span>
     ),
@@ -302,7 +302,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Python Essentials 1 & 2 (Cisco certified), automation & data structures.",
     usedIn: [{ label: "Cisco Certifications" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-sm text-amber-300 leading-none">
+      <span className="font-mono font-black text-xs sm:text-sm text-amber-300 leading-none">
         Py
       </span>
     ),
@@ -319,7 +319,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Server-side scripting and real-time POS / IMS integration.",
     usedIn: [{ label: "Auto Avenue", projectId: "auto-avenue-ims" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs italic text-white leading-none">
+      <span className="font-mono font-black text-[11px] sm:text-xs italic text-white leading-none">
         php
       </span>
     ),
@@ -341,7 +341,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "Auto Avenue", projectId: "auto-avenue-ims" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs text-white leading-none">
+      <span className="font-mono font-black text-[11px] sm:text-xs text-white leading-none">
         SQL
       </span>
     ),
@@ -359,7 +359,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Relational inventory and POS database management.",
     usedIn: [{ label: "Auto Avenue", projectId: "auto-avenue-ims" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-white fill-none" strokeWidth="1.8">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-white fill-none" strokeWidth="1.8">
         <ellipse cx="12" cy="5" rx="8" ry="3" />
         <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
         <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
@@ -378,7 +378,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Object-Oriented Programming and core algorithmic design.",
     usedIn: [{ label: "Academic Coursework" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs text-white leading-none">
+      <span className="font-mono font-black text-[11px] sm:text-xs text-white leading-none">
         JV
       </span>
     ),
@@ -395,7 +395,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Data structures, algorithmic logic, and memory fundamentals.",
     usedIn: [{ label: "Academic Coursework" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs text-white leading-none">
+      <span className="font-mono font-black text-[11px] sm:text-xs text-white leading-none">
         C++
       </span>
     ),
@@ -419,7 +419,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "PalengkeHub", projectId: "palengkehub" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-white fill-none" strokeWidth="2">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-white fill-none" strokeWidth="2">
         <circle cx="6" cy="6" r="2.5" />
         <circle cx="18" cy="6" r="2.5" />
         <circle cx="6" cy="18" r="2.5" />
@@ -443,7 +443,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "IT Elective 4", projectId: "itelect4-project" },
     ],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white">
+      <svg viewBox="0 0 24 24" className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-white">
         <path d="M12 3l10 18H2L12 3z" />
       </svg>
     ),
@@ -460,7 +460,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Lightning-fast frontend build tooling and HMR dev server.",
     usedIn: [{ label: "IT Elective 4", projectId: "itelect4-project" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-amber-300">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-300">
         <path d="M13 2L4 14h7l-1 8 10-12h-7l0-8z" />
       </svg>
     ),
@@ -478,7 +478,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "REST API testing, endpoint debugging, and payload validation.",
     usedIn: [{ label: "IT Elective 4", projectId: "itelect4-project" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs text-white leading-none">
+      <span className="font-mono font-black text-[10px] sm:text-xs text-white leading-none">
         API
       </span>
     ),
@@ -499,7 +499,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "ShinPay+", projectId: "shinpay-plus" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs text-white leading-none">
+      <span className="font-mono font-black text-[10px] sm:text-xs text-white leading-none">
         FIG
       </span>
     ),
@@ -516,7 +516,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Lightweight embedded local relational database.",
     usedIn: [{ label: "Academic Coursework" }],
     renderIcon: () => (
-      <span className="font-mono font-bold text-xs text-sky-200 leading-none">
+      <span className="font-mono font-bold text-[10px] sm:text-xs text-sky-200 leading-none">
         Lite
       </span>
     ),
@@ -535,7 +535,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Shell navigation, CLI scripting, and server environment management.",
     usedIn: [{ label: "Development & Servers" }],
     renderIcon: () => (
-      <span className="font-mono font-bold text-xs text-amber-400 leading-none">
+      <span className="font-mono font-bold text-[10px] sm:text-xs text-amber-400 leading-none">
         SH
       </span>
     ),
@@ -555,7 +555,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
       { label: "ShinPay+", projectId: "shinpay-plus" },
     ],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs text-white leading-none">
+      <span className="font-mono font-black text-[10px] sm:text-xs text-white leading-none">
         {"</>"}
       </span>
     ),
@@ -573,7 +573,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "React Native mobile development, device testing, and builds.",
     usedIn: [{ label: "PalengkeHub", projectId: "palengkehub" }],
     renderIcon: () => (
-      <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-white fill-none" strokeWidth="2.4">
+      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-white fill-none" strokeWidth="2.4">
         <path d="M4 18L12 5l8 13" />
       </svg>
     ),
@@ -591,7 +591,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Business data visualization dashboards & Robotic Process Automation.",
     usedIn: [{ label: "Academic Coursework" }],
     renderIcon: () => (
-      <span className="font-mono font-black text-xs text-neutral-950 leading-none">
+      <span className="font-mono font-black text-[10px] sm:text-xs text-neutral-950 leading-none">
         BI
       </span>
     ),
@@ -607,7 +607,7 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     wallColor: "#831843",
     description: "Cycles the mechanical chassis underglow between IG Sunset, Cyber Cyan, Emerald, and Stealth.",
     usedIn: [{ label: "3D Keyboard Lab" }],
-    renderIcon: () => <Sparkles className="w-4 h-4 text-white" />,
+    renderIcon: () => <Sparkles className="w-3.5 h-3.5 text-white" />,
   },
   {
     id: "macro-play",
@@ -618,9 +618,9 @@ const KEYCAP_SKILLS: KeycapSkill[] = [
     categoryLabel: "Hardware Macro",
     color: "#18181B",
     wallColor: "#09090B",
-    description: "Plays an automated mechanical typing wave across Richard's core tech stack.",
+    description: "Plays an automated mechanical typing wave across all 28 skills on the board.",
     usedIn: [{ label: "3D Keyboard Lab" }],
-    renderIcon: () => <Play className="w-4 h-4 text-white fill-white" />,
+    renderIcon: () => <Play className="w-3.5 h-3.5 text-white fill-white" />,
   },
 ];
 
@@ -635,10 +635,27 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
   const [glowTheme, setGlowTheme] = useState<GlowTheme>("instagram");
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [tilt, setTilt] = useState({ x: 34, z: -26, y: 8 });
+  const [tilt, setTilt] = useState({ x: 30, z: -20, y: 6 });
+  const [isMobile, setIsMobile] = useState(false);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+
+  // Check screen width for mobile-friendly initial rotation
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+      if (mobile) {
+        setTilt({ x: 22, z: -10, y: 4 });
+      } else {
+        setTilt({ x: 30, z: -20, y: 6 });
+      }
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Synthesize realistic mechanical switch audio via native Web Audio API (zero external MP3s)
   const playMechanicalSound = useCallback(
@@ -668,7 +685,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         filter.type = "bandpass";
         const baseFreq =
           profile === "clicky" ? 2200 : profile === "thocky" ? 1350 : 950;
-        filter.frequency.setValueAtTime(baseFreq + pitchOffset * 25, now);
+        filter.frequency.setValueAtTime(baseFreq + (pitchOffset % 6) * 30, now);
         filter.Q.setValueAtTime(profile === "clicky" ? 5 : 3, now);
 
         clickOsc.type = profile === "clicky" ? "sawtooth" : "triangle";
@@ -676,7 +693,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         clickOsc.frequency.exponentialRampToValueAtTime(280, now + 0.022);
 
         clickGain.gain.setValueAtTime(
-          profile === "clicky" ? 0.38 : profile === "thocky" ? 0.28 : 0.14,
+          profile === "clicky" ? 0.35 : profile === "thocky" ? 0.25 : 0.12,
           now
         );
         clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
@@ -694,11 +711,11 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
         bodyOsc.type = "sine";
         const thockStart = profile === "thocky" ? 165 : 135;
-        bodyOsc.frequency.setValueAtTime(thockStart + (pitchOffset % 5) * 4, now);
+        bodyOsc.frequency.setValueAtTime(thockStart + (pitchOffset % 6) * 5, now);
         bodyOsc.frequency.exponentialRampToValueAtTime(48, now + 0.055);
 
         bodyGain.gain.setValueAtTime(
-          profile === "thocky" ? 0.55 : profile === "linear" ? 0.42 : 0.3,
+          profile === "thocky" ? 0.52 : profile === "linear" ? 0.38 : 0.28,
           now
         );
         bodyGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
@@ -744,23 +761,23 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
     [playMechanicalSound, soundProfile, cycleGlowTheme]
   );
 
-  // Auto-Demo Wave across core skills when PLAY macro key is toggled
+  // FIX: Auto-Demo Wave now ripples across ALL 28 skills (indices 0..27) on the board!
   useEffect(() => {
     if (!isAutoPlaying) return;
-    const coreSkills = KEYCAP_SKILLS.filter(
-      (s) => s.category !== "macro" && s.highlight
-    );
+    // Get ALL 28 skills (excludes hardware macro keys)
+    const allSkills = KEYCAP_SKILLS.filter((s) => s.category !== "macro");
     let step = 0;
+
     const interval = setInterval(() => {
-      const target = coreSkills[step % coreSkills.length];
-      if (target) {
+      if (step < allSkills.length) {
+        const target = allSkills[step];
         triggerKeycap(target, step);
-      }
-      step++;
-      if (step >= coreSkills.length) {
+        step++;
+      } else {
+        // Finished full sweep of all 28 keys
         setIsAutoPlaying(false);
       }
-    }, 380);
+    }, 220);
 
     return () => clearInterval(interval);
   }, [isAutoPlaying, triggerKeycap]);
@@ -801,21 +818,25 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
     [activeProject]
   );
 
-  // Interactive 3D tilt when moving cursor over the stage
+  // Interactive 3D tilt when moving cursor over the stage (desktop only)
   const handleStageMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!stageRef.current) return;
+    if (isMobile || !stageRef.current) return;
     const rect = stageRef.current.getBoundingClientRect();
     const nx = (e.clientX - rect.left) / rect.width - 0.5;
     const ny = (e.clientY - rect.top) / rect.height - 0.5;
     setTilt({
-      x: 34 - ny * 10,
-      z: -26 + nx * 10,
-      y: 8 + nx * 8,
+      x: 30 - ny * 8,
+      z: -20 + nx * 8,
+      y: 6 + nx * 6,
     });
   };
 
   const handleStageMouseLeave = () => {
-    setTilt({ x: 34, z: -26, y: 8 });
+    if (isMobile) {
+      setTilt({ x: 22, z: -10, y: 4 });
+    } else {
+      setTilt({ x: 30, z: -20, y: 6 });
+    }
   };
 
   const cycleSoundProfile = () => {
@@ -829,59 +850,61 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
   const glowStyles: Record<GlowTheme, string> = {
     instagram:
-      "radial-gradient(circle, rgba(221,42,123,0.42) 0%, rgba(245,133,41,0.22) 45%, transparent 75%)",
+      "radial-gradient(circle, rgba(221,42,123,0.38) 0%, rgba(245,133,41,0.18) 45%, transparent 75%)",
     cyber:
-      "radial-gradient(circle, rgba(6,182,212,0.45) 0%, rgba(59,130,246,0.22) 45%, transparent 75%)",
+      "radial-gradient(circle, rgba(6,182,212,0.4) 0%, rgba(59,130,246,0.18) 45%, transparent 75%)",
     emerald:
-      "radial-gradient(circle, rgba(16,185,129,0.42) 0%, rgba(5,150,105,0.2) 45%, transparent 75%)",
+      "radial-gradient(circle, rgba(16,185,129,0.38) 0%, rgba(5,150,105,0.16) 45%, transparent 75%)",
     stealth:
-      "radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%)",
+      "radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 70%)",
   };
 
   if (variant === "sidebar" && isMinimized) {
     return (
-      <div className="flex justify-end">
+      <div className="flex justify-end pr-2">
         <button
           onClick={() => setIsMinimized(false)}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/90 dark:bg-[#111116]/90 backdrop-blur-md border border-neutral-200 dark:border-zinc-800 shadow-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 hover:border-ig-pink transition-all"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200 dark:border-zinc-800 shadow-md text-xs font-semibold text-neutral-800 dark:text-zinc-200 hover:border-ig-pink transition-all"
         >
-          <Keyboard className="w-4 h-4 text-ig-pink" />
-          <span>Expand 3D Tech Keyboard (28)</span>
-          <Maximize2 className="w-3.5 h-3.5 text-neutral-400" />
+          <Keyboard className="w-3.5 h-3.5 text-ig-pink" />
+          <span>Expand 3D Keyboard (28)</span>
+          <Maximize2 className="w-3 h-3 text-neutral-400" />
         </button>
       </div>
     );
   }
 
   return (
-    <div className="w-full select-none">
-      {/* Top Floating Header — matches reference "SKILLS (hint: press a key)" */}
-      <div className="flex items-center justify-between mb-2 px-1">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-black tracking-wider uppercase bg-gradient-to-b from-neutral-900 via-neutral-700 to-neutral-400 dark:from-white dark:via-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent">
+    <div className="w-full select-none overflow-x-clip">
+      {/* Top Floating Header — Compact, responsive font size */}
+      <div className="flex items-center justify-between mb-1.5 px-1 gap-2">
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <h2 className="text-base sm:text-lg xl:text-xl font-black tracking-wider uppercase bg-gradient-to-b from-neutral-900 via-neutral-700 to-neutral-400 dark:from-white dark:via-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent">
               SKILLS
             </h2>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-ig-pink/15 text-ig-pink border border-ig-pink/30">
+            <span className="px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold bg-ig-pink/15 text-ig-pink border border-ig-pink/30">
               28 KEYS
             </span>
           </div>
-          <p className="text-[11px] font-mono text-neutral-500 dark:text-zinc-400">
-            (hint: press a key on your keyboard or tap a keycap)
+          <p className="text-[10px] font-mono text-neutral-500 dark:text-zinc-400 truncate">
+            {isMobile
+              ? "(tap any keycap below to explore)"
+              : "(hint: press a key or tap a keycap)"}
           </p>
         </div>
 
         {/* Sound & Minimize Controls */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 flex-shrink-0">
           <button
             onClick={cycleSoundProfile}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium bg-white/80 dark:bg-zinc-900/90 border border-neutral-200/80 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300 hover:border-ig-pink transition-colors"
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-white/80 dark:bg-zinc-900/90 border border-neutral-200/80 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300 hover:border-ig-pink transition-colors"
             title="Cycle mechanical switch sound profile"
           >
             {soundProfile === "mute" ? (
-              <VolumeX className="w-3.5 h-3.5 text-neutral-400" />
+              <VolumeX className="w-3 h-3 text-neutral-400" />
             ) : (
-              <Volume2 className="w-3.5 h-3.5 text-ig-pink" />
+              <Volume2 className="w-3 h-3 text-ig-pink" />
             )}
             <span className="capitalize">{soundProfile}</span>
           </button>
@@ -889,50 +912,50 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
           {variant === "sidebar" && (
             <button
               onClick={() => setIsMinimized(true)}
-              className="p-1.5 rounded-lg bg-white/80 dark:bg-zinc-900/90 border border-neutral-200/80 dark:border-zinc-800 text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+              className="p-1 rounded-md bg-white/80 dark:bg-zinc-900/90 border border-neutral-200/80 dark:border-zinc-800 text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
               title="Minimize 3D Keyboard"
               aria-label="Minimize 3D Keyboard"
             >
-              <Minimize2 className="w-3.5 h-3.5" />
+              <Minimize2 className="w-3 h-3" />
             </button>
           )}
         </div>
       </div>
 
-      {/* 3D Isometric Mechanical Keypad Stage */}
+      {/* 3D Isometric Mechanical Keypad Stage — Compact padding to fit without scrolling */}
       <div
         ref={stageRef}
         onMouseMove={handleStageMouseMove}
         onMouseLeave={handleStageMouseLeave}
-        className="relative w-full py-7 sm:py-9 flex items-center justify-center overflow-visible"
-        style={{ perspective: "1100px" }}
+        className="relative w-full py-2.5 sm:py-3.5 flex items-center justify-center overflow-visible touch-manipulation"
+        style={{ perspective: "1000px" }}
       >
         {/* Dynamic Ambient Underglow */}
         <div
-          className="absolute w-72 h-56 rounded-full blur-2xl pointer-events-none transition-all duration-500"
+          className="absolute w-60 h-44 sm:w-72 sm:h-52 rounded-full blur-2xl pointer-events-none transition-all duration-500"
           style={{ background: glowStyles[glowTheme] }}
         />
 
         {/* Sculpted Anodized Aluminum 3D Keyboard Case */}
         <div
-          className="relative p-3 sm:p-3.5 rounded-[22px] bg-[#14151c] border border-white/15 transition-transform duration-200 ease-out"
+          className="relative p-2 xs:p-2.5 sm:p-3 rounded-[18px] sm:rounded-[22px] bg-[#14151c] border border-white/15 transition-transform duration-200 ease-out max-w-full"
           style={{
             transform: `rotateX(${tilt.x}deg) rotateZ(${tilt.z}deg) rotateY(${tilt.y}deg)`,
             transformStyle: "preserve-3d",
             boxShadow: `
-              -2px 3px 0 #0b0c10,
-              -4px 6px 0 #0b0c10,
-              -6px 9px 0 #090a0e,
-              -8px 12px 0 #08090c,
-              -10px 15px 0 #060709,
-              -14px 24px 38px rgba(0, 0, 0, 0.78)
+              -2px 2px 0 #0b0c10,
+              -3px 4px 0 #0b0c10,
+              -5px 6px 0 #090a0e,
+              -6px 8px 0 #08090c,
+              -8px 11px 0 #060709,
+              -10px 18px 26px rgba(0, 0, 0, 0.72)
             `,
           }}
         >
           {/* Recessed Switch Plate */}
-          <div className="p-2 rounded-[16px] bg-[#090a0f] border border-white/5 shadow-inner">
+          <div className="p-1.5 xs:p-2 rounded-[14px] sm:rounded-[16px] bg-[#090a0f] border border-white/5 shadow-inner">
             {/* 6 Columns x 5 Rows = 30 Keycaps (28 Skills + 2 Hardware Macros) */}
-            <div className="grid grid-cols-6 gap-2 sm:gap-2.5">
+            <div className="grid grid-cols-6 gap-1 xs:gap-1.5 sm:gap-2">
               {KEYCAP_SKILLS.map((skill, idx) => {
                 const isPressed = !!pressedIds[skill.id];
                 const isSelected = selectedSkill.id === skill.id;
@@ -944,42 +967,41 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                     type="button"
                     onClick={() => triggerKeycap(skill, idx)}
                     aria-label={`${skill.name} (${skill.keyTrigger})`}
-                    className="group relative w-11 h-11 sm:w-12 sm:h-12 rounded-[10px] focus:outline-none transition-transform duration-75"
+                    className="group relative w-[38px] h-[38px] xs:w-[41px] xs:h-[41px] sm:w-[44px] sm:h-[44px] xl:w-[40px] xl:h-[40px] 2xl:w-[44px] 2xl:h-[44px] rounded-[8px] sm:rounded-[9px] focus:outline-none transition-transform duration-75 active:scale-95"
                     style={{
                       backgroundColor: skill.color,
                       transform: isPressed
-                        ? "translate(-1px, 5px)"
+                        ? "translate(-1px, 4px)"
                         : "translate(0px, 0px)",
                       boxShadow: isPressed
                         ? `
                           -1px 1px 0 ${skill.wallColor},
-                          -2px 2px 0 ${skill.wallColor},
-                          0 0 14px rgba(255,255,255,0.35)
+                          -1.5px 1.5px 0 ${skill.wallColor},
+                          0 0 10px rgba(255,255,255,0.3)
                         `
                         : `
-                          -1px 1.5px 0 ${skill.wallColor},
-                          -2px 3px 0 ${skill.wallColor},
-                          -3px 4.5px 0 ${skill.wallColor},
-                          -4px 6px 0 ${skill.wallColor},
-                          -5px 7.5px 0 #050608,
-                          -6px 10px 10px rgba(0,0,0,0.65)
+                          -1px 1px 0 ${skill.wallColor},
+                          -2px 2px 0 ${skill.wallColor},
+                          -3px 3.5px 0 ${skill.wallColor},
+                          -4px 5px 0 #050608,
+                          -5px 7px 8px rgba(0,0,0,0.6)
                         `,
                     }}
                   >
                     {/* Active Selection / Synced Project Halo Ring */}
                     {(isSelected || isProjectMatch) && (
                       <span
-                        className={`pointer-events-none absolute -inset-[2px] rounded-[11px] ${
+                        className={`pointer-events-none absolute -inset-[2px] rounded-[9px] sm:rounded-[10px] ${
                           isSelected
-                            ? "ring-2 ring-white shadow-[0_0_12px_rgba(255,255,255,0.6)]"
-                            : "ring-1 ring-amber-300/80"
+                            ? "ring-2 ring-white shadow-[0_0_10px_rgba(255,255,255,0.55)]"
+                            : "ring-1 ring-amber-300/80 animate-pulse"
                         }`}
                       />
                     )}
 
                     {/* Sculpted Concave Keycap Dish */}
                     <div
-                      className="absolute inset-[3px] rounded-[7px] flex flex-col items-center justify-center p-0.5 overflow-hidden"
+                      className="absolute inset-[2.5px] rounded-[6px] sm:rounded-[7px] flex flex-col items-center justify-center p-0.5 overflow-hidden"
                       style={{
                         background:
                           "linear-gradient(145deg, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.18) 100%)",
@@ -987,9 +1009,9 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                       }}
                     >
                       {/* Keycap Icon */}
-                      <div className="transform group-hover:scale-110 transition-transform">
+                      <div className="transform group-hover:scale-105 transition-transform flex items-center justify-center">
                         {skill.id === "macro-play" && isAutoPlaying ? (
-                          <Square className="w-3.5 h-3.5 text-rose-400 fill-rose-400" />
+                          <Square className="w-3 h-3 text-rose-400 fill-rose-400" />
                         ) : (
                           skill.renderIcon()
                         )}
@@ -997,7 +1019,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
                       {/* Tiny Sub-Legend */}
                       <span
-                        className="text-[7px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
+                        className="text-[6.5px] xs:text-[7px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
                         style={{ color: skill.textColor || "#ffffff" }}
                       >
                         {skill.shortLabel}
@@ -1010,112 +1032,111 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
           </div>
 
           {/* Bottom Metallic Chassis Status Strip */}
-          <div className="mt-2 px-1.5 flex items-center justify-between text-[9px] font-mono text-zinc-400">
-            <span className="inline-flex items-center gap-1.5">
+          <div className="mt-1 px-1 flex items-center justify-between text-[8px] sm:text-[9px] font-mono text-zinc-400">
+            <span className="inline-flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>SHIN-28 MECHANICAL</span>
+              <span>SHIN-28</span>
             </span>
             <span className="uppercase">{glowTheme} GLOW</span>
           </div>
         </div>
       </div>
 
-      {/* Live Inspector HUD Card Below Keyboard */}
-      <div className="mt-1 rounded-2xl bg-white/90 dark:bg-[#111116]/90 backdrop-blur-md border border-neutral-200/80 dark:border-zinc-800/90 p-3.5 shadow-lg transition-all">
-        <div className="flex items-start justify-between gap-2.5">
-          <div className="flex items-center gap-2.5 min-w-0">
+      {/* Streamlined, Compact Skill Inspector HUD — Never collides with Byte AI Mascot */}
+      <div className="mt-1 rounded-xl bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200/80 dark:border-zinc-800/90 p-2.5 shadow-md transition-all">
+        {/* Row 1: Skill Icon + Name + Key badge + Wave button */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-white/15"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm border border-white/15"
               style={{ backgroundColor: selectedSkill.color }}
             >
               {selectedSkill.renderIcon()}
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <h3 className="font-bold text-sm text-neutral-900 dark:text-zinc-100 truncate">
+              <div className="flex items-center gap-1.5">
+                <h3 className="font-bold text-xs sm:text-sm text-neutral-900 dark:text-zinc-100 truncate">
                   {selectedSkill.name}
                 </h3>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300 border border-neutral-200 dark:border-zinc-700">
-                  Key: {selectedSkill.keyTrigger}
+                <span className="px-1 py-0.2 rounded text-[9px] font-mono font-semibold bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300 border border-neutral-200 dark:border-zinc-700 flex-shrink-0">
+                  [{selectedSkill.keyTrigger}]
                 </span>
               </div>
-              <p className="text-[11px] font-medium text-ig-pink">
+              <p className="text-[10px] font-medium text-ig-pink truncate">
                 {selectedSkill.categoryLabel}
               </p>
             </div>
           </div>
 
-          {/* Quick Auto-Wave Button */}
+          {/* Auto-Wave across all 28 keys button */}
           <button
             onClick={() => setIsAutoPlaying((prev) => !prev)}
-            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold border transition-all flex-shrink-0 ${
+            className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-mono font-semibold border transition-all flex-shrink-0 ${
               isAutoPlaying
-                ? "bg-rose-500/15 text-rose-400 border-rose-500/30"
+                ? "bg-rose-500/15 text-rose-400 border-rose-500/30 animate-pulse"
                 : "bg-neutral-100 dark:bg-zinc-800/90 text-neutral-700 dark:text-zinc-300 border-neutral-200 dark:border-zinc-700 hover:border-ig-pink"
             }`}
+            title="Play an automated mechanical typing wave across all 28 skills"
           >
             {isAutoPlaying ? (
               <>
-                <Square className="w-3 h-3 fill-current" />
-                <span>Stop</span>
+                <Square className="w-2.5 h-2.5 fill-current" />
+                <span>Stop Wave</span>
               </>
             ) : (
               <>
-                <Play className="w-3 h-3 fill-current" />
-                <span>Wave</span>
+                <Play className="w-2.5 h-2.5 fill-current" />
+                <span>Wave All 28</span>
               </>
             )}
           </button>
         </div>
 
-        {/* Skill Description */}
-        <p className="mt-2 text-xs text-neutral-600 dark:text-zinc-300 leading-relaxed">
+        {/* Row 2: Short 1-line description */}
+        <p className="mt-1 text-[11px] text-neutral-600 dark:text-zinc-400 leading-snug line-clamp-2">
           {selectedSkill.description}
         </p>
 
-        {/* Connected Live Projects — Click to jump feed carousel */}
-        <div className="mt-2.5 pt-2.5 border-t border-neutral-100 dark:border-zinc-800/80 flex items-center justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 dark:text-zinc-500 flex items-center gap-1">
-              <Layers className="w-3 h-3 text-ig-purple" />
-              Used in:
-            </span>
-            {selectedSkill.usedIn.map((item) => {
-              const isClickable = !!item.projectId && !!onSelectProject;
-              const matchedProject = item.projectId
-                ? projectsData.find((p) => p.id === item.projectId)
-                : null;
+        {/* Row 3: Connected Project Pills */}
+        <div className="mt-1.5 pt-1.5 border-t border-neutral-100 dark:border-zinc-800/80 flex items-center gap-1.5 flex-wrap">
+          <span className="text-[9px] font-mono uppercase tracking-wider text-neutral-400 dark:text-zinc-500 flex items-center gap-0.5">
+            <Layers className="w-2.5 h-2.5 text-ig-purple" />
+            Used in:
+          </span>
+          {selectedSkill.usedIn.map((item) => {
+            const isClickable = !!item.projectId && !!onSelectProject;
+            const matchedProject = item.projectId
+              ? projectsData.find((p) => p.id === item.projectId)
+              : null;
 
-              return isClickable ? (
-                <button
-                  key={item.label}
-                  type="button"
-                  onClick={() =>
-                    item.projectId && onSelectProject?.(item.projectId)
-                  }
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-ig-pink/10 hover:bg-ig-pink/20 text-ig-pink border border-ig-pink/25 transition-colors"
-                  title={
-                    matchedProject
-                      ? `Jump to ${matchedProject.title} live demo`
-                      : item.label
-                  }
-                >
-                  <span>{item.label}</span>
-                  <ArrowUpRight className="w-3 h-3" />
-                </button>
-              ) : (
-                <span
-                  key={item.label}
-                  className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300"
-                >
-                  {item.label}
-                </span>
-              );
-            })}
-          </div>
+            return isClickable ? (
+              <button
+                key={item.label}
+                type="button"
+                onClick={() =>
+                  item.projectId && onSelectProject?.(item.projectId)
+                }
+                className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-semibold bg-ig-pink/10 hover:bg-ig-pink/20 text-ig-pink border border-ig-pink/25 transition-colors active:scale-95"
+                title={
+                  matchedProject
+                    ? `Jump to ${matchedProject.title} live demo`
+                    : item.label
+                }
+              >
+                <span>{item.label}</span>
+                <ArrowUpRight className="w-2.5 h-2.5" />
+              </button>
+            ) : (
+              <span
+                key={item.label}
+                className="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-medium bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300"
+              >
+                {item.label}
+              </span>
+            );
+          })}
         </div>
       </div>
     </div>
   );
 };
-

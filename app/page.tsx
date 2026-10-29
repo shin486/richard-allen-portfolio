@@ -84,7 +84,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen relative">
+    <div className="flex flex-col min-h-screen relative overflow-x-clip">
       {/* Layered Animated Background (radial glows + floating technical lines) */}
       <AnimatedBackground />
 
@@ -96,10 +96,10 @@ export default function HomePage() {
       />
 
       {/* Responsive Desktop Split Container: Instagram Feed + Right-Side 3D Keyboard Space */}
-      <div className="flex-1 w-full max-w-[1440px] 2xl:max-w-[1540px] mx-auto px-4 sm:px-6 xl:px-8 relative z-10">
-        <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_390px] 2xl:grid-cols-[minmax(0,1fr)_420px] xl:gap-8 2xl:gap-12 items-start">
+      <div className="flex-1 w-full max-w-[1400px] 2xl:max-w-[1520px] mx-auto px-3.5 sm:px-6 xl:px-8 relative z-10">
+        <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_380px] xl:gap-8 2xl:gap-10 items-start">
           {/* Main Instagram Profile & Feed Column */}
-          <main className="w-full max-w-5xl mx-auto xl:mx-0 min-w-0">
+          <main className="w-full max-w-4xl mx-auto xl:mx-0 min-w-0">
             {/* Instagram Profile Header */}
             <div className="rise-in" style={{ animationDelay: "90ms" }}>
               <ProfileHeader
@@ -158,7 +158,7 @@ export default function HomePage() {
           {/* Open Right-Side Space: Sticky 3D Mechanical Tech Stack Keyboard */}
           <aside
             aria-label="3D Mechanical Tech Stack Keyboard"
-            className="hidden xl:block sticky top-20 pt-6 pb-24 rise-in"
+            className="hidden xl:block sticky top-20 pt-3 pb-28 rise-in"
             style={{ animationDelay: "240ms" }}
           >
             <TechKeyboard3D
