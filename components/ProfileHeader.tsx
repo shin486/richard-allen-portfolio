@@ -100,8 +100,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <ProfileNote tailAlign="left" />
         </div>
 
-        {/* Column 1: Avatar with Instagram Animated Story Ring + Desktop Thought Bubble */}
-        <div className="col-start-1 row-start-2 sm:row-start-1 sm:row-span-3 relative flex flex-col items-start flex-shrink-0">
+        {/* Column 1: Avatar with Instagram Animated Story Ring + Desktop Thought Bubble + Role underneath */}
+        <div className="col-start-1 row-start-2 sm:row-start-1 sm:row-span-2 relative flex flex-col items-start flex-shrink-0">
           {/* Desktop Thought Bubble Note anchored cleanly above avatar */}
           <div className="hidden sm:block absolute bottom-[calc(100%+12px)] left-0 sm:left-2 z-30 pointer-events-auto">
             <ProfileNote tailAlign="left" />
@@ -133,107 +133,108 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
             </div>
           </div>
-        </div>
 
-        {/* Username & Verified Rosette (Row 1 on desktop, Row 3 on mobile) */}
-        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-3 sm:row-start-1 flex items-center gap-1.5 pt-2 sm:pt-0">
-          <span className="font-bold sm:font-semibold text-sm sm:text-xl md:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
-            {profileData.username}
-          </span>
-          <div
-            title="Verified Developer Profile"
-            data-note="Yes, verified. De La Salle Lipa certified, zero buzzword fluff."
-            className="cursor-help inline-flex items-center"
-          >
-            <VerifiedBadge className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+          {/* Under Avatar Photo: Full-Stack Developer Title ("its like a bio") */}
+          <div className="mt-2 sm:mt-2.5 text-left">
+            <h1 className="text-xs sm:text-sm md:text-[15px] font-semibold text-neutral-900 dark:text-zinc-100 tracking-tight leading-tight whitespace-nowrap">
+              Full-Stack Developer
+            </h1>
           </div>
         </div>
 
-        {/* Stats Row (Row 2 beside Avatar on mobile, Row 2 below Username on desktop) */}
-        <div className="col-start-2 row-start-2 sm:col-start-2 sm:row-start-2 self-center sm:self-auto min-w-0 sm:pt-1">
-          <ProfileStats
-            onStatClick={(sectionId, tabName) => {
-              if (tabName) onSelectTab(tabName);
-              onNavigateToSection(sectionId);
-            }}
-          />
+        {/* Column 2: Username & Stats ("Followers" theme directly below username) */}
+        <div className="col-start-2 row-start-2 sm:row-start-1 flex flex-col justify-center gap-1.5 sm:gap-3.5 min-w-0 pt-0.5 sm:pt-1">
+          {/* Username & Verified Rosette (Upper Right on mobile & desktop) */}
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold sm:font-semibold text-base sm:text-xl md:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
+              {profileData.username}
+            </span>
+            <div
+              title="Verified Developer Profile"
+              data-note="Yes, verified. De La Salle Lipa certified, zero buzzword fluff."
+              className="cursor-help inline-flex items-center"
+            >
+              <VerifiedBadge className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+            </div>
+          </div>
+
+          {/* Stats Row ("Followers" theme directly below username) */}
+          <div className="min-w-0">
+            <ProfileStats
+              onStatClick={(sectionId, tabName) => {
+                if (tabName) onSelectTab(tabName);
+                onNavigateToSection(sectionId);
+              }}
+            />
+          </div>
         </div>
 
-        {/* Real Instagram Bio & Details + 8-Bit Graduation XP Bar Below It */}
-        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-4 sm:row-start-3 flex flex-col gap-0.5 sm:gap-1 text-xs sm:text-sm sm:text-[15px] pt-1 sm:pt-2">
-          <h1 className="font-semibold sm:font-bold text-xs sm:text-base text-neutral-900 dark:text-zinc-100 leading-snug">
-            {profileData.name}
-          </h1>
-          <p className="text-neutral-500 dark:text-zinc-400 font-medium">
-            {profileData.title}
-          </p>
-          <p className="text-neutral-700 dark:text-zinc-300 leading-snug">
-            4th-year BSIT @{" "}
-            <span className="font-semibold text-neutral-900 dark:text-zinc-100">
-              De La Salle Lipa
-            </span>
-          </p>
+        {/* 8-Bit Graduation XP Bar with Blinking Progress */}
+        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-3 sm:row-start-2 pt-2.5 sm:pt-3 max-w-md w-full">
+          <div
+            onClick={handleReplayXp}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleReplayXp();
+              }
+            }}
+            data-note={`${targetPct}% loaded. Graduation DLC drops June 2, 2026. Hire me before the patch.`}
+            title="Click to replay XP bar animation"
+            className="group/xp cursor-pointer select-none rounded-lg px-3 py-2 bg-neutral-100/90 dark:bg-[#14141d] border border-neutral-300/90 dark:border-[#2e2e3e] shadow-2xs"
+          >
+            {/* Top Metadata Line */}
+            <div className="flex items-center justify-between gap-2 mb-1.5 font-pixel text-[8px] sm:text-[9px] leading-none tracking-tight">
+              <div className="flex items-center gap-1.5 min-w-0 truncate">
+                <span className="px-1.5 py-0.5 bg-ig-pink/15 dark:bg-ig-pink/20 text-ig-pink border border-ig-pink/40 font-bold">
+                  LV.4
+                </span>
+                <span className="text-neutral-700 dark:text-zinc-200 truncate">
+                  GRADUATION XP
+                </span>
+              </div>
 
-          {/* 8-Bit Graduation XP Bar directly below bio details */}
-          <div className="pt-2 sm:pt-2.5 max-w-md w-full">
+              <div className="flex items-center gap-1.5 flex-shrink-0 tabular-nums">
+                <div className="inline-flex items-center gap-0.5 sm:gap-1 font-mono font-bold text-[11px] sm:text-xs text-emerald-600 dark:text-emerald-400">
+                  <span>{displayedPct}%</span>
+                  <span
+                    className="inline-block w-1.5 h-2.5 sm:h-3 bg-emerald-500 dark:bg-emerald-400 pixel-blink"
+                    aria-hidden="true"
+                  />
+                </div>
+                <span className="text-neutral-400 dark:text-zinc-500 font-mono text-[10px]">
+                  · JUN 2, 2026
+                </span>
+              </div>
+            </div>
+
+            {/* 8-Bit Segmented XP Track (20 discrete blocks) with Blinking Progress */}
             <div
-              onClick={handleReplayXp}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  handleReplayXp();
-                }
+              className="grid gap-[2px] sm:gap-[2.5px] p-[2.5px] bg-neutral-200/80 dark:bg-[#0B0B0F] border border-neutral-300 dark:border-[#262635]"
+              style={{
+                gridTemplateColumns: `repeat(${TOTAL_XP_BLOCKS}, minmax(0, 1fr))`,
               }}
-              data-note={`${targetPct}% loaded. Graduation DLC drops June 2, 2026. Hire me before the patch.`}
-              title="Click to replay XP bar animation"
-              className="group/xp cursor-pointer select-none rounded-lg px-3 py-2 bg-neutral-100/90 dark:bg-[#14141d] border border-neutral-300/90 dark:border-[#2e2e3e] shadow-2xs"
+              aria-label={`Graduation progress: ${targetPct}% toward June 2, 2026`}
             >
-              {/* Top Metadata Line */}
-              <div className="flex items-center justify-between gap-2 mb-1.5 font-pixel text-[8px] sm:text-[9px] leading-none tracking-tight">
-                <div className="flex items-center gap-1.5 min-w-0 truncate">
-                  <span className="px-1.5 py-0.5 bg-ig-pink/15 dark:bg-ig-pink/20 text-ig-pink border border-ig-pink/40 font-bold">
-                    LV.4
-                  </span>
-                  <span className="text-neutral-700 dark:text-zinc-200 truncate">
-                    GRADUATION XP
-                  </span>
-                </div>
+              {Array.from({ length: TOTAL_XP_BLOCKS }).map((_, idx) => {
+                const isFilled = idx < animatedBlocks;
+                const isLeading = idx === animatedBlocks - 1 && animatedBlocks > 0;
 
-                <div className="flex items-center gap-1 flex-shrink-0 tabular-nums">
-                  <span className="inline-block w-[4ch] text-right text-emerald-600 dark:text-emerald-400 font-bold">
-                    {displayedPct}%
-                  </span>
-                  <span className="text-neutral-400 dark:text-zinc-500">
-                    · JUN 2, 2026
-                  </span>
-                </div>
-              </div>
-
-              {/* 8-Bit Segmented XP Track (20 discrete blocks) */}
-              <div
-                className="grid gap-[2px] sm:gap-[2.5px] p-[2.5px] bg-neutral-200/80 dark:bg-[#0B0B0F] border border-neutral-300 dark:border-[#262635]"
-                style={{
-                  gridTemplateColumns: `repeat(${TOTAL_XP_BLOCKS}, minmax(0, 1fr))`,
-                }}
-                aria-label={`Graduation progress: ${targetPct}% toward June 2, 2026`}
-              >
-                {Array.from({ length: TOTAL_XP_BLOCKS }).map((_, idx) => {
-                  const isFilled = idx < animatedBlocks;
-
-                  return (
-                    <span
-                      key={idx}
-                      className={`h-2 sm:h-2.5 relative transition-none ${
-                        isFilled
-                          ? "bg-gradient-to-b from-emerald-400 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]"
-                          : "bg-neutral-300/60 dark:bg-zinc-800/70"
-                      }`}
-                    />
-                  );
-                })}
-              </div>
+                return (
+                  <span
+                    key={idx}
+                    className={`h-2 sm:h-2.5 relative transition-none ${
+                      isFilled
+                        ? `bg-gradient-to-b from-emerald-400 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${
+                            isLeading ? "pixel-blink" : ""
+                          }`
+                        : "bg-neutral-300/60 dark:bg-zinc-800/70"
+                    }`}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
