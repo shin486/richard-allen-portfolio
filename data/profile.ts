@@ -51,7 +51,7 @@ export const profileData: ProfileData = {
   educationSummary: {
     degree: "Bachelor of Science in Information Technology",
     school: "De La Salle Lipa",
-    expectedGraduation: "June 2, 2027",
+    expectedGraduation: "June 2, 2026",
     location: "Lipa City, Batangas, Philippines",
   },
 
