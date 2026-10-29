@@ -6,7 +6,6 @@ import {
   VolumeX,
   Play,
   Square,
-  Sparkles,
   ArrowUpRight,
   Keyboard,
   Minimize2,
@@ -41,7 +40,8 @@ interface TechKeyboard3DProps {
 }
 
 /**
- * Custom crisp SVG icons for all 28 technologies + 2 hardware macro keys
+ * Custom crisp SVG icons for all 28 technologies + 1 mechanical 2U Wave keycap
+ * (Non-relevant RGB sparkle key removed per user request)
  */
 export const KEYCAP_SKILLS: KeycapSkill[] = [
   // ================= ROW 1: CORE LANGUAGES & WEB =================
@@ -522,7 +522,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     ),
   },
 
-  // ================= ROW 5: ENVIRONMENT & HARDWARE MACROS =================
+  // ================= ROW 5: ENVIRONMENT & 2U MECHANICAL WAVE KEY =================
   {
     id: "linux",
     name: "Linux",
@@ -596,31 +596,26 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       </span>
     ),
   },
-  {
-    id: "macro-rgb",
-    name: "RGB Underglow",
-    shortLabel: "RGB",
-    keyTrigger: "0",
-    category: "macro",
-    categoryLabel: "Hardware Macro",
-    color: "#DB2777",
-    wallColor: "#831843",
-    description: "Cycles the mechanical chassis underglow between IG Sunset, Cyber Cyan, Emerald, and Stealth.",
-    usedIn: [{ label: "3D Keyboard Lab" }],
-    renderIcon: () => <Sparkles className="w-3.5 h-3.5 text-white" />,
-  },
+  // 2U Wide Mechanical Wave Keycap (replaces the non-relevant RGB key)
   {
     id: "macro-play",
     name: "Auto-Demo Wave",
-    shortLabel: "PLAY",
+    shortLabel: "WAVE 28",
     keyTrigger: "ENTER",
     category: "macro",
-    categoryLabel: "Hardware Macro",
+    categoryLabel: "Mechanical Macro",
     color: "#18181B",
     wallColor: "#09090B",
     description: "Plays an automated mechanical typing wave across all 28 skills on the board.",
     usedIn: [{ label: "3D Keyboard Lab" }],
-    renderIcon: () => <Play className="w-3.5 h-3.5 text-white fill-white" />,
+    renderIcon: () => (
+      <div className="flex items-center justify-center gap-1">
+        <Play className="w-2.5 h-2.5 text-white fill-white" />
+        <span className="text-[7.5px] font-mono font-bold text-white tracking-wider">
+          WAVE 28
+        </span>
+      </div>
+    ),
   },
 ];
 
@@ -746,11 +741,6 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         setPressedIds((prev) => ({ ...prev, [skill.id]: false }));
       }, 150);
 
-      if (skill.id === "macro-rgb") {
-        cycleGlowTheme();
-        return;
-      }
-
       if (skill.id === "macro-play") {
         setIsAutoPlaying((prev) => !prev);
         return;
@@ -758,7 +748,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
       setSelectedSkill(skill);
     },
-    [playMechanicalSound, soundProfile, cycleGlowTheme]
+    [playMechanicalSound, soundProfile]
   );
 
   // Auto-Demo Wave across ALL 28 skills on the board
@@ -874,7 +864,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
   return (
     <div className="w-full select-none">
-      {/* Top Floating Header — Clean spacing, never cut off */}
+      {/* Top Floating Header — Clean spacing */}
       <div className="flex items-center justify-between mb-2 px-1 gap-2">
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
@@ -892,8 +882,17 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
           </p>
         </div>
 
-        {/* Sound & Minimize Controls */}
+        {/* Sound & Controls */}
         <div className="flex items-center gap-1 flex-shrink-0">
+          <button
+            onClick={cycleGlowTheme}
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-white/80 dark:bg-zinc-900/90 border border-neutral-200/80 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300 hover:border-ig-pink transition-colors capitalize"
+            title="Cycle underglow lighting"
+          >
+            <span>🎨</span>
+            <span>{glowTheme}</span>
+          </button>
+
           <button
             onClick={cycleSoundProfile}
             className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-white/80 dark:bg-zinc-900/90 border border-neutral-200/80 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300 hover:border-ig-pink transition-colors"
@@ -920,12 +919,12 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         </div>
       </div>
 
-      {/* 3D Isometric Mechanical Keypad Stage — Perfectly centered with zero clipping */}
+      {/* 3D Isometric Mechanical Keypad Stage — Generous bottom clearance so it NEVER touches the card below */}
       <div
         ref={stageRef}
         onMouseMove={handleStageMouseMove}
         onMouseLeave={handleStageMouseLeave}
-        className="relative w-full py-2 flex items-center justify-center touch-manipulation overflow-visible"
+        className="relative w-full pt-2 pb-6 sm:pb-8 flex items-center justify-center touch-manipulation overflow-visible"
         style={{ perspective: "1000px" }}
       >
         {/* Dynamic Ambient Underglow */}
@@ -952,12 +951,13 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         >
           {/* Recessed Switch Plate */}
           <div className="p-1.5 rounded-[13px] sm:rounded-[15px] bg-[#090a0f] border border-white/5 shadow-inner">
-            {/* 6 Columns x 5 Rows = 30 Keycaps (28 Skills + 2 Hardware Macros) */}
+            {/* 6 Columns Grid: Rows 1-4 = 24 skills, Row 5 = 4 skills + 1 2U Wave Keycap */}
             <div className="grid grid-cols-6 gap-1 xs:gap-1.5 sm:gap-1.5">
               {KEYCAP_SKILLS.map((skill, idx) => {
                 const isPressed = !!pressedIds[skill.id];
                 const isSelected = selectedSkill.id === skill.id;
                 const isProjectMatch = isSkillInActiveProject(skill);
+                const isWideKey = skill.id === "macro-play";
 
                 return (
                   <button
@@ -965,7 +965,11 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                     type="button"
                     onClick={() => triggerKeycap(skill, idx)}
                     aria-label={`${skill.name} (${skill.keyTrigger})`}
-                    className="group relative w-[34px] h-[34px] xs:w-[37px] xs:h-[37px] sm:w-[40px] sm:h-[40px] xl:w-[36px] xl:h-[36px] 2xl:w-[40px] 2xl:h-[40px] rounded-[7px] sm:rounded-[8px] focus:outline-none transition-transform duration-75 active:scale-95"
+                    className={`group relative ${
+                      isWideKey
+                        ? "col-span-2 w-full"
+                        : "w-[34px] xs:w-[37px] sm:w-[40px] xl:w-[36px] 2xl:w-[40px]"
+                    } h-[34px] xs:h-[37px] sm:h-[40px] xl:h-[36px] 2xl:h-[40px] rounded-[7px] sm:rounded-[8px] focus:outline-none transition-transform duration-75 active:scale-95`}
                     style={{
                       backgroundColor: skill.color,
                       transform: isPressed
@@ -1004,22 +1008,29 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                         borderTop: "1px solid rgba(255,255,255,0.28)",
                       }}
                     >
-                      {/* Keycap Icon */}
+                      {/* Keycap Icon / Label */}
                       <div className="transform group-hover:scale-105 transition-transform flex items-center justify-center">
-                        {skill.id === "macro-play" && isAutoPlaying ? (
-                          <Square className="w-2.5 h-2.5 text-rose-400 fill-rose-400" />
+                        {isWideKey && isAutoPlaying ? (
+                          <div className="flex items-center gap-1">
+                            <Square className="w-2.5 h-2.5 text-rose-400 fill-rose-400" />
+                            <span className="text-[7.5px] font-mono font-bold text-rose-400">
+                              STOP
+                            </span>
+                          </div>
                         ) : (
                           skill.renderIcon()
                         )}
                       </div>
 
-                      {/* Tiny Sub-Legend */}
-                      <span
-                        className="text-[6px] xs:text-[6.5px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
-                        style={{ color: skill.textColor || "#ffffff" }}
-                      >
-                        {skill.shortLabel}
-                      </span>
+                      {/* Tiny Sub-Legend (for normal keys only) */}
+                      {!isWideKey && (
+                        <span
+                          className="text-[6px] xs:text-[6.5px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
+                          style={{ color: skill.textColor || "#ffffff" }}
+                        >
+                          {skill.shortLabel}
+                        </span>
+                      )}
                     </div>
                   </button>
                 );
@@ -1027,7 +1038,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
             </div>
           </div>
 
-          {/* Bottom Metallic Chassis Status Strip — Never cut off */}
+          {/* Bottom Metallic Chassis Status Strip */}
           <div className="mt-1 px-0.5 flex items-center justify-between text-[8px] font-mono text-zinc-400">
             <span className="inline-flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -1038,8 +1049,8 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         </div>
       </div>
 
-      {/* Streamlined, Compact Skill Inspector HUD */}
-      <div className="mt-2 rounded-xl bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200/80 dark:border-zinc-800/90 p-2.5 shadow-md transition-all">
+      {/* Streamlined, Compact Skill Inspector HUD — Separated by spacious margin */}
+      <div className="mt-6 sm:mt-8 rounded-xl bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200/80 dark:border-zinc-800/90 p-2.5 shadow-md transition-all">
         {/* Row 1: Skill Icon + Name + Key badge + Wave button */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
@@ -1077,12 +1088,12 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
             {isAutoPlaying ? (
               <>
                 <Square className="w-2.5 h-2.5 fill-current" />
-                <span>Stop Wave</span>
+                <span>Stop</span>
               </>
             ) : (
               <>
                 <Play className="w-2.5 h-2.5 fill-current" />
-                <span>Wave All 28</span>
+                <span>Wave 28</span>
               </>
             )}
           </button>
