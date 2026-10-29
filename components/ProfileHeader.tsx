@@ -29,7 +29,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         {/* Left Column: Avatar with Instagram Animated Story Ring + Floating Note */}
         <div className="relative flex flex-col items-start flex-shrink-0">
           {/* Floating Interactive Instagram Thought Bubble Note (anchored to avatar, extends rightward with clean clearance) */}
-          <div className="absolute bottom-[calc(100%+22px)] left-0 sm:left-2 z-30 pointer-events-auto">
+          <div className="absolute bottom-[calc(100%+12px)] left-0 sm:left-2 z-30 pointer-events-auto">
             <ProfileNote tailAlign="left" />
           </div>
 
