@@ -118,7 +118,7 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
       className={`group/note cursor-pointer select-none transition-all duration-200 max-w-full sm:max-w-xl min-w-0 ${className}`}
     >
       <div
-        className={`relative flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 w-fit max-w-full pixel-balloon-light dark:pixel-balloon-dark text-neutral-900 dark:text-neutral-100 text-[9px] sm:text-[11px] font-pixel font-semibold leading-relaxed transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
+        className={`relative flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 w-fit max-w-full pixel-balloon text-[9px] sm:text-[11px] font-pixel font-semibold leading-relaxed transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
           isPopping ? "scale-105" : "scale-100"
         }`}
       >
@@ -136,7 +136,7 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
         {/* Authentic 8-bit Retro RPG Thought Tail Blocks leading down to avatar */}
         <span
           aria-hidden="true"
-          className={`absolute -bottom-2 w-2.5 h-2.5 pixel-tail-dot-light dark:pixel-tail-dot-dark pointer-events-none ${
+          className={`absolute -bottom-2 w-2.5 h-2.5 pixel-tail-dot pointer-events-none ${
             isLeft
               ? "left-9 sm:left-14 md:left-16"
               : "left-1/2 -translate-x-1/2"
@@ -144,7 +144,7 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
         />
         <span
           aria-hidden="true"
-          className={`absolute -bottom-4 w-1.5 h-1.5 pixel-tail-dot-light dark:pixel-tail-dot-dark pointer-events-none ${
+          className={`absolute -bottom-4 w-1.5 h-1.5 pixel-tail-dot pointer-events-none ${
             isLeft
               ? "left-10 sm:left-14 md:left-16"
               : "left-1/2 -translate-x-1/2"
