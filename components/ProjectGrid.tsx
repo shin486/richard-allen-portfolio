@@ -554,10 +554,56 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </div>
                 </div>
 
-                {/* Description */}
-                <p className="text-xs sm:text-sm text-neutral-600 dark:text-zinc-300 leading-relaxed">
-                  {activeProject.description}
-                </p>
+                {/* Instagram-Style Post Caption Body with "... more" / "less" Expansion */}
+                <div className="text-xs sm:text-sm text-neutral-600 dark:text-zinc-300 leading-relaxed">
+                  {isBreakdownExpanded ? (
+                    <div className="space-y-2.5 animate-fade-in">
+                      <p>{activeProject.description}</p>
+
+                      {/* Detailed Key Features & Architecture */}
+                      {activeProject.keyFeatures && activeProject.keyFeatures.length > 0 && (
+                        <div className="pt-2.5 border-t border-neutral-100 dark:border-zinc-800/80 space-y-1.5">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-700 dark:text-zinc-300 flex items-center gap-1.5">
+                            <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                            Key Features &amp; Architecture
+                          </span>
+                          <ul className="space-y-1.5 pl-1">
+                            {activeProject.keyFeatures.map((feature, idx) => (
+                              <li
+                                key={idx}
+                                className="flex items-start gap-2 text-xs text-neutral-600 dark:text-zinc-400"
+                              >
+                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-ig-pink flex-shrink-0" />
+                                <span className="leading-relaxed">{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => setIsBreakdownExpanded(false)}
+                        className="text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300 font-semibold text-xs cursor-pointer inline-block"
+                      >
+                        less
+                      </button>
+                    </div>
+                  ) : (
+                    <p>
+                      {activeProject.description.length > 135
+                        ? `${activeProject.description.slice(0, 135).trim()}... `
+                        : `${activeProject.description} `}
+                      <button
+                        type="button"
+                        onClick={() => setIsBreakdownExpanded(true)}
+                        className="text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300 font-semibold text-xs cursor-pointer inline-block"
+                      >
+                        more
+                      </button>
+                    </p>
+                  )}
+                </div>
 
                 {/* Optional Service Management & Operations Callout (e.g., AVMS) */}
                 {activeProject.operationsNote && (
@@ -675,33 +721,6 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   })}
                 </div>
 
-                {/* Inline Project Breakdown (Expands directly on the page, no modal layer lock) */}
-                {isBreakdownExpanded && (
-                  <div className="pt-3.5 pb-1 space-y-3 border-t border-neutral-100 dark:border-zinc-800/80 animate-fade-in">
-                    {/* Key Features */}
-                    {activeProject.keyFeatures &&
-                      activeProject.keyFeatures.length > 0 && (
-                        <div>
-                          <h4 className="text-[11px] font-bold uppercase tracking-wider text-neutral-500 dark:text-zinc-400 mb-2 flex items-center gap-1.5">
-                            <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
-                            Key Features &amp; Architecture
-                          </h4>
-                          <ul className="space-y-2">
-                            {activeProject.keyFeatures.map((feature, idx) => (
-                              <li
-                                key={idx}
-                                className="flex items-start gap-2.5 text-xs sm:text-sm text-neutral-700 dark:text-zinc-300"
-                              >
-                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-ig-pink flex-shrink-0" />
-                                <span className="leading-relaxed">{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                  </div>
-                )}
-
                 {/* Action Footer Buttons */}
                 <div className="flex flex-wrap items-center justify-between gap-2.5 pt-2">
                   <div className="flex flex-wrap items-center gap-2">
@@ -759,24 +778,6 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                         <span>Poster</span>
                       </button>
                     </div>
-
-                    {/* Specs & Breakdown Button with smooth rotating chevron */}
-                    <button
-                      onClick={() => setIsBreakdownExpanded((prev) => !prev)}
-                      data-note="Inspect architecture breakdown, database models, and key features."
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-900 hover:bg-neutral-200 dark:hover:bg-zinc-800 border border-neutral-200 dark:border-zinc-800 active:scale-95 transition-all"
-                    >
-                      <span>
-                        {isBreakdownExpanded
-                          ? "Hide Specs"
-                          : "Specs & Breakdown"}
-                      </span>
-                      <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          isBreakdownExpanded ? "rotate-180 text-ig-pink" : ""
-                        }`}
-                      />
-                    </button>
                   </div>
                 </div>
               </div>
