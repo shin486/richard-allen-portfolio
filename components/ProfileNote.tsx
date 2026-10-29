@@ -12,6 +12,7 @@ const IDLE_NOTES: string[] = [
 
 interface ProfileNoteProps {
   className?: string;
+  tailAlign?: "center" | "left";
 }
 
 /**
@@ -19,11 +20,14 @@ interface ProfileNoteProps {
  * - Floats above Richard's avatar in ProfileHeader
  * - Responds in real-time with sharp, witty English developer lines
  *   whenever the visitor's cursor hovers over key interactive elements
- *   (Stickman, Avatar, 3D Keyboard, Projects, Resume, Contact, Verified badge)
+ * - Responsive layout: never clips on mobile, tablet, or desktop
  * - Strictly zero emojis (clean typography only)
  * - Tapping the note immediately cycles to the next witty thought
  */
-export const ProfileNote: React.FC<ProfileNoteProps> = ({ className = "" }) => {
+export const ProfileNote: React.FC<ProfileNoteProps> = ({
+  className = "",
+  tailAlign = "left",
+}) => {
   const [currentNote, setCurrentNote] = useState<string>(IDLE_NOTES[0]);
   const [isPopping, setIsPopping] = useState<boolean>(false);
   const idleIndexRef = useRef<number>(0);
@@ -105,39 +109,48 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({ className = "" }) => {
     applyNote(IDLE_NOTES[idleIndexRef.current]);
   };
 
+  const isLeft = tailAlign === "left";
+
   return (
     <div
       onClick={handleNoteClick}
       title="Click to cycle thoughts"
-      className={`group/note cursor-pointer select-none transition-all duration-200 ${className}`}
+      className={`group/note cursor-pointer select-none transition-all duration-200 max-w-[calc(100vw-32px)] sm:max-w-md ${className}`}
     >
       <div
-        className={`relative inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white dark:bg-[#18181f] text-neutral-900 dark:text-neutral-100 text-[11px] sm:text-[11.5px] font-semibold leading-tight shadow-md dark:shadow-xl border border-neutral-200/90 dark:border-zinc-700/80 transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
+        className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-2xl sm:rounded-full bg-white dark:bg-[#18181f] text-neutral-900 dark:text-neutral-100 text-[11px] sm:text-[11.5px] font-semibold leading-snug shadow-md dark:shadow-xl border border-neutral-200/90 dark:border-zinc-700/80 transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
           isPopping ? "scale-105" : "scale-100"
         }`}
       >
         {/* Subtle Instagram pink pulsar dot */}
         <span
           aria-hidden="true"
-          className="w-1.5 h-1.5 rounded-full bg-ig-pink flex-shrink-0 animate-pulse"
+          className="w-1.5 h-1.5 rounded-full bg-ig-pink flex-shrink-0 animate-pulse mt-0.5 sm:mt-0"
         />
 
-        {/* Note Text Message */}
-        <span className="whitespace-nowrap tracking-tight font-medium">
+        {/* Note Text Message (Wraps gracefully on small devices, single-line on desktop) */}
+        <span className="break-words sm:whitespace-nowrap tracking-tight font-medium text-left">
           {currentNote}
         </span>
 
         {/* Authentic Instagram thought bubble tails leading down to avatar */}
         <span
           aria-hidden="true"
-          className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-white dark:bg-[#18181f] border-b border-r border-neutral-200/90 dark:border-zinc-700/80 shadow-xs pointer-events-none"
+          className={`absolute -bottom-1.5 w-2 h-2 rounded-full bg-white dark:bg-[#18181f] border-b border-r border-neutral-200/90 dark:border-zinc-700/80 shadow-xs pointer-events-none ${
+            isLeft
+              ? "left-10 sm:left-14"
+              : "left-1/2 -translate-x-1/2"
+          }`}
         />
         <span
           aria-hidden="true"
-          className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white dark:bg-[#18181f] border-b border-r border-neutral-200/90 dark:border-zinc-700/80 shadow-2xs pointer-events-none"
+          className={`absolute -bottom-3 w-1 h-1 rounded-full bg-white dark:bg-[#18181f] border-b border-r border-neutral-200/90 dark:border-zinc-700/80 shadow-2xs pointer-events-none ${
+            isLeft
+              ? "left-12 sm:left-16"
+              : "left-1/2 -translate-x-1/2"
+          }`}
         />
       </div>
     </div>
   );
 };
-

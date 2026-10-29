@@ -27,10 +27,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       {/* DESKTOP LAYOUT (sm and up): Clean Instagram Web 2-Column Structure */}
       <div className="hidden sm:flex items-start gap-8 md:gap-12">
         {/* Left Column: Avatar with Instagram Animated Story Ring + Floating Note */}
-        <div className="relative flex flex-col items-center flex-shrink-0">
-          {/* Floating Interactive Instagram Thought Bubble Note */}
-          <div className="absolute -top-11 left-1/2 -translate-x-1/2 z-30 pointer-events-auto">
-            <ProfileNote />
+        <div className="relative flex flex-col items-start flex-shrink-0">
+          {/* Floating Interactive Instagram Thought Bubble Note (anchored to avatar, extends rightward) */}
+          <div className="absolute -top-11 left-0 sm:left-2 z-30 pointer-events-auto">
+            <ProfileNote tailAlign="left" />
           </div>
 
           <div
@@ -121,9 +121,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
       {/* MOBILE LAYOUT (< sm): Clean Instagram Mobile App Structure */}
       <div className="sm:hidden flex flex-col gap-2">
-        {/* Mobile Note Bubble above header */}
-        <div className="flex justify-center pb-1">
-          <ProfileNote />
+        {/* Mobile Note Bubble above header (anchored to mobile avatar) */}
+        <div className="flex justify-start px-0.5 pb-1">
+          <ProfileNote tailAlign="left" />
         </div>
 
         {/* Mobile Top Row: Avatar on Left, Stats on Right */}
