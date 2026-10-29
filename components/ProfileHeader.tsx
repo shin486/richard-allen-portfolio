@@ -13,7 +13,7 @@ interface ProfileHeaderProps {
   onNavigateToSection: (sectionId: string) => void;
 }
 
-const ROLE_TEXT = "Full Stack Developer";
+const ROLE_TEXT = "Full-Stack Developer";
 const TOTAL_XP_BLOCKS = 20;
 
 /**
@@ -61,12 +61,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   // Chunky 8-bit step fill for the XP bar & RPG typewriter for the role title
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      setAnimatedBlocks(targetBlocks);
-      setTypedChars(ROLE_TEXT.length);
-      return;
-    }
 
     setAnimatedBlocks(0);
     setTypedChars(0);
@@ -116,13 +110,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     <section id="profile-header" className="pt-6 sm:pt-16 md:pt-20 pb-3 sm:pb-6">
       {/* Unified Responsive Instagram Profile Header */}
       <div className="grid grid-cols-[auto_1fr] items-start gap-x-4 sm:gap-x-8 md:gap-x-12">
-        {/* Mobile-only thought bubble row above header */}
-        <div className="col-span-2 row-start-1 sm:hidden flex justify-start px-0.5 pb-3 max-w-full min-w-0">
+        {/* Mobile-only thought bubble row above header (locked min-height prevents vertical layout shift) */}
+        <div className="col-span-2 row-start-1 sm:hidden flex items-end justify-start px-0.5 pb-3 min-h-[48px] max-w-full min-w-0">
           <ProfileNote tailAlign="left" />
         </div>
 
-        {/* Column 1: Avatar with Instagram Animated Story Ring + Desktop Thought Bubble + RPG Role Title */}
-        <div className="col-start-1 row-start-2 sm:row-span-2 relative flex flex-col items-center sm:items-start flex-shrink-0">
+        {/* Column 1: Locked width to avatar size so typing bio never shifts Column 2 */}
+        <div className="col-start-1 row-start-2 sm:row-span-2 w-[72px] sm:w-32 md:w-36 relative flex flex-col items-start flex-shrink-0">
           {/* Desktop Thought Bubble Note anchored cleanly above avatar */}
           <div className="hidden sm:block absolute bottom-[calc(100%+12px)] left-0 sm:left-2 z-30 pointer-events-auto">
             <ProfileNote tailAlign="left" />
@@ -155,19 +149,27 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             </div>
           </div>
 
-          {/* Under Profile Pic: RPG Dialogue Typewriter Bio Title + Blinking 8-Bit Cursor */}
+          {/* Under Profile Pic: RPG Pixel Font Bio + Blinking Block Cursor (Zero Layout Shift) */}
           <div
             onClick={handleReplayXp}
-            data-note="Full Stack Developer. React Native on mobile, Next.js and Supabase on web."
+            data-note="Full-Stack Developer. React Native on mobile, Next.js and Supabase on web."
             title="Click to replay animation"
-            className="mt-2 sm:mt-2.5 text-center sm:text-left cursor-pointer select-none"
+            className="mt-2 sm:mt-2.5 text-left cursor-pointer select-none w-max"
           >
-            <h1 className="inline-flex items-center text-[11px] sm:text-sm md:text-[15px] font-semibold text-neutral-900 dark:text-zinc-100 tracking-tight leading-tight whitespace-nowrap">
-              <span>{ROLE_TEXT.slice(0, typedChars)}</span>
-              <span
-                aria-hidden="true"
-                className="inline-block w-[5px] h-[11px] sm:w-[6px] sm:h-[13px] bg-ig-pink ml-1 align-middle pixel-blink flex-shrink-0"
-              />
+            <h1 className="relative inline-flex items-center font-pixel font-bold uppercase text-[9.5px] sm:text-[10.5px] md:text-[11px] text-neutral-900 dark:text-zinc-100 tracking-tight leading-none whitespace-nowrap">
+              {/* Invisible sizer locks exact width & height from frame 0 */}
+              <span className="invisible select-none" aria-hidden="true">
+                {ROLE_TEXT}
+                <span className="inline-block w-[6px] sm:w-[7px] ml-1" />
+              </span>
+              {/* Live typing overlay */}
+              <span className="absolute inset-0 inline-flex items-center">
+                <span>{ROLE_TEXT.slice(0, typedChars)}</span>
+                <span
+                  aria-hidden="true"
+                  className="inline-block w-[6px] h-[10px] sm:w-[7px] sm:h-[11px] bg-ig-pink ml-1 pixel-blink flex-shrink-0"
+                />
+              </span>
             </h1>
           </div>
         </div>
@@ -200,7 +202,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
 
         {/* Column 2, Bottom (Spans full width on mobile, sits cleanly under stats on desktop): 8-Bit Graduation XP Bar */}
-        <div className="col-span-2 row-start-3 sm:col-span-1 sm:col-start-2 sm:row-start-3 mt-3 sm:mt-3.5 max-w-md">
+        <div className="col-span-2 row-start-3 sm:col-span-1 sm:col-start-2 sm:row-start-3 mt-3 sm:mt-3.5 max-w-md w-full">
           <div
             onClick={handleReplayXp}
             role="button"
@@ -213,7 +215,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             }}
             data-note={`${targetPct}% loaded. Graduation DLC drops June 2, 2026. Hire me before the patch.`}
             title="Click to replay XP bar animation"
-            className="group/xp cursor-pointer select-none rounded-lg px-3 py-2 bg-neutral-100/90 dark:bg-[#14141d] border border-neutral-300/90 dark:border-[#2e2e3e] shadow-2xs transition-transform duration-150 active:scale-[0.99]"
+            className="group/xp cursor-pointer select-none rounded-lg px-3 py-2 bg-neutral-100/90 dark:bg-[#14141d] border border-neutral-300/90 dark:border-[#2e2e3e] shadow-2xs"
           >
             {/* Top Metadata Line */}
             <div className="flex items-center justify-between gap-2 mb-1.5 font-pixel text-[8px] sm:text-[9px] leading-none tracking-tight">
@@ -226,8 +228,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 </span>
               </div>
 
-              <div className="flex items-center gap-1.5 flex-shrink-0 tabular-nums">
-                <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+              <div className="flex items-center gap-1 flex-shrink-0 tabular-nums">
+                <span className="inline-block w-[4ch] text-right text-emerald-600 dark:text-emerald-400 font-bold">
                   {displayedPct}%
                 </span>
                 <span className="text-neutral-400 dark:text-zinc-500 hidden xs:inline sm:inline">
@@ -256,7 +258,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                       isFilled
                         ? "bg-gradient-to-b from-emerald-400 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]"
                         : "bg-neutral-300/60 dark:bg-zinc-800/70"
-                    } ${isLeadingEdge ? "pixel-blink" : ""}`}
+                    } ${isLeadingEdge ? "xp-edge-pulse" : ""}`}
                   />
                 );
               })}
