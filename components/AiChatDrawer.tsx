@@ -340,7 +340,42 @@ const getLocalByteReply = (message: string): string => {
 
 export const AiChatDrawer: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showGreetingBubble, setShowGreetingBubble] = useState(true);
+  // Greeting bubble is a short, one-time teaser per session so it never lingers over page content
+  const [showGreetingBubble, setShowGreetingBubble] = useState(false);
+
+  const dismissGreetingBubble = () => {
+    setShowGreetingBubble(false);
+    try {
+      sessionStorage.setItem("byte-greeting-seen", "1");
+    } catch {
+      // storage unavailable (private mode) - bubble simply won't persist its dismissal
+    }
+  };
+
+  useEffect(() => {
+    let alreadySeen = false;
+    try {
+      alreadySeen = sessionStorage.getItem("byte-greeting-seen") === "1";
+    } catch {
+      alreadySeen = false;
+    }
+    if (alreadySeen) return;
+
+    const showTimer = setTimeout(() => setShowGreetingBubble(true), 2500);
+    const hideTimer = setTimeout(() => {
+      setShowGreetingBubble(false);
+      try {
+        sessionStorage.setItem("byte-greeting-seen", "1");
+      } catch {
+        // ignore
+      }
+    }, 2500 + 7000);
+
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
   const [inputVal, setInputVal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -492,7 +527,7 @@ export const AiChatDrawer: React.FC = () => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                setShowGreetingBubble(false);
+                dismissGreetingBubble();
               }}
               aria-label="Dismiss greeting"
               className="p-0.5 rounded-full text-neutral-400 hover:text-neutral-700 dark:hover:text-zinc-200"

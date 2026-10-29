@@ -48,8 +48,8 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
       onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      title="The Journey (Click to scroll to top)"
-      aria-label="Interactive 8-bit walking stickman journey"
+      title="shin.dev — account switcher"
+      aria-label="shin.dev, interactive 8-bit walking stickman. Opens account switcher"
       className={`group relative flex items-center gap-2 py-1 px-2 -ml-2 rounded-xl focus:outline-none transition-colors hover:bg-neutral-100 dark:hover:bg-zinc-900/90 ${className}`}
     >
       {/* 8-Bit Canvas/SVG Stage */}
@@ -176,9 +176,16 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
         )}
       </div>
 
-      {/* Mini "Journey" Status Label */}
-      <span className="hidden xs:inline text-[11px] font-mono font-medium tracking-tight text-neutral-800 dark:text-zinc-200 transition-colors">
-        {isHovered ? "rest stop." : "the journey."}
+      {/* Brand wordmark: anchors the stickman so it reads as an intentional logo, not a stray glyph */}
+      <span className="inline-flex items-baseline font-mono text-sm sm:text-base font-bold tracking-tight text-neutral-900 dark:text-white transition-colors">
+        <span>shin</span>
+        <span className="text-neutral-400 dark:text-zinc-500">.dev</span>
+        <span
+          aria-hidden="true"
+          className={`ml-0.5 inline-block w-[7px] h-[2px] bg-current self-end mb-[3px] ${
+            isHovered ? "opacity-100" : "animate-pulse"
+          }`}
+        />
       </span>
     </button>
   );

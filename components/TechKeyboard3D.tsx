@@ -866,6 +866,14 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
 
   return (
     <div className="w-full select-none">
+      {/* Desk-mat pedestal: groups header + keyboard + inspector display into one cohesive hardware module */}
+      <div
+        className={`relative rounded-3xl border p-3 sm:p-3.5 backdrop-blur-sm transition-colors duration-300 ${
+          isDark
+            ? "bg-white/[0.025] border-white/10"
+            : "bg-white/60 border-neutral-200/80 shadow-sm"
+        }`}
+      >
       {/* Top Floating Header — Clean & minimal (zero unwanted buttons) */}
       <div className="flex items-center justify-between mb-2 px-1 gap-2">
         <div className="min-w-0">
@@ -917,7 +925,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         ref={stageRef}
         onMouseMove={handleStageMouseMove}
         onMouseLeave={handleStageMouseLeave}
-        className="relative w-full pt-2 pb-6 sm:pb-8 flex items-center justify-center touch-manipulation overflow-visible"
+        className="relative w-full pt-2 pb-6 sm:pb-7 flex items-center justify-center touch-manipulation overflow-visible"
         style={{ perspective: "1000px" }}
       >
         {/* Dynamic Ambient Underglow — Matches Dark Mode vs Light Mode */}
@@ -1136,8 +1144,14 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         </div>
       </div>
 
-      {/* Streamlined, Compact Skill Inspector HUD — Dark/Light responsive */}
-      <div className="mt-6 sm:mt-8 rounded-xl bg-white/95 dark:bg-[#111116]/95 backdrop-blur-md border border-neutral-200/90 dark:border-zinc-800/90 p-2.5 shadow-md transition-all">
+      {/* Skill Inspector HUD — styled as the keyboard's integrated display panel (matches chassis in Dark/Light mode) */}
+      <div
+        className={`mt-2 rounded-xl border p-2.5 transition-colors duration-300 ${
+          isDark
+            ? "bg-[#0b0c11] border-white/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.65)]"
+            : "bg-white border-neutral-200 shadow-[inset_0_1px_3px_rgba(0,0,0,0.07)]"
+        }`}
+      >
         {/* Row 1: Skill Icon + Name + Key badge + Wave button */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
@@ -1230,6 +1244,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
             );
           })}
         </div>
+      </div>
       </div>
     </div>
   );

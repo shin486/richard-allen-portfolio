@@ -97,7 +97,7 @@ export default function HomePage() {
 
       {/* Responsive Desktop Split Container: Instagram Feed + Right-Side 3D Keyboard Space */}
       <div className="flex-1 w-full max-w-[1440px] 2xl:max-w-[1560px] mx-auto px-4 sm:px-6 xl:px-8 relative z-10">
-        <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_380px] xl:gap-8 2xl:gap-10 items-start">
+        <div className="xl:grid xl:grid-cols-[minmax(0,896px)_340px] 2xl:grid-cols-[minmax(0,896px)_380px] xl:justify-center xl:gap-8 2xl:gap-10 items-start">
           {/* Main Instagram Profile & Feed Column */}
           <main className="w-full max-w-4xl mx-auto xl:mx-0 min-w-0">
             {/* Instagram Profile Header */}
