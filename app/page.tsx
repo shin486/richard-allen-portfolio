@@ -16,6 +16,7 @@ import { AiChatDrawer } from "@/components/AiChatDrawer";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { Reveal } from "@/components/Reveal";
 import { TechKeyboard3D } from "@/components/TechKeyboard3D";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { Project, projectsData } from "@/data/projects";
 import { skillsData } from "@/data/skills";
 import { certificatesData } from "@/data/certificates";
@@ -85,6 +86,9 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen relative">
+      {/* Minimalist Instagram + Stickman Loading Screen */}
+      <LoadingScreen />
+
       {/* Layered Animated Background (radial glows + floating technical lines) */}
       <AnimatedBackground />
 
