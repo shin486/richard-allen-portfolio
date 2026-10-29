@@ -6,7 +6,6 @@ import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 import { ProfileStats } from "./ProfileStats";
 import { VerifiedBadge } from "./VerifiedBadge";
-import { ByteBugCatcher } from "./ByteBugCatcher";
 
 interface ProfileHeaderProps {
   onSelectTab: (tab: string) => void;
@@ -23,9 +22,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   };
 
   return (
-    <section id="profile-header" className="pt-3 sm:pt-6 pb-3 sm:pb-5">
-      {/* DESKTOP LAYOUT (sm and up): Clean 2-Column Architecture with Byte's Bug Catcher at Top */}
-      <div className="hidden sm:flex items-start gap-8 md:gap-10">
+    <section id="profile-header" className="pt-3 sm:pt-8 pb-3 sm:pb-6">
+      {/* DESKTOP LAYOUT (sm and up): Clean Instagram Web 2-Column Structure */}
+      <div className="hidden sm:flex items-start gap-8 md:gap-12">
         {/* Left Column: Avatar with Instagram Animated Story Ring */}
         <div
           className="relative group cursor-pointer flex-shrink-0"
@@ -56,10 +55,17 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
         </div>
 
-        {/* Right Column: Interactive Game Header, Stats & Identity Docked Beside Avatar */}
-        <div className="flex-1 flex flex-col gap-2.5 min-w-0">
-          {/* Row 1: Interactive Mascot Mini-Game (Replaces redundant handle) */}
-          <ByteBugCatcher />
+        {/* Right Column: Identity, Stats & Bio Docked Beside Avatar */}
+        <div className="flex-1 flex flex-col gap-3 min-w-0">
+          {/* Row 1: Username & Verified Rosette */}
+          <div className="flex items-center gap-1.5">
+            <span className="font-semibold text-xl md:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
+              {profileData.username}
+            </span>
+            <div title="Verified Developer Profile" className="cursor-help inline-flex items-center">
+              <VerifiedBadge className="w-4 h-4 md:w-5 md:h-5" />
+            </div>
+          </div>
 
           {/* Row 2: Stats Row */}
           <div className="pt-0.5">
@@ -72,16 +78,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
 
           {/* Row 3: Name & Bio Information */}
-          <div className="flex flex-col gap-1 text-sm sm:text-[15px] pt-0.5">
-            <div className="flex items-center gap-1.5">
-              <h1 className="font-bold text-base md:text-lg text-neutral-900 dark:text-zinc-100 leading-snug">
-                {profileData.name}
-              </h1>
-              <div title="Verified Developer Profile" className="cursor-help inline-flex items-center">
-                <VerifiedBadge className="w-4 h-4 md:w-5 md:h-5" />
-              </div>
-            </div>
-
+          <div className="flex flex-col gap-1 text-sm sm:text-[15px] pt-1">
+            <h1 className="font-bold text-sm sm:text-base text-neutral-900 dark:text-zinc-100 leading-snug">
+              {profileData.name}
+            </h1>
             <p className="text-xs sm:text-sm text-neutral-500 dark:text-zinc-400 font-medium">
               {profileData.title}
             </p>
@@ -93,7 +93,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             </p>
 
             {/* OJT Availability Badge */}
-            <div className="pt-1 flex items-center gap-2">
+            <div className="pt-1.5 flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60 shadow-2xs w-fit">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Open for OJT &amp; Opportunities
@@ -103,7 +103,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
       </div>
 
-      {/* MOBILE LAYOUT (< sm): Clean Instagram Mobile App Structure with Mini-Game */}
+      {/* MOBILE LAYOUT (< sm): Clean Instagram Mobile App Structure */}
       <div className="sm:hidden flex flex-col gap-3">
         {/* Mobile Top Row: Avatar on Left, Stats on Right */}
         <div className="flex items-center gap-4">
@@ -141,14 +141,17 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
         </div>
 
-        {/* Mobile Middle: Name, Title, Education, Badge */}
+        {/* Mobile Middle: Username, Name, Title, Education, Badge */}
         <div className="flex flex-col gap-0.5 text-xs">
           <div className="flex items-center gap-1">
             <span className="font-bold text-sm text-neutral-900 dark:text-zinc-100">
-              {profileData.name}
+              {profileData.username}
             </span>
             <VerifiedBadge className="w-3.5 h-3.5" />
           </div>
+          <p className="text-neutral-900 dark:text-zinc-100 font-semibold">
+            {profileData.name}
+          </p>
           <p className="text-neutral-500 dark:text-zinc-400 font-medium">
             {profileData.title}
           </p>
@@ -164,11 +167,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               Open for OJT &amp; Opportunities
             </span>
           </div>
-        </div>
-
-        {/* Mobile Mini-Game Dock */}
-        <div className="pt-0.5">
-          <ByteBugCatcher />
         </div>
       </div>
     </section>

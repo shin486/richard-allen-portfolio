@@ -272,3 +272,12 @@ body {
   will-change: opacity, transform;
 }
 
+/* 8-Bit Stickman Journey Ground Scroll */
+@keyframes stickman-ground-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-12px);
+  }
+}

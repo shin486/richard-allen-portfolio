@@ -26,6 +26,7 @@ import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 import { ThemeToggle } from "./ThemeToggle";
 import { VerifiedBadge } from "./VerifiedBadge";
+import { PixelStickmanJourney } from "./PixelStickmanJourney";
 
 interface NavbarProps {
   searchQuery: string;
@@ -98,23 +99,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3 sm:gap-4">
           {/* Instagram Account Switcher Brand Trigger */}
           <div className="relative" ref={switcherRef}>
-            <button
-              onClick={() => setSwitcherOpen((prev) => !prev)}
-              className="group flex items-center gap-1.5 py-1 px-2.5 -ml-2 rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-900/90 text-left focus:outline-none transition-colors border border-transparent hover:border-neutral-200 dark:hover:border-zinc-800"
-              aria-expanded={switcherOpen}
-              aria-haspopup="true"
-              aria-label="Switch portfolio view"
-            >
-              <span className="font-bold text-base sm:text-lg tracking-tight text-neutral-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white transition-colors">
-                {profileData.username}
-              </span>
-              <VerifiedBadge className="w-4 h-4" />
-              <ChevronDown
-                className={`w-3.5 h-3.5 text-neutral-500 dark:text-zinc-400 transition-transform duration-200 ${
-                  switcherOpen ? "rotate-180 text-neutral-900 dark:text-white" : ""
-                }`}
-              />
-            </button>
+            {/* 8-Bit Pixel Walking Stickman Journey (Pauses on Hover, Abstract Black/White) */}
+            <PixelStickmanJourney onClick={() => setSwitcherOpen((prev) => !prev)} />
 
             {/* Instagram Account Switcher Popover */}
             {switcherOpen && (
