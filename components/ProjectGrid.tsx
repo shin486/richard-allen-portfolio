@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import {
   FolderCode,
@@ -52,6 +52,20 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [demoSpotlit, setDemoSpotlit] = useState(false);
+  const demoStageRef = useRef<HTMLDivElement | null>(null);
+
+  const launchInteractiveDemo = useCallback(() => {
+    setIsLiveDemoView(true);
+    setDemoSpotlit(true);
+    window.setTimeout(() => {
+      demoStageRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }, 40);
+    window.setTimeout(() => setDemoSpotlit(false), 1200);
+  }, []);
 
   // Filter projects by search query (title, subtitle, description, operationsNote, or technologies)
   const filteredProjects = useMemo(() => {
@@ -280,6 +294,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsLiveDemoView(true)}
+                    title="Simulate live in-browser — no setup or download required"
                     aria-label="Launch live interactive UI"
                     className={`relative z-10 px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors duration-200 flex items-center justify-center gap-1.5 ${
                       isLiveDemoView
@@ -317,7 +332,12 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
 
             {/* Viewport: Live Interactive Sandbox vs Image Carousel */}
             {isLiveDemoView ? (
-              <div className="relative w-full bg-neutral-100/70 dark:bg-[#0c0c10] p-3 sm:p-5 border-b border-neutral-100 dark:border-zinc-800 flex flex-col items-center">
+              <div
+                ref={demoStageRef}
+                className={`relative w-full bg-neutral-100/70 dark:bg-[#0c0c10] p-3 sm:p-5 border-b border-neutral-100 dark:border-zinc-800 flex flex-col items-center transition-shadow duration-300 ${
+                  demoSpotlit ? "ring-2 ring-inset ring-pink-500/60" : ""
+                }`}
+              >
                 {/* Project Switcher Navigation Rail in Sandbox Mode */}
                 <div className="w-full max-w-2xl flex items-center justify-between pb-3 text-xs font-semibold text-neutral-600 dark:text-zinc-400">
                   <button
@@ -329,12 +349,18 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                     <span>Previous</span>
                   </button>
 
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-bold text-neutral-900 dark:text-zinc-100">
-                      {activeProject.title}
-                    </span>
-                    <span className="text-[10px] text-neutral-400 font-mono">
-                      ({safeSlideIndex + 1}/{totalSlides})
+                  <div className="flex flex-col items-center text-center">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="font-bold text-neutral-900 dark:text-zinc-100">
+                        {activeProject.title}
+                      </span>
+                      <span className="text-[10px] text-neutral-400 font-mono">
+                        ({safeSlideIndex + 1}/{totalSlides})
+                      </span>
+                    </div>
+                    <span className="hidden sm:inline-block text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+                      Simulate live in-browser — no setup or download required
                     </span>
                   </div>
 
@@ -438,12 +464,25 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </button>
                 )}
 
-                {/* Bottom Overlay Bar: Date */}
-                <div className="absolute bottom-3.5 left-3.5 z-10 pointer-events-none">
+                {/* Bottom Overlay Bar: Date & 1-Click Live Demo CTA */}
+                <div className="absolute bottom-3.5 inset-x-3.5 z-10 flex items-center justify-between gap-2 pointer-events-none">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-black/65 text-zinc-200 backdrop-blur-md border border-white/10">
                     <Calendar className="w-3.5 h-3.5 text-ig-pink" />
                     {activeProject.year}
                   </span>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      launchInteractiveDemo();
+                    }}
+                    title="Simulate live in-browser — no setup or download required"
+                    className="pointer-events-auto inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-ig-gradient text-white shadow-lg shadow-pink-500/30 border border-white/25 hover:opacity-95 active:scale-95 transition-all"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                    <span>⚡ Try Interactive Live Demo</span>
+                  </button>
                 </div>
               </div>
             )}
@@ -644,19 +683,34 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 {/* Action Footer Buttons */}
                 <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
                   <div className="flex flex-wrap items-center gap-2">
+                    <div className="relative group/demo-cta inline-flex">
+                      <button
+                        type="button"
+                        onClick={launchInteractiveDemo}
+                        title="Simulate live in-browser — no setup or download required"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold bg-ig-gradient text-white shadow-md shadow-pink-500/20 hover:opacity-95 active:scale-95 transition-all"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse shadow-[0_0_8px_#6ee7b7]" />
+                        <span>⚡ Try Interactive Live Demo</span>
+                      </button>
+                      <span
+                        role="tooltip"
+                        className="pointer-events-none absolute -top-9 left-0 whitespace-nowrap rounded-md bg-neutral-900 dark:bg-zinc-100 px-2.5 py-1 text-[11px] font-medium text-white dark:text-neutral-900 opacity-0 shadow-md transition-opacity duration-150 group-hover/demo-cta:opacity-100 z-20"
+                      >
+                        Simulate live in-browser — no setup or download required
+                      </span>
+                    </div>
+
                     <button
+                      type="button"
                       onClick={() => setIsLiveDemoView((prev) => !prev)}
-                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold active:scale-95 transition-all shadow-sm ${
-                        isLiveDemoView
-                          ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-black hover:opacity-90"
-                          : "bg-ig-gradient text-white hover:opacity-95"
-                      }`}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-95 transition-all"
                     >
-                      <Play className="w-3.5 h-3.5 fill-current" />
+                      <Layers className="w-3.5 h-3.5 text-ig-pink" />
                       <span>
                         {isLiveDemoView
                           ? "View Photo Preview"
-                          : "⚡ Use Project in Portfolio"}
+                          : "Back to Live UI"}
                       </span>
                     </button>
 

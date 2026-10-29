@@ -9,6 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://richard-allen-portfolio.vercel.app"),
   title: "Richard Allen Liman | Aspiring Full-Stack Developer",
   description: "Portfolio of Richard Allen Liman, an Information Technology student and aspiring Full-Stack Developer showcasing projects, skills, and experience.",
   keywords: [
@@ -29,15 +30,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://richardallen.dev",
+    url: "https://richard-allen-portfolio.vercel.app",
     title: "Richard Allen Liman | Aspiring Full-Stack Developer",
     description: "Portfolio of Richard Allen Liman, an Information Technology student and aspiring Full-Stack Developer showcasing projects, skills, and experience.",
     siteName: "Richard Allen Liman Portfolio",
+    images: [
+      {
+        url: "/og-preview.png",
+        width: 1200,
+        height: 630,
+        alt: "Richard Allen Liman — Aspiring Full-Stack & Mobile Developer Portfolio",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Richard Allen Liman | Aspiring Full-Stack Developer",
     description: "Information Technology student passionate about building practical, user-focused web and mobile applications.",
+    images: ["/og-preview.png"],
   },
 };
 

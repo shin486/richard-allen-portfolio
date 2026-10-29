@@ -81,24 +81,30 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animated-ig-ring {
-    animation: none;
-    background-position: 50% 50%;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  .rise-in {
-    animation: none;
-    opacity: 1;
-  }
-  * {
+  *,
+  ::before,
+  ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .animated-ig-ring {
+    background: linear-gradient(45deg, #f09433, #dc2743, #bc1888) !important;
+    animation: none !important;
+  }
+  .slash-particle {
+    animation: none !important;
+    opacity: var(--peak);
+    transform: rotate(var(--angle));
+  }
+  .reveal,
+  .rise-in,
+  .stagger-item {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 

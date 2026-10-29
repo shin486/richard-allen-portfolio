@@ -18,12 +18,24 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
   className = "",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [frame, setFrame] = useState(0);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mql.matches);
+    const onChange = (e: MediaQueryListEvent) =>
+      setPrefersReducedMotion(e.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  const isPaused = isHovered || prefersReducedMotion;
 
   // 4-frame retro 8-bit walk cycle at 130ms cadence
   useEffect(() => {
-    if (isHovered) {
-      // Idle frame when hovered
+    if (isPaused) {
+      // Idle frame when hovered or when reduced motion is preferred
       return;
     }
 
@@ -32,7 +44,7 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
     }, 130);
 
     return () => clearInterval(interval);
-  }, [isHovered]);
+  }, [isPaused]);
 
   const handleClick = () => {
     if (onClick) {
@@ -61,7 +73,7 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
             backgroundImage:
               "repeating-linear-gradient(to right, currentColor 0px, currentColor 3px, transparent 3px, transparent 6px)",
             color: "currentColor",
-            animation: isHovered
+            animation: isPaused
               ? "none"
               : "stickman-ground-scroll 0.52s linear infinite",
           }}
@@ -73,7 +85,7 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
           className="w-7 h-7 text-black dark:text-white fill-current transition-transform duration-75"
           style={{ imageRendering: "pixelated" }}
         >
-          {isHovered ? (
+          {isPaused ? (
             /* IDLE FRAME (Hovered: Stops walking, stands still at rest) */
             <g>
               {/* Head: 4x4 pixel square */}
@@ -168,7 +180,7 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
         </svg>
 
         {/* Ambient floating pixel trail / dust behind feet */}
-        {!isHovered && (
+        {!isPaused && (
           <span
             className="absolute bottom-1.5 left-2 w-1 h-1 bg-black/60 dark:bg-white/60 animate-ping pointer-events-none"
             style={{ animationDuration: "0.8s" }}
@@ -183,7 +195,7 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
         <span
           aria-hidden="true"
           className={`ml-0.5 inline-block w-[7px] h-[2px] bg-current self-end mb-[3px] ${
-            isHovered ? "opacity-100" : "animate-pulse"
+            isPaused ? "opacity-100" : "animate-pulse"
           }`}
         />
       </span>
