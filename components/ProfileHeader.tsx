@@ -122,7 +122,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       {/* MOBILE LAYOUT (< sm): Clean Instagram Mobile App Structure */}
       <div className="sm:hidden flex flex-col gap-2">
         {/* Mobile Note Bubble above header (anchored to mobile avatar) */}
-        <div className="flex justify-start px-0.5 pb-1">
+        <div className="flex justify-start px-0.5 pb-1 max-w-full min-w-0">
           <ProfileNote tailAlign="left" />
         </div>
 

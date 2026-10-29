@@ -235,6 +235,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => scrollToSection("profile-header")}
+              data-note="Back to top. Ready for another scroll?"
               className="p-2 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
               title="Home"
               aria-label="Home"
@@ -244,6 +245,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => scrollToSection("portfolio-grid", "projects")}
+              data-note="Jump straight to my projects. Tested and deployment-ready."
               className="p-2 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
               title="Projects"
               aria-label="Projects"
@@ -253,6 +255,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <a
               href={profileData.socials.github}
+              data-note="My GitHub. Green contribution squares, zero commit fudging."
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
@@ -264,6 +267,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <a
               href={profileData.socials.linkedin}
+              data-note="Connect with me on LinkedIn. Real developer network, zero corporate fluff."
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 text-neutral-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"

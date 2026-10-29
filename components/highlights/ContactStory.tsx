@@ -72,6 +72,7 @@ export const ContactStory: React.FC<ContactStoryProps> = ({ story, onInteract })
           <div className="flex items-center gap-2">
             <a
               href={profileData.socials.linkedin}
+              data-note="Connect with me on LinkedIn. Real developer network, zero corporate fluff."
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
@@ -83,6 +84,7 @@ export const ContactStory: React.FC<ContactStoryProps> = ({ story, onInteract })
 
             <a
               href={profileData.socials.github}
+              data-note="My GitHub. Green contribution squares, zero commit fudging."
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}

@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        pixel: ["'Silkscreen'", "monospace"],
+      },
       colors: {
         background: {
           light: "#FFFFFF",

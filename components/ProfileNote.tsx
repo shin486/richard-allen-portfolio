@@ -115,28 +115,28 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
     <div
       onClick={handleNoteClick}
       title="Click to cycle thoughts"
-      className={`group/note cursor-pointer select-none transition-all duration-200 max-w-[calc(100vw-32px)] sm:max-w-xl ${className}`}
+      className={`group/note cursor-pointer select-none transition-all duration-200 max-w-full sm:max-w-xl min-w-0 ${className}`}
     >
       <div
-        className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-2xl sm:rounded-full bg-white dark:bg-[#18181f] text-neutral-900 dark:text-neutral-100 text-[11px] sm:text-[11.5px] font-semibold leading-snug shadow-md dark:shadow-xl border border-neutral-200/90 dark:border-zinc-700/80 transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
+        className={`relative flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 w-fit max-w-full pixel-balloon-light dark:pixel-balloon-dark text-neutral-900 dark:text-neutral-100 text-[9px] sm:text-[11px] font-pixel font-semibold leading-relaxed transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
           isPopping ? "scale-105" : "scale-100"
         }`}
       >
-        {/* Subtle Instagram pink pulsar dot */}
+        {/* 8-bit Retro Square Pulsar Pixel Dot in Instagram Pink */}
         <span
           aria-hidden="true"
-          className="w-1.5 h-1.5 rounded-full bg-ig-pink flex-shrink-0 animate-pulse mt-0.5 sm:mt-0"
+          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-ig-pink flex-shrink-0 pixel-blink shadow-xs"
         />
 
-        {/* Note Text Message (Wraps gracefully on small devices, single-line on desktop) */}
-        <span className="break-words sm:whitespace-nowrap tracking-tight font-medium text-left">
+        {/* Note Text Message (Wrapped gracefully on mobile, single-line on desktop) */}
+        <span className="whitespace-normal sm:whitespace-nowrap break-words tracking-tight font-pixel text-left min-w-0">
           {currentNote}
         </span>
 
-        {/* Authentic Instagram thought bubble tails leading down directly to avatar center */}
+        {/* Authentic 8-bit Retro RPG Thought Tail Blocks leading down to avatar */}
         <span
           aria-hidden="true"
-          className={`absolute -bottom-1.5 w-2 h-2 rounded-full bg-white dark:bg-[#18181f] border-b border-r border-neutral-200/90 dark:border-zinc-700/80 shadow-xs pointer-events-none ${
+          className={`absolute -bottom-2 w-2.5 h-2.5 pixel-tail-dot-light dark:pixel-tail-dot-dark pointer-events-none ${
             isLeft
               ? "left-9 sm:left-14 md:left-16"
               : "left-1/2 -translate-x-1/2"
@@ -144,9 +144,9 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
         />
         <span
           aria-hidden="true"
-          className={`absolute -bottom-3 w-1 h-1 rounded-full bg-white dark:bg-[#18181f] border-b border-r border-neutral-200/90 dark:border-zinc-700/80 shadow-2xs pointer-events-none ${
+          className={`absolute -bottom-4 w-1.5 h-1.5 pixel-tail-dot-light dark:pixel-tail-dot-dark pointer-events-none ${
             isLeft
-              ? "left-[38px] sm:left-14 md:left-16"
+              ? "left-10 sm:left-14 md:left-16"
               : "left-1/2 -translate-x-1/2"
           }`}
         />

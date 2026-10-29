@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -286,4 +288,68 @@ body {
   100% {
     transform: translateX(-12px);
   }
+}
+
+/* ============================================================
+   RETRO RPG PIXEL THOUGHT BALLOON (Option 1)
+   ============================================================ */
+.pixel-balloon-dark {
+  background: #14141d;
+  box-shadow:
+    0 -3px 0 0 #3b3b4f,
+    0 3px 0 0 #3b3b4f,
+    -3px 0 0 0 #3b3b4f,
+    3px 0 0 0 #3b3b4f,
+    -2px -2px 0 0 #3b3b4f,
+    2px -2px 0 0 #3b3b4f,
+    -2px 2px 0 0 #3b3b4f,
+    2px 2px 0 0 #3b3b4f,
+    0 6px 16px rgba(0, 0, 0, 0.55);
+}
+
+.pixel-balloon-light {
+  background: #ffffff;
+  box-shadow:
+    0 -3px 0 0 #26262b,
+    0 3px 0 0 #26262b,
+    -3px 0 0 0 #26262b,
+    3px 0 0 0 #26262b,
+    -2px -2px 0 0 #26262b,
+    2px -2px 0 0 #26262b,
+    -2px 2px 0 0 #26262b,
+    2px 2px 0 0 #26262b,
+    0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.pixel-tail-dot-dark {
+  background: #14141d;
+  box-shadow:
+    0 -2px 0 0 #3b3b4f,
+    0 2px 0 0 #3b3b4f,
+    -2px 0 0 0 #3b3b4f,
+    2px 0 0 0 #3b3b4f;
+}
+
+.pixel-tail-dot-light {
+  background: #ffffff;
+  box-shadow:
+    0 -2px 0 0 #26262b,
+    0 2px 0 0 #26262b,
+    -2px 0 0 0 #26262b,
+    2px 0 0 0 #26262b;
+}
+
+@keyframes pixelBlink {
+  0%, 49% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50%, 100% {
+    opacity: 0.15;
+    transform: scale(0.9);
+  }
+}
+
+.pixel-blink {
+  animation: pixelBlink 0.9s steps(1, end) infinite;
 }
