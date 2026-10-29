@@ -98,7 +98,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <header className="sticky top-0 z-40 w-full bg-white/85 dark:bg-[#0B0B0F]/85 backdrop-blur-md border-b border-neutral-200 dark:border-zinc-800 transition-colors duration-200 rise-in">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3 sm:gap-4">
           {/* Instagram Account Switcher Brand Trigger */}
-          <div className="relative" ref={switcherRef}>
+          <div className="relative" ref={switcherRef} data-note="Hey, that is my stickman. He is walking towards graduation, do not distract him.">
             {/* 8-Bit Pixel Walking Stickman Journey (Pauses on Hover, Abstract Black/White) */}
             <PixelStickmanJourney onClick={() => setSwitcherOpen((prev) => !prev)} />
 
@@ -275,6 +275,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <a
               href={profileData.socials.resumeUrl}
+              data-note="There is the resume. Grab it before someone else hires me first."
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
@@ -291,6 +292,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => scrollToSection("contact-section", "contact")}
+              data-note="Click Contact. We could literally be coworkers by next week."
               className="ml-1 hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-ig-gradient hover:opacity-90 active:scale-95 transition-all shadow-sm"
             >
               <Mail className="w-3.5 h-3.5" />

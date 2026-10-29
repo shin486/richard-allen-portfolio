@@ -868,6 +868,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
     <div className="w-full select-none">
       {/* Desk-mat pedestal: groups header + keyboard + inspector display into one cohesive hardware module */}
       <div
+        data-note="Go ahead, tap the keys. They have genuine thocky mechanical switches."
         className={`relative rounded-3xl border p-3 sm:p-3.5 backdrop-blur-sm transition-colors duration-300 ${
           isDark
             ? "bg-white/[0.025] border-white/10"

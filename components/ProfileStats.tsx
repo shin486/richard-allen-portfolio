@@ -71,6 +71,7 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ onStatClick }) => {
       <button
         type="button"
         onClick={() => handleScroll("portfolio-grid", "projects")}
+        data-note="Six full production projects. Built with late nights and black coffee."
         className="group flex flex-col items-center sm:items-start text-center sm:text-left focus:outline-none transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
       >
         <span className="font-bold tabular-nums text-neutral-900 dark:text-zinc-100 text-sm sm:text-lg group-hover:text-ig-pink transition-colors leading-none">
@@ -84,6 +85,7 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ onStatClick }) => {
       <button
         type="button"
         onClick={() => handleScroll("skills-section", "skills")}
+        data-note="Twenty-eight technologies. React Native, Next.js, and Supabase ready."
         className="group flex flex-col items-center sm:items-start text-center sm:text-left focus:outline-none transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
       >
         <span className="font-bold tabular-nums text-neutral-900 dark:text-zinc-100 text-sm sm:text-lg group-hover:text-ig-purple transition-colors leading-none">
@@ -97,6 +99,7 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ onStatClick }) => {
       <button
         type="button"
         onClick={() => handleScroll("certificates-section", "certificates")}
+        data-note="Dual Cisco CCNA certified. Yes, I know how to subnet in my head."
         className="group flex flex-col items-center sm:items-start text-center sm:text-left focus:outline-none transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
       >
         <span className="font-bold tabular-nums text-neutral-900 dark:text-zinc-100 text-sm sm:text-lg group-hover:text-ig-orange transition-colors leading-none">

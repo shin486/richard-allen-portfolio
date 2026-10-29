@@ -540,6 +540,7 @@ export const AiChatDrawer: React.FC = () => {
         {/* Main Floating Pup Button */}
         <button
           onClick={() => setIsOpen((prev) => !prev)}
+          data-note="That is Byte. Battery-powered robot dog that answers technical questions."
           className="group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full p-[2.5px] animated-ig-ring shadow-xl transition-transform hover:scale-105 active:scale-95 focus:outline-none"
           aria-label={isOpen ? "Close Byte AI chat" : "Chat with Byte, Richard's AI dog"}
           title="Chat with Byte (AI Portfolio Companion)"

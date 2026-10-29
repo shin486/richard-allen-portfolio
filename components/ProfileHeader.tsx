@@ -6,6 +6,7 @@ import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 import { ProfileStats } from "./ProfileStats";
 import { VerifiedBadge } from "./VerifiedBadge";
+import { ProfileNote } from "./ProfileNote";
 
 interface ProfileHeaderProps {
   onSelectTab: (tab: string) => void;
@@ -22,36 +23,44 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   };
 
   return (
-    <section id="profile-header" className="pt-3 sm:pt-8 pb-3 sm:pb-6">
+    <section id="profile-header" className="pt-6 sm:pt-14 pb-3 sm:pb-6">
       {/* DESKTOP LAYOUT (sm and up): Clean Instagram Web 2-Column Structure */}
       <div className="hidden sm:flex items-start gap-8 md:gap-12">
-        {/* Left Column: Avatar with Instagram Animated Story Ring */}
-        <div
-          className="relative group cursor-pointer flex-shrink-0"
-          onClick={handleViewProjects}
-          title="Click to view featured projects"
-        >
-          <div className="w-32 h-32 md:w-36 md:h-36 rounded-full p-[3px] animated-ig-ring shadow-md transition-transform duration-300 group-hover:scale-105">
-            <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2.5px] transition-colors duration-200">
-              <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900 flex items-center justify-center">
-                <Image
-                  src={profilePic}
-                  alt={profileData.name}
-                  fill
-                  sizes="(max-width: 768px) 128px, 144px"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
+        {/* Left Column: Avatar with Instagram Animated Story Ring + Floating Note */}
+        <div className="relative flex flex-col items-center flex-shrink-0">
+          {/* Floating Interactive Instagram Thought Bubble Note */}
+          <div className="absolute -top-11 left-1/2 -translate-x-1/2 z-30 pointer-events-auto">
+            <ProfileNote />
           </div>
 
-          {/* Active Status Dot */}
           <div
-            className="absolute bottom-1 right-1 md:bottom-2 md:right-2 bg-emerald-500 text-white rounded-full p-1 border-2 border-white dark:border-[#0B0B0F] shadow-sm"
-            title="Open for OJT & Full-Stack Opportunities"
+            className="relative group cursor-pointer"
+            onClick={handleViewProjects}
+            data-note="Why are you staring at my 2x2 ID photo? Just hire me already."
+            title="Click to view featured projects"
           >
-            <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
+            <div className="w-32 h-32 md:w-36 md:h-36 rounded-full p-[3px] animated-ig-ring shadow-md transition-transform duration-300 group-hover:scale-105">
+              <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2.5px] transition-colors duration-200">
+                <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900 flex items-center justify-center">
+                  <Image
+                    src={profilePic}
+                    alt={profileData.name}
+                    fill
+                    sizes="(max-width: 768px) 128px, 144px"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Active Status Dot */}
+            <div
+              className="absolute bottom-1 right-1 md:bottom-2 md:right-2 bg-emerald-500 text-white rounded-full p-1 border-2 border-white dark:border-[#0B0B0F] shadow-sm"
+              title="Open for OJT & Full-Stack Opportunities"
+            >
+              <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
+            </div>
           </div>
         </div>
 
@@ -62,7 +71,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             <span className="font-semibold text-xl md:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
               {profileData.username}
             </span>
-            <div title="Verified Developer Profile" className="cursor-help inline-flex items-center">
+            <div
+              title="Verified Developer Profile"
+              data-note="Yes, verified. De La Salle Lipa certified, zero buzzword fluff."
+              className="cursor-help inline-flex items-center"
+            >
               <VerifiedBadge className="w-4 h-4 md:w-5 md:h-5" />
             </div>
           </div>
@@ -94,7 +107,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
             {/* OJT Availability Badge */}
             <div className="pt-1.5 flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60 shadow-2xs w-fit">
+              <span
+                data-note="Open for OJT and junior engineering roles. Ready to deploy."
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60 shadow-2xs w-fit cursor-default"
+              >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Open for OJT &amp; Opportunities
               </span>
@@ -104,12 +120,18 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       </div>
 
       {/* MOBILE LAYOUT (< sm): Clean Instagram Mobile App Structure */}
-      <div className="sm:hidden flex flex-col gap-3">
+      <div className="sm:hidden flex flex-col gap-2">
+        {/* Mobile Note Bubble above header */}
+        <div className="flex justify-center pb-1">
+          <ProfileNote />
+        </div>
+
         {/* Mobile Top Row: Avatar on Left, Stats on Right */}
         <div className="flex items-center gap-4">
           <div
             className="relative group cursor-pointer flex-shrink-0"
             onClick={handleViewProjects}
+            data-note="Why are you staring at my 2x2 ID photo? Just hire me already."
           >
             <div className="w-[74px] h-[74px] rounded-full p-[2.5px] animated-ig-ring shadow-sm">
               <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px]">

@@ -220,6 +220,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   role="tab"
                   aria-selected={isCurrent}
                   title={`${proj.title} — ${proj.subtitle}`}
+                  data-note={proj.id === "palengkehub" ? "PalengkeHub. Defended capstone, zero bugs surrendered." : proj.id === "shinpay-plus" ? "ShinPay+. Automated payroll calculation so devs get paid on time." : "Defended capstones and real SaaS tools. Test them live in-browser."}
                   className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
                     isCurrent
                       ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 border-neutral-900 dark:border-zinc-100 shadow-sm"
