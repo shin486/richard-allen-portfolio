@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
 import {
   Award,
@@ -22,11 +22,33 @@ export const CertificateGrid: React.FC = () => {
   const [likedIds, setLikedIds] = useState<Record<string, boolean>>({});
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [heartPopId, setHeartPopId] = useState<string | null>(null);
+  const heartPopTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastTapRef = useRef<{ id: string; time: number }>({ id: "", time: 0 });
 
   const totalSlides = certificatesData.length;
   const safeSlideIndex =
     totalSlides > 0 ? Math.min(currentSlide, totalSlides - 1) : 0;
   const activeCert = certificatesData[safeSlideIndex];
+
+  const triggerDoubleTapHeart = useCallback((id: string) => {
+    setLikedIds((prev) => ({ ...prev, [id]: true }));
+    setHeartPopId(id);
+    if (heartPopTimerRef.current) {
+      clearTimeout(heartPopTimerRef.current);
+    }
+    heartPopTimerRef.current = setTimeout(() => {
+      setHeartPopId(null);
+    }, 920);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (heartPopTimerRef.current) {
+        clearTimeout(heartPopTimerRef.current);
+      }
+    };
+  }, []);
 
   const goNext = useCallback(() => {
     setCurrentSlide((prev) => (prev < totalSlides - 1 ? prev + 1 : prev));
@@ -57,6 +79,19 @@ export const CertificateGrid: React.FC = () => {
         goNext();
       } else {
         goPrev();
+      }
+    } else if (activeCert) {
+      // Tap without swipe -> detect double-tap
+      const now = Date.now();
+      if (
+        lastTapRef.current.id === activeCert.id &&
+        now - lastTapRef.current.time < 320 &&
+        now - lastTapRef.current.time > 40
+      ) {
+        triggerDoubleTapHeart(activeCert.id);
+        lastTapRef.current = { id: "", time: 0 };
+      } else {
+        lastTapRef.current = { id: activeCert.id, time: now };
       }
     }
     setTouchStartX(null);
@@ -182,10 +217,26 @@ export const CertificateGrid: React.FC = () => {
 
           {/* Swipeable Certificate Slide Track Viewport */}
           <div
-            className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-neutral-100 dark:bg-zinc-950 overflow-hidden group select-none"
+            className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-neutral-100 dark:bg-zinc-950 overflow-hidden group select-none cursor-pointer"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
+            onDoubleClick={() => triggerDoubleTapHeart(activeCert.id)}
+            title="Double-tap or double-click to like"
           >
+            {/* Instagram Big Heart Double-Tap Pop Overlay */}
+            {heartPopId === activeCert.id && (
+              <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center">
+                <div className="animate-ig-doubletap-heart filter drop-shadow-[0_0_24px_rgba(237,73,86,0.9)]">
+                  <svg
+                    className="w-24 h-24 sm:w-28 sm:h-28 fill-[#ED4956] stroke-white stroke-[1.5]"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                </div>
+              </div>
+            )}
+
             {/* Horizontal Sliding Track */}
             <div
               className="w-full h-full flex transition-transform duration-500 ease-out"

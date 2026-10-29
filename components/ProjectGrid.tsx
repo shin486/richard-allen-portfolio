@@ -24,6 +24,7 @@ import {
   Smartphone,
   Database,
   Server,
+  Shield,
 } from "lucide-react";
 import { Project, projectsData } from "@/data/projects";
 import { profileData } from "@/data/profile";
@@ -39,6 +40,255 @@ interface ProjectGridProps {
   /** Notifies parent when the active slide project changes (e.g. to sync the 3D keyboard) */
   onActiveProjectChange?: (project: Project | null) => void;
 }
+
+interface PipelineNode {
+  layer: string;
+  tech: string;
+  techKey: string;
+  note: string;
+  brandClass: string;
+  haloClass: string;
+  icon: React.ReactNode;
+}
+
+interface ProjectPipeline {
+  nodes: PipelineNode[];
+  qualityTag: string;
+}
+
+const getProjectPipeline = (project: Project): ProjectPipeline => {
+  switch (project.id) {
+    case "palengkehub":
+      return {
+        qualityTag: "✓ iOS & Android Tested",
+        nodes: [
+          {
+            layer: "Client",
+            tech: "React Native (Expo)",
+            techKey: "React Native",
+            note: "React Native (Expo): Cross-platform mobile client with gesture nav and camera integration.",
+            brandClass: "border-cyan-500/50 bg-cyan-950/20 text-cyan-300 dark:text-cyan-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(6,182,212,0.3)]",
+            icon: (
+              <svg className="w-3.5 h-3.5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(30 12 12)" />
+                <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(90 12 12)" />
+                <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(150 12 12)" />
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+              </svg>
+            ),
+          },
+          {
+            layer: "Logic",
+            tech: "TypeScript",
+            techKey: "TypeScript",
+            note: "TypeScript: Strict type contracts across buyer, vendor, and admin transactional flows.",
+            brandClass: "border-blue-500/50 bg-blue-950/20 text-blue-300 dark:text-blue-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(59,130,246,0.3)]",
+            icon: (
+              <span className="w-3.5 h-3.5 rounded-[2.5px] bg-[#3178C6] text-[8px] font-black text-white flex items-center justify-center font-mono leading-none">
+                TS
+              </span>
+            ),
+          },
+          {
+            layer: "DB & Auth",
+            tech: "Supabase (PostgreSQL)",
+            techKey: "Supabase",
+            note: "Supabase: ACID PostgreSQL schemas, Row-Level Security (RLS), and realtime price updates.",
+            brandClass: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300 dark:text-emerald-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(16,185,129,0.3)]",
+            icon: (
+              <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13.5 2L3 14.5h7.5L9 22l12-13.5h-8.5L13.5 2z" />
+              </svg>
+            ),
+          },
+        ],
+      };
+    case "shinpay-plus":
+      return {
+        qualityTag: "Multi-Tenant Architecture",
+        nodes: [
+          {
+            layer: "Frontend",
+            tech: "Next.js 14 App Router",
+            techKey: "Next.js",
+            note: "Next.js 14: Server Components, Server Actions, and lightning SSR deployed on Vercel.",
+            brandClass: "border-white/50 bg-zinc-800/40 text-zinc-100",
+            haloClass: "hover:shadow-[0_0_14px_rgba(255,255,255,0.25)]",
+            icon: <span className="font-mono font-black text-[10px] text-white">N</span>,
+          },
+          {
+            layer: "Logic & UI",
+            tech: "TypeScript (Tailwind)",
+            techKey: "TypeScript",
+            note: "TypeScript: Philippine statutory tax math (SSS, PhilHealth, Pag-IBIG) & tenant isolation.",
+            brandClass: "border-blue-500/50 bg-blue-950/20 text-blue-300 dark:text-blue-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(59,130,246,0.3)]",
+            icon: (
+              <span className="w-3.5 h-3.5 rounded-[2.5px] bg-[#3178C6] text-[8px] font-black text-white flex items-center justify-center font-mono leading-none">
+                TS
+              </span>
+            ),
+          },
+          {
+            layer: "Database",
+            tech: "Supabase (PostgreSQL RLS)",
+            techKey: "PostgreSQL",
+            note: "PostgreSQL: Multi-tenant isolated schemas with strict Row-Level Security policies.",
+            brandClass: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300 dark:text-emerald-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(16,185,129,0.3)]",
+            icon: (
+              <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13.5 2L3 14.5h7.5L9 22l12-13.5h-8.5L13.5 2z" />
+              </svg>
+            ),
+          },
+        ],
+      };
+    case "itelect4-project":
+      return {
+        qualityTag: "Google Gemini AI Integrated",
+        nodes: [
+          {
+            layer: "Client",
+            tech: "React (Vite)",
+            techKey: "React",
+            note: "React + Vite: High-performance SPA with modern component state and clean styling.",
+            brandClass: "border-cyan-500/50 bg-cyan-950/20 text-cyan-300 dark:text-cyan-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(6,182,212,0.3)]",
+            icon: (
+              <svg className="w-3.5 h-3.5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(30 12 12)" />
+                <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(90 12 12)" />
+                <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(150 12 12)" />
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+              </svg>
+            ),
+          },
+          {
+            layer: "Server & AI",
+            tech: "Express + Gemini AI",
+            techKey: "Express",
+            note: "Express + Gemini AI: Rate-limited POST /api/ai returning Zod-validated JSON evaluations.",
+            brandClass: "border-amber-500/50 bg-amber-950/20 text-amber-300 dark:text-amber-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(245,158,11,0.3)]",
+            icon: <Sparkles className="w-3.5 h-3.5 text-amber-400" />,
+          },
+          {
+            layer: "Database",
+            tech: "MongoDB",
+            techKey: "MongoDB",
+            note: "MongoDB: Document collections with indexed Mongoose ODM models.",
+            brandClass: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300 dark:text-emerald-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(16,185,129,0.3)]",
+            icon: <Database className="w-3.5 h-3.5 text-emerald-400" />,
+          },
+        ],
+      };
+    case "auto-avenue-ims":
+      return {
+        qualityTag: "Real-Time POS Integration",
+        nodes: [
+          {
+            layer: "UI Layer",
+            tech: "Bootstrap UI",
+            techKey: "Bootstrap",
+            note: "Bootstrap: Rapid, accessible dashboard layout designed for auto repair shop technicians.",
+            brandClass: "border-purple-500/50 bg-purple-950/20 text-purple-300 dark:text-purple-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(168,85,247,0.3)]",
+            icon: <Code2 className="w-3.5 h-3.5 text-purple-400" />,
+          },
+          {
+            layer: "Backend",
+            tech: "PHP REST Engine",
+            techKey: "PHP",
+            note: "PHP REST Engine: Automated stock reorder calculation and direct POS transactional sync.",
+            brandClass: "border-indigo-500/50 bg-indigo-950/20 text-indigo-300 dark:text-indigo-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(99,102,241,0.3)]",
+            icon: <Server className="w-3.5 h-3.5 text-indigo-400" />,
+          },
+          {
+            layer: "Database",
+            tech: "MySQL Relational DB",
+            techKey: "MySQL",
+            note: "MySQL: Relational inventory schemas with transactional integrity and reorder alerts.",
+            brandClass: "border-sky-500/50 bg-sky-950/20 text-sky-300 dark:text-sky-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(14,165,233,0.3)]",
+            icon: <Database className="w-3.5 h-3.5 text-sky-400" />,
+          },
+        ],
+      };
+    case "avms":
+      return {
+        qualityTag: "ITSM Certified Framework",
+        nodes: [
+          {
+            layer: "Access Portal",
+            tech: "Campus QR Scanner",
+            techKey: "QR Access Control",
+            note: "Campus QR Portal: Online pre-registration, QR-coded badges, and host notifications.",
+            brandClass: "border-orange-500/50 bg-orange-950/20 text-orange-300 dark:text-orange-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(249,115,22,0.3)]",
+            icon: <Sparkles className="w-3.5 h-3.5 text-orange-400" />,
+          },
+          {
+            layer: "Security Core",
+            tech: "RBAC + MFA + Encryption",
+            techKey: "RBAC & MFA",
+            note: "Security: Role-based access control, multi-factor auth, and encrypted audit trails.",
+            brandClass: "border-rose-500/50 bg-rose-950/20 text-rose-300 dark:text-rose-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(244,63,94,0.3)]",
+            icon: <Shield className="w-3.5 h-3.5 text-rose-400" />,
+          },
+          {
+            layer: "Operations",
+            tech: "ITSM Framework (99.9% SLA)",
+            techKey: "ITSM",
+            note: "ITSM Framework: Structured incident/problem lifecycles and 99.9% uptime SLA.",
+            brandClass: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300 dark:text-emerald-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(16,185,129,0.3)]",
+            icon: <Server className="w-3.5 h-3.5 text-emerald-400" />,
+          },
+        ],
+      };
+    case "crave-cart":
+    default:
+      return {
+        qualityTag: "Lightweight Microservice",
+        nodes: [
+          {
+            layer: "Client UI",
+            tech: "Interactive Menu + Maps",
+            techKey: "JavaScript",
+            note: "Interactive Menu: Digital food kiosk browser with embedded Google Maps store locator.",
+            brandClass: "border-teal-500/50 bg-teal-950/20 text-teal-300 dark:text-teal-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(20,184,166,0.3)]",
+            icon: <Sparkles className="w-3.5 h-3.5 text-teal-400" />,
+          },
+          {
+            layer: "API Server",
+            tech: "Node.js + Express",
+            techKey: "Node.js",
+            note: "Node.js + Express: Lightweight REST routing, order validation, and receipt formatting.",
+            brandClass: "border-green-500/50 bg-green-950/20 text-green-300 dark:text-green-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(34,197,94,0.3)]",
+            icon: <Server className="w-3.5 h-3.5 text-green-400" />,
+          },
+          {
+            layer: "Storage",
+            tech: "Local Storage & JSON Store",
+            techKey: "Local Storage",
+            note: "Local Storage: Client state cart persistence and file-based feedback logging.",
+            brandClass: "border-amber-500/50 bg-amber-950/20 text-amber-300 dark:text-amber-200",
+            haloClass: "hover:shadow-[0_0_14px_rgba(245,158,11,0.3)]",
+            icon: <Database className="w-3.5 h-3.5 text-amber-400" />,
+          },
+        ],
+      };
+  }
+};
 
 export const ProjectGrid: React.FC<ProjectGridProps> = ({
   searchQuery,
@@ -109,6 +359,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
   const activeProject =
     totalSlides > 0 ? filteredProjects[safeSlideIndex] : null;
 
+  const pipeline = useMemo(() => {
+    if (!activeProject) return { nodes: [], qualityTag: "" };
+    return getProjectPipeline(activeProject);
+  }, [activeProject]);
+
   useEffect(() => {
     onActiveProjectChange?.(activeProject);
   }, [activeProject, onActiveProjectChange]);
@@ -121,6 +376,29 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
 
   const goPrev = useCallback(() => {
     setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
+  }, []);
+
+  const [heartPopId, setHeartPopId] = useState<string | null>(null);
+  const heartPopTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastTapRef = useRef<{ id: string; time: number }>({ id: "", time: 0 });
+
+  const triggerDoubleTapHeart = useCallback((id: string) => {
+    setLikedIds((prev) => ({ ...prev, [id]: true }));
+    setHeartPopId(id);
+    if (heartPopTimerRef.current) {
+      clearTimeout(heartPopTimerRef.current);
+    }
+    heartPopTimerRef.current = setTimeout(() => {
+      setHeartPopId(null);
+    }, 920);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (heartPopTimerRef.current) {
+        clearTimeout(heartPopTimerRef.current);
+      }
+    };
   }, []);
 
   const toggleLike = (id: string, e?: React.MouseEvent) => {
@@ -146,6 +424,19 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
         goNext();
       } else {
         goPrev();
+      }
+    } else if (activeProject) {
+      // Tap without horizontal swipe -> detect double-tap
+      const now = Date.now();
+      if (
+        lastTapRef.current.id === activeProject.id &&
+        now - lastTapRef.current.time < 320 &&
+        now - lastTapRef.current.time > 40
+      ) {
+        triggerDoubleTapHeart(activeProject.id);
+        lastTapRef.current = { id: "", time: 0 };
+      } else {
+        lastTapRef.current = { id: activeProject.id, time: now };
       }
     }
     setTouchStartX(null);
@@ -325,10 +616,26 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
             ) : (
               /* Swipeable Slide Track Viewport */
               <div
-                className="relative w-full aspect-[4/3] sm:aspect-[16/9] bg-slate-950 overflow-hidden group select-none"
+                className="relative w-full aspect-[4/3] sm:aspect-[16/9] bg-slate-950 overflow-hidden group select-none cursor-pointer"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
+                onDoubleClick={() => triggerDoubleTapHeart(activeProject.id)}
+                title="Double-tap or double-click to like"
               >
+                {/* Instagram Big Heart Double-Tap Pop Overlay */}
+                {heartPopId === activeProject.id && (
+                  <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center">
+                    <div className="animate-ig-doubletap-heart filter drop-shadow-[0_0_24px_rgba(237,73,86,0.9)]">
+                      <svg
+                        className="w-24 h-24 sm:w-28 sm:h-28 fill-[#ED4956] stroke-white stroke-[1.5]"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+
                 {/* Horizontal Sliding Track */}
                 <div
                   className="w-full h-full flex transition-transform duration-500 ease-out"
@@ -617,166 +924,66 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </div>
                 )}
 
-                {/* Tech Stack Chips with Branded Micro-Halos & 3D Keyboard Reactive Link */}
-                <div className="flex flex-wrap gap-1.5 pt-2 border-t border-neutral-100 dark:border-zinc-800/80">
-                  {activeProject.technologies.map((tech) => {
-                    const t = tech.toLowerCase();
-
-                    let brandColor = "hover:border-zinc-500 hover:text-white";
-                    let haloGlow = "hover:shadow-[0_0_12px_rgba(255,255,255,0.15)]";
-                    let icon = <Code2 className="w-3 h-3 text-ig-pink" />;
-                    let note = `${tech} in production architecture.`;
-
-                    if (t.includes("react native") || t === "react") {
-                      brandColor = "hover:border-cyan-500/60 hover:bg-cyan-950/20 hover:text-cyan-300";
-                      haloGlow = "hover:shadow-[0_0_12px_rgba(6,182,212,0.25)]";
-                      icon = (
-                        <svg className="w-3 h-3 text-cyan-400 group-hover/tech:rotate-45 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(30 12 12)" />
-                          <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(90 12 12)" />
-                          <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(150 12 12)" />
-                          <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-                        </svg>
-                      );
-                      note = "React Native: Smooth cross-platform mobile apps for iOS and Android.";
-                    } else if (t.includes("expo")) {
-                      brandColor = "hover:border-white/60 hover:bg-zinc-800/40 hover:text-white";
-                      haloGlow = "hover:shadow-[0_0_12px_rgba(255,255,255,0.2)]";
-                      icon = (
-                        <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13H5.5L12 6.5z" />
-                        </svg>
-                      );
-                      note = "Expo: EAS updates, camera, geolocation, and native mobile modules.";
-                    } else if (t.includes("typescript")) {
-                      brandColor = "hover:border-blue-500/60 hover:bg-blue-950/20 hover:text-blue-300";
-                      haloGlow = "hover:shadow-[0_0_12px_rgba(59,130,246,0.25)]";
-                      icon = (
-                        <span className="w-3 h-3 rounded-[2.5px] bg-[#3178C6] text-[8px] font-black text-white flex items-center justify-center font-mono leading-none">
-                          TS
+                {/* Visual System Architecture Pipeline (Senior System Design — Non-Redundant) */}
+                <div className="pt-3 border-t border-neutral-100 dark:border-zinc-800/80">
+                  <div className="p-3 sm:p-3.5 rounded-xl bg-neutral-50/80 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800/90 shadow-2xs">
+                    {/* Pipeline Header with Quality Indicator */}
+                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-ig-pink animate-pulse" />
+                        <span className="text-[10.5px] font-bold uppercase tracking-wider text-neutral-700 dark:text-zinc-300">
+                          Architecture Pipeline
                         </span>
-                      );
-                      note = "TypeScript: Strict type safety, generics, and zero runtime surprises.";
-                    } else if (t.includes("supabase")) {
-                      brandColor = "hover:border-emerald-500/60 hover:bg-emerald-950/20 hover:text-emerald-300";
-                      haloGlow = "hover:shadow-[0_0_12px_rgba(16,185,129,0.25)]";
-                      icon = (
-                        <svg className="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M13.5 2L3 14.5h7.5L9 22l12-13.5h-8.5L13.5 2z" />
-                        </svg>
-                      );
-                      note = "Supabase: Realtime subscriptions, Auth, Storage, and PostgreSQL RLS.";
-                    } else if (t.includes("postgres") || t.includes("sql")) {
-                      brandColor = "hover:border-sky-500/60 hover:bg-sky-950/20 hover:text-sky-300";
-                      haloGlow = "hover:shadow-[0_0_12px_rgba(14,165,233,0.25)]";
-                      icon = (
-                        <svg className="w-3 h-3 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <ellipse cx="12" cy="7" rx="8" ry="3" />
-                          <path d="M4 7v10c0 1.66 3.58 3 8 3s8-1.34 8-3V7" />
-                          <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
-                        </svg>
-                      );
-                      note = "PostgreSQL: ACID-compliant relational schemas, indexed queries, and foreign keys.";
-                    } else if (t.includes("next")) {
-                      brandColor = "hover:border-white/60 hover:bg-zinc-800/40 hover:text-white";
-                      haloGlow = "hover:shadow-[0_0_12px_rgba(255,255,255,0.2)]";
-                      icon = <span className="font-mono font-black text-[9px] text-white">N</span>;
-                      note = "Next.js App Router: Server Components, Server Actions, and lightning SSR.";
-                    } else if (t.includes("node") || t.includes("express")) {
-                      brandColor = "hover:border-green-500/60 hover:bg-green-950/20 hover:text-green-300";
-                      haloGlow = "hover:shadow-[0_0_12px_rgba(34,197,94,0.25)]";
-                      icon = <Server className="w-3 h-3 text-green-400" />;
-                      note = "Node.js & Express: Lightweight REST APIs, middleware, and route handlers.";
-                    } else if (t.includes("mongo")) {
-                      brandColor = "hover:border-emerald-500/60 hover:bg-emerald-950/20 hover:text-emerald-300";
-                      haloGlow = "hover:shadow-[0_0_12px_rgba(16,185,129,0.25)]";
-                      icon = <Database className="w-3 h-3 text-emerald-400" />;
-                      note = "MongoDB: NoSQL document store with Mongoose ODM schemas.";
-                    } else if (t.includes("tailwind") || t.includes("css")) {
-                      brandColor = "hover:border-teal-400/60 hover:bg-teal-950/20 hover:text-teal-300";
-                      haloGlow = "hover:shadow-[0_0_12px_rgba(45,212,191,0.25)]";
-                      icon = <Sparkles className="w-3 h-3 text-teal-400" />;
-                      note = "Tailwind CSS: Utility-first styling with dark-mode responsiveness.";
-                    }
-
-                    const handleMouseEnter = () => {
-                      if (typeof window !== "undefined") {
-                        window.dispatchEvent(
-                          new CustomEvent("shin-tech-hover", { detail: { tech } })
-                        );
-                      }
-                    };
-
-                    return (
-                      <span
-                        key={tech}
-                        data-note={note}
-                        onMouseEnter={handleMouseEnter}
-                        className={`group/tech px-2.5 py-1 bg-neutral-100 dark:bg-zinc-900/90 text-neutral-700 dark:text-zinc-300 text-xs font-medium rounded-md border border-neutral-200/80 dark:border-zinc-800 transition-all duration-200 cursor-default flex items-center gap-1.5 active:scale-95 hover:-translate-y-0.5 ${brandColor} ${haloGlow}`}
-                      >
-                        {icon}
-                        <span>{tech}</span>
+                      </div>
+                      <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 font-mono flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-md border border-emerald-200/60 dark:border-emerald-800/50">
+                        {pipeline.qualityTag}
                       </span>
-                    );
-                  })}
-                </div>
+                    </div>
 
-                {/* Action Footer Buttons */}
-                <div className="flex flex-wrap items-center justify-between gap-2.5 pt-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {/* Primary CTA: Linear/Apple Specular Shimmer Beam Button */}
-                    <button
-                      type="button"
-                      onClick={launchInteractiveDemo}
-                      data-note="Launch the interactive in-browser phone simulator. No setup needed."
-                      className="specular-beam beacon-pulse bg-white text-zinc-950 hover:bg-zinc-100 active:scale-95 font-bold px-4 py-2 rounded-lg transition-all inline-flex items-center gap-2 text-xs sm:text-sm shadow-sm"
-                    >
-                      <Play className="w-4 h-4 fill-current" />
-                      <span>Live Demo</span>
-                    </button>
+                    {/* Connected Data Flow Nodes */}
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      {pipeline.nodes.map((node, idx) => {
+                        const handleMouseEnter = () => {
+                          if (typeof window !== "undefined") {
+                            window.dispatchEvent(
+                              new CustomEvent("shin-tech-hover", {
+                                detail: { tech: node.techKey },
+                              })
+                            );
+                          }
+                        };
 
-                    {/* Secondary CTA: Clean Bordered GitHub */}
-                    {activeProject.githubUrl && (
-                      <a
-                        href={activeProject.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        data-note="Explore raw commits, clean architecture, and modular code on GitHub."
-                        className="bg-zinc-900 hover:bg-zinc-850 text-zinc-200 hover:text-white border border-zinc-800 hover:border-zinc-700 active:scale-95 px-3.5 py-2 rounded-lg transition-all inline-flex items-center gap-2 text-xs sm:text-sm font-medium"
-                      >
-                        <Github className="w-4 h-4" />
-                        <span>GitHub</span>
-                      </a>
-                    )}
+                        return (
+                          <React.Fragment key={node.layer}>
+                            <div
+                              data-note={node.note}
+                              onMouseEnter={handleMouseEnter}
+                              className={`group/node inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-lg border text-xs font-medium cursor-default transition-all duration-200 hover:-translate-y-0.5 active:scale-95 ${node.brandClass} ${node.haloClass}`}
+                            >
+                              <div className="flex-shrink-0">{node.icon}</div>
+                              <div className="flex items-center gap-1">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500 font-mono">
+                                  {node.layer}:
+                                </span>
+                                <span className="font-semibold">{node.tech}</span>
+                              </div>
+                            </div>
 
-                    {/* Segmented View Mode Switcher: Eliminates "Live UI" ambiguity! */}
-                    <div className="inline-flex items-center p-0.5 rounded-lg bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-xs font-semibold">
-                      <button
-                        type="button"
-                        onClick={() => setIsLiveDemoView(true)}
-                        data-note="Switch to in-browser mobile phone simulator."
-                        className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
-                          isLiveDemoView
-                            ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-xs"
-                            : "text-neutral-500 hover:text-neutral-900 dark:hover:text-zinc-200"
-                        }`}
-                      >
-                        <Smartphone className="w-3.5 h-3.5 text-emerald-500" />
-                        <span>App UI</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setIsLiveDemoView(false)}
-                        data-note="Switch to high-resolution poster photo preview."
-                        className={`px-3 py-1.5 rounded-md transition-all flex items-center gap-1.5 ${
-                          !isLiveDemoView
-                            ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-xs"
-                            : "text-neutral-500 hover:text-neutral-900 dark:hover:text-zinc-200"
-                        }`}
-                      >
-                        <Layers className="w-3.5 h-3.5 text-ig-pink" />
-                        <span>Poster</span>
-                      </button>
+                            {/* Chevron Arrow Connector */}
+                            {idx < pipeline.nodes.length - 1 && (
+                              <svg
+                                className="w-3.5 h-3.5 text-neutral-400 dark:text-zinc-600 flex-shrink-0 transition-transform group-hover/node:translate-x-0.5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                              >
+                                <polyline points="9 18 15 12 9 6" />
+                              </svg>
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
