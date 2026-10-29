@@ -23,13 +23,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   };
 
   return (
-    <section id="profile-header" className="pt-6 sm:pt-14 md:pt-16 pb-3 sm:pb-6">
+    <section id="profile-header" className="pt-6 sm:pt-16 md:pt-20 pb-3 sm:pb-6">
       {/* DESKTOP LAYOUT (sm and up): Clean Instagram Web 2-Column Structure */}
       <div className="hidden sm:flex items-start gap-8 md:gap-12">
         {/* Left Column: Avatar with Instagram Animated Story Ring + Floating Note */}
         <div className="relative flex flex-col items-start flex-shrink-0">
-          {/* Floating Interactive Instagram Thought Bubble Note (anchored to avatar, extends rightward) */}
-          <div className="absolute bottom-[calc(100%+12px)] left-0 sm:left-2 z-30 pointer-events-auto">
+          {/* Floating Interactive Instagram Thought Bubble Note (anchored to avatar, extends rightward with clean clearance) */}
+          <div className="absolute bottom-[calc(100%+22px)] left-0 sm:left-2 z-30 pointer-events-auto">
             <ProfileNote tailAlign="left" />
           </div>
 
@@ -121,8 +121,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
       {/* MOBILE LAYOUT (< sm): Clean Instagram Mobile App Structure */}
       <div className="sm:hidden flex flex-col gap-2">
-        {/* Mobile Note Bubble above header (anchored to mobile avatar) */}
-        <div className="flex justify-start px-0.5 pb-1 max-w-full min-w-0">
+        {/* Mobile Note Bubble above header (anchored to mobile avatar with clearance) */}
+        <div className="flex justify-start px-0.5 pb-3 max-w-full min-w-0">
           <ProfileNote tailAlign="left" />
         </div>
 

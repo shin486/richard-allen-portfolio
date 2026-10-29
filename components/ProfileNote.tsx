@@ -115,28 +115,28 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
     <div
       onClick={handleNoteClick}
       title="Click to cycle thoughts"
-      className={`group/note cursor-pointer select-none transition-all duration-200 max-w-full sm:max-w-xl min-w-0 ${className}`}
+      className={`group/note cursor-pointer select-none transition-all duration-200 max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl min-w-0 ${className}`}
     >
       <div
-        className={`relative flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 w-fit max-w-full pixel-balloon text-[9px] sm:text-[11px] font-pixel font-semibold leading-relaxed transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
+        className={`relative flex items-start gap-2 px-3 py-1.5 sm:px-4 sm:py-2 w-fit max-w-full pixel-balloon text-[9.5px] sm:text-[11px] font-pixel font-semibold leading-relaxed transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
           isPopping ? "scale-105" : "scale-100"
         }`}
       >
         {/* 8-bit Retro Square Pulsar Pixel Dot in Instagram Pink */}
         <span
           aria-hidden="true"
-          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-ig-pink flex-shrink-0 pixel-blink shadow-xs"
+          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-ig-pink flex-shrink-0 pixel-blink shadow-xs mt-1 sm:mt-1.5"
         />
 
-        {/* Note Text Message (Wrapped gracefully on mobile, single-line on desktop) */}
-        <span className="whitespace-normal sm:whitespace-nowrap break-words tracking-tight font-pixel text-left min-w-0">
+        {/* Note Text Message (Wraps cleanly without overflowing outside the border) */}
+        <span className="whitespace-normal break-words tracking-tight font-pixel text-left min-w-0">
           {currentNote}
         </span>
 
         {/* Authentic 8-bit Retro RPG Thought Tail Blocks leading down to avatar */}
         <span
           aria-hidden="true"
-          className={`absolute -bottom-2 w-2.5 h-2.5 pixel-tail-dot pointer-events-none ${
+          className={`absolute -bottom-2.5 w-2.5 h-2.5 pixel-tail-dot pointer-events-none ${
             isLeft
               ? "left-9 sm:left-14 md:left-16"
               : "left-1/2 -translate-x-1/2"
@@ -144,7 +144,7 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
         />
         <span
           aria-hidden="true"
-          className={`absolute -bottom-4 w-1.5 h-1.5 pixel-tail-dot pointer-events-none ${
+          className={`absolute -bottom-5 w-1.5 h-1.5 pixel-tail-dot pointer-events-none ${
             isLeft
               ? "left-10 sm:left-14 md:left-16"
               : "left-1/2 -translate-x-1/2"
