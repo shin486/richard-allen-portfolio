@@ -118,16 +118,10 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
       className={`group/note cursor-pointer select-none transition-all duration-200 w-max max-w-[calc(100vw-32px)] sm:max-w-none ${className}`}
     >
       <div
-        className={`relative inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 w-max max-w-full pixel-balloon text-[9px] sm:text-[10px] md:text-[10.5px] font-pixel font-semibold leading-none transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
+        className={`relative inline-flex items-center px-3 py-1.5 sm:px-3.5 sm:py-2 w-max max-w-full pixel-balloon text-[9px] sm:text-[10px] md:text-[10.5px] font-pixel font-semibold leading-none transition-transform duration-200 active:scale-95 group-hover/note:scale-105 ${
           isPopping ? "scale-105" : "scale-100"
         }`}
       >
-        {/* 8-bit Retro Square Pulsar Pixel Dot in Instagram Pink */}
-        <span
-          aria-hidden="true"
-          className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-ig-pink flex-shrink-0 pixel-blink shadow-xs"
-        />
-
         {/* Note Text Message (Wraps gracefully on mobile, single-line on desktop) */}
         <span className="whitespace-normal sm:whitespace-nowrap break-words tracking-tight font-pixel text-left leading-tight sm:leading-none">
           {currentNote}
