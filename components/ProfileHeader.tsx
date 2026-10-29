@@ -41,6 +41,22 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const [targetPct, setTargetPct] = useState<number>(85);
   const [animatedBlocks, setAnimatedBlocks] = useState<number>(0);
   const [replayNonce, setReplayNonce] = useState<number>(0);
+  const [isBlinkOn, setIsBlinkOn] = useState<boolean>(true);
+
+  // Synchronized 8-bit blinking cycle (450ms ON / 450ms OFF = 900ms lockstep)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+
+    const blinkInterval = window.setInterval(() => {
+      setIsBlinkOn((prev) => !prev);
+    }, 450);
+
+    return () => {
+      window.clearInterval(blinkInterval);
+    };
+  }, []);
 
   useEffect(() => {
     setTargetPct(calculateGraduationXp());
@@ -200,7 +216,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 <div className="inline-flex items-center gap-0.5 sm:gap-1 font-mono font-bold text-[11px] sm:text-xs text-emerald-600 dark:text-emerald-400">
                   <span>{displayedPct}%</span>
                   <span
-                    className="inline-block w-1.5 h-2.5 sm:h-3 bg-emerald-500 dark:bg-emerald-400 pixel-blink"
+                    className={`inline-block w-1.5 h-2.5 sm:h-3 bg-emerald-500 dark:bg-emerald-400 transition-none ${
+                      isBlinkOn ? "opacity-100" : "opacity-0"
+                    }`}
                     aria-hidden="true"
                   />
                 </div>
@@ -210,7 +228,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               </div>
             </div>
 
-            {/* 8-Bit Segmented XP Track (20 discrete blocks) with Blinking Progress */}
+            {/* 8-Bit Segmented XP Track (20 discrete blocks) with Synchronized Blinking Progress */}
             <div
               className="grid gap-[2px] sm:gap-[2.5px] p-[2.5px] bg-neutral-200/80 dark:bg-[#0B0B0F] border border-neutral-300 dark:border-[#262635]"
               style={{
@@ -221,15 +239,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               {Array.from({ length: TOTAL_XP_BLOCKS }).map((_, idx) => {
                 const isFilled = idx < animatedBlocks;
                 const isLeading = idx === animatedBlocks - 1 && animatedBlocks > 0;
+                const shouldShowFilled = isFilled && (!isLeading || isBlinkOn);
 
                 return (
                   <span
                     key={idx}
                     className={`h-2 sm:h-2.5 relative transition-none ${
-                      isFilled
-                        ? `bg-gradient-to-b from-emerald-400 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ${
-                            isLeading ? "pixel-blink" : ""
-                          }`
+                      shouldShowFilled
+                        ? "bg-gradient-to-b from-emerald-400 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]"
                         : "bg-neutral-300/60 dark:bg-zinc-800/70"
                     }`}
                   />
