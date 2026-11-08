@@ -8,25 +8,16 @@ import {
   Linkedin,
   Mail,
   MapPin,
-  CheckCircle2,
-  ExternalLink,
-  ShieldCheck,
+  GraduationCap,
+  Play,
+  Terminal,
   Cpu,
-  Layers,
-  ArrowRight,
+  Code2,
+  ShieldCheck,
+  Activity,
   Database,
   Smartphone,
-  Server,
-  Play,
-  FlaskConical,
-  GraduationCap,
-  Calendar,
-  Code2,
-  Lock,
   GitBranch,
-  Terminal,
-  Activity,
-  Check,
 } from "lucide-react";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
@@ -50,41 +41,41 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
   const avms = projectsData.find((p) => p.id === "avms")!;
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8 animate-fade-in text-neutral-900 dark:text-zinc-100 font-sans">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6 animate-fade-in text-zinc-100 font-sans">
       {/* 1. EXECUTIVE CANDIDATE HEADER */}
-      <section className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800/90 rounded-2xl p-6 sm:p-8 shadow-sm">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-6 border-b border-neutral-100 dark:border-zinc-800">
-          <div className="flex items-center gap-5">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden relative border-2 border-neutral-200 dark:border-zinc-700 shadow-md shrink-0 bg-neutral-900">
+      <section className="bg-zinc-950 border border-zinc-800/80 rounded-lg p-6 sm:p-7 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 pb-5 border-b border-zinc-800/80">
+          <div className="flex items-center gap-4 sm:gap-5">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden relative border border-zinc-800 shrink-0 bg-zinc-900">
               <Image
                 src={profilePic}
                 alt={profileData.name}
                 fill
                 priority
-                sizes="96px"
+                sizes="80px"
                 className="object-cover"
               />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black text-neutral-950 dark:text-white tracking-tight">
+                <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-100">
                   {profileData.name}
                 </h1>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/25">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
                   VERIFIED CANDIDATE
                 </span>
               </div>
-              <p className="text-sm sm:text-base font-semibold text-neutral-700 dark:text-zinc-300 mt-0.5">
+              <p className="text-sm font-medium text-zinc-400 mt-1">
                 Full-Stack &amp; Mobile Developer
               </p>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-neutral-500 dark:text-zinc-400 mt-2">
-                <span className="flex items-center gap-1">
-                  <GraduationCap className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500 font-mono mt-1.5">
+                <span className="flex items-center gap-1.5">
+                  <GraduationCap className="w-3.5 h-3.5 text-zinc-400" />
                   BSIT, De La Salle Lipa (Graduating June 2027)
                 </span>
                 <span>•</span>
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-amber-500" />
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-zinc-400" />
                   Lipa City, Batangas, Philippines
                 </span>
               </div>
@@ -97,43 +88,43 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
               href={profileData.socials.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-neutral-950 hover:bg-neutral-800 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-neutral-950 text-xs font-bold transition-all shadow-sm active:scale-95"
+              className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3.5 py-1.5 rounded-md inline-flex items-center gap-2 transition-colors justify-center"
             >
-              <FileText className="w-4 h-4" />
+              <FileText className="w-3.5 h-3.5" />
               <span>Download Official Resume (PDF)</span>
             </a>
-            <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold text-center sm:text-right">
-              ✓ Available for 500+ Hours OJT &amp; Full-Time
+            <span className="text-[11px] font-mono text-zinc-400 text-center sm:text-right">
+              Available for 500+ Hours OJT &amp; Full-Time
             </span>
           </div>
         </div>
 
         {/* Contact Strip */}
-        <div className="pt-4 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="pt-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
           <div className="flex flex-wrap items-center gap-4">
             <a
               href={profileData.socials.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white font-medium"
+              className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-100 transition-colors"
             >
-              <Github className="w-4 h-4" />
+              <Github className="w-3.5 h-3.5" />
               <span>github.com/shin486</span>
             </a>
             <a
               href={profileData.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-neutral-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
+              className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-100 transition-colors"
             >
-              <Linkedin className="w-4 h-4" />
+              <Linkedin className="w-3.5 h-3.5" />
               <span>linkedin.com/in/richard-allen-liman</span>
             </a>
             <a
               href="mailto:richardallen0901@gmail.com"
-              className="inline-flex items-center gap-1.5 text-neutral-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium"
+              className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-100 transition-colors"
             >
-              <Mail className="w-4 h-4" />
+              <Mail className="w-3.5 h-3.5" />
               <span>richardallen0901@gmail.com</span>
             </a>
           </div>
@@ -142,7 +133,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
             <button
               type="button"
               onClick={onSwitchToStudio}
-              className="inline-flex items-center gap-1 text-[11px] font-semibold text-ig-pink hover:underline"
+              className="inline-flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-200 transition-colors font-mono"
             >
               <span>Switch to Studio View →</span>
             </button>
@@ -151,54 +142,50 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
       </section>
 
       {/* 2. CORE ENGINEERING METRICS STRIP */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
           {
             title: "3 Production Applications",
             stat: "3 Live Deployments",
             desc: "PalengkeHub (Capstone), ShinPay+ (SaaS), Auto Avenue (IMS)",
             icon: Cpu,
-            accent: "border-blue-500/30 text-blue-600 dark:text-blue-400",
           },
           {
             title: "100% TypeScript",
             stat: "Zero `any` Debt",
             desc: "Zod runtime schema validation & strict end-to-end contracts",
             icon: Code2,
-            accent: "border-indigo-500/30 text-indigo-600 dark:text-indigo-400",
           },
           {
             title: "Supabase RLS Secured",
             stat: "8+ Normalized Tables",
             desc: "Strict tenant isolation policies & WebSocket Realtime broadcast",
             icon: ShieldCheck,
-            accent: "border-emerald-500/30 text-emerald-600 dark:text-emerald-400",
           },
           {
             title: "Automated Test Coverage",
             stat: "Sub-Millisecond Engine",
             desc: "Real-time client assertion suite verifying PH statutory tables",
             icon: Activity,
-            accent: "border-amber-500/30 text-amber-600 dark:text-amber-400",
           },
         ].map((item) => {
           const Icon = item.icon;
           return (
             <div
               key={item.title}
-              className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800/90 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between"
+              className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-4 flex flex-col justify-between"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
                   {item.title}
                 </span>
-                <Icon className={`w-4 h-4 ${item.accent}`} />
+                <Icon className="w-3.5 h-3.5 text-zinc-400" />
               </div>
               <div>
-                <div className="text-base sm:text-lg font-black font-mono text-neutral-950 dark:text-white">
+                <div className="text-base sm:text-lg font-semibold font-mono text-zinc-100">
                   {item.stat}
                 </div>
-                <p className="text-[11px] text-neutral-500 dark:text-zinc-400 mt-1 leading-snug">
+                <p className="text-xs text-zinc-400 mt-1 leading-snug">
                   {item.desc}
                 </p>
               </div>
@@ -211,236 +198,265 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-black text-neutral-950 dark:text-white">
+            <h2 className="text-base font-semibold tracking-tight text-zinc-100">
               Systems Architecture &amp; Flagship Projects
             </h2>
-            <p className="text-xs text-neutral-500 dark:text-zinc-400">
-              Interactive sandboxes, architecture diagrams, and production metrics
+            <p className="text-xs text-zinc-500 font-mono mt-0.5">
+              Interactive sandboxes, architecture specifications, and production metrics
             </p>
           </div>
-          <span className="text-xs font-mono text-neutral-400 dark:text-zinc-500">
-            Click &apos;Launch Sandbox&apos; to test directly
+          <span className="hidden sm:inline text-xs font-mono text-zinc-500">
+            Click &apos;Launch Sandbox&apos; to run in-browser
           </span>
         </div>
 
         {/* Project 1: PalengkeHub */}
-        <div className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-5 sm:p-6 shadow-xs">
+          {/* Top row: Category badge on left, unified action buttons on right */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#E8833A]/15 text-[#C96A28] border border-[#E8833A]/30">
-                  MOBILE CAPSTONE
-                </span>
-                <h3 className="text-base sm:text-lg font-black text-neutral-900 dark:text-white">
-                  PalengkeHub — Public-Market Price Transparency &amp; Pre-Ordering
-                </h3>
-              </div>
-              <p className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
-                React Native · Expo · TypeScript · Supabase Realtime · PostgreSQL RLS
-              </p>
-            </div>
+            <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
+              CAPSTONE
+            </span>
 
             <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={() => setSelectedProjectForModal(palengkehub)}
-                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#E8833A] hover:bg-[#c96a28] text-white text-xs font-bold transition-all shadow-xs active:scale-95"
+                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3.5 py-1.5 rounded-md inline-flex items-center gap-2 transition-colors flex-1 sm:flex-none justify-center"
               >
-                <Smartphone className="w-3.5 h-3.5" />
-                <span>Launch Mobile Sandbox</span>
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Launch Sandbox</span>
               </button>
               <a
                 href="https://github.com/shin486/PalengkeHubFinal"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1.5 rounded-xl border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white"
+                className="border border-zinc-800 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-100 text-xs font-medium px-2.5 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
                 title="View GitHub Repository"
               >
-                <Github className="w-4 h-4" />
+                <Github className="w-3.5 h-3.5" />
+                <span>GitHub</span>
               </a>
             </div>
           </div>
 
-          <p className="text-xs sm:text-sm text-neutral-700 dark:text-zinc-300 leading-relaxed">
+          {/* Title, Subtitle & Tech Stack */}
+          <h3 className="text-lg font-semibold tracking-tight text-zinc-100 mt-3">
+            PalengkeHub
+          </h3>
+          <p className="text-sm text-zinc-400">
+            Public-Market Price Transparency &amp; Pre-Ordering Platform
+          </p>
+          <p className="text-xs text-zinc-500 font-mono mt-1">
+            React Native • Expo • TypeScript • Supabase Realtime • PostgreSQL RLS
+          </p>
+
+          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mt-3">
             Engineered an offline-first mobile marketplace for municipal market vendors and buyers across Lipa City. 
             Normalized 8+ PostgreSQL tables with strict Row-Level Security, sub-250ms WebSocket price discovery, and deterministic local mutation queue that auto-reconciles when cellular signal restores.
           </p>
 
-          {/* System Architecture Flow */}
-          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800 text-[11px] font-mono">
-            <span className="text-[10px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-wider block mb-2">
-              SYSTEM ARCHITECTURE DATAFLOW
-            </span>
-            <div className="flex flex-wrap items-center gap-2 text-neutral-700 dark:text-zinc-300">
-              <span className="px-2 py-1 rounded bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 font-bold">
-                📱 React Native Client
-              </span>
-              <span className="text-neutral-400">→ (Offline Mutate) →</span>
-              <span className="px-2 py-1 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
-                💾 AsyncStorage Queue
-              </span>
-              <span className="text-neutral-400">→ (NetInfo Online) →</span>
-              <span className="px-2 py-1 rounded bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-500/30 font-bold">
-                ⚡ Supabase Realtime (WebSocket &lt;250ms)
-              </span>
-              <span className="text-neutral-400">→ (RLS Filter) →</span>
-              <span className="px-2 py-1 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
-                🗄️ PostgreSQL (8+ Tables)
-              </span>
+          {/* 3-Column Architecture Spec Grid */}
+          <div className="mt-4 pt-4 border-t border-zinc-800/60 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+            <div>
+              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Frontend / Client</span>
+              <span className="text-zinc-300">Expo • React Native • Offline Queue</span>
+            </div>
+            <div>
+              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Data Sync / Network</span>
+              <span className="text-zinc-300">Supabase Realtime (&lt;250ms WS)</span>
+            </div>
+            <div>
+              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Persistence &amp; Security</span>
+              <span className="text-zinc-300">PostgreSQL (8 Tables • Multi-Tenant RLS)</span>
             </div>
           </div>
         </div>
 
         {/* Project 2: ShinPay+ */}
-        <div className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-5 sm:p-6 shadow-xs">
+          {/* Top row: Category badge on left, unified action buttons on right */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#536c51]/15 text-[#536c51] dark:text-[#7ba277] border border-[#536c51]/30">
-                  FULL-STACK SAAS
-                </span>
-                <h3 className="text-base sm:text-lg font-black text-neutral-900 dark:text-white">
-                  ShinPay+ — Multi-Tenant Payroll &amp; Statutory Compliance SaaS
-                </h3>
-              </div>
-              <p className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
-                Next.js 14 App Router · TypeScript · Supabase PostgreSQL · Tailwind CSS · Pure Math Engine
-              </p>
-            </div>
+            <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
+              FULL-STACK SAAS
+            </span>
 
             <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={() => setSelectedProjectForModal(shinpay)}
-                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#536c51] hover:bg-[#435641] text-white text-xs font-bold transition-all shadow-xs active:scale-95"
+                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3.5 py-1.5 rounded-md inline-flex items-center gap-2 transition-colors flex-1 sm:flex-none justify-center"
               >
-                <FlaskConical className="w-3.5 h-3.5" />
-                <span>Launch &amp; Run Test Suite</span>
+                <Terminal className="w-3.5 h-3.5" />
+                <span>Run Test Suite</span>
               </button>
               <a
                 href="https://github.com/shin486/ShinPay-"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1.5 rounded-xl border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white"
+                className="border border-zinc-800 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-100 text-xs font-medium px-2.5 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
                 title="View GitHub Repository"
               >
-                <Github className="w-4 h-4" />
+                <Github className="w-3.5 h-3.5" />
+                <span>GitHub</span>
               </a>
             </div>
           </div>
 
-          <p className="text-xs sm:text-sm text-neutral-700 dark:text-zinc-300 leading-relaxed">
+          {/* Title, Subtitle & Tech Stack */}
+          <h3 className="text-lg font-semibold tracking-tight text-zinc-100 mt-3">
+            ShinPay+
+          </h3>
+          <p className="text-sm text-zinc-400">
+            Multi-Tenant Payroll &amp; Statutory Compliance Engine
+          </p>
+          <p className="text-xs text-zinc-500 font-mono mt-1">
+            Next.js 14 App Router • TypeScript • Supabase PostgreSQL • Pure Math Engine
+          </p>
+
+          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mt-3">
             Multi-tenant payroll and human resource SaaS engineered for Philippine enterprises. 
             Implements tenant-isolated PostgreSQL tables via Supabase RLS, coupled with a zero-allocation mathematical engine computing BIR TRAIN withholding taxes, SSS 2025 schedules, PhilHealth 5% splits, and Pag-IBIG mandatory ceilings.
           </p>
 
-          {/* System Architecture Flow */}
-          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800 text-[11px] font-mono">
-            <span className="text-[10px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-wider block mb-2">
-              SYSTEM ARCHITECTURE DATAFLOW
-            </span>
-            <div className="flex flex-wrap items-center gap-2 text-neutral-700 dark:text-zinc-300">
-              <span className="px-2 py-1 rounded bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 font-bold">
-                🖥️ Next.js 14 App Router
-              </span>
-              <span className="text-neutral-400">→ (Zod Schema Validation) →</span>
-              <span className="px-2 py-1 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
-                🧮 Pure Math Statutory Engine (5 Tests)
-              </span>
-              <span className="text-neutral-400">→ (tenant_id Context) →</span>
-              <span className="px-2 py-1 rounded bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30 font-bold">
-                🔐 Supabase RLS Protected Schema
-              </span>
+          {/* 3-Column Architecture Spec Grid */}
+          <div className="mt-4 pt-4 border-t border-zinc-800/60 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+            <div>
+              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Frontend / Client</span>
+              <span className="text-zinc-300">Next.js 14 (App Router) • TypeScript • Zod</span>
+            </div>
+            <div>
+              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Statutory Math Engine</span>
+              <span className="text-zinc-300">TRAIN • SSS • PhilHealth • Pag-IBIG</span>
+            </div>
+            <div>
+              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Persistence &amp; Security</span>
+              <span className="text-zinc-300">Supabase PostgreSQL • Multi-Tenant RLS</span>
             </div>
           </div>
         </div>
 
         {/* Project 3: Auto Avenue */}
-        <div className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+        <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-5 sm:p-6 shadow-xs">
+          {/* Top row: Category badge on left, unified action buttons on right */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
-                  IMS / POS INTEGRATION
-                </span>
-                <h3 className="text-base sm:text-lg font-black text-neutral-900 dark:text-white">
-                  Auto Avenue — Inventory Management System (150+ SKUs)
-                </h3>
-              </div>
-              <p className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
-                PHP · MySQL · POS Integration · Bootstrap · Git
-              </p>
-            </div>
+            <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
+              IMS &amp; POS
+            </span>
 
             <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={() => setSelectedProjectForModal(autoAvenue)}
-                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white text-xs font-bold transition-all shadow-xs active:scale-95"
+                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3.5 py-1.5 rounded-md inline-flex items-center gap-2 transition-colors flex-1 sm:flex-none justify-center"
               >
-                <Play className="w-3.5 h-3.5" />
-                <span>Launch IMS Sandbox</span>
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Launch Sandbox</span>
               </button>
               <a
                 href="https://github.com/shin486/auto-avenue-ims"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1.5 rounded-xl border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white"
+                className="border border-zinc-800 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-100 text-xs font-medium px-2.5 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
                 title="View GitHub Repository"
               >
-                <Github className="w-4 h-4" />
+                <Github className="w-3.5 h-3.5" />
+                <span>GitHub</span>
               </a>
             </div>
           </div>
 
-          <p className="text-xs sm:text-sm text-neutral-700 dark:text-zinc-300 leading-relaxed">
+          {/* Title, Subtitle & Tech Stack */}
+          <h3 className="text-lg font-semibold tracking-tight text-zinc-100 mt-3">
+            Auto Avenue
+          </h3>
+          <p className="text-sm text-zinc-400">
+            Inventory Management &amp; POS Integration (150+ SKUs)
+          </p>
+          <p className="text-xs text-zinc-500 font-mono mt-1">
+            PHP • MySQL • Point of Sale Integration • Bootstrap • Git
+          </p>
+
+          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mt-3">
             Engineered a centralized IMS for Auto Avenue Car Care Center managing 150+ automotive spare part and fluid SKUs. 
             Synchronized live Point of Sale checkouts with inventory tables to eliminate stock reconciliation errors and trigger automated vendor purchase orders.
           </p>
+
+          {/* 3-Column Architecture Spec Grid */}
+          <div className="mt-4 pt-4 border-t border-zinc-800/60 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+            <div>
+              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Frontend / Client</span>
+              <span className="text-zinc-300">Responsive POS &amp; Inventory UI</span>
+            </div>
+            <div>
+              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Application Logic</span>
+              <span className="text-zinc-300">PHP • Real-Time Stock Reconciliation</span>
+            </div>
+            <div>
+              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Persistence &amp; Storage</span>
+              <span className="text-zinc-300">MySQL Schema • Automated Purchase Orders</span>
+            </div>
+          </div>
         </div>
 
         {/* Secondary Technical Deliverables: AVMS & IT Elective 4 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800/90 rounded-2xl p-4 sm:p-5 shadow-xs space-y-2">
+          <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-5 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500">
-                ITSM Operations
+              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
+                ITSM OPERATIONS
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedProjectForModal(avms)}
-                className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline inline-flex items-center gap-0.5"
+                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
               >
+                <Play className="w-3 h-3 fill-current" />
                 <span>Launch Sandbox</span>
-                <ArrowRight className="w-3 h-3" />
               </button>
             </div>
-            <h4 className="font-bold text-sm text-neutral-900 dark:text-white">
-              Automated Visitor Management System (AVMS)
-            </h4>
-            <p className="text-xs text-neutral-600 dark:text-zinc-400 leading-relaxed">
+            <div>
+              <h4 className="text-base font-semibold tracking-tight text-zinc-100">
+                AVMS
+              </h4>
+              <p className="text-xs text-zinc-400 mt-0.5">
+                Automated Visitor Management System
+              </p>
+              <p className="text-xs text-zinc-500 font-mono mt-1">
+                Campus Security • QR Passes • RBAC / MFA Logs
+              </p>
+            </div>
+            <p className="text-xs text-zinc-300 leading-relaxed">
               Campus security portal with encrypted QR access passes, 99.9% uptime SLA ITSM incident lifecycles, and RBAC / MFA verification logs.
             </p>
           </div>
 
-          <div className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800/90 rounded-2xl p-4 sm:p-5 shadow-xs space-y-2">
+          <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-5 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500">
-                Full-Stack + AI
+              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
+                FULL-STACK &amp; AI
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedProjectForModal(itelect4)}
-                className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline inline-flex items-center gap-0.5"
+                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
               >
+                <Play className="w-3 h-3 fill-current" />
                 <span>Launch Sandbox</span>
-                <ArrowRight className="w-3 h-3" />
               </button>
             </div>
-            <h4 className="font-bold text-sm text-neutral-900 dark:text-white">
-              IT Elective 4 — React + Express + Google Gemini AI
-            </h4>
-            <p className="text-xs text-neutral-600 dark:text-zinc-400 leading-relaxed">
+            <div>
+              <h4 className="text-base font-semibold tracking-tight text-zinc-100">
+                IT Elective 4
+              </h4>
+              <p className="text-xs text-zinc-400 mt-0.5">
+                AI Reviews &amp; Full-Stack Microservice
+              </p>
+              <p className="text-xs text-zinc-500 font-mono mt-1">
+                React • Node.js Express • MongoDB • Google Gemini AI
+              </p>
+            </div>
+            <p className="text-xs text-zinc-300 leading-relaxed">
               JWT-authenticated REST API with MongoDB, protected tenant routes, and a live Google Gemini AI endpoint (`POST /api/ai`) returning Zod-validated JSON reviews.
             </p>
           </div>
@@ -448,28 +464,28 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
       </section>
 
       {/* 4. CATEGORIZED TECH STACK MATRIX */}
-      <section className="bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800/90 rounded-2xl p-6 shadow-xs space-y-5">
+      <section className="bg-zinc-950 border border-zinc-800/80 rounded-lg p-6 space-y-4">
         <div>
-          <h2 className="text-lg font-black text-neutral-950 dark:text-white">
+          <h2 className="text-base font-semibold tracking-tight text-zinc-100">
             Categorized Technical Stack
           </h2>
-          <p className="text-xs text-neutral-500 dark:text-zinc-400">
+          <p className="text-xs text-zinc-500 font-mono mt-0.5">
             Validated technologies verified in production applications and coursework
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
           {/* Languages */}
-          <div className="p-4 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800 space-y-2.5">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-700 dark:text-zinc-300 pb-1 border-b border-neutral-200 dark:border-zinc-800">
-              <Code2 className="w-3.5 h-3.5 text-blue-500" />
-              <span>Languages</span>
+          <div className="space-y-2.5">
+            <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-400 pb-1.5 border-b border-zinc-800/60">
+              <Code2 className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="uppercase tracking-wider text-[10px]">Languages</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {["TypeScript", "JavaScript (ES6+)", "SQL (PostgreSQL)", "PHP", "HTML5 & CSS3"].map((t) => (
                 <span
                   key={t}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-white dark:bg-zinc-800 text-neutral-800 dark:text-zinc-200 border border-neutral-200 dark:border-zinc-700 shadow-2xs"
+                  className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded"
                 >
                   {t}
                 </span>
@@ -478,16 +494,16 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
           </div>
 
           {/* Frontend & Mobile */}
-          <div className="p-4 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800 space-y-2.5">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-700 dark:text-zinc-300 pb-1 border-b border-neutral-200 dark:border-zinc-800">
-              <Smartphone className="w-3.5 h-3.5 text-[#E8833A]" />
-              <span>Mobile &amp; Frontend</span>
+          <div className="space-y-2.5">
+            <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-400 pb-1.5 border-b border-zinc-800/60">
+              <Smartphone className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="uppercase tracking-wider text-[10px]">Mobile &amp; Frontend</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
-              {["React Native", "Expo", "React 19", "Next.js 14 (App Router)", "Vite", "Tailwind CSS", "Bootstrap"].map((t) => (
+              {["React Native", "Expo", "React 19", "Next.js 14", "Vite", "Tailwind CSS", "Bootstrap"].map((t) => (
                 <span
                   key={t}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-white dark:bg-zinc-800 text-neutral-800 dark:text-zinc-200 border border-neutral-200 dark:border-zinc-700 shadow-2xs"
+                  className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded"
                 >
                   {t}
                 </span>
@@ -496,16 +512,16 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
           </div>
 
           {/* Backend & Database */}
-          <div className="p-4 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800 space-y-2.5">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-700 dark:text-zinc-300 pb-1 border-b border-neutral-200 dark:border-zinc-800">
-              <Database className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Backend &amp; Database</span>
+          <div className="space-y-2.5">
+            <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-400 pb-1.5 border-b border-zinc-800/60">
+              <Database className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="uppercase tracking-wider text-[10px]">Backend &amp; Database</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {["Supabase", "PostgreSQL (RLS)", "Node.js", "Express", "MongoDB", "MySQL", "REST APIs"].map((t) => (
                 <span
                   key={t}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-white dark:bg-zinc-800 text-neutral-800 dark:text-zinc-200 border border-neutral-200 dark:border-zinc-700 shadow-2xs"
+                  className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded"
                 >
                   {t}
                 </span>
@@ -514,16 +530,16 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
           </div>
 
           {/* DevOps & Quality */}
-          <div className="p-4 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800 space-y-2.5">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-700 dark:text-zinc-300 pb-1 border-b border-neutral-200 dark:border-zinc-800">
-              <GitBranch className="w-3.5 h-3.5 text-purple-500" />
-              <span>DevOps &amp; Quality</span>
+          <div className="space-y-2.5">
+            <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-400 pb-1.5 border-b border-zinc-800/60">
+              <GitBranch className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="uppercase tracking-wider text-[10px]">DevOps &amp; Quality</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {["GitHub Actions CI", "Git PR Workflow", "Vercel Deployments", "Zod Validation", "ITSM SLA Lifecycle", "Jest/Vitest"].map((t) => (
                 <span
                   key={t}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-white dark:bg-zinc-800 text-neutral-800 dark:text-zinc-200 border border-neutral-200 dark:border-zinc-700 shadow-2xs"
+                  className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded"
                 >
                   {t}
                 </span>

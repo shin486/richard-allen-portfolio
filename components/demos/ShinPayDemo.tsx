@@ -494,10 +494,10 @@ export default function ShinPayDemo() {
             <button
               type="button"
               onClick={startTestSuite}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10.5px] font-bold transition-all shadow-2xs hover:shadow-xs active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-100 border border-zinc-700 text-xs font-mono font-medium transition-colors"
               title="Execute client-side assertion checks against Philippine statutory deduction formulas"
             >
-              <FlaskConical className="w-3.5 h-3.5 text-emerald-700" />
+              <Terminal className="w-3.5 h-3.5" />
               <span>Run Statutory Test Suite</span>
             </button>
 
@@ -507,9 +507,9 @@ export default function ShinPayDemo() {
                 setDisbursed(true);
                 setActiveNav("payslip");
               }}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#536c51] hover:bg-[#435641] text-white text-[10.5px] font-bold transition-colors shadow-2xs shrink-0"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-medium transition-colors shrink-0"
             >
-              <Play className="w-3 h-3 fill-white" />
+              <Play className="w-3 h-3 fill-current" />
               <span>Run Payroll</span>
             </button>
           </div>

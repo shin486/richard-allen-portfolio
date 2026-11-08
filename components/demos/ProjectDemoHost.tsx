@@ -14,15 +14,6 @@ interface ProjectDemoHostProps {
   className?: string;
 }
 
-const PROJECT_GLOWS: Record<string, string> = {
-  palengkehub: "rgba(232, 131, 58, 0.28)",
-  "shinpay-plus": "rgba(83, 108, 81, 0.32)",
-  "itelect4-project": "rgba(37, 99, 235, 0.28)",
-  "auto-avenue-ims": "rgba(66, 169, 111, 0.28)",
-  avms: "rgba(168, 85, 247, 0.28)",
-  "crave-cart": "rgba(255, 107, 107, 0.30)",
-};
-
 const PROJECT_URLS: Record<string, string> = {
   palengkehub: "palengkehub.ph/market/lipa",
   "shinpay-plus": "shinpay.ph/app/dashboard",
@@ -97,19 +88,10 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
     }
   };
 
-  const activeGlow = PROJECT_GLOWS[projectId] || "rgba(236,72,153,0.22)";
   const activeUrl = PROJECT_URLS[projectId] || "app.local";
 
   return (
     <div className={`w-full flex flex-col items-center relative ${className}`}>
-      {/* Dynamic Project-Themed Ambient Glow behind chassis */}
-      <div
-        className="absolute -top-10 -right-10 w-72 sm:w-96 h-72 sm:h-96 rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out opacity-60 dark:opacity-40 -z-10"
-        style={{
-          background: `radial-gradient(circle, ${activeGlow} 0%, transparent 70%)`,
-        }}
-      />
-
       {/* Stationary Measurement Wrapper -> 3D Tilting Chassis + 1:1 Pixel-Locked Cursor Spotlight */}
       <div
         ref={measureRef}
@@ -121,24 +103,24 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
           {/* Subtle Cursor Spotlight Overlay (100% locked to exact mouse coordinates, pointer-events-none) */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-2xl z-30 transition-opacity duration-200"
+            className="pointer-events-none absolute inset-0 rounded-lg z-30 transition-opacity duration-200"
             style={{
               opacity: "var(--spot-opacity, 0)",
               background:
-                "radial-gradient(280px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255, 255, 255, 0.08), rgba(221, 42, 123, 0.04) 45%, transparent 75%)",
+                "radial-gradient(280px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255, 255, 255, 0.05), transparent 70%)",
             }}
           />
 
           {/* Render Authentic Hardware Device Viewport */}
           {projectId === "palengkehub" && isPhoneMode ? (
             /* Authentic Mobile Phone Frame Chassis for PalengkeHub */
-            <div className="w-full h-[510px] sm:h-[530px] rounded-2xl border border-neutral-200 dark:border-zinc-800 milled-card shadow-xl overflow-hidden bg-neutral-100/70 dark:bg-[#0c0c10] p-2 sm:p-3 flex items-center justify-center relative">
+            <div className="w-full h-[510px] sm:h-[530px] rounded-lg border border-neutral-200 dark:border-zinc-800 shadow-md overflow-hidden bg-neutral-100/70 dark:bg-zinc-950 p-2 sm:p-3 flex items-center justify-center relative">
               {/* Chassis Top Controls */}
               <div className="absolute top-2.5 right-3.5 z-30 flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setIsPhoneMode(false)}
-                  className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/90 dark:bg-zinc-850/90 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white flex items-center gap-1 shadow-2xs transition-transform active:scale-95"
+                  className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded flex items-center gap-1 hover:text-zinc-200 transition-colors"
                   title="Expand to Full Width"
                 >
                   <Laptop className="w-3 h-3" />
@@ -163,20 +145,20 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
               </div>
             </div>
           ) : (
-            /* Authentic macOS / Desktop Browser Chrome Window */
-            <div className="w-full h-[490px] sm:h-[520px] rounded-2xl border border-neutral-200 dark:border-zinc-800 milled-card shadow-xl overflow-hidden bg-white dark:bg-zinc-950 flex flex-col">
+            /* Authentic Desktop Browser Chrome Window */
+            <div className="w-full h-[490px] sm:h-[520px] rounded-lg border border-neutral-200 dark:border-zinc-800 shadow-md overflow-hidden bg-white dark:bg-zinc-950 flex flex-col">
               {/* macOS Window Header */}
               <div className="px-3 py-2 bg-neutral-100 dark:bg-zinc-900 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between gap-2 shrink-0">
                 {/* Traffic Lights */}
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56] border border-[#e0443e]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] border border-[#dea123]" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f] border border-[#1aab29]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
                 </div>
 
                 {/* Center SSL Address Bar */}
-                <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-[10.5px] font-mono text-neutral-600 dark:text-zinc-300 max-w-xs truncate shadow-2xs">
-                  <Lock className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-white dark:bg-zinc-800/80 border border-neutral-200 dark:border-zinc-700 text-[10.5px] font-mono text-neutral-600 dark:text-zinc-300 max-w-xs truncate shadow-2xs">
+                  <Lock className="w-2.5 h-2.5 text-zinc-400 shrink-0" />
                   <span className="truncate">{activeUrl}</span>
                 </div>
 
@@ -186,7 +168,7 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
                     <button
                       type="button"
                       onClick={() => setIsPhoneMode(true)}
-                      className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white flex items-center gap-1 transition-transform active:scale-95"
+                      className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded flex items-center gap-1 hover:text-zinc-200 transition-colors"
                       title="Switch to Mobile Chassis"
                     >
                       <Smartphone className="w-3 h-3" />

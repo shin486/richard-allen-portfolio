@@ -21,6 +21,7 @@ import {
   Sparkles,
   Wifi,
   WifiOff,
+  Flame,
   Zap,
   RotateCw,
   Database,
@@ -824,7 +825,7 @@ export default function PalengkeHubDemo() {
             ) : (
               <>
                 <Wifi className="w-3 h-3 text-emerald-600 shrink-0" />
-                <span className="truncate">📶 Simulate Signal Drop</span>
+                <span className="truncate">Simulate Signal Drop</span>
               </>
             )}
           </button>
@@ -861,7 +862,7 @@ export default function PalengkeHubDemo() {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-[13px] font-extrabold text-[#261006]">
-                  Magandang Araw, Ka-Palengke! 👋
+                  Magandang Araw, Ka-Palengke!
                 </h3>
                 <p className="text-[10.5px] text-[#6E5D4F]">
                   Order now for fast, zero-haggle stall pickup
@@ -1041,8 +1042,9 @@ export default function PalengkeHubDemo() {
 
                       {/* Add to Basket Footer */}
                       <div className="mt-2 pt-2 border-t border-[#F0E9DA] flex items-center justify-between">
-                        <span className="text-[9.5px] font-semibold text-[#6E5D4F]">
-                          🔥 {item.soldThisMonth} sold this month
+                        <span className="inline-flex items-center gap-1 text-[9.5px] font-semibold text-[#6E5D4F]">
+                          <Flame className="w-3 h-3 text-amber-500 shrink-0" />
+                          <span>{item.soldThisMonth} sold this month</span>
                         </span>
                         {qty === 0 ? (
                           <button
