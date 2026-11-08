@@ -122,7 +122,7 @@ export default function HomePage() {
       {/* Minimalist Instagram + Stickman Loading Screen */}
       <LoadingScreen />
 
-      {/* Layered Animated Background (Active in Studio Mode; suppressed in Recruiter Dossier for pure performance) */}
+      {/* Layered Animated Background (Active in Studio Mode; suppressed in Recruiter View for pure performance) */}
       {viewMode === "studio" && <AnimatedBackground />}
 
       {/* Sticky Top Navigation with Persistent Dual-View Switcher */}
@@ -135,7 +135,7 @@ export default function HomePage() {
       />
 
       {viewMode === "recruiter" ? (
-        /* Recruiter Dossier: Performance-First, High-Density Systems Engineering Dashboard */
+        /* Recruiter View: Performance-First, High-Density Systems Engineering Dashboard */
         <main className="flex-1 w-full relative z-10">
           <RecruiterDossierView onSwitchToStudio={() => handleViewChange("studio")} />
         </main>

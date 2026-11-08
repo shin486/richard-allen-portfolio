@@ -163,7 +163,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     )}
                   </button>
 
-                  {/* Option 2: Recruiter Fast-Pass / Dossier */}
+                  {/* Option 2: Recruiter Fast-Pass / Recruiter View */}
                   <button
                     onClick={() => {
                       setSwitcherOpen(false);
@@ -185,7 +185,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </div>
                       <div className="min-w-0">
                         <span className="block text-xs font-bold text-neutral-900 dark:text-zinc-100 truncate">
-                          Recruiter Dossier Mode
+                          Recruiter View
                         </span>
                         <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
                           High-density candidate engineering dashboard
@@ -252,11 +252,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                       ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
                       : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-zinc-200"
                   }`}
-                  title="Switch to Recruiter Dossier"
+                  title="Switch to Recruiter View"
                 >
-                  <Briefcase className="w-3 h-3 text-blue-500 shrink-0" />
-                  <span className="hidden sm:inline">Recruiter Dossier</span>
-                  <span className="sm:hidden">Dossier</span>
+                  <span className="hidden sm:inline">Recruiter View</span>
+                  <span className="sm:hidden">Recruiter</span>
                 </button>
               </div>
             )}
