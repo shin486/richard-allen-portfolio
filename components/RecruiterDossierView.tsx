@@ -81,7 +81,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-neutral-500 dark:text-zinc-400 mt-2">
                 <span className="flex items-center gap-1">
                   <GraduationCap className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  BSIT, De La Salle Lipa (Graduating June 2026)
+                  BSIT, De La Salle Lipa (Graduating June 2027)
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">

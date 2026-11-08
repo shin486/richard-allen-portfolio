@@ -16,17 +16,17 @@ interface ProfileHeaderProps {
 const TOTAL_XP_BLOCKS = 20;
 
 /**
- * Calculates live BSIT degree completion percentage toward June 2, 2026.
- * Start of 4-year BSIT: August 15, 2022 -> Target Graduation: June 2, 2026.
- * Handles local dev clocks skewed ahead of June 2, 2026 by normalizing the year.
+ * Calculates live BSIT degree completion percentage toward June 2, 2027.
+ * Start of 4-year BSIT: August 15, 2023 -> Target Graduation: June 2, 2027.
+ * Handles local dev clocks skewed ahead of June 2, 2027 by normalizing the year.
  */
 function calculateGraduationXp(): number {
-  const startMs = new Date("2022-08-15T00:00:00+08:00").getTime();
-  const gradMs = new Date("2026-06-02T00:00:00+08:00").getTime();
+  const startMs = new Date("2023-08-15T00:00:00+08:00").getTime();
+  const gradMs = new Date("2027-06-02T00:00:00+08:00").getTime();
   const now = new Date();
 
   if (now.getTime() >= gradMs) {
-    now.setFullYear(2025);
+    now.setFullYear(2026);
   }
 
   const clampedNow = Math.max(startMs, Math.min(now.getTime(), gradMs));
@@ -218,7 +218,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   {displayedPct}%
                 </span>
                 <span className="text-neutral-500 dark:text-zinc-400 text-[11px]">
-                  • Target: June 2026
+                  • Target: June 2027
                 </span>
               </div>
             </div>
@@ -229,7 +229,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               style={{
                 gridTemplateColumns: `repeat(${TOTAL_XP_BLOCKS}, minmax(0, 1fr))`,
               }}
-              aria-label={`Graduation progress: ${targetPct}% toward June 2, 2026`}
+              aria-label={`Graduation progress: ${targetPct}% toward June 2, 2027`}
             >
               {Array.from({ length: TOTAL_XP_BLOCKS }).map((_, idx) => {
                 const isFilled = idx < animatedBlocks;
