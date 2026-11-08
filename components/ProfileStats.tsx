@@ -71,13 +71,13 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ onStatClick }) => {
       <button
         type="button"
         onClick={() => handleScroll("portfolio-grid", "projects")}
-        data-note="Six full production projects. Built with late nights and black coffee."
+        title="View 6 featured projects"
         className="group flex-1 sm:flex-initial flex flex-col items-center sm:items-start text-center sm:text-left focus:outline-none transition-transform duration-200 hover:-translate-y-0.5 active:scale-95 min-w-0"
       >
         <span className="font-bold tabular-nums text-neutral-900 dark:text-zinc-100 text-sm sm:text-lg group-hover:text-ig-pink transition-colors leading-none">
           {projectsCount}
         </span>
-        <span className="text-[10px] sm:text-sm text-neutral-500 dark:text-zinc-400 group-hover:text-neutral-900 dark:group-hover:text-zinc-200 transition-colors mt-0.5 sm:mt-0 truncate max-w-full">
+        <span className="text-[11px] sm:text-sm text-neutral-500 dark:text-zinc-400 group-hover:text-neutral-900 dark:group-hover:text-zinc-200 transition-colors mt-0.5 sm:mt-0 truncate max-w-full font-medium">
           projects
         </span>
       </button>
@@ -85,13 +85,13 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ onStatClick }) => {
       <button
         type="button"
         onClick={() => handleScroll("skills-section", "skills")}
-        data-note="Twenty-eight technologies. React Native, Next.js, and Supabase ready."
+        title="Explore technical skills & stack"
         className="group flex-1 sm:flex-initial flex flex-col items-center sm:items-start text-center sm:text-left focus:outline-none transition-transform duration-200 hover:-translate-y-0.5 active:scale-95 min-w-0"
       >
         <span className="font-bold tabular-nums text-neutral-900 dark:text-zinc-100 text-sm sm:text-lg group-hover:text-ig-purple transition-colors leading-none">
           {techCount}
         </span>
-        <span className="text-[10px] sm:text-sm text-neutral-500 dark:text-zinc-400 group-hover:text-neutral-900 dark:group-hover:text-zinc-200 transition-colors mt-0.5 sm:mt-0 truncate max-w-full">
+        <span className="text-[11px] sm:text-sm text-neutral-500 dark:text-zinc-400 group-hover:text-neutral-900 dark:group-hover:text-zinc-200 transition-colors mt-0.5 sm:mt-0 truncate max-w-full font-medium">
           technologies
         </span>
       </button>
@@ -99,13 +99,13 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ onStatClick }) => {
       <button
         type="button"
         onClick={() => handleScroll("certificates-section", "certificates")}
-        data-note="Dual Cisco CCNA certified. Yes, I know how to subnet in my head."
+        title="View verified certifications"
         className="group flex-1 sm:flex-initial flex flex-col items-center sm:items-start text-center sm:text-left focus:outline-none transition-transform duration-200 hover:-translate-y-0.5 active:scale-95 min-w-0"
       >
         <span className="font-bold tabular-nums text-neutral-900 dark:text-zinc-100 text-sm sm:text-lg group-hover:text-ig-orange transition-colors leading-none">
           {certsCount}
         </span>
-        <span className="text-[10px] sm:text-sm text-neutral-500 dark:text-zinc-400 group-hover:text-neutral-900 dark:group-hover:text-zinc-200 transition-colors mt-0.5 sm:mt-0 truncate max-w-full">
+        <span className="text-[11px] sm:text-sm text-neutral-500 dark:text-zinc-400 group-hover:text-neutral-900 dark:group-hover:text-zinc-200 transition-colors mt-0.5 sm:mt-0 truncate max-w-full font-medium">
           certificates
         </span>
       </button>

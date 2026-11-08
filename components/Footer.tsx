@@ -37,7 +37,7 @@ export const Footer: React.FC = () => {
         </button>
       </div>
 
-      <div className="border-t border-neutral-100 dark:border-zinc-800/60 py-3 text-center text-[11px] text-neutral-400 dark:text-zinc-500">
+      <div className="border-t border-neutral-100 dark:border-zinc-800/60 py-3 text-center text-[11.5px] text-neutral-500 dark:text-zinc-400 tabular-nums">
         © {new Date().getFullYear()} {profileData.name}
       </div>
     </footer>

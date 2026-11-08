@@ -67,8 +67,8 @@ export const ContactSection: React.FC = () => {
             </div>
 
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              Available for OJT
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              Available for OJT &amp; Internships
             </div>
 
             <a
@@ -76,9 +76,9 @@ export const ContactSection: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               download="Richard_Allen_Liman_Resume.pdf"
-              className="inline-flex items-center justify-center gap-1.5 w-full px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-zinc-800 hover:bg-neutral-100 dark:hover:bg-zinc-700 text-neutral-800 dark:text-zinc-200 border border-neutral-300 dark:border-zinc-700 transition-all shadow-sm active:scale-95"
+              className="inline-flex items-center justify-center gap-1.5 w-full px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-zinc-800 hover:bg-neutral-100 dark:hover:bg-zinc-700 text-neutral-800 dark:text-zinc-200 border border-neutral-300 dark:border-zinc-700 transition-all shadow-2xs active:scale-95"
             >
-              <FileText className="w-3.5 h-3.5 text-ig-purple" />
+              <FileText className="w-3.5 h-3.5 text-neutral-600 dark:text-zinc-400" />
               <span>Download Resume (PDF)</span>
             </a>
           </div>
@@ -89,10 +89,10 @@ export const ContactSection: React.FC = () => {
           <form onSubmit={handleSendMessage} className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-zinc-400 flex items-center gap-1.5">
-                <MessageSquare className="w-3.5 h-3.5 text-ig-purple" />
+                <MessageSquare className="w-3.5 h-3.5 text-neutral-700 dark:text-zinc-300" />
                 Direct Message
               </span>
-              <span className="text-[11px] text-neutral-400 dark:text-zinc-500">via default email</span>
+              <span className="text-[11px] text-neutral-400 dark:text-zinc-500">via email</span>
             </div>
 
             <div>
@@ -126,7 +126,8 @@ export const ContactSection: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-2.5 px-4 rounded-lg text-sm font-bold text-white bg-ig-gradient hover:opacity-95 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
+              disabled={!message.trim()}
+              className="w-full py-2.5 px-4 rounded-lg text-sm font-semibold text-white bg-ig-gradient hover:opacity-95 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
             >
               <Send className="w-4 h-4 -rotate-45" />
               <span>Send Message</span>

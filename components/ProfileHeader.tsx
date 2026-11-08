@@ -121,8 +121,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <div
             className="relative group cursor-pointer"
             onClick={handleViewProjects}
-            data-note="Why are you staring at my 2x2 ID photo? Just hire me already."
-            title="Click to view featured projects"
+            title="View featured projects"
           >
             <div className="w-[72px] h-[72px] sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full p-[2.5px] sm:p-[3px] animated-ig-ring shadow-sm sm:shadow-md transition-transform duration-300 group-hover:scale-105">
               <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] sm:p-[2.5px] transition-colors duration-200">
@@ -141,7 +140,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
             {/* Active Status Dot */}
             <div className="absolute bottom-0 right-0 sm:bottom-1 sm:right-1 md:bottom-2 md:right-2 bg-emerald-500 text-white rounded-full p-0.5 sm:p-1 border-2 border-white dark:border-[#0B0B0F] shadow-sm">
-              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
+              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white" />
             </div>
           </div>
         </div>
@@ -154,8 +153,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               {profileData.username}
             </span>
             <div
-              title="Verified Developer Profile"
-              data-note="Yes, verified. De La Salle Lipa certified, zero buzzword fluff."
+              title="Verified Developer Profile — De La Salle Lipa"
               className="cursor-help inline-flex items-center"
             >
               <VerifiedBadge className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
@@ -175,7 +173,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
         {/* Bio & Identity Block (Stacked underneath Avatar/Stats in mobile view, Column 2 on desktop) */}
         <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-2 sm:row-start-2 flex flex-col gap-0.5 sm:gap-1 pt-3 sm:pt-2">
-          <h1 className="font-bold text-xs sm:text-base text-neutral-900 dark:text-zinc-100 leading-snug">
+          <h1 className="font-bold text-sm sm:text-base text-neutral-900 dark:text-zinc-100 leading-snug tracking-tight">
             {profileData.name}
           </h1>
           <p className="text-neutral-600 dark:text-zinc-400 font-normal text-xs sm:text-sm leading-snug">
@@ -189,7 +187,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </p>
         </div>
 
-        {/* Custom Graduation XP Bar with Synchronized Blinking Progress */}
+        {/* Custom Graduation Progress Track */}
         <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-3 sm:row-start-3 mt-3.5 sm:mt-4 max-w-md w-full">
           <div
             onClick={handleReplayXp}
@@ -201,40 +199,33 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 handleReplayXp();
               }
             }}
-            data-note={`${targetPct}% loaded. Graduation DLC drops June 2, 2026. Hire me before the patch.`}
-            title="Click to replay XP bar animation"
-            className="group/xp cursor-pointer select-none rounded-lg px-3 py-2 bg-neutral-100/90 dark:bg-[#14141d] border border-neutral-300/90 dark:border-[#2e2e3e] shadow-2xs"
+            title="Degree Progress — Bachelor of Science in Information Technology (Click to replay)"
+            className="group/xp cursor-pointer select-none rounded-xl px-3.5 py-2.5 bg-neutral-100/80 dark:bg-[#14141d]/90 border border-neutral-200/90 dark:border-zinc-800 transition-all hover:border-neutral-300 dark:hover:border-zinc-700 shadow-2xs"
           >
             {/* Top Metadata Line */}
-            <div className="flex items-center justify-between gap-2 mb-1.5 font-pixel text-[8px] sm:text-[9px] leading-none tracking-tight">
-              <div className="flex items-center gap-1.5 min-w-0 truncate">
-                <span className="px-1.5 py-0.5 bg-ig-pink/15 dark:bg-ig-pink/20 text-ig-pink border border-ig-pink/40 font-bold">
-                  LV.4
+            <div className="flex items-center justify-between gap-2 mb-2 text-xs">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded text-[10.5px] font-bold bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 tracking-wide">
+                  LEVEL 4
                 </span>
-                <span className="text-neutral-700 dark:text-zinc-200 truncate">
-                  GRADUATION XP
+                <span className="text-neutral-800 dark:text-zinc-200 font-semibold text-xs tracking-tight">
+                  4th-Year BSIT Progress
                 </span>
               </div>
 
               <div className="flex items-center gap-1.5 flex-shrink-0 tabular-nums">
-                <div className="inline-flex items-center gap-0.5 sm:gap-1 font-mono font-bold text-[11px] sm:text-xs text-emerald-600 dark:text-emerald-400">
-                  <span>{displayedPct}%</span>
-                  <span
-                    className={`inline-block w-1.5 h-2.5 sm:h-3 bg-emerald-500 dark:bg-emerald-400 transition-none ${
-                      isBlinkOn ? "opacity-100" : "opacity-0"
-                    }`}
-                    aria-hidden="true"
-                  />
-                </div>
-                <span className="text-neutral-400 dark:text-zinc-500 font-mono text-[10px]">
-                  · JUN 2, 2026
+                <span className="font-bold text-xs text-emerald-600 dark:text-emerald-400">
+                  {displayedPct}%
+                </span>
+                <span className="text-neutral-500 dark:text-zinc-400 text-[11px]">
+                  • Target: June 2026
                 </span>
               </div>
             </div>
 
-            {/* 8-Bit Segmented XP Track (20 discrete blocks) with Synchronized Blinking Progress */}
+            {/* 8-Bit Segmented XP Track (20 discrete blocks) */}
             <div
-              className="grid gap-[2px] sm:gap-[2.5px] p-[2.5px] bg-neutral-200/80 dark:bg-[#0B0B0F] border border-neutral-300 dark:border-[#262635]"
+              className="grid gap-[2.5px] p-[2.5px] rounded bg-neutral-200/80 dark:bg-[#0B0B0F] border border-neutral-300 dark:border-[#262635]"
               style={{
                 gridTemplateColumns: `repeat(${TOTAL_XP_BLOCKS}, minmax(0, 1fr))`,
               }}
@@ -248,7 +239,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 return (
                   <span
                     key={idx}
-                    className={`h-2 sm:h-2.5 relative transition-none ${
+                    className={`h-2 sm:h-2.5 rounded-[1px] relative transition-none ${
                       shouldShowFilled
                         ? "bg-gradient-to-b from-emerald-400 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]"
                         : "bg-neutral-300/60 dark:bg-zinc-800/70"

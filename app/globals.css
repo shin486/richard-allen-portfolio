@@ -67,9 +67,9 @@ body {
 
 /* Instagram Gradient Ring Utilities */
 .animated-ig-ring {
-  background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4, #f58529);
-  background-size: 300% 300%;
-  animation: ringRotate 8s ease infinite;
+  background: linear-gradient(135deg, #f58529 0%, #dd2a7b 45%, #8134af 85%, #515bd4 100%);
+  background-size: 150% 150%;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
 .static-ig-ring {
@@ -93,12 +93,6 @@ body {
   }
   .animated-ig-ring {
     background: linear-gradient(45deg, #f09433, #dc2743, #bc1888) !important;
-    animation: none !important;
-  }
-  .slash-particle {
-    animation: none !important;
-    opacity: var(--peak);
-    transform: rotate(var(--angle));
   }
   .reveal,
   .rise-in,
@@ -108,53 +102,6 @@ body {
     transform: none !important;
     transition: none !important;
   }
-}
-
-/* --- Slash Particles (thin diagonal strokes, ambient float) --- */
-:root {
-  --slash-ink: rgba(30, 32, 40, 0.45);
-}
-.dark {
-  --slash-ink: rgba(226, 230, 240, 0.55);
-}
-
-.slash-particle {
-  position: absolute;
-  border-radius: 9999px;
-  pointer-events: none;
-  opacity: 0;
-  background: var(--slash-ink);
-  will-change: opacity, transform;
-  animation: slashFloat var(--dur) ease-in-out var(--delay) infinite;
-}
-
-/* Compose translate-drift + constant slash rotation. */
-@keyframes slashFloat {
-  0% {
-    transform: translate(0px, 0px) rotate(var(--angle));
-    opacity: 0;
-  }
-  12% {
-    opacity: var(--peak);
-  }
-  50% {
-    transform: translate(var(--sway), -140px) rotate(var(--angle));
-    opacity: var(--peak);
-  }
-  86% {
-    opacity: 0;
-  }
-  100% {
-    transform: translate(calc(var(--sway) * -0.6), -300px) rotate(var(--angle));
-    opacity: 0;
-  }
-}
-
-/* Static fallback when reduced motion is preferred. */
-.slash-static {
-  animation: none;
-  opacity: var(--peak);
-  transform: rotate(var(--angle));
 }
 
 /* Custom Scrollbars */

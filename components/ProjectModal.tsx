@@ -282,7 +282,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsLiveDemo(true)}
-                className="flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-medium text-zinc-950 bg-white hover:bg-zinc-200 active:scale-95 transition-colors flex items-center justify-center gap-2 shadow-sm"
+                className="flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold text-white bg-neutral-900 dark:bg-zinc-100 dark:text-neutral-900 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
               >
                 <Play className="w-4 h-4 fill-current" />
                 <span>Live Demo</span>
@@ -293,7 +293,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="py-2 px-3.5 rounded-lg text-xs sm:text-sm font-medium text-zinc-200 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 transition-colors flex items-center justify-center gap-2"
+                  className="py-2 px-3.5 rounded-lg text-xs sm:text-sm font-semibold text-neutral-800 dark:text-zinc-200 bg-neutral-100 dark:bg-zinc-800 hover:bg-neutral-200 dark:hover:bg-zinc-700 border border-neutral-200 dark:border-zinc-700/60 transition-colors flex items-center justify-center gap-2"
                 >
                   <Github className="w-4 h-4" />
                   <span>GitHub</span>

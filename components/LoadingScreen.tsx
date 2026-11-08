@@ -32,8 +32,8 @@ export const LoadingScreen: React.FC = () => {
     // Lock page scroll while loader is visible
     document.body.style.overflow = "hidden";
 
-    const holdDuration = prefersReducedMotion ? 100 : 1300;
-    const fadeDuration = prefersReducedMotion ? 50 : 500;
+    const holdDuration = prefersReducedMotion ? 50 : 850;
+    const fadeDuration = prefersReducedMotion ? 50 : 400;
 
     const timer = setTimeout(() => {
       setIsExiting(true);

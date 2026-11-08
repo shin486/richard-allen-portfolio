@@ -522,7 +522,7 @@ export const AiChatDrawer: React.FC = () => {
               onClick={() => setIsOpen(true)}
               className="text-left hover:text-ig-pink transition-colors"
             >
-              <span className="font-bold">Woof! I&apos;m Byte</span> · Ask me about Richard!
+              <span className="font-semibold">Ask Byte</span> · AI Assistant for projects &amp; skills
             </button>
             <button
               onClick={(e) => {
@@ -540,10 +540,9 @@ export const AiChatDrawer: React.FC = () => {
         {/* Main Floating Pup Button */}
         <button
           onClick={() => setIsOpen((prev) => !prev)}
-          data-note="That is Byte. Battery-powered robot dog that answers technical questions."
           className="group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full p-[2.5px] animated-ig-ring shadow-xl transition-transform hover:scale-105 active:scale-95 focus:outline-none"
-          aria-label={isOpen ? "Close Byte AI chat" : "Chat with Byte, Richard's AI dog"}
-          title="Chat with Byte (AI Portfolio Companion)"
+          aria-label={isOpen ? "Close Byte AI chat" : "Chat with Byte, Richard's AI assistant"}
+          title="Chat with Byte (AI Portfolio Assistant)"
         >
           <div className="w-full h-full rounded-full bg-white dark:bg-[#111116] flex items-center justify-center transition-colors">
             {isOpen ? (
@@ -555,9 +554,8 @@ export const AiChatDrawer: React.FC = () => {
 
           {/* Live green status badge */}
           {!isOpen && (
-            <span className="absolute top-0.5 right-0.5 flex w-3.5 h-3.5">
-              <span className="absolute inline-flex w-full h-full rounded-full bg-emerald-400 opacity-75 animate-ping" />
-              <span className="relative inline-flex w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#111116]" />
+            <span className="absolute top-1 right-1 flex w-3 h-3">
+              <span className="relative inline-flex w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-[#111116]" />
             </span>
           )}
         </button>
@@ -588,8 +586,8 @@ export const AiChatDrawer: React.FC = () => {
                 </div>
                 <p className="text-[11px] text-neutral-500 dark:text-zinc-400">
                   {isLoading
-                    ? "Fetching your answer..."
-                    : "Richard's loyal companion • Always online"}
+                    ? "Fetching information..."
+                    : "AI Portfolio Assistant • Ready to answer questions"}
                 </p>
               </div>
             </div>

@@ -55,26 +55,26 @@ export const AboutSection: React.FC = () => {
         {/* Narrative Text */}
         <div className="space-y-4 text-sm sm:text-[15px] text-neutral-700 dark:text-zinc-300 leading-relaxed font-normal">
           <p>
-            Hello! I&apos;m <strong className="text-neutral-900 dark:text-white">{profileData.name}</strong>, an Information Technology student at <strong>De La Salle Lipa</strong> with a passion for full-stack web and mobile application engineering.
+            Hello! I&apos;m <strong className="text-neutral-900 dark:text-white">{profileData.name}</strong>, an Information Technology student at <strong>De La Salle Lipa</strong> specializing in full-stack web and mobile application engineering.
           </p>
 
           <p>
-            I enjoy transforming everyday problems into practical, user-focused digital solutions — like building <strong>PalengkeHub</strong>, my capstone project bringing stall-level price transparency to our local public market. I love the full process of ideating, prototyping in Figma, and writing clean, scalable code.
+            I focus on transforming everyday workflows into practical, high-performance digital tools — such as <strong>PalengkeHub</strong>, my capstone project delivering stall-level price transparency and pre-ordering for local public markets. I take projects from initial Figma prototypes to robust, production-ready code.
           </p>
 
           <p>
-            As an aspiring full-stack developer preparing for <strong>On-the-Job Training (OJT)</strong> and internship opportunities, I am eager to contribute to real-world engineering teams, learn industry best practices, and expand my technical depth across modern web and mobile architectures.
+            Currently seeking <strong>On-the-Job Training (OJT)</strong> and internship opportunities where I can contribute to production codebases, learn from experienced engineering teams, and build reliable software.
           </p>
         </div>
 
-        {/* Focus Areas Grid (No Emojis - Lucide Icons!) */}
+        {/* Focus Areas Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2">
           <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/70 dark:border-zinc-800 flex flex-col gap-1.5">
             <div className="flex items-center gap-2 text-neutral-900 dark:text-zinc-100 font-semibold text-xs sm:text-sm">
               <Laptop className="w-4 h-4 text-ig-purple" />
               <span>Full-Stack &amp; Web</span>
             </div>
-            <p className="text-xs text-neutral-600 dark:text-zinc-400 leading-normal">
+            <p className="text-xs text-neutral-600 dark:text-zinc-300 leading-normal">
               Building responsive frontend interfaces with React/Next.js and connecting robust SQL/Supabase backends.
             </p>
           </div>
@@ -84,7 +84,7 @@ export const AboutSection: React.FC = () => {
               <Smartphone className="w-4 h-4 text-ig-pink" />
               <span>Mobile App Dev</span>
             </div>
-            <p className="text-xs text-neutral-600 dark:text-zinc-400 leading-normal">
+            <p className="text-xs text-neutral-600 dark:text-zinc-300 leading-normal">
               Developing cross-platform mobile apps with React Native and Expo for everyday utility.
             </p>
           </div>
@@ -94,7 +94,7 @@ export const AboutSection: React.FC = () => {
               <Sparkles className="w-4 h-4 text-ig-orange" />
               <span>UI/UX &amp; Prototyping</span>
             </div>
-            <p className="text-xs text-neutral-600 dark:text-zinc-400 leading-normal">
+            <p className="text-xs text-neutral-600 dark:text-zinc-300 leading-normal">
               Wireframing intuitive user flows in Figma and turning them into accessible components with Tailwind CSS.
             </p>
           </div>
@@ -120,7 +120,7 @@ export const AboutSection: React.FC = () => {
           </div>
 
           <div className="sm:text-right flex flex-col sm:items-end text-xs text-neutral-300 dark:text-zinc-300">
-            <span className="font-semibold text-white">
+            <span className="font-semibold text-white tabular-nums">
               Expected: {profileData.educationSummary.expectedGraduation}
             </span>
             <span className="flex items-center gap-1 text-neutral-400 dark:text-zinc-400">

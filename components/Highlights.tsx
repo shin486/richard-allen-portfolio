@@ -61,11 +61,11 @@ export const Highlights: React.FC<HighlightsProps> = ({ onOpenHighlight }) => {
 
               {/* Highlight Label */}
               <div className="flex flex-col items-center leading-tight">
-                <span className="text-[11px] sm:text-xs font-medium tracking-tight text-neutral-700 dark:text-zinc-300 group-hover:text-neutral-950 dark:group-hover:text-white transition-colors truncate max-w-[64px] sm:max-w-none text-center">
+                <span className="text-[11.5px] sm:text-xs font-medium tracking-tight text-neutral-700 dark:text-zinc-300 group-hover:text-neutral-950 dark:group-hover:text-white transition-colors truncate max-w-[68px] sm:max-w-none text-center">
                   {highlight.title}
                 </span>
                 {highlight.timeAgo && (
-                  <span className="text-[9px] sm:text-[10px] text-neutral-400 dark:text-zinc-500 font-mono hidden sm:inline">
+                  <span className="text-[10px] text-neutral-500 dark:text-zinc-400 tabular-nums hidden sm:inline mt-0.5">
                     {highlight.timeAgo}
                   </span>
                 )}

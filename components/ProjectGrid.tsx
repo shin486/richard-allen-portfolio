@@ -496,7 +496,6 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   role="tab"
                   aria-selected={isCurrent}
                   title={`${proj.title} — ${proj.subtitle}`}
-                  data-note={proj.id === "palengkehub" ? "PalengkeHub. Defended capstone, zero bugs surrendered." : proj.id === "shinpay-plus" ? "ShinPay+. Automated payroll calculation so devs get paid on time." : "Defended capstones and real SaaS tools. Test them live in-browser."}
                   className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
                     isCurrent
                       ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 border-neutral-900 dark:border-zinc-100 shadow-sm"
@@ -924,18 +923,18 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </div>
                 )}
 
-                {/* Visual System Architecture Pipeline (Senior System Design — Non-Redundant) */}
+                {/* Visual System Architecture Pipeline */}
                 <div className="pt-3 border-t border-neutral-100 dark:border-zinc-800/80">
                   <div className="p-3 sm:p-3.5 rounded-xl bg-neutral-50/80 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800/90 shadow-2xs">
                     {/* Pipeline Header with Quality Indicator */}
                     <div className="flex items-center justify-between gap-2 mb-2.5">
                       <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-ig-pink animate-pulse" />
+                        <span className="w-2 h-2 rounded-full bg-ig-pink" />
                         <span className="text-[10.5px] font-bold uppercase tracking-wider text-neutral-700 dark:text-zinc-300">
                           Architecture Pipeline
                         </span>
                       </div>
-                      <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 font-mono flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-md border border-emerald-200/60 dark:border-emerald-800/50">
+                      <span className="text-[10.5px] font-semibold text-emerald-700 dark:text-emerald-400 font-mono flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-md border border-emerald-200/60 dark:border-emerald-800/50">
                         {pipeline.qualityTag}
                       </span>
                     </div>
@@ -956,16 +955,16 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                         return (
                           <React.Fragment key={node.layer}>
                             <div
-                              data-note={node.note}
+                              title={node.note}
                               onMouseEnter={handleMouseEnter}
-                              className={`group/node inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-lg border text-xs font-medium cursor-default transition-all duration-200 hover:-translate-y-0.5 active:scale-95 ${node.brandClass} ${node.haloClass}`}
+                              className="group/node inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-lg border border-neutral-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-800/60 text-xs font-medium cursor-default transition-all duration-200 hover:-translate-y-0.5 hover:border-neutral-300 dark:hover:border-zinc-700 shadow-2xs"
                             >
                               <div className="flex-shrink-0">{node.icon}</div>
-                              <div className="flex items-center gap-1">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500 font-mono">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-zinc-400 font-mono">
                                   {node.layer}:
                                 </span>
-                                <span className="font-semibold">{node.tech}</span>
+                                <span className="font-semibold text-neutral-900 dark:text-zinc-100">{node.tech}</span>
                               </div>
                             </div>
 

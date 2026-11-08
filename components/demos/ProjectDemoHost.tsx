@@ -193,7 +193,7 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
                       <span>Phone Frame</span>
                     </button>
                   )}
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="Live System Online" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" title="Live System Online" />
                 </div>
               </div>
 

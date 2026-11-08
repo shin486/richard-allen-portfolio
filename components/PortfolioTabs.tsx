@@ -134,7 +134,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
               className={`relative z-10 flex-1 sm:flex-initial flex items-center justify-center gap-2 py-3 sm:py-3.5 px-3 transition-colors duration-200 focus:outline-none ${
                 isActive
                   ? "text-neutral-900 dark:text-zinc-100 font-semibold"
-                  : "text-neutral-400 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200"
+                  : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100"
               }`}
               aria-selected={isActive}
               role="tab"
@@ -144,7 +144,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
                 className={`w-5 h-5 sm:w-4 sm:h-4 transition-transform duration-200 ${
                   isActive
                     ? "text-neutral-900 dark:text-zinc-100 scale-105"
-                    : "text-neutral-400 dark:text-zinc-500"
+                    : "text-neutral-500 dark:text-zinc-400"
                 }`}
               />
               <span className="text-xs tracking-wider uppercase font-bold hidden sm:inline">

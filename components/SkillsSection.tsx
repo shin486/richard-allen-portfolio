@@ -215,14 +215,16 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                   )}
                 </div>
 
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800/90 text-neutral-500 dark:text-zinc-400 border border-neutral-200/60 dark:border-zinc-700/60 flex-shrink-0">
-                  {skill.categoryTitle}
-                </span>
+                {(activeFilter === "all" || activeFilter === "core") && (
+                  <span className="text-[10.5px] font-medium text-neutral-500 dark:text-zinc-400 flex-shrink-0">
+                    {skill.categoryTitle}
+                  </span>
+                )}
               </div>
 
               {/* Description */}
               {skill.description && (
-                <p className="text-xs text-neutral-600 dark:text-zinc-400 mt-1.5 leading-relaxed">
+                <p className="text-xs text-neutral-600 dark:text-zinc-300 mt-1.5 leading-relaxed">
                   {skill.description}
                 </p>
               )}
@@ -239,7 +241,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                   {skill.usedIn.map((projName) => (
                     <span
                       key={projName}
-                      className="px-2 py-0.5 rounded text-[11px] font-medium bg-neutral-50 dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 border border-neutral-200/70 dark:border-zinc-800"
+                      className="px-2 py-0.5 rounded text-[11px] font-medium bg-neutral-100 dark:bg-zinc-800 text-neutral-700 dark:text-zinc-300"
                     >
                       {projName}
                     </span>

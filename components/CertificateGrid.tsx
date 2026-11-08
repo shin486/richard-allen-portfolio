@@ -207,7 +207,7 @@ export const CertificateGrid: React.FC = () => {
             </div>
 
             {/* Slide Counter Badge (e.g. 1 / 5) */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900/90 dark:bg-zinc-800 text-white text-xs font-semibold tracking-wider flex-shrink-0">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900/90 dark:bg-zinc-800 text-white text-xs font-semibold tabular-nums tracking-wider flex-shrink-0">
               <Layers className="w-3.5 h-3.5 text-ig-orange" />
               <span>
                 {safeSlideIndex + 1} / {totalSlides}
