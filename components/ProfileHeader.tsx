@@ -1,24 +1,20 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 import { ProfileStats } from "./ProfileStats";
 import { VerifiedBadge } from "./VerifiedBadge";
-import { ProfileNote } from "./ProfileNote";
 
 interface ProfileHeaderProps {
   onSelectTab: (tab: string) => void;
   onNavigateToSection: (sectionId: string) => void;
 }
 
-const TOTAL_XP_BLOCKS = 20;
-
 /**
  * Calculates live BSIT degree completion percentage toward June 2, 2027.
  * Start of 4-year BSIT: August 15, 2023 -> Target Graduation: June 2, 2027.
- * Handles local dev clocks skewed ahead of June 2, 2027 by normalizing the year.
  */
 function calculateGraduationXp(): number {
   const startMs = new Date("2023-08-15T00:00:00+08:00").getTime();
@@ -34,133 +30,166 @@ function calculateGraduationXp(): number {
   return Math.max(75, Math.min(97, rawPct));
 }
 
+const CIRCUMFERENCE = 2 * Math.PI * 54; // ≈ 339.292
+
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onSelectTab,
   onNavigateToSection,
 }) => {
   const [targetPct, setTargetPct] = useState<number>(85);
-  const [animatedBlocks, setAnimatedBlocks] = useState<number>(0);
-  const [replayNonce, setReplayNonce] = useState<number>(0);
-  const [isBlinkOn, setIsBlinkOn] = useState<boolean>(true);
-
-  // Synchronized 8-bit blinking cycle (450ms ON / 450ms OFF = 900ms lockstep)
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
-
-    const blinkInterval = window.setInterval(() => {
-      setIsBlinkOn((prev) => !prev);
-    }, 450);
-
-    return () => {
-      window.clearInterval(blinkInterval);
-    };
-  }, []);
+  const [animatedPct, setAnimatedPct] = useState<number>(0);
+  const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
   useEffect(() => {
-    setTargetPct(calculateGraduationXp());
+    const pct = calculateGraduationXp();
+    setTargetPct(pct);
+
+    // Smooth mechanical fill on initial load
+    const timer = setTimeout(() => {
+      setAnimatedPct(pct);
+    }, 180);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  const targetBlocks = Math.max(
-    1,
-    Math.min(
-      TOTAL_XP_BLOCKS - 1,
-      Math.round((targetPct / 100) * TOTAL_XP_BLOCKS)
-    )
-  );
-
-  // Chunky 8-bit step fill for the XP bar
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    setAnimatedBlocks(0);
-
-    let currentBlock = 0;
-    const xpInterval = window.setInterval(() => {
-      currentBlock += 1;
-      setAnimatedBlocks(currentBlock);
-      if (currentBlock >= targetBlocks) {
-        window.clearInterval(xpInterval);
-      }
-    }, 42);
-
-    return () => {
-      window.clearInterval(xpInterval);
-    };
-  }, [targetBlocks, replayNonce]);
-
-  const displayedPct =
-    targetBlocks > 0
-      ? Math.min(
-          targetPct,
-          Math.round((animatedBlocks / targetBlocks) * targetPct)
-        )
-      : targetPct;
-
-  const handleViewProjects = () => {
-    onSelectTab("projects");
-    onNavigateToSection("portfolio-grid");
-  };
-
-  const handleReplayXp = useCallback(() => {
-    setReplayNonce((n) => n + 1);
-  }, []);
+  const strokeDashoffset = CIRCUMFERENCE * (1 - animatedPct / 100);
 
   return (
-    <section id="profile-header" className="pt-14 sm:pt-16 md:pt-20 pb-3 sm:pb-6">
+    <section id="profile-header" className="pt-4 sm:pt-6 md:pt-8 pb-2 sm:pb-3">
       {/* Unified Responsive Instagram Profile Header */}
-      <div className="grid grid-cols-[auto_1fr] items-start gap-x-4 sm:gap-x-8 md:gap-x-12">
-        {/* Column 1: Circular Avatar with Animated Instagram Story Ring + Thought Bubble Note */}
-        <div className="col-start-1 row-start-1 sm:row-span-3 relative flex flex-col items-start flex-shrink-0">
-          {/* Retro Pixel Speech Bubble anchored cleanly above avatar container */}
-          <div className="absolute bottom-[calc(100%+8px)] sm:bottom-[calc(100%+12px)] left-0 sm:left-2 z-30 pointer-events-auto">
-            <ProfileNote tailAlign="left" />
-          </div>
-
+      <div className="grid grid-cols-[auto_1fr] items-center sm:items-start gap-x-4 sm:gap-x-7 md:gap-x-10">
+        {/* Column 1: Circular Avatar with SVG Progress Ring & Pinned LVL 4 Badge */}
+        <div className="col-start-1 row-start-1 sm:row-span-2 relative flex flex-col items-center flex-shrink-0">
           <div
             className="relative group cursor-pointer"
-            onClick={handleViewProjects}
-            title="View featured projects"
+            onClick={() => setShowTooltip((prev) => !prev)}
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setShowTooltip((prev) => !prev);
+              }
+            }}
+            aria-label="View BSIT Graduation Progress"
           >
-            <div className="w-[72px] h-[72px] sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full p-[2.5px] sm:p-[3px] animated-ig-ring shadow-sm sm:shadow-md transition-transform duration-300 group-hover:scale-105">
-              <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] sm:p-[2.5px] transition-colors duration-200">
-                <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900 flex items-center justify-center">
-                  <Image
-                    src={profilePic}
-                    alt={profileData.name}
-                    fill
-                    sizes="(max-width: 640px) 72px, (max-width: 768px) 128px, 144px"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
+            {/* SVG Circular Progress Ring */}
+            <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.03]">
+              <svg
+                viewBox="0 0 120 120"
+                className="w-full h-full select-none overflow-visible"
+                aria-label={`Graduation progress: ${targetPct}% toward June 2027`}
+              >
+                <defs>
+                  <linearGradient
+                    id="emeraldProgressGradient"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stopColor="#34d399" />
+                    <stop offset="100%" stopColor="#059669" />
+                  </linearGradient>
+                </defs>
+
+                {/* Background Track */}
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="54"
+                  strokeWidth="4"
+                  className="stroke-neutral-200 dark:stroke-zinc-800"
+                  fill="transparent"
+                />
+
+                {/* Progress Stroke with Subtle Emerald Glow */}
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="54"
+                  strokeWidth="4"
+                  stroke="url(#emeraldProgressGradient)"
+                  fill="transparent"
+                  strokeDasharray={CIRCUMFERENCE.toFixed(2)}
+                  strokeDashoffset={strokeDashoffset.toFixed(2)}
+                  strokeLinecap="round"
+                  transform="rotate(-90 60 60)"
+                  style={{
+                    filter: "drop-shadow(0 0 5px rgba(16, 185, 129, 0.4))",
+                    transition: "stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
+                />
+              </svg>
+
+              {/* Inner Circular Avatar Image with gap */}
+              <div className="absolute inset-[6px] sm:inset-[7px] rounded-full overflow-hidden bg-neutral-900 border border-neutral-100 dark:border-zinc-800 shadow-sm">
+                <Image
+                  src={profilePic}
+                  alt={profileData.name}
+                  fill
+                  sizes="(max-width: 640px) 96px, 128px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+
+              {/* Pinned LVL 4 Badge overlapping bottom */}
+              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-zinc-950 border border-emerald-500/60 text-emerald-400 font-mono text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-lg flex items-center gap-1 select-none z-20 whitespace-nowrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                LVL 4
               </div>
             </div>
 
-            {/* Active Status Dot */}
-            <div className="absolute bottom-0 right-0 sm:bottom-1 sm:right-1 md:bottom-2 md:right-2 bg-emerald-500 text-white rounded-full p-0.5 sm:p-1 border-2 border-white dark:border-[#0B0B0F] shadow-sm">
-              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white" />
+            {/* Interactive Milestone Tooltip */}
+            <div
+              className={`absolute left-1/2 -translate-x-1/2 top-full mt-2.5 z-40 w-60 sm:w-64 p-3 rounded-lg bg-zinc-950 text-zinc-100 border border-zinc-800 shadow-2xl transition-all duration-200 pointer-events-none font-mono text-left ${
+                showTooltip
+                  ? "opacity-100 translate-y-0 scale-100"
+                  : "opacity-0 -translate-y-1 scale-95 pointer-events-none"
+              }`}
+            >
+              <div className="flex items-center justify-between pb-1.5 border-b border-zinc-800">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-100">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  <span>BSIT Senior • Level 4</span>
+                </div>
+                <span className="text-[10px] font-bold text-emerald-400">
+                  {targetPct}%
+                </span>
+              </div>
+              <p className="text-[11px] text-zinc-400 mt-1.5 leading-snug">
+                {targetPct}% Completed to Graduation (Target: June 2027)
+              </p>
+              <p className="text-[10px] text-zinc-500 mt-1">
+                De La Salle Lipa • Lipa City, Batangas
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Column 2: Username & Stats (Row 1 beside Avatar on mobile & desktop) */}
-        <div className="col-start-2 row-start-1 flex flex-col justify-center gap-1.5 sm:gap-3.5 min-w-0 pt-0.5 sm:pt-1">
-          {/* Username & Verified Rosette */}
-          <div className="flex items-center gap-1.5">
-            <span className="font-bold sm:font-semibold text-base sm:text-xl md:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
+        {/* Column 2: Username & Stats */}
+        <div className="col-start-2 row-start-1 flex flex-col justify-center gap-1.5 sm:gap-2.5 min-w-0">
+          {/* Handle Row with Verified Badge & Availability */}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="font-bold sm:font-semibold text-base sm:text-xl text-neutral-900 dark:text-zinc-100 tracking-tight">
               {profileData.username}
             </span>
             <div
               title="Verified Developer Profile — De La Salle Lipa"
               className="cursor-help inline-flex items-center"
             >
-              <VerifiedBadge className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+              <VerifiedBadge className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-sky-400" />
             </div>
+            <span className="inline-flex items-center gap-1.5 text-[10.5px] sm:text-xs font-mono text-zinc-600 dark:text-zinc-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+              Open for OJT / Junior Roles
+            </span>
           </div>
 
-          {/* Stats Row ("Followers" theme directly below username) */}
+          {/* Stats Row */}
           <div className="min-w-0 w-full">
             <ProfileStats
               onStatClick={(sectionId, tabName) => {
@@ -171,84 +200,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
         </div>
 
-        {/* Bio & Identity Block (Stacked underneath Avatar/Stats in mobile view, Column 2 on desktop) */}
-        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-2 sm:row-start-2 flex flex-col gap-0.5 sm:gap-1 pt-3 sm:pt-2">
-          <h1 className="font-bold text-sm sm:text-base text-neutral-900 dark:text-zinc-100 leading-snug tracking-tight">
+        {/* Bio & Identity Block */}
+        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-2 flex flex-col gap-0.5 pt-2 sm:pt-1">
+          <h1 className="font-semibold text-sm sm:text-base text-neutral-900 dark:text-zinc-100 leading-snug tracking-tight">
             {profileData.name}
           </h1>
-          <p className="text-neutral-600 dark:text-zinc-400 font-normal text-xs sm:text-sm leading-snug">
-            {profileData.title}
+          <p className="text-xs text-neutral-600 dark:text-zinc-400 leading-snug font-mono">
+            {profileData.title} • De La Salle Lipa
           </p>
-          <p className="text-neutral-700 dark:text-zinc-300 text-xs sm:text-sm leading-snug">
-            4th-year BSIT @{" "}
-            <span className="font-semibold text-neutral-900 dark:text-zinc-100">
-              De La Salle Lipa
-            </span>
-          </p>
-        </div>
-
-        {/* Custom Graduation Progress Track */}
-        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-3 sm:row-start-3 mt-3.5 sm:mt-4 max-w-md w-full">
-          <div
-            onClick={handleReplayXp}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                handleReplayXp();
-              }
-            }}
-            title="Degree Progress — Bachelor of Science in Information Technology (Click to replay)"
-            className="group/xp cursor-pointer select-none rounded-xl px-3.5 py-2.5 bg-neutral-100/80 dark:bg-[#14141d]/90 border border-neutral-200/90 dark:border-zinc-800 transition-all hover:border-neutral-300 dark:hover:border-zinc-700 shadow-2xs"
-          >
-            {/* Top Metadata Line */}
-            <div className="flex items-center justify-between gap-2 mb-2 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10.5px] font-bold bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 tracking-wide">
-                  LEVEL 4
-                </span>
-                <span className="text-neutral-800 dark:text-zinc-200 font-semibold text-xs tracking-tight">
-                  4th-Year BSIT Progress
-                </span>
-              </div>
-
-              <div className="flex items-center gap-1.5 flex-shrink-0 tabular-nums">
-                <span className="font-bold text-xs text-emerald-600 dark:text-emerald-400">
-                  {displayedPct}%
-                </span>
-                <span className="text-neutral-500 dark:text-zinc-400 text-[11px]">
-                  • Target: June 2027
-                </span>
-              </div>
-            </div>
-
-            {/* 8-Bit Segmented XP Track (20 discrete blocks) */}
-            <div
-              className="grid gap-[2.5px] p-[2.5px] rounded bg-neutral-200/80 dark:bg-[#0B0B0F] border border-neutral-300 dark:border-[#262635]"
-              style={{
-                gridTemplateColumns: `repeat(${TOTAL_XP_BLOCKS}, minmax(0, 1fr))`,
-              }}
-              aria-label={`Graduation progress: ${targetPct}% toward June 2, 2027`}
-            >
-              {Array.from({ length: TOTAL_XP_BLOCKS }).map((_, idx) => {
-                const isFilled = idx < animatedBlocks;
-                const isLeading = idx === animatedBlocks - 1 && animatedBlocks > 0;
-                const shouldShowFilled = isFilled && (!isLeading || isBlinkOn);
-
-                return (
-                  <span
-                    key={idx}
-                    className={`h-2 sm:h-2.5 rounded-[1px] relative transition-none ${
-                      shouldShowFilled
-                        ? "bg-gradient-to-b from-emerald-400 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]"
-                        : "bg-neutral-300/60 dark:bg-zinc-800/70"
-                    }`}
-                  />
-                );
-              })}
-            </div>
-          </div>
         </div>
       </div>
     </section>
