@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { Highlights } from "@/components/Highlights";
@@ -17,16 +17,49 @@ import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { Reveal } from "@/components/Reveal";
 import { TechKeyboard3D } from "@/components/TechKeyboard3D";
 import { LoadingScreen } from "@/components/LoadingScreen";
+import { RecruiterDossierView } from "@/components/RecruiterDossierView";
 import { Project, projectsData } from "@/data/projects";
 import { skillsData } from "@/data/skills";
 import { certificatesData } from "@/data/certificates";
 import { highlightsData } from "@/data/highlights";
 
 export default function HomePage() {
+  const [viewMode, setViewMode] = useState<"studio" | "recruiter">("studio");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<string>("projects");
   const [activeCarouselProject, setActiveCarouselProject] =
     useState<Project | null>(projectsData[0] || null);
+
+  useEffect(() => {
+    // 1. Check URL query param (?view=recruiter or ?view=studio)
+    const params = new URLSearchParams(window.location.search);
+    const viewParam = params.get("view");
+    if (viewParam === "recruiter" || viewParam === "studio") {
+      setViewMode(viewParam);
+      try {
+        localStorage.setItem("portfolio-view-mode", viewParam);
+      } catch {}
+      return;
+    }
+
+    // 2. Check localStorage
+    try {
+      const saved = localStorage.getItem("portfolio-view-mode");
+      if (saved === "recruiter" || saved === "studio") {
+        setViewMode(saved);
+      }
+    } catch {}
+  }, []);
+
+  const handleViewChange = (mode: "studio" | "recruiter") => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem("portfolio-view-mode", mode);
+    } catch {}
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", mode);
+    window.history.replaceState({}, "", url.toString());
+  };
 
   // Lets the Journey Timeline or 3D Keyboard jump the Projects carousel to a specific project
   const [projectFocus, setProjectFocus] = useState<{
@@ -89,103 +122,114 @@ export default function HomePage() {
       {/* Minimalist Instagram + Stickman Loading Screen */}
       <LoadingScreen />
 
-      {/* Layered Animated Background (radial glows + floating technical lines) */}
-      <AnimatedBackground />
+      {/* Layered Animated Background (Active in Studio Mode; suppressed in Recruiter Dossier for pure performance) */}
+      {viewMode === "studio" && <AnimatedBackground />}
 
-      {/* Sticky Top Navigation */}
+      {/* Sticky Top Navigation with Persistent Dual-View Switcher */}
       <Navbar
         searchQuery={searchQuery}
         onSearchChange={handleSearchChange}
         onSelectTab={setActiveTab}
+        activeView={viewMode}
+        onViewChange={handleViewChange}
       />
 
-      {/* Responsive Desktop Split Container: Instagram Feed + Right-Side 3D Keyboard Space */}
-      <div className="flex-1 w-full max-w-[1440px] 2xl:max-w-[1560px] mx-auto px-4 sm:px-6 xl:px-8 relative z-10">
-        <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_380px] xl:gap-8 2xl:gap-10 items-start">
-          {/* Main Instagram Profile & Feed Column */}
-          <main className="w-full max-w-4xl mx-auto xl:mx-0 min-w-0">
-            {/* Instagram Profile Header */}
-            <div className="rise-in" style={{ animationDelay: "90ms" }}>
-              <ProfileHeader
-                onSelectTab={setActiveTab}
-                onNavigateToSection={scrollToSection}
-              />
-            </div>
+      {viewMode === "recruiter" ? (
+        /* Recruiter Dossier: Performance-First, High-Density Systems Engineering Dashboard */
+        <main className="flex-1 w-full relative z-10">
+          <RecruiterDossierView onSwitchToStudio={() => handleViewChange("studio")} />
+        </main>
+      ) : (
+        /* Responsive Desktop Split Container: Instagram Feed + Right-Side 3D Keyboard Space */
+        <div className="flex-1 w-full max-w-[1440px] 2xl:max-w-[1560px] mx-auto px-4 sm:px-6 xl:px-8 relative z-10">
+          <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_380px] xl:gap-8 2xl:gap-10 items-start">
+            {/* Main Instagram Profile & Feed Column */}
+            <main className="w-full max-w-4xl mx-auto xl:mx-0 min-w-0">
+              {/* Instagram Profile Header */}
+              <div className="rise-in" style={{ animationDelay: "90ms" }}>
+                <ProfileHeader
+                  onSelectTab={setActiveTab}
+                  onNavigateToSection={scrollToSection}
+                />
+              </div>
 
-            {/* Curated Story Highlights */}
-            <div className="rise-in" style={{ animationDelay: "180ms" }}>
-              <Highlights onOpenHighlight={handleOpenHighlight} />
-            </div>
+              {/* Curated Story Highlights */}
+              <div className="rise-in" style={{ animationDelay: "180ms" }}>
+                <Highlights onOpenHighlight={handleOpenHighlight} />
+              </div>
 
-            {/* Instagram Post & Navigation Tabs */}
-            <div id="portfolio-tabs">
+              {/* Instagram Post & Navigation Tabs */}
+              <div id="portfolio-tabs">
+                <Reveal>
+                  <PortfolioTabs
+                    activeTab={activeTab}
+                    onTabChange={handleTabChange}
+                    projectCount={projectsData.length}
+                    skillCategoriesCount={skillsData.reduce(
+                      (total, cat) => total + cat.skills.length,
+                      0
+                    )}
+                    certCount={certificatesData.length}
+                  />
+                </Reveal>
+              </div>
+
+              {/* Active Tab Content */}
+              <div key={activeTab} className="stagger-item">
+                {activeTab === "projects" && (
+                  <ProjectGrid
+                    searchQuery={searchQuery}
+                    onSearchChange={handleSearchChange}
+                    focusRequest={projectFocus}
+                    onActiveProjectChange={setActiveCarouselProject}
+                  />
+                )}
+
+                {activeTab === "skills" && (
+                  <SkillsSection onSelectProject={handleViewProject} />
+                )}
+
+                {activeTab === "certificates" && <CertificateGrid />}
+
+                {activeTab === "about" && <AboutSection />}
+              </div>
+
+              {/* Contact / Direct Message Section */}
               <Reveal>
-                <PortfolioTabs
-                  activeTab={activeTab}
-                  onTabChange={handleTabChange}
-                  projectCount={projectsData.length}
-                  skillCategoriesCount={skillsData.reduce(
-                    (total, cat) => total + cat.skills.length,
-                    0
-                  )}
-                  certCount={certificatesData.length}
-                />
+                <ContactSection />
               </Reveal>
-            </div>
+            </main>
 
-            {/* Active Tab Content */}
-            <div key={activeTab} className="stagger-item">
-              {activeTab === "projects" && (
-                <ProjectGrid
-                  searchQuery={searchQuery}
-                  onSearchChange={handleSearchChange}
-                  focusRequest={projectFocus}
-                  onActiveProjectChange={setActiveCarouselProject}
-                />
-              )}
-
-              {activeTab === "skills" && (
-                <SkillsSection onSelectProject={handleViewProject} />
-              )}
-
-              {activeTab === "certificates" && <CertificateGrid />}
-
-              {activeTab === "about" && <AboutSection />}
-            </div>
-
-            {/* Contact / Direct Message Section */}
-            <Reveal>
-              <ContactSection />
-            </Reveal>
-          </main>
-
-          {/* Open Right-Side Space: Sticky 3D Mechanical Tech Stack Keyboard */}
-          <aside
-            aria-label="3D Mechanical Tech Stack Keyboard"
-            className="hidden xl:block sticky top-20 pt-2 pb-24 rise-in overflow-visible"
-            style={{ animationDelay: "240ms" }}
-          >
-            <TechKeyboard3D
-              activeProject={
-                activeTab === "projects" ? activeCarouselProject : null
-              }
-              onSelectProject={handleViewProject}
-              variant="sidebar"
-            />
-          </aside>
+            {/* Open Right-Side Space: Sticky 3D Mechanical Tech Stack Keyboard */}
+            <aside
+              aria-label="3D Mechanical Tech Stack Keyboard"
+              className="hidden xl:block sticky top-20 pt-2 pb-24 rise-in overflow-visible"
+              style={{ animationDelay: "240ms" }}
+            >
+              <TechKeyboard3D
+                activeProject={
+                  activeTab === "projects" ? activeCarouselProject : null
+                }
+                onSelectProject={handleViewProject}
+                variant="sidebar"
+              />
+            </aside>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Instagram Story Viewer Modal */}
-      <HighlightViewer
-        isOpen={isViewerOpen}
-        initialHighlightIndex={activeHighlightIndex}
-        highlights={highlightsData}
-        onClose={() => setIsViewerOpen(false)}
-      />
+      {/* Instagram Story Viewer Modal (Only in Studio View) */}
+      {viewMode === "studio" && (
+        <HighlightViewer
+          isOpen={isViewerOpen}
+          initialHighlightIndex={activeHighlightIndex}
+          highlights={highlightsData}
+          onClose={() => setIsViewerOpen(false)}
+        />
+      )}
 
-      {/* Instagram DM AI Portfolio Assistant */}
-      <AiChatDrawer />
+      {/* Instagram DM AI Portfolio Assistant (Only in Studio View) */}
+      {viewMode === "studio" && <AiChatDrawer />}
 
       {/* Footer */}
       <Footer />

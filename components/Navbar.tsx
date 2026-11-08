@@ -21,6 +21,7 @@ import {
   MapPin,
   Terminal,
   ArrowUpRight,
+  Sparkles,
 } from "lucide-react";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
@@ -32,12 +33,16 @@ interface NavbarProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onSelectTab?: (tab: string) => void;
+  activeView?: "studio" | "recruiter";
+  onViewChange?: (view: "studio" | "recruiter") => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   searchQuery,
   onSearchChange,
   onSelectTab,
+  activeView = "studio",
+  onViewChange,
 }) => {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [switcherOpen, setSwitcherOpen] = useState(false);
@@ -118,9 +123,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => {
                     setSwitcherOpen(false);
+                    onViewChange?.("studio");
                     window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
-                  className="w-full flex items-center justify-between p-2.5 rounded-xl bg-neutral-100/80 dark:bg-zinc-800/60 text-left transition-colors"
+                  className={`w-full flex items-center justify-between p-2.5 rounded-xl text-left transition-colors ${
+                    activeView === "studio"
+                      ? "bg-neutral-100/80 dark:bg-zinc-800/60"
+                      : "hover:bg-neutral-100 dark:hover:bg-zinc-800/50"
+                  }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-9 h-9 rounded-full p-[1.5px] animated-ig-ring flex-shrink-0">
@@ -142,34 +152,53 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <VerifiedBadge className="w-3 h-3" />
                       </div>
                       <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
-                        Full Portfolio Experience
+                        Studio View (Feed &amp; 3D Keyboard)
                       </p>
                     </div>
                   </div>
-                  <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
-                    <Check className="w-3 h-3 stroke-[3]" />
-                  </div>
+                  {activeView === "studio" && (
+                    <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
+                      <Check className="w-3 h-3 stroke-[3]" />
+                    </div>
+                  )}
                 </button>
 
-                {/* Option 2: Recruiter Fast-Pass */}
+                {/* Option 2: Recruiter Fast-Pass / Dossier */}
                 <button
-                  onClick={handleOpenRecruiterModal}
-                  className="w-full mt-1 flex items-center justify-between p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-800/50 text-left transition-colors group"
+                  onClick={() => {
+                    setSwitcherOpen(false);
+                    if (onViewChange) {
+                      onViewChange("recruiter");
+                    } else {
+                      handleOpenRecruiterModal();
+                    }
+                  }}
+                  className={`w-full mt-1 flex items-center justify-between p-2.5 rounded-xl text-left transition-colors group ${
+                    activeView === "recruiter"
+                      ? "bg-neutral-100/80 dark:bg-zinc-800/60"
+                      : "hover:bg-neutral-100 dark:hover:bg-zinc-800/50"
+                  }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 flex items-center justify-center text-neutral-700 dark:text-zinc-200 flex-shrink-0 group-hover:border-neutral-400 dark:group-hover:border-zinc-500 transition-colors">
-                      <Briefcase className="w-4 h-4" />
+                      <Briefcase className="w-4 h-4 text-blue-500" />
                     </div>
                     <div className="min-w-0">
                       <span className="block text-xs font-bold text-neutral-900 dark:text-zinc-100 truncate">
-                        Recruiter Fast-Pass
+                        Recruiter Dossier Mode
                       </span>
                       <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
-                        OJT spec sheet, stack &amp; PDF resume
+                        High-density candidate engineering dashboard
                       </p>
                     </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-zinc-200 transition-transform group-hover:translate-x-0.5 flex-shrink-0" />
+                  {activeView === "recruiter" ? (
+                    <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
+                      <Check className="w-3 h-3 stroke-[3]" />
+                    </div>
+                  ) : (
+                    <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-zinc-200 transition-transform group-hover:translate-x-0.5 flex-shrink-0" />
+                  )}
                 </button>
 
                 {/* Option 3: Byte Assistant */}
@@ -195,6 +224,41 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             )}
           </div>
+
+          {/* Dual-View Switcher (Studio vs. Recruiter Dossier) */}
+          {onViewChange && (
+            <div className="flex items-center p-0.5 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-[11px] font-semibold shrink-0">
+              <button
+                type="button"
+                onClick={() => onViewChange("studio")}
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full transition-all ${
+                  activeView === "studio"
+                    ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
+                    : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-zinc-200"
+                }`}
+                title="Switch to Creative Studio View (Instagram feed, 3D keyboard, Byte mascot)"
+              >
+                <Sparkles className="w-3 h-3 text-amber-500" />
+                <span className="hidden sm:inline">Studio View</span>
+                <span className="sm:hidden">Studio</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onViewChange("recruiter")}
+                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full transition-all ${
+                  activeView === "recruiter"
+                    ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
+                    : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-zinc-200"
+                }`}
+                title="Switch to Recruiter Dossier (Minimalist high-density performance dashboard)"
+              >
+                <Briefcase className="w-3 h-3 text-blue-500" />
+                <span className="hidden sm:inline">Recruiter Dossier</span>
+                <span className="sm:hidden">Dossier</span>
+              </button>
+            </div>
+          )}
 
           {/* Center: Search Field */}
           <div className="flex-1 max-w-xs sm:max-w-sm mx-2 hidden md:block">

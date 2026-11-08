@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Search,
   MapPin,
@@ -19,6 +19,12 @@ import {
   Tag,
   Navigation,
   Sparkles,
+  Wifi,
+  WifiOff,
+  Zap,
+  RotateCw,
+  Database,
+  AlertTriangle,
 } from "lucide-react";
 
 interface Product {
@@ -232,6 +238,332 @@ const PRODUCTS: Product[] = [
   },
 ];
 
+export const STALL_INVENTORY_SEEDED: Product[] = [
+  ...PRODUCTS,
+  {
+    id: "ph-7",
+    name: "Batangas Beef Sirloin",
+    englishName: "Prime Tapang Taal Cut · Fresh Lipa Abattoir",
+    stallId: "st-3",
+    stallName: "Mang Berting's Prime Cuts",
+    stallNumber: "Stall M-08",
+    section: "Meat",
+    categoryChip: "Karne",
+    price: 440,
+    minMarketPrice: 430,
+    avgMarketPrice: 460,
+    maxMarketPrice: 480,
+    stallCount: 4,
+    unit: "kg",
+    stock: 14,
+    verdict: "PINAKAMURA",
+    promoDiscount: "DTI SRP",
+    soldThisMonth: 195,
+    emoji: "🥩",
+  },
+  {
+    id: "ph-8",
+    name: "Batangas Beef Bulalo (Bone-in)",
+    englishName: "Native Beef Shank with Marrow",
+    stallId: "st-3",
+    stallName: "Mang Berting's Prime Cuts",
+    stallNumber: "Stall M-08",
+    section: "Meat",
+    categoryChip: "Karne",
+    price: 410,
+    minMarketPrice: 410,
+    avgMarketPrice: 435,
+    maxMarketPrice: 450,
+    stallCount: 3,
+    unit: "kg",
+    stock: 10,
+    verdict: "PINAKAMURA",
+    soldThisMonth: 210,
+    emoji: "🍖",
+  },
+  {
+    id: "ph-9",
+    name: "Tilapia Taal (Live)",
+    englishName: "Freshwater Tilapia · Live tank pickup",
+    stallId: "st-1",
+    stallName: "Aling Nena's Fresh Catch",
+    stallNumber: "Stall F-12",
+    section: "Fish",
+    categoryChip: "Isda",
+    price: 150,
+    minMarketPrice: 150,
+    avgMarketPrice: 165,
+    maxMarketPrice: 180,
+    stallCount: 5,
+    unit: "kg",
+    stock: 35,
+    verdict: "PINAKAMURA",
+    soldThisMonth: 340,
+    emoji: "🐟",
+  },
+  {
+    id: "ph-10",
+    name: "Galunggong Tagalog (Local Catch)",
+    englishName: "Round Scad · Fresh Lipa delivery",
+    stallId: "st-1",
+    stallName: "Aling Nena's Fresh Catch",
+    stallNumber: "Stall F-12",
+    section: "Fish",
+    categoryChip: "Isda",
+    price: 240,
+    minMarketPrice: 235,
+    avgMarketPrice: 260,
+    maxMarketPrice: 280,
+    stallCount: 4,
+    unit: "kg",
+    stock: 22,
+    verdict: "MURA",
+    soldThisMonth: 180,
+    emoji: "🐟",
+  },
+  {
+    id: "ph-11",
+    name: "Bawang Ilokos (Native Garlic)",
+    englishName: "Aromatic Small Native Bulbs",
+    stallId: "st-2",
+    stallName: "Kuya Ben's Bukid Harvest",
+    stallNumber: "Stall V-04",
+    section: "Vegetables",
+    categoryChip: "Gulay",
+    price: 180,
+    minMarketPrice: 175,
+    avgMarketPrice: 195,
+    maxMarketPrice: 220,
+    stallCount: 6,
+    unit: "kg",
+    stock: 16,
+    verdict: "MURA",
+    soldThisMonth: 165,
+    emoji: "🧄",
+  },
+  {
+    id: "ph-12",
+    name: "Luya Dilaw (Native Ginger)",
+    englishName: "Fresh Batangas Yellow Ginger",
+    stallId: "st-2",
+    stallName: "Kuya Ben's Bukid Harvest",
+    stallNumber: "Stall V-04",
+    section: "Vegetables",
+    categoryChip: "Gulay",
+    price: 110,
+    minMarketPrice: 110,
+    avgMarketPrice: 130,
+    maxMarketPrice: 145,
+    stallCount: 4,
+    unit: "kg",
+    stock: 25,
+    verdict: "PINAKAMURA",
+    soldThisMonth: 115,
+    emoji: "🫚",
+  },
+  {
+    id: "ph-13",
+    name: "Sitaw Batangas (Yardlong Beans)",
+    englishName: "Crisp Native Long Green Beans",
+    stallId: "st-2",
+    stallName: "Kuya Ben's Bukid Harvest",
+    stallNumber: "Stall V-04",
+    section: "Vegetables",
+    categoryChip: "Gulay",
+    price: 60,
+    minMarketPrice: 60,
+    avgMarketPrice: 75,
+    maxMarketPrice: 85,
+    stallCount: 5,
+    unit: "kg",
+    stock: 28,
+    verdict: "PINAKAMURA",
+    soldThisMonth: 140,
+    emoji: "🥬",
+  },
+  {
+    id: "ph-14",
+    name: "Talong Long Purple",
+    englishName: "Native Tender Eggplant",
+    stallId: "st-2",
+    stallName: "Kuya Ben's Bukid Harvest",
+    stallNumber: "Stall V-04",
+    section: "Vegetables",
+    categoryChip: "Gulay",
+    price: 70,
+    minMarketPrice: 70,
+    avgMarketPrice: 85,
+    maxMarketPrice: 95,
+    stallCount: 4,
+    unit: "kg",
+    stock: 30,
+    verdict: "PINAKAMURA",
+    soldThisMonth: 190,
+    emoji: "🍆",
+  },
+  {
+    id: "ph-15",
+    name: "Kalabasa Squash (Golden Slice)",
+    englishName: "Sweet Local Butternut Calabaza",
+    stallId: "st-2",
+    stallName: "Kuya Ben's Bukid Harvest",
+    stallNumber: "Stall V-04",
+    section: "Vegetables",
+    categoryChip: "Gulay",
+    price: 50,
+    minMarketPrice: 48,
+    avgMarketPrice: 60,
+    maxMarketPrice: 70,
+    stallCount: 5,
+    unit: "kg",
+    stock: 45,
+    verdict: "MURA",
+    soldThisMonth: 230,
+    emoji: "🎃",
+  },
+  {
+    id: "ph-16",
+    name: "Sayote Silang",
+    englishName: "Fresh Chayote Green Squash",
+    stallId: "st-2",
+    stallName: "Kuya Ben's Bukid Harvest",
+    stallNumber: "Stall V-04",
+    section: "Vegetables",
+    categoryChip: "Gulay",
+    price: 45,
+    minMarketPrice: 45,
+    avgMarketPrice: 55,
+    maxMarketPrice: 65,
+    stallCount: 5,
+    unit: "kg",
+    stock: 40,
+    verdict: "PINAKAMURA",
+    soldThisMonth: 175,
+    emoji: "🍐",
+  },
+  {
+    id: "ph-17",
+    name: "Dinorado Mindoro (Aromatic Pink)",
+    englishName: "Fragrant Premium Local Rice",
+    stallId: "st-4",
+    stallName: "Lipa Grain & Bigas Center",
+    stallNumber: "Stall G-02",
+    section: "Grains",
+    categoryChip: "Bigas",
+    price: 62,
+    minMarketPrice: 60,
+    avgMarketPrice: 65,
+    maxMarketPrice: 70,
+    stallCount: 4,
+    unit: "kg",
+    stock: 80,
+    verdict: "MURA",
+    soldThisMonth: 420,
+    emoji: "🍚",
+  },
+  {
+    id: "ph-18",
+    name: "Malagkit Glutinous Rice",
+    englishName: "Lipa Suman Grade Sticky Rice",
+    stallId: "st-4",
+    stallName: "Lipa Grain & Bigas Center",
+    stallNumber: "Stall G-02",
+    section: "Grains",
+    categoryChip: "Bigas",
+    price: 68,
+    minMarketPrice: 68,
+    avgMarketPrice: 74,
+    maxMarketPrice: 80,
+    stallCount: 3,
+    unit: "kg",
+    stock: 60,
+    verdict: "PINAKAMURA",
+    soldThisMonth: 260,
+    emoji: "🌾",
+  },
+  {
+    id: "ph-19",
+    name: "Saging Saba (Cardava)",
+    englishName: "Cooking Bananas · Nilaga/Turon grade",
+    stallId: "st-2",
+    stallName: "Kuya Ben's Bukid Harvest",
+    stallNumber: "Stall V-04",
+    section: "Vegetables",
+    categoryChip: "Gulay",
+    price: 40,
+    minMarketPrice: 40,
+    avgMarketPrice: 50,
+    maxMarketPrice: 55,
+    stallCount: 6,
+    unit: "kg",
+    stock: 50,
+    verdict: "PINAKAMURA",
+    soldThisMonth: 310,
+    emoji: "🍌",
+  },
+  {
+    id: "ph-20",
+    name: "Mangga Carabao (Sweet Batangas)",
+    englishName: "Ripe Ripe Yellow Mangoes",
+    stallId: "st-2",
+    stallName: "Kuya Ben's Bukid Harvest",
+    stallNumber: "Stall V-04",
+    section: "Vegetables",
+    categoryChip: "Gulay",
+    price: 160,
+    minMarketPrice: 155,
+    avgMarketPrice: 180,
+    maxMarketPrice: 200,
+    stallCount: 4,
+    unit: "kg",
+    stock: 25,
+    verdict: "MURA",
+    soldThisMonth: 275,
+    emoji: "🥭",
+  },
+  {
+    id: "ph-21",
+    name: "Kapeng Barako Ground (Liberica)",
+    englishName: "Lipa City Pure Liberica Roast",
+    stallId: "st-4",
+    stallName: "Lipa Grain & Bigas Center",
+    stallNumber: "Stall G-02",
+    section: "Grains",
+    categoryChip: "Bigas",
+    price: 260,
+    minMarketPrice: 260,
+    avgMarketPrice: 290,
+    maxMarketPrice: 320,
+    stallCount: 3,
+    unit: "kg",
+    stock: 18,
+    verdict: "PINAKAMURA",
+    promoDiscount: "LIPA SPECIAL",
+    soldThisMonth: 380,
+    emoji: "☕",
+  },
+  {
+    id: "ph-22",
+    name: "Pure Tablea Batirol (100% Cacao)",
+    englishName: "Traditional Batangas Chocolate Tablets",
+    stallId: "st-4",
+    stallName: "Lipa Grain & Bigas Center",
+    stallNumber: "Stall G-02",
+    section: "Grains",
+    categoryChip: "Bigas",
+    price: 180,
+    minMarketPrice: 180,
+    avgMarketPrice: 200,
+    maxMarketPrice: 220,
+    stallCount: 3,
+    unit: "roll",
+    stock: 22,
+    verdict: "PINAKAMURA",
+    soldThisMonth: 190,
+    emoji: "🍫",
+  },
+];
+
 const CATEGORY_CHIPS = [
   { id: "All", label: "Lahat", icon: "🧺", bg: "#FDF3E7", border: "#E8833A" },
   { id: "Gulay", label: "Gulay", icon: "🥬", bg: "#EEF6E8", border: "#9EBF5C" },
@@ -241,6 +573,15 @@ const CATEGORY_CHIPS = [
 ];
 
 export default function PalengkeHubDemo() {
+  const [products, setProducts] = useState<Product[]>(PRODUCTS);
+  const [isSeeded, setIsSeeded] = useState(false);
+  const [isOffline, setIsOffline] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [offlineQueue, setOfflineQueue] = useState<
+    Array<{ id: string; desc: string; time: string }>
+  >([]);
+  const [syncBanner, setSyncBanner] = useState<string | null>(null);
+
   const [activeTab, setActiveTab] = useState<"home" | "stalls" | "map" | "cart" | "pass">("home");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
@@ -254,8 +595,56 @@ export default function PalengkeHubDemo() {
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [orderCode, setOrderCode] = useState("PKH-8492-LIPA");
 
+  const handlePopulateInventory = () => {
+    const seeded = STALL_INVENTORY_SEEDED.map((p) => {
+      const variance = (Math.random() - 0.5) * 4;
+      const updatedPrice = Math.max(p.minMarketPrice, Math.round(p.price + variance));
+      return {
+        ...p,
+        price: updatedPrice,
+      };
+    });
+    setProducts(seeded);
+    setIsSeeded(true);
+    setSyncBanner("Seeded 22 Lipa market SKUs · Live DTI SRP updates synchronized via WebSocket");
+    setTimeout(() => {
+      setSyncBanner(null);
+    }, 4000);
+  };
+
+  const handleToggleSignal = () => {
+    if (!isOffline) {
+      setIsOffline(true);
+      setSyncBanner("Offline Mode: Simulating cellular dead-spot in Lipa Public Market");
+    } else {
+      setIsOffline(false);
+      if (offlineQueue.length > 0) {
+        setIsSyncing(true);
+        setSyncBanner(`Syncing ${offlineQueue.length} mutation(s) with Supabase Realtime layer...`);
+        setTimeout(() => {
+          setIsSyncing(false);
+          const count = offlineQueue.length;
+          setOfflineQueue([]);
+          setSyncBanner(
+            count === 1
+              ? "Synced: Order committed to Supabase Realtime layer (sub-180ms reconciliation)"
+              : `Synced: ${count} mutations committed to Supabase Realtime layer (sub-180ms reconciliation)`
+          );
+          setTimeout(() => {
+            setSyncBanner(null);
+          }, 3500);
+        }, 220);
+      } else {
+        setSyncBanner("Online: Connected to Lipa Market Supabase Realtime node");
+        setTimeout(() => {
+          setSyncBanner(null);
+        }, 2500);
+      }
+    }
+  };
+
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((p) => {
+    return products.filter((p) => {
       const matchesCat = selectedCategory === "All" || p.categoryChip === selectedCategory;
       const matchesSearch =
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -263,22 +652,35 @@ export default function PalengkeHubDemo() {
         p.stallName.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCat && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [products, selectedCategory, searchQuery]);
 
   const cartItems = useMemo(() => {
     return Object.entries(cart)
       .filter(([, qty]) => qty > 0)
       .map(([id, qty]) => {
-        const product = PRODUCTS.find((p) => p.id === id)!;
-        return { product, qty, subtotal: product.price * qty };
-      });
-  }, [cart]);
+        const product = products.find((p) => p.id === id) || PRODUCTS.find((p) => p.id === id)!;
+        return { product, qty, subtotal: product ? product.price * qty : 0 };
+      })
+      .filter((item) => !!item.product);
+  }, [cart, products]);
 
   const totalItems = cartItems.reduce((acc, i) => acc + i.qty, 0);
   const subtotal = cartItems.reduce((acc, i) => acc + i.subtotal, 0);
 
   const updateQty = (id: string, delta: number) => {
     setOrderConfirmed(false);
+    const prod = products.find((p) => p.id === id);
+    if (isOffline && prod) {
+      const newMutation = {
+        id: `mut-${Date.now()}`,
+        desc: `Cart mutation: ${prod.name} (${delta > 0 ? "+1" : "-1"})`,
+        time: new Date().toLocaleTimeString("en-PH", { hour12: true }),
+      };
+      const updatedQueue = [...offlineQueue, newMutation];
+      setOfflineQueue(updatedQueue);
+      setSyncBanner(`Offline Mode: ${updatedQueue.length} mutation queued in memory (indexedDB/local state)`);
+    }
+
     setCart((prev) => {
       const next = (prev[id] || 0) + delta;
       if (next <= 0) {
@@ -296,8 +698,19 @@ export default function PalengkeHubDemo() {
 
   const handleCheckout = () => {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
-    setOrderCode(`PKH-${randomNum}-LIPA`);
+    const newCode = `PKH-${randomNum}-LIPA`;
+    setOrderCode(newCode);
     setOrderConfirmed(true);
+    if (isOffline) {
+      const newMutation = {
+        id: `mut-${Date.now()}`,
+        desc: `Order ${newCode} queued for background sync`,
+        time: new Date().toLocaleTimeString("en-PH", { hour12: true }),
+      };
+      const updatedQueue = [...offlineQueue, newMutation];
+      setOfflineQueue(updatedQueue);
+      setSyncBanner(`Offline Mode: ${updatedQueue.length} mutation queued in memory (indexedDB/local state)`);
+    }
     setActiveTab("pass");
   };
 
@@ -374,6 +787,70 @@ export default function PalengkeHubDemo() {
             className="w-full bg-white border border-[#E0D6C3] focus:border-[#E8833A] rounded-xl pl-8 pr-3 py-1.5 text-[11px] text-[#261006] placeholder:text-[#9A8978] focus:outline-none shadow-2xs"
           />
         </div>
+
+        {/* Developer Sandbox Control Strip (Seeding + Signal Simulation) */}
+        <div className="mt-2 flex items-center justify-between gap-1.5 pt-1.5 border-t border-[#E6DEC8]">
+          <button
+            type="button"
+            onClick={handlePopulateInventory}
+            className={`flex-1 inline-flex items-center justify-center gap-1 px-2 py-1 rounded-lg text-[9.5px] font-bold transition-all shadow-2xs ${
+              isSeeded
+                ? "bg-[#2E7D5B]/15 text-[#1b5e3c] border border-[#2E7D5B]/35"
+                : "bg-[#E8833A]/15 hover:bg-[#E8833A]/25 text-[#9C4B13] border border-[#E8833A]/30 active:scale-95"
+            }`}
+            title="Seed client state with 22 localized Batangas market SKUs"
+          >
+            <Zap className="w-3 h-3 text-[#E8833A] shrink-0" />
+            <span className="truncate">
+              {isSeeded ? "22 SKUs Seeded" : "⚡ Populate Stall Inventory"}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleToggleSignal}
+            className={`flex-1 inline-flex items-center justify-center gap-1 px-2 py-1 rounded-lg text-[9.5px] font-bold transition-all shadow-2xs active:scale-95 ${
+              isOffline
+                ? "bg-rose-500/15 text-rose-700 border border-rose-400"
+                : "bg-emerald-500/15 text-emerald-800 border border-emerald-400 hover:bg-emerald-500/25"
+            }`}
+            title={isOffline ? "Click to reconnect to Supabase Realtime" : "Click to simulate network dead-spot"}
+          >
+            {isOffline ? (
+              <>
+                <WifiOff className="w-3 h-3 text-rose-600 shrink-0" />
+                <span className="truncate">Signal Dropped (Offline)</span>
+              </>
+            ) : (
+              <>
+                <Wifi className="w-3 h-3 text-emerald-600 shrink-0" />
+                <span className="truncate">📶 Simulate Signal Drop</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Real-Time Sync / Offline Notification Banner */}
+        {syncBanner && (
+          <div
+            className={`mt-1.5 px-2.5 py-1 rounded-lg text-[9.5px] font-bold flex items-center gap-1.5 shadow-2xs transition-all animate-fade-in ${
+              isOffline
+                ? "bg-amber-100/95 text-amber-900 border border-amber-300"
+                : isSyncing
+                ? "bg-blue-100/95 text-blue-900 border border-blue-300 animate-pulse"
+                : "bg-emerald-100/95 text-emerald-900 border border-emerald-300"
+            }`}
+          >
+            {isOffline ? (
+              <AlertTriangle className="w-3 h-3 text-amber-600 shrink-0" />
+            ) : isSyncing ? (
+              <RotateCw className="w-3 h-3 text-blue-600 animate-spin shrink-0" />
+            ) : (
+              <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+            )}
+            <span className="truncate leading-tight">{syncBanner}</span>
+          </div>
+        )}
       </div>
 
       {/* Main Scrollable Screen Content */}
