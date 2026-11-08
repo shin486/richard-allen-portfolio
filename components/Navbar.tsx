@@ -21,7 +21,6 @@ import {
   MapPin,
   Terminal,
   ArrowUpRight,
-  Sparkles,
 } from "lucide-react";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
@@ -101,197 +100,198 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header className="sticky top-0 z-40 w-full bg-white/85 dark:bg-[#0B0B0F]/85 backdrop-blur-md border-b border-neutral-200 dark:border-zinc-800 transition-colors duration-200 rise-in">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3 sm:gap-4">
-          {/* Instagram Account Switcher Brand Trigger */}
-          <div className="relative" ref={switcherRef} title="Richard Allen Liman — 4th-Year BSIT">
-            {/* 8-Bit Pixel Walking Stickman Journey (Pauses on Hover, Abstract Black/White) */}
-            <PixelStickmanJourney onClick={() => setSwitcherOpen((prev) => !prev)} />
+        <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
+          {/* Left Section: Stickman Walker & shin.dev_ Brand Logo */}
+          <div className="flex items-center gap-3 flex-shrink-0 justify-start">
+            <div className="relative" ref={switcherRef} title="Richard Allen Liman — 4th-Year BSIT">
+              {/* 8-Bit Pixel Walking Stickman Journey (Pauses on Hover, Abstract Black/White) */}
+              <PixelStickmanJourney onClick={() => setSwitcherOpen((prev) => !prev)} />
 
-            {/* Instagram Account Switcher Popover */}
-            {switcherOpen && (
-              <div className="absolute left-0 mt-2 w-72 sm:w-80 bg-white dark:bg-[#14141A] border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-2 z-50 animate-scale-up">
-                <div className="px-3 py-1.5 flex items-center justify-between">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-zinc-500">
-                    Switch View
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
-                    Open for OJT
-                  </span>
-                </div>
+              {/* Instagram Account Switcher Popover */}
+              {switcherOpen && (
+                <div className="absolute left-0 mt-2 w-72 sm:w-80 bg-white dark:bg-[#14141A] border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-2 z-50 animate-scale-up">
+                  <div className="px-3 py-1.5 flex items-center justify-between">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-zinc-500">
+                      Switch View
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
+                      Open for OJT
+                    </span>
+                  </div>
 
-                {/* Option 1: Default Portfolio Account */}
-                <button
-                  onClick={() => {
-                    setSwitcherOpen(false);
-                    onViewChange?.("studio");
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className={`w-full flex items-center justify-between p-2.5 rounded-xl text-left transition-colors ${
-                    activeView === "studio"
-                      ? "bg-neutral-100/80 dark:bg-zinc-800/60"
-                      : "hover:bg-neutral-100 dark:hover:bg-zinc-800/50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-full p-[1.5px] animated-ig-ring flex-shrink-0">
-                      <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900">
-                        <Image
-                          src={profilePic}
-                          alt={profileData.name}
-                          fill
-                          sizes="36px"
-                          className="object-cover"
-                        />
+                  {/* Option 1: Default Portfolio Account */}
+                  <button
+                    onClick={() => {
+                      setSwitcherOpen(false);
+                      onViewChange?.("studio");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className={`w-full flex items-center justify-between p-2.5 rounded-xl text-left transition-colors ${
+                      activeView === "studio"
+                        ? "bg-neutral-100/80 dark:bg-zinc-800/60"
+                        : "hover:bg-neutral-100 dark:hover:bg-zinc-800/50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-full p-[1.5px] animated-ig-ring flex-shrink-0">
+                        <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900">
+                          <Image
+                            src={profilePic}
+                            alt={profileData.name}
+                            fill
+                            sizes="36px"
+                            className="object-cover"
+                          />
+                        </div>
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs font-bold text-neutral-900 dark:text-zinc-100 truncate">
+                            {profileData.username}
+                          </span>
+                          <VerifiedBadge className="w-3 h-3" />
+                        </div>
+                        <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
+                          Studio View (Feed &amp; 3D Keyboard)
+                        </p>
                       </div>
                     </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs font-bold text-neutral-900 dark:text-zinc-100 truncate">
-                          {profileData.username}
+                    {activeView === "studio" && (
+                      <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
+                        <Check className="w-3 h-3 stroke-[3]" />
+                      </div>
+                    )}
+                  </button>
+
+                  {/* Option 2: Recruiter Fast-Pass / Dossier */}
+                  <button
+                    onClick={() => {
+                      setSwitcherOpen(false);
+                      if (onViewChange) {
+                        onViewChange("recruiter");
+                      } else {
+                        handleOpenRecruiterModal();
+                      }
+                    }}
+                    className={`w-full mt-1 flex items-center justify-between p-2.5 rounded-xl text-left transition-colors group ${
+                      activeView === "recruiter"
+                        ? "bg-neutral-100/80 dark:bg-zinc-800/60"
+                        : "hover:bg-neutral-100 dark:hover:bg-zinc-800/50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 flex items-center justify-center text-neutral-700 dark:text-zinc-200 flex-shrink-0 group-hover:border-neutral-400 dark:group-hover:border-zinc-500 transition-colors">
+                        <Briefcase className="w-4 h-4 text-blue-500" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="block text-xs font-bold text-neutral-900 dark:text-zinc-100 truncate">
+                          Recruiter Dossier Mode
                         </span>
-                        <VerifiedBadge className="w-3 h-3" />
+                        <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
+                          High-density candidate engineering dashboard
+                        </p>
                       </div>
-                      <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
-                        Studio View (Feed &amp; 3D Keyboard)
-                      </p>
                     </div>
-                  </div>
-                  {activeView === "studio" && (
-                    <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
-                      <Check className="w-3 h-3 stroke-[3]" />
-                    </div>
-                  )}
-                </button>
+                    {activeView === "recruiter" ? (
+                      <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
+                        <Check className="w-3 h-3 stroke-[3]" />
+                      </div>
+                    ) : (
+                      <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-zinc-200 transition-transform group-hover:translate-x-0.5 flex-shrink-0" />
+                    )}
+                  </button>
 
-                {/* Option 2: Recruiter Fast-Pass / Dossier */}
-                <button
-                  onClick={() => {
-                    setSwitcherOpen(false);
-                    if (onViewChange) {
-                      onViewChange("recruiter");
-                    } else {
-                      handleOpenRecruiterModal();
-                    }
-                  }}
-                  className={`w-full mt-1 flex items-center justify-between p-2.5 rounded-xl text-left transition-colors group ${
-                    activeView === "recruiter"
-                      ? "bg-neutral-100/80 dark:bg-zinc-800/60"
-                      : "hover:bg-neutral-100 dark:hover:bg-zinc-800/50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 flex items-center justify-center text-neutral-700 dark:text-zinc-200 flex-shrink-0 group-hover:border-neutral-400 dark:group-hover:border-zinc-500 transition-colors">
-                      <Briefcase className="w-4 h-4 text-blue-500" />
+                  {/* Option 3: Byte Assistant */}
+                  <button
+                    onClick={handleOpenByteChat}
+                    className="w-full mt-1 flex items-center justify-between p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-800/50 text-left transition-colors group"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 flex items-center justify-center text-neutral-700 dark:text-zinc-200 flex-shrink-0 group-hover:border-neutral-400 dark:group-hover:border-zinc-500 transition-colors">
+                        <MessageSquare className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="block text-xs font-bold text-neutral-900 dark:text-zinc-100 truncate">
+                          Byte Assistant
+                        </span>
+                        <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
+                          Ask about projects, role &amp; skills
+                        </p>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <span className="block text-xs font-bold text-neutral-900 dark:text-zinc-100 truncate">
-                        Recruiter Dossier Mode
-                      </span>
-                      <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
-                        High-density candidate engineering dashboard
-                      </p>
-                    </div>
-                  </div>
-                  {activeView === "recruiter" ? (
-                    <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-white flex-shrink-0">
-                      <Check className="w-3 h-3 stroke-[3]" />
-                    </div>
-                  ) : (
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-zinc-200 transition-transform group-hover:translate-x-0.5 flex-shrink-0" />
-                  )}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Center Section: Centered View Switcher Toggle */}
+          <div className="flex-1 flex items-center justify-center px-2 min-w-0">
+            {onViewChange && (
+              <div className="flex items-center p-0.5 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-[11px] font-semibold shrink-0 shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => onViewChange("studio")}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all ${
+                    activeView === "studio"
+                      ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
+                      : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-zinc-200"
+                  }`}
+                  title="Switch to Studio View"
+                >
+                  <span className="hidden sm:inline">Studio View</span>
+                  <span className="sm:hidden">Studio</span>
                 </button>
 
-                {/* Option 3: Byte Assistant */}
                 <button
-                  onClick={handleOpenByteChat}
-                  className="w-full mt-1 flex items-center justify-between p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-800/50 text-left transition-colors group"
+                  type="button"
+                  onClick={() => onViewChange("recruiter")}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all ${
+                    activeView === "recruiter"
+                      ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
+                      : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-zinc-200"
+                  }`}
+                  title="Switch to Recruiter Dossier"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-full bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 flex items-center justify-center text-neutral-700 dark:text-zinc-200 flex-shrink-0 group-hover:border-neutral-400 dark:group-hover:border-zinc-500 transition-colors">
-                      <MessageSquare className="w-4 h-4" />
-                    </div>
-                    <div className="min-w-0">
-                      <span className="block text-xs font-bold text-neutral-900 dark:text-zinc-100 truncate">
-                        Byte Assistant
-                      </span>
-                      <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
-                        Ask about projects, role &amp; skills
-                      </p>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-zinc-200 transition-transform group-hover:translate-x-0.5 flex-shrink-0" />
+                  <Briefcase className="w-3 h-3 text-blue-500 shrink-0" />
+                  <span className="hidden sm:inline">Recruiter Dossier</span>
+                  <span className="sm:hidden">Dossier</span>
                 </button>
               </div>
             )}
           </div>
 
-          {/* Dual-View Switcher (Studio vs. Recruiter Dossier) */}
-          {onViewChange && (
-            <div className="flex items-center p-0.5 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-[11px] font-semibold shrink-0">
-              <button
-                type="button"
-                onClick={() => onViewChange("studio")}
-                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full transition-all ${
-                  activeView === "studio"
-                    ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
-                    : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-zinc-200"
-                }`}
-                title="Switch to Creative Studio View (Instagram feed, 3D keyboard, Byte mascot)"
-              >
-                <Sparkles className="w-3 h-3 text-amber-500" />
-                <span className="hidden sm:inline">Studio View</span>
-                <span className="sm:hidden">Studio</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => onViewChange("recruiter")}
-                className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full transition-all ${
-                  activeView === "recruiter"
-                    ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
-                    : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-zinc-200"
-                }`}
-                title="Switch to Recruiter Dossier (Minimalist high-density performance dashboard)"
-              >
-                <Briefcase className="w-3 h-3 text-blue-500" />
-                <span className="hidden sm:inline">Recruiter Dossier</span>
-                <span className="sm:hidden">Dossier</span>
-              </button>
-            </div>
-          )}
-
-          {/* Center: Search Field */}
-          <div className="flex-1 max-w-xs sm:max-w-sm mx-2 hidden md:block">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-400 dark:text-zinc-500">
-                <Search className="w-4 h-4" />
+          {/* Right Section: Search, Socials, Resume, Theme & Contact */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0 justify-end">
+            {/* Desktop Search Field */}
+            <div className="relative hidden md:block w-36 lg:w-48 xl:w-56">
+              <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-neutral-400 dark:text-zinc-500">
+                <Search className="w-3.5 h-3.5" />
               </div>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search projects, skills..."
+                placeholder="Search projects..."
                 aria-label="Search projects"
-                className="w-full pl-9 pr-8 py-1.5 bg-neutral-100 dark:bg-zinc-900/90 text-sm text-neutral-900 dark:text-zinc-100 placeholder-neutral-400 dark:placeholder-zinc-500 rounded-lg border border-transparent dark:border-zinc-800/80 focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-zinc-600 focus:bg-white dark:focus:bg-zinc-900 transition-all"
+                className="w-full pl-8 pr-7 py-1.5 bg-neutral-100 dark:bg-zinc-900/90 text-xs text-neutral-900 dark:text-zinc-100 placeholder-neutral-400 dark:placeholder-zinc-500 rounded-lg border border-transparent dark:border-zinc-800/80 focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-zinc-600 focus:bg-white dark:focus:bg-zinc-900 transition-all"
               />
               {searchQuery && (
                 <button
                   onClick={() => onSearchChange("")}
-                  className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-neutral-400 hover:text-neutral-700 dark:hover:text-zinc-200"
+                  className="absolute inset-y-0 right-0 pr-2 flex items-center text-neutral-400 hover:text-neutral-700 dark:hover:text-zinc-200"
                   aria-label="Clear search"
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-3 h-3" />
                 </button>
               )}
             </div>
-          </div>
 
-          {/* Right: Quick Actions & Theme Switcher */}
-          <nav className="flex items-center gap-1 sm:gap-1.5">
             {/* Mobile Search Button */}
             <button
               onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
-              className="md:hidden p-2 text-neutral-700 dark:text-zinc-300 hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              className="md:hidden p-1.5 text-neutral-700 dark:text-zinc-300 hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
               aria-label="Toggle Search"
             >
               <Search className="w-4 h-4" />
@@ -301,7 +301,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               href={profileData.socials.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              className="p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
               title="GitHub Profile"
               aria-label="GitHub Profile"
             >
@@ -312,7 +312,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               href={profileData.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-neutral-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              className="p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
               title="LinkedIn Profile"
               aria-label="LinkedIn Profile"
             >
@@ -323,7 +323,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               href={profileData.socials.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              className="p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
               title="Resume (PDF)"
               aria-label="Resume (PDF)"
             >
@@ -331,20 +331,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             </a>
 
             {/* Theme Switcher Toggle */}
-            <div className="ml-1">
+            <div className="ml-0.5">
               <ThemeToggle />
             </div>
 
             {/* Primary Action Button */}
             <button
               onClick={() => scrollToSection("contact-section", "contact")}
-              className="ml-1.5 hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white bg-ig-gradient hover:opacity-95 hover:shadow-sm active:scale-95 transition-all"
+              className="ml-1 hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white bg-ig-gradient hover:opacity-95 hover:shadow-xs active:scale-95 transition-all"
             >
               <Mail className="w-3.5 h-3.5" />
               <span>Contact</span>
             </button>
-          </nav>
-        </div>
+          </div>
+        </nav>
 
         {/* Mobile Search Dropdown */}
         {mobileSearchOpen && (

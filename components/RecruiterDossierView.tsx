@@ -13,7 +13,6 @@ import {
   ShieldCheck,
   Cpu,
   Layers,
-  Sparkles,
   ArrowRight,
   Database,
   Smartphone,
@@ -145,8 +144,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
               onClick={onSwitchToStudio}
               className="inline-flex items-center gap-1 text-[11px] font-semibold text-ig-pink hover:underline"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Switch to Studio View</span>
+              <span>Switch to Studio View →</span>
             </button>
           )}
         </div>
