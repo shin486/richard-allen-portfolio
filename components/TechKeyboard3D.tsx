@@ -35,12 +35,13 @@ export interface KeycapSkill {
   renderIcon: () => React.ReactNode;
 }
 
-type SoundProfile = "thocky" | "clicky" | "linear" | "mute";
+export type SoundProfile = "thocky" | "clicky" | "linear" | "mute";
 
 interface TechKeyboard3DProps {
   activeProject?: Project | null;
   onSelectProject?: (projectId: string) => void;
   variant?: "sidebar" | "inline";
+  isDeployedToStage?: boolean;
 }
 
 export interface EngineeringSpec {
@@ -770,10 +771,239 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
   },
 ];
 
+export const getEngineeringSpecForSkill = (
+  skill: KeycapSkill
+): EngineeringSpec => {
+  if (ENGINEERING_SPECS[skill.id]) {
+    return ENGINEERING_SPECS[skill.id];
+  }
+  if (
+    skill.category === "backend" ||
+    skill.id.includes("sql") ||
+    skill.id.includes("mongo")
+  ) {
+    return ENGINEERING_SPECS["postgresql"];
+  }
+  if (skill.category === "languages") {
+    return ENGINEERING_SPECS["typescript"];
+  }
+  if (skill.category === "frontend") {
+    return ENGINEERING_SPECS["react"];
+  }
+  return {
+    filePath: `src/core/${skill.id}.config.ts`,
+    architectureTier: `${skill.categoryLabel} Architecture`,
+    language: "typescript",
+    snippet: `// Production implementation spec for ${skill.name}
+export const ${
+      skill.shortLabel.replace(/[^a-zA-Z0-9]/g, "") || "Skill"
+    }Config = {
+  name: "${skill.name}",
+  category: "${skill.categoryLabel}",
+  status: "PRODUCTION_VERIFIED" as const,
+  runtime: "TypeScript 5.x / Node.js 20.x",
+};`,
+  };
+};
+
+/**
+ * Exposed Mechanical Switch Housing & Kailh/Cherry Cross Stem (+)
+ * Shown inside a socket when its 3D keycap has lifted off or is in flight
+ */
+export const ExposedSwitchStem: React.FC<{
+  skill: KeycapSkill;
+  isDark: boolean;
+  isIncoming?: boolean;
+}> = ({ skill, isDark, isIncoming = false }) => {
+  return (
+    <div
+      className={`absolute inset-0 rounded-[7px] sm:rounded-[8px] flex items-center justify-center overflow-hidden transition-all duration-200 ${
+        isDark
+          ? "bg-[#050609] border border-white/10 shadow-[inset_0_2px_6px_rgba(0,0,0,0.95)]"
+          : "bg-[#dde4ee] border border-neutral-300 shadow-[inset_0_2px_5px_rgba(0,0,0,0.18)]"
+      }`}
+    >
+      {/* Switch Polycarbonate Inner Housing */}
+      <div
+        className={`relative w-[74%] h-[74%] rounded-[4px] flex items-center justify-center border ${
+          isDark
+            ? "bg-[#0c0e14] border-white/10"
+            : "bg-[#cbd5e1] border-neutral-400/50"
+        }`}
+      >
+        {/* North-Facing SMD RGB LED Diode */}
+        <span
+          className={`absolute top-[2px] left-1/2 -translate-x-1/2 w-2.5 h-1 rounded-full transition-opacity duration-300 ${
+            isIncoming ? "animate-ping" : "opacity-90"
+          }`}
+          style={{
+            backgroundColor: skill.color,
+            boxShadow: `0 0 8px ${skill.color}, 0 0 14px ${skill.color}`,
+          }}
+        />
+
+        {/* Dust-Proof Box Stem Surround + Crosshair (+) Stem */}
+        <div
+          className="relative w-3.5 h-3.5 rounded-[2.5px] flex items-center justify-center border"
+          style={{
+            borderColor: `${skill.color}88`,
+            backgroundColor: isDark ? "#07080c" : "#f8fafc",
+            boxShadow: `0 0 6px ${skill.color}44`,
+          }}
+        >
+          {/* Horizontal bar of (+) stem */}
+          <span
+            className="absolute w-2 h-[2.5px] rounded-[0.5px]"
+            style={{ backgroundColor: skill.color }}
+          />
+          {/* Vertical bar of (+) stem */}
+          <span
+            className="absolute w-[2.5px] h-2 rounded-[0.5px]"
+            style={{ backgroundColor: skill.color }}
+          />
+        </div>
+
+        {/* Micro key trigger silkscreen label on bottom of switch housing */}
+        <span
+          className={`absolute bottom-[1px] right-[2px] text-[5.5px] font-mono font-bold leading-none ${
+            isDark ? "text-zinc-500" : "text-neutral-600"
+          }`}
+        >
+          {skill.keyTrigger}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Reusable Physical 3D PBT Keycap Body
+ * Used by:
+ * 1. Sidebar 3D Keyboard (TechKeyboard3D)
+ * 2. Cross-Screen Flying Keycap Portal (SkillsSection)
+ * 3. Docked Per-Skill Switch Socket (SkillsSection)
+ */
+export const Keycap3DSurface: React.FC<{
+  skill: KeycapSkill;
+  isDark: boolean;
+  isPressed?: boolean;
+  isWideKey?: boolean;
+  isAutoPlaying?: boolean;
+}> = ({
+  skill,
+  isDark,
+  isPressed = false,
+  isWideKey = false,
+  isAutoPlaying = false,
+}) => {
+  return (
+    <div
+      className="absolute inset-0 rounded-[7px] sm:rounded-[8px] pointer-events-none transition-transform duration-75 group-hover:brightness-105"
+      style={{
+        transform: isPressed ? "translateY(3px)" : "translateY(0px)",
+        boxShadow: isPressed
+          ? isDark
+            ? "0 1px 3px rgba(0,0,0,0.7), -1px 1px 2px rgba(0,0,0,0.5)"
+            : "0 1px 3px rgba(0,0,0,0.2), -1px 1px 2px rgba(0,0,0,0.15)"
+          : isDark
+          ? `
+            -1.5px 2px 0 ${skill.wallColor},
+            -2.5px 4px 6px rgba(0,0,0,0.65),
+            0 3px 6px rgba(0,0,0,0.5)
+          `
+          : `
+            -1.5px 2px 0 ${skill.wallColor},
+            -2.5px 4px 6px rgba(0,0,0,0.18),
+            0 3px 6px rgba(0,0,0,0.12)
+          `,
+      }}
+    >
+      {/* Visible Left Side Wall (Isometric depth facet) */}
+      <div
+        className="absolute top-0 left-0 bottom-[2px] pointer-events-none rounded-l-[7px] sm:rounded-l-[8px]"
+        style={{
+          width: "4px",
+          background: isDark
+            ? "linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)"
+            : "linear-gradient(to right, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.06) 60%, transparent 100%)",
+        }}
+      />
+
+      {/* Visible Front Wall (South face facing viewer with realistic gradient & bevel) */}
+      <div
+        className="absolute left-0 right-0 bottom-0 pointer-events-none rounded-b-[7px] sm:rounded-b-[8px] transition-all duration-75 overflow-hidden"
+        style={{
+          height: isPressed ? "3.5px" : "7px",
+          background: isDark
+            ? `linear-gradient(to bottom, ${skill.wallColor} 0%, rgba(0,0,0,0.45) 100%)`
+            : `linear-gradient(to bottom, ${skill.wallColor} 0%, rgba(0,0,0,0.18) 100%)`,
+          boxShadow: isDark
+            ? "inset 0 1px 0 rgba(255,255,255,0.22)"
+            : "inset 0 1px 0 rgba(255,255,255,0.35)",
+          borderBottom: isDark
+            ? "1px solid rgba(0,0,0,0.6)"
+            : "1px solid rgba(0,0,0,0.22)",
+        }}
+      />
+
+      {/* Sculpted Concave Top Dish (Holding Icon & Sub-Legend) */}
+      <div
+        className="absolute left-[1.5px] right-[1px] top-0 rounded-[5.5px] sm:rounded-[6.5px] flex flex-col items-center justify-center p-0.5 overflow-hidden transition-all duration-75"
+        style={{
+          bottom: isPressed ? "3px" : "6px",
+          backgroundColor: skill.color,
+          background: `linear-gradient(150deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.02) 40%, rgba(0,0,0,0.2) 100%), ${skill.color}`,
+          boxShadow: `
+            inset 0 1px 1px rgba(255,255,255,0.45),
+            inset 0 -1px 2px rgba(0,0,0,0.32)
+          `,
+          borderTop: "1px solid rgba(255,255,255,0.42)",
+          borderLeft: "1px solid rgba(255,255,255,0.24)",
+          borderRight: "1px solid rgba(0,0,0,0.18)",
+        }}
+      >
+        {/* Subtle Concave Radial Reflection Dent */}
+        <div
+          className="pointer-events-none absolute inset-0.5 rounded-[4.5px] sm:rounded-[5.5px]"
+          style={{
+            background:
+              "radial-gradient(ellipse at 48% 32%, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 80%)",
+          }}
+        />
+
+        {/* Keycap Icon */}
+        <div className="relative z-10 transform group-hover:scale-105 transition-transform flex items-center justify-center">
+          {isWideKey && isAutoPlaying ? (
+            <div className="flex items-center gap-1">
+              <Square className="w-2.5 h-2.5 text-rose-400 fill-rose-400" />
+              <span className="text-[7.5px] font-mono font-bold text-rose-400">
+                STOP
+              </span>
+            </div>
+          ) : (
+            skill.renderIcon()
+          )}
+        </div>
+
+        {/* Tiny Sub-Legend (for normal keys only) */}
+        {!isWideKey && (
+          <span
+            className="relative z-10 text-[6px] xs:text-[6.5px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
+            style={{ color: skill.textColor || "#ffffff" }}
+          >
+            {skill.shortLabel}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
   activeProject,
   onSelectProject,
   variant = "sidebar",
+  isDeployedToStage = false,
 }) => {
   const [selectedSkill, setSelectedSkill] = useState<KeycapSkill>(KEYCAP_SKILLS[4]); // Default: React
   const [pressedIds, setPressedIds] = useState<Record<string, boolean>>({});
@@ -785,33 +1015,30 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
   const [isMobile, setIsMobile] = useState(false);
   const [showSpecDrawer, setShowSpecDrawer] = useState(false);
   const [copiedSpec, setCopiedSpec] = useState(false);
+  const [deployedIds, setDeployedIds] = useState<Set<string>>(new Set());
 
-  const getCurrentSpec = (skill: KeycapSkill): EngineeringSpec => {
-    if (ENGINEERING_SPECS[skill.id]) {
-      return ENGINEERING_SPECS[skill.id];
+  useEffect(() => {
+    if (!isDeployedToStage) {
+      setDeployedIds(new Set());
+      return;
     }
-    if (skill.category === "backend" || skill.id.includes("sql") || skill.id.includes("mongo")) {
-      return ENGINEERING_SPECS["postgresql"];
-    }
-    if (skill.category === "languages") {
-      return ENGINEERING_SPECS["typescript"];
-    }
-    if (skill.category === "frontend") {
-      return ENGINEERING_SPECS["react"];
-    }
-    return {
-      filePath: `src/core/${skill.id}.config.ts`,
-      architectureTier: `${skill.categoryLabel} Architecture`,
-      language: "typescript",
-      snippet: `// Production implementation spec for ${skill.name}
-export const ${skill.shortLabel.replace(/[^a-zA-Z0-9]/g, "") || "Skill"}Config = {
-  name: "${skill.name}",
-  category: "${skill.categoryLabel}",
-  status: "PRODUCTION_VERIFIED" as const,
-  runtime: "TypeScript 5.x / Node.js 20.x",
-};`,
+    const handleDeployedChange = (e: Event) => {
+      const custom = e as CustomEvent<{ deployedIds: string[] }>;
+      if (custom.detail?.deployedIds) {
+        setDeployedIds(new Set(custom.detail.deployedIds));
+      }
     };
-  };
+    window.addEventListener("shin-deployed-keys-change", handleDeployedChange);
+    return () => {
+      window.removeEventListener(
+        "shin-deployed-keys-change",
+        handleDeployedChange
+      );
+    };
+  }, [isDeployedToStage]);
+
+  const getCurrentSpec = (skill: KeycapSkill): EngineeringSpec =>
+    getEngineeringSpecForSkill(skill);
 
   const handleCopySpec = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -1194,11 +1421,19 @@ export const ${skill.shortLabel.replace(/[^a-zA-Z0-9]/g, "") || "Skill"}Config =
                 const isSelected = selectedSkill.id === skill.id;
                 const isProjectMatch = isSkillInActiveProject(skill);
                 const isWideKey = skill.id === "macro-play";
+                const isKeyEjected =
+                  isDeployedToStage && !isWideKey && deployedIds.has(skill.id);
 
                 return (
                   <button
                     key={skill.id}
                     type="button"
+                    data-sidebar-keycap={
+                      variant === "sidebar" ? skill.id : undefined
+                    }
+                    data-inline-keycap={
+                      variant === "inline" ? skill.id : undefined
+                    }
                     onClick={() => triggerKeycap(skill, idx)}
                     aria-label={`${skill.name} (${skill.keyTrigger})`}
                     className={`group relative ${
@@ -1216,111 +1451,20 @@ export const ${skill.shortLabel.replace(/[^a-zA-Z0-9]/g, "") || "Skill"}Config =
                       }`}
                     />
 
-                    {/* Physical 3D Keycap Body (Depresses 3px into the socket on press) */}
-                    <div
-                      className="absolute inset-0 rounded-[7px] sm:rounded-[8px] pointer-events-none transition-transform duration-75 group-hover:brightness-105"
-                      style={{
-                        transform: isPressed
-                          ? "translateY(3px)"
-                          : "translateY(0px)",
-                        boxShadow: isPressed
-                          ? isDark
-                            ? "0 1px 3px rgba(0,0,0,0.7), -1px 1px 2px rgba(0,0,0,0.5)"
-                            : "0 1px 3px rgba(0,0,0,0.2), -1px 1px 2px rgba(0,0,0,0.15)"
-                          : isDark
-                          ? `
-                            -1.5px 2px 0 ${skill.wallColor},
-                            -2.5px 4px 6px rgba(0,0,0,0.65),
-                            0 3px 6px rgba(0,0,0,0.5)
-                          `
-                          : `
-                            -1.5px 2px 0 ${skill.wallColor},
-                            -2.5px 4px 6px rgba(0,0,0,0.18),
-                            0 3px 6px rgba(0,0,0,0.12)
-                          `,
-                      }}
-                    >
-                      {/* Visible Left Side Wall (Isometric depth facet) */}
-                      <div
-                        className="absolute top-0 left-0 bottom-[2px] pointer-events-none rounded-l-[7px] sm:rounded-l-[8px]"
-                        style={{
-                          width: "4px",
-                          background: isDark
-                            ? "linear-gradient(to right, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)"
-                            : "linear-gradient(to right, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.06) 60%, transparent 100%)",
-                        }}
+                    {isKeyEjected ? (
+                      <ExposedSwitchStem skill={skill} isDark={isDark} />
+                    ) : (
+                      <Keycap3DSurface
+                        skill={skill}
+                        isDark={isDark}
+                        isPressed={isPressed}
+                        isWideKey={isWideKey}
+                        isAutoPlaying={isAutoPlaying}
                       />
-
-                      {/* Visible Front Wall (South face facing viewer with realistic gradient & bevel) */}
-                      <div
-                        className="absolute left-0 right-0 bottom-0 pointer-events-none rounded-b-[7px] sm:rounded-b-[8px] transition-all duration-75 overflow-hidden"
-                        style={{
-                          height: isPressed ? "3.5px" : "7px",
-                          background: isDark
-                            ? `linear-gradient(to bottom, ${skill.wallColor} 0%, rgba(0,0,0,0.45) 100%)`
-                            : `linear-gradient(to bottom, ${skill.wallColor} 0%, rgba(0,0,0,0.18) 100%)`,
-                          boxShadow: isDark
-                            ? "inset 0 1px 0 rgba(255,255,255,0.22)"
-                            : "inset 0 1px 0 rgba(255,255,255,0.35)",
-                          borderBottom: isDark
-                            ? "1px solid rgba(0,0,0,0.6)"
-                            : "1px solid rgba(0,0,0,0.22)",
-                        }}
-                      />
-
-                      {/* Sculpted Concave Top Dish (Holding Icon & Sub-Legend) */}
-                      <div
-                        className="absolute left-[1.5px] right-[1px] top-0 rounded-[5.5px] sm:rounded-[6.5px] flex flex-col items-center justify-center p-0.5 overflow-hidden transition-all duration-75"
-                        style={{
-                          bottom: isPressed ? "3px" : "6px",
-                          backgroundColor: skill.color,
-                          background: `linear-gradient(150deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.02) 40%, rgba(0,0,0,0.2) 100%), ${skill.color}`,
-                          boxShadow: `
-                            inset 0 1px 1px rgba(255,255,255,0.45),
-                            inset 0 -1px 2px rgba(0,0,0,0.32)
-                          `,
-                          borderTop: "1px solid rgba(255,255,255,0.42)",
-                          borderLeft: "1px solid rgba(255,255,255,0.24)",
-                          borderRight: "1px solid rgba(0,0,0,0.18)",
-                        }}
-                      >
-                        {/* Subtle Concave Radial Reflection Dent */}
-                        <div
-                          className="pointer-events-none absolute inset-0.5 rounded-[4.5px] sm:rounded-[5.5px]"
-                          style={{
-                            background:
-                              "radial-gradient(ellipse at 48% 32%, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 80%)",
-                          }}
-                        />
-
-                        {/* Keycap Icon */}
-                        <div className="relative z-10 transform group-hover:scale-105 transition-transform flex items-center justify-center">
-                          {isWideKey && isAutoPlaying ? (
-                            <div className="flex items-center gap-1">
-                              <Square className="w-2.5 h-2.5 text-rose-400 fill-rose-400" />
-                              <span className="text-[7.5px] font-mono font-bold text-rose-400">
-                                STOP
-                              </span>
-                            </div>
-                          ) : (
-                            skill.renderIcon()
-                          )}
-                        </div>
-
-                        {/* Tiny Sub-Legend (for normal keys only) */}
-                        {!isWideKey && (
-                          <span
-                            className="relative z-10 text-[6px] xs:text-[6.5px] font-mono font-bold tracking-tighter leading-none mt-0.5 opacity-90 truncate max-w-full"
-                            style={{ color: skill.textColor || "#ffffff" }}
-                          >
-                            {skill.shortLabel}
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                    )}
 
                     {/* Active Selection / Synced Project Halo Ring */}
-                    {(isSelected || isProjectMatch) && (
+                    {!isKeyEjected && (isSelected || isProjectMatch) && (
                       <span
                         className={`pointer-events-none absolute -inset-[2px] rounded-[9px] z-20 ${
                           isSelected
@@ -1342,19 +1486,58 @@ export const ${skill.shortLabel.replace(/[^a-zA-Z0-9]/g, "") || "Skill"}Config =
                 isDark ? "text-zinc-400" : "text-neutral-600 font-semibold"
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>SHIN-28</span>
+              <span
+                className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                  isDeployedToStage ? "bg-ig-pink" : "bg-emerald-500"
+                }`}
+              />
+              <span>
+                {isDeployedToStage
+                  ? `DEPLOYED (${deployedIds.size}/28)`
+                  : "SHIN-28"}
+              </span>
             </span>
             <span
               className={`uppercase tracking-tight transition-colors ${
                 isDark ? "text-zinc-500" : "text-neutral-500"
               }`}
             >
-              {isDark ? "DARK CHASSIS" : "SILVER CHASSIS"}
+              {isDeployedToStage
+                ? "EXPOSED SWITCH BAY"
+                : isDark
+                ? "DARK CHASSIS"
+                : "SILVER CHASSIS"}
             </span>
           </div>
         </div>
       </div>
+
+      {/* Deployed Status Banner when TECH STACK tab is active */}
+      {isDeployedToStage && variant === "sidebar" && (
+        <div
+          className={`mb-2 rounded-xl border px-3 py-2 flex items-center justify-between gap-2 text-[10px] font-mono ${
+            isDark
+              ? "bg-ig-pink/10 border-ig-pink/30 text-zinc-200"
+              : "bg-ig-pink/10 border-ig-pink/30 text-neutral-800"
+          }`}
+        >
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="w-2 h-2 rounded-full bg-ig-pink animate-ping flex-shrink-0" />
+            <span className="truncate font-semibold">
+              ← {deployedIds.size} Keycaps Docked in Tech Stack
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() =>
+              window.dispatchEvent(new CustomEvent("shin-replay-keycap-flight"))
+            }
+            className="px-2 py-0.5 rounded-md bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 font-bold hover:opacity-90 transition-opacity flex-shrink-0"
+          >
+            Replay Flight
+          </button>
+        </div>
+      )}
 
       {/* Skill Inspector HUD — styled as the keyboard's integrated display panel (matches chassis in Dark/Light mode) */}
       <div

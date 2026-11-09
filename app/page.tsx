@@ -213,6 +213,7 @@ export default function HomePage() {
                 }
                 onSelectProject={handleViewProject}
                 variant="sidebar"
+                isDeployedToStage={activeTab === "skills"}
               />
             </aside>
           </div>

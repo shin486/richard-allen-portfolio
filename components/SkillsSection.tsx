@@ -1,257 +1,1035 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
 import {
-  Terminal,
-  Code,
-  Cpu,
-  Database,
-  Wrench,
+  ArrowUpRight,
+  Check,
+  Code2,
+  Copy,
+  FileCode,
+  Keyboard,
+  Play,
+  RotateCcw,
   Sparkles,
-  FolderCode,
+  Square,
+  Volume2,
+  VolumeX,
+  Zap,
 } from "lucide-react";
-import { skillsData, SkillItem } from "@/data/skills";
-import { TechKeyboard3D } from "./TechKeyboard3D";
+import { projectsData } from "@/data/projects";
+import {
+  ExposedSwitchStem,
+  getEngineeringSpecForSkill,
+  KEYCAP_SKILLS,
+  Keycap3DSurface,
+  KeycapSkill,
+  SoundProfile,
+  TechKeyboard3D,
+} from "./TechKeyboard3D";
 
-type FilterKey = "all" | "core" | "languages" | "frontend" | "backend" | "tools";
-
-interface FlattenedSkill extends SkillItem {
-  categoryTitle: string;
-  categoryKey: string;
-}
+type DomainFilterKey =
+  | "all"
+  | "core"
+  | "frontend"
+  | "backend"
+  | "languages"
+  | "tools";
 
 interface SkillsSectionProps {
   onSelectProject?: (projectId: string) => void;
 }
 
+const SHIPPED_SYSTEMS = [
+  {
+    id: "palengkehub",
+    label: "PalengkeHub",
+    architecture:
+      "React Native ▸ Expo ▸ TypeScript ▸ Supabase Realtime (<250ms) ▸ PostgreSQL RLS",
+    summary: "Offline-First Public Market Mobile App",
+  },
+  {
+    id: "shinpay-plus",
+    label: "ShinPay+",
+    architecture:
+      "Next.js 14 App Router ▸ TypeScript ▸ TRAIN Tax Engine ▸ Supabase ▸ PostgreSQL RLS",
+    summary: "Multi-Tenant Enterprise Payroll & HR SaaS",
+  },
+  {
+    id: "itelect4-project",
+    label: "IT Elective 4",
+    architecture:
+      "React + Vite ▸ TypeScript ▸ Node.js & Express ▸ Gemini AI ▸ MongoDB",
+    summary: "Full-Stack JWT CRUD & Google Gemini AI Endpoint",
+  },
+  {
+    id: "auto-avenue-ims",
+    label: "Auto Avenue",
+    architecture: "PHP ▸ MySQL Relational Engine ▸ Bootstrap 5 ▸ POS Sync",
+    summary: "150+ SKU Inventory Management & POS System",
+  },
+  {
+    id: "crave-cart",
+    label: "Crave Cart",
+    architecture: "JavaScript ES6+ ▸ Node.js & Express ▸ REST API ▸ Local I/O",
+    summary: "Interactive Food Ordering Kiosk & Receipt Engine",
+  },
+];
+
 export const SkillsSection: React.FC<SkillsSectionProps> = ({
   onSelectProject,
 }) => {
-  const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
+  const [mounted, setMounted] = useState(false);
+  const [isDark, setIsDark] = useState(true);
+  const [domainFilter, setDomainFilter] = useState<DomainFilterKey>("all");
+  const [projectFilter, setProjectFilter] = useState<string | null>(null);
+  const [soundProfile, setSoundProfile] = useState<SoundProfile>("thocky");
+  const [pressedIds, setPressedIds] = useState<Record<string, boolean>>({});
+  const [expandedSpecId, setExpandedSpecId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [isAutoWaving, setIsAutoWaving] = useState(false);
 
-  const allSkills: FlattenedSkill[] = useMemo(() => {
-    return skillsData.flatMap((cat) =>
-      cat.skills.map((skill) => ({
-        ...skill,
-        categoryTitle: cat.title,
-        categoryKey: cat.categoryKey,
-      }))
-    );
-  }, []);
-
-  const coreCount = useMemo(
-    () => allSkills.filter((s) => s.highlight).length,
-    [allSkills]
+  // Flight choreography state
+  const [flightNonce, setFlightNonce] = useState<number>(0);
+  const [isFlying, setIsFlying] = useState<boolean>(true);
+  const [landedIds, setLandedIds] = useState<Set<string>>(new Set());
+  const [justLandedIds, setJustLandedIds] = useState<Record<string, boolean>>(
+    {}
   );
 
-  const filteredSkills = useMemo(() => {
-    if (activeFilter === "all") return allSkills;
-    if (activeFilter === "core") return allSkills.filter((s) => s.highlight);
-    return allSkills.filter((s) => s.categoryKey === activeFilter);
-  }, [allSkills, activeFilter]);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const flyingNodeRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const rafRef = useRef<number | null>(null);
+  const soundProfileRef = useRef<SoundProfile>(soundProfile);
 
-  const filterTabs: {
-    key: FilterKey;
-    label: string;
-    count: number;
-    icon: React.ElementType;
-  }[] = [
-    {
-      key: "all",
-      label: "All Stack",
-      count: allSkills.length,
-      icon: Terminal,
+  useEffect(() => {
+    soundProfileRef.current = soundProfile;
+  }, [soundProfile]);
+
+  // All 28 real technology keycaps (excluding the 2U macro wave key)
+  const allSkillKeys = useMemo(
+    () => KEYCAP_SKILLS.filter((k) => k.category !== "macro"),
+    []
+  );
+
+  // Filtered skills based on Domain + Shipped System X-Ray
+  const filteredSkills = useMemo(() => {
+    return allSkillKeys.filter((skill) => {
+      if (projectFilter) {
+        const matchesProject = skill.usedIn.some(
+          (u) => u.projectId === projectFilter
+        );
+        if (!matchesProject) return false;
+      }
+      if (domainFilter === "all") return true;
+      if (domainFilter === "core") return Boolean(skill.highlight);
+      return skill.category === domainFilter;
+    });
+  }, [allSkillKeys, domainFilter, projectFilter]);
+
+  // Sync Dark / Light theme
+  useEffect(() => {
+    setMounted(true);
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => {
+      observer.disconnect();
+      // Reset sidebar deployed state when unmounting SkillsSection
+      window.dispatchEvent(
+        new CustomEvent("shin-deployed-keys-change", {
+          detail: { deployedIds: [] },
+        })
+      );
+    };
+  }, []);
+
+  // Synthesize realistic mechanical switch audio via Web Audio API
+  const playSwitchSound = useCallback(
+    (profile: SoundProfile, pitchIndex = 0, gainScale = 1) => {
+      if (profile === "mute" || typeof window === "undefined") return;
+      try {
+        const AudioContextClass =
+          window.AudioContext ||
+          (window as unknown as { webkitAudioContext: typeof AudioContext })
+            .webkitAudioContext;
+        if (!audioCtxRef.current) {
+          audioCtxRef.current = new AudioContextClass();
+        }
+        const ctx = audioCtxRef.current;
+        if (ctx.state === "suspended") {
+          ctx.resume();
+        }
+
+        const now = ctx.currentTime;
+
+        // 1. Switch leaf ping
+        const clickOsc = ctx.createOscillator();
+        const clickGain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+
+        filter.type = "bandpass";
+        const baseFreq =
+          profile === "clicky" ? 2200 : profile === "thocky" ? 1350 : 950;
+        filter.frequency.setValueAtTime(
+          baseFreq + (pitchIndex % 7) * 28,
+          now
+        );
+        filter.Q.setValueAtTime(profile === "clicky" ? 5 : 3, now);
+
+        clickOsc.type = profile === "clicky" ? "sawtooth" : "triangle";
+        clickOsc.frequency.setValueAtTime(baseFreq, now);
+        clickOsc.frequency.exponentialRampToValueAtTime(280, now + 0.022);
+
+        const rawClickPeak =
+          (profile === "clicky" ? 0.32 : profile === "thocky" ? 0.22 : 0.12) *
+          gainScale;
+        clickGain.gain.setValueAtTime(Math.max(0.002, rawClickPeak), now);
+        clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+
+        clickOsc.connect(filter);
+        filter.connect(clickGain);
+        clickGain.connect(ctx.destination);
+
+        clickOsc.start(now);
+        clickOsc.stop(now + 0.026);
+
+        // 2. Keycap bottom-out thock
+        const bodyOsc = ctx.createOscillator();
+        const bodyGain = ctx.createGain();
+
+        bodyOsc.type = "sine";
+        const thockStart = profile === "thocky" ? 165 : 135;
+        bodyOsc.frequency.setValueAtTime(
+          thockStart + (pitchIndex % 7) * 5,
+          now
+        );
+        bodyOsc.frequency.exponentialRampToValueAtTime(48, now + 0.055);
+
+        const rawBodyPeak =
+          (profile === "thocky" ? 0.48 : profile === "linear" ? 0.34 : 0.24) *
+          gainScale;
+        bodyGain.gain.setValueAtTime(Math.max(0.002, rawBodyPeak), now);
+        bodyGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+        bodyOsc.connect(bodyGain);
+        bodyGain.connect(ctx.destination);
+
+        bodyOsc.start(now);
+        bodyOsc.stop(now + 0.062);
+      } catch {
+        // Ignore autoplay restrictions before user interaction
+      }
     },
+    []
+  );
+
+  // Trigger a docked 3D keycap inside SkillsSection
+  const triggerDockedSkill = useCallback(
+    (skill: KeycapSkill, index = 0, toggleSpec = true) => {
+      playSwitchSound(soundProfileRef.current, index, 1);
+
+      setPressedIds((prev) => ({ ...prev, [skill.id]: true }));
+      setTimeout(() => {
+        setPressedIds((prev) => ({ ...prev, [skill.id]: false }));
+      }, 160);
+
+      if (toggleSpec) {
+        setExpandedSpecId((prev) => (prev === skill.id ? null : skill.id));
+      }
+    },
+    [playSwitchSound]
+  );
+
+  // Listen for "Replay Flight" events from the sidebar keyboard HUD + sync physical keyboard keydowns
+  useEffect(() => {
+    const handleReplay = () => {
+      setFlightNonce((n) => n + 1);
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const keyUpper = e.key.toUpperCase();
+      const matched = allSkillKeys.find((s) => s.keyTrigger === keyUpper);
+      if (matched) {
+        setPressedIds((prev) => ({ ...prev, [matched.id]: true }));
+        setTimeout(() => {
+          setPressedIds((prev) => ({ ...prev, [matched.id]: false }));
+        }, 160);
+      }
+    };
+    window.addEventListener("shin-replay-keycap-flight", handleReplay);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("shin-replay-keycap-flight", handleReplay);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [allSkillKeys]);
+
+  // Coordinate-tracked 3D Keycap Flight Engine (Sidebar Keyboard -> Per-Skill Switch Sockets)
+  useEffect(() => {
+    if (!mounted) return;
+
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+
+    const skillsToFly = filteredSkills;
+    if (skillsToFly.length === 0) {
+      setIsFlying(false);
+      setLandedIds(new Set());
+      window.dispatchEvent(
+        new CustomEvent("shin-deployed-keys-change", {
+          detail: { deployedIds: [] },
+        })
+      );
+      return;
+    }
+
+    // Step 1: Reset all sockets to exposed switch stems & put keycaps back on sidebar briefly
+    setIsFlying(true);
+    setLandedIds(new Set());
+    window.dispatchEvent(
+      new CustomEvent("shin-deployed-keys-change", {
+        detail: { deployedIds: [] },
+      })
+    );
+
+    const FLIGHT_DURATION = 640; // ms per individual keycap flight
+    const STAGGER_MS = 28; // ms delay between each keycap peeling off the keyboard
+    const INITIAL_HOLD_MS = 90; // brief beat so visitor sees the sidebar keyboard before launch
+
+    const launchedTracker = new Set<string>();
+    const landedTracker = new Set<string>();
+    let startTime: number | null = null;
+
+    const stepFrame = (timestamp: number) => {
+      if (startTime === null) startTime = timestamp;
+      const elapsed = timestamp - startTime - INITIAL_HOLD_MS;
+
+      // Batch-read all source (sidebar/inline keyboard) and destination (skill socket) rects
+      const sourceRects: Record<string, DOMRect | null> = {};
+      const destRects: Record<string, DOMRect | null> = {};
+
+      for (let i = 0; i < skillsToFly.length; i++) {
+        const id = skillsToFly[i].id;
+        const sidebarEl = document.querySelector<HTMLElement>(
+          `[data-sidebar-keycap="${id}"]`
+        );
+        const inlineEl = document.querySelector<HTMLElement>(
+          `[data-inline-keycap="${id}"]`
+        );
+
+        let srcRect: DOMRect | null = null;
+        if (sidebarEl) {
+          const r = sidebarEl.getBoundingClientRect();
+          if (r.width > 0 && r.height > 0) srcRect = r;
+        }
+        if (!srcRect && inlineEl) {
+          const r = inlineEl.getBoundingClientRect();
+          if (r.width > 0 && r.height > 0) srcRect = r;
+        }
+        sourceRects[id] = srcRect;
+
+        const socketEl = document.querySelector<HTMLElement>(
+          `[data-skill-socket="${id}"]`
+        );
+        destRects[id] = socketEl ? socketEl.getBoundingClientRect() : null;
+      }
+
+      let newlyLaunched = false;
+      let newlyLanded = false;
+      const newlyLandedList: { id: string; index: number }[] = [];
+
+      for (let i = 0; i < skillsToFly.length; i++) {
+        const skill = skillsToFly[i];
+        const id = skill.id;
+        const delay = i * STAGGER_MS;
+        const localElapsed = elapsed - delay;
+        const flyNode = flyingNodeRefs.current[id];
+
+        if (localElapsed < 0) {
+          // Waiting on the sidebar keyboard
+          if (flyNode) {
+            flyNode.style.opacity = "0";
+          }
+          continue;
+        }
+
+        if (!launchedTracker.has(id)) {
+          launchedTracker.add(id);
+          newlyLaunched = true;
+        }
+
+        const rawProgress = Math.min(1, localElapsed / FLIGHT_DURATION);
+
+        if (rawProgress >= 1) {
+          // Keycap has landed in its target socket
+          if (flyNode) {
+            flyNode.style.opacity = "0";
+          }
+          if (!landedTracker.has(id)) {
+            landedTracker.add(id);
+            newlyLanded = true;
+            newlyLandedList.push({ id, index: i });
+          }
+          continue;
+        }
+
+        // Keycap is actively in flight across the viewport
+        const destRect = destRects[id];
+        if (!destRect || !flyNode) continue;
+
+        // Fallback origin if neither sidebar nor inline keyboard is visible
+        const fallbackX = window.innerWidth - 180;
+        const fallbackY = 180 + (i % 6) * 40;
+        const srcRect = sourceRects[id];
+
+        const startX = srcRect ? srcRect.left : fallbackX;
+        const startY = srcRect ? srcRect.top : fallbackY;
+        const startW = srcRect ? srcRect.width : 38;
+        const startH = srcRect ? srcRect.height : 40;
+
+        // Smooth cubic-out easing for X/Y translation + parabolic upward lift
+        const ease = 1 - Math.pow(1 - rawProgress, 3.1);
+        const arcLift = Math.sin(rawProgress * Math.PI) * -42;
+
+        const curX = startX + (destRect.left - startX) * ease;
+        const curY = startY + (destRect.top - startY) * ease + arcLift;
+        const curW = startW + (destRect.width - startW) * ease;
+        const curH = startH + (destRect.height - startH) * ease;
+
+        // Smoothly un-tilt from the sidebar's isometric 3D angle (25deg X, -14deg Z, 5deg Y) to 0deg
+        const rotX = 25 * (1 - ease);
+        const rotZ = -14 * (1 - ease);
+        const rotY = 5 * (1 - ease);
+        const midScale = 1 + Math.sin(rawProgress * Math.PI) * 0.22;
+
+        flyNode.style.opacity = "1";
+        flyNode.style.width = `${curW}px`;
+        flyNode.style.height = `${curH}px`;
+        flyNode.style.transform = `translate3d(${curX}px, ${curY}px, 0) perspective(700px) rotateX(${rotX.toFixed(
+          2
+        )}deg) rotateZ(${rotZ.toFixed(2)}deg) rotateY(${rotY.toFixed(
+          2
+        )}deg) scale(${midScale.toFixed(3)})`;
+      }
+
+      if (newlyLaunched) {
+        window.dispatchEvent(
+          new CustomEvent("shin-deployed-keys-change", {
+            detail: { deployedIds: Array.from(launchedTracker) },
+          })
+        );
+      }
+
+      if (newlyLanded) {
+        setLandedIds(new Set(landedTracker));
+        const pulsePatch: Record<string, boolean> = {};
+        newlyLandedList.forEach(({ id, index }) => {
+          pulsePatch[id] = true;
+          // Subtle low-volume mechanical bottom-out tick as each keycap snaps into its socket
+          if (index % 2 === 0) {
+            playSwitchSound(soundProfileRef.current, index, 0.22);
+          }
+        });
+        setJustLandedIds((prev) => ({ ...prev, ...pulsePatch }));
+        setTimeout(() => {
+          setJustLandedIds((prev) => {
+            const next = { ...prev };
+            newlyLandedList.forEach(({ id }) => {
+              delete next[id];
+            });
+            return next;
+          });
+        }, 190);
+      }
+
+      const totalDuration =
+        (skillsToFly.length - 1) * STAGGER_MS + FLIGHT_DURATION + 40;
+      if (elapsed < totalDuration) {
+        rafRef.current = requestAnimationFrame(stepFrame);
+      } else {
+        setIsFlying(false);
+        setLandedIds(new Set(skillsToFly.map((s) => s.id)));
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(stepFrame);
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+  }, [mounted, filteredSkills, flightNonce, playSwitchSound]);
+
+  // Auto-Demo Wave across all docked keycaps in SkillsSection
+  useEffect(() => {
+    if (!isAutoWaving) return;
+    let step = 0;
+    const interval = setInterval(() => {
+      if (step < filteredSkills.length) {
+        const target = filteredSkills[step];
+        triggerDockedSkill(target, step, false);
+        step++;
+      } else {
+        setIsAutoWaving(false);
+      }
+    }, 140);
+
+    return () => clearInterval(interval);
+  }, [isAutoWaving, filteredSkills, triggerDockedSkill]);
+
+  const cycleSoundProfile = () => {
+    const order: SoundProfile[] = ["thocky", "clicky", "linear", "mute"];
+    const next = order[(order.indexOf(soundProfile) + 1) % order.length];
+    setSoundProfile(next);
+    if (next !== "mute") {
+      playSwitchSound(next, 3, 0.8);
+    }
+  };
+
+  const handleCopySpec = (skillId: string, code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedId(skillId);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const activeSystemInfo = useMemo(
+    () => SHIPPED_SYSTEMS.find((s) => s.id === projectFilter) || null,
+    [projectFilter]
+  );
+
+  const domainTabs: { key: DomainFilterKey; label: string; count: number }[] = [
+    { key: "all", label: "All 28 Keys", count: allSkillKeys.length },
     {
       key: "core",
       label: "Core Stack",
-      count: coreCount,
-      icon: Sparkles,
-    },
-    {
-      key: "languages",
-      label: "Languages",
-      count:
-        skillsData.find((c) => c.categoryKey === "languages")?.skills.length ||
-        0,
-      icon: Code,
+      count: allSkillKeys.filter((s) => s.highlight).length,
     },
     {
       key: "frontend",
       label: "Frontend & Mobile",
-      count:
-        skillsData.find((c) => c.categoryKey === "frontend")?.skills.length ||
-        0,
-      icon: Cpu,
+      count: allSkillKeys.filter((s) => s.category === "frontend").length,
     },
     {
       key: "backend",
       label: "Backend & DB",
-      count:
-        skillsData.find((c) => c.categoryKey === "backend")?.skills.length || 0,
-      icon: Database,
+      count: allSkillKeys.filter((s) => s.category === "backend").length,
+    },
+    {
+      key: "languages",
+      label: "Languages",
+      count: allSkillKeys.filter((s) => s.category === "languages").length,
     },
     {
       key: "tools",
-      label: "Tools & Workflow",
-      count:
-        skillsData.find((c) => c.categoryKey === "tools")?.skills.length || 0,
-      icon: Wrench,
+      label: "Tools & Cloud",
+      count: allSkillKeys.filter((s) => s.category === "tools").length,
     },
   ];
 
-  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    el.style.setProperty("--spot-x", `${x}px`);
-    el.style.setProperty("--spot-y", `${y}px`);
-  };
-
   return (
-    <section id="skills-section" className="py-6 sm:py-8">
-      {/* On screens < xl where the right sidebar is hidden, show the 3D Keyboard inline here */}
-      <div className="xl:hidden mb-8">
-        <TechKeyboard3D onSelectProject={onSelectProject} variant="inline" />
+    <section id="skills-section" className="py-5 sm:py-7">
+      {/* On screens < xl where the right sidebar is hidden, render the 3D Keyboard Dock here so keycaps visibly fly out of it */}
+      <div className="xl:hidden mb-6">
+        <TechKeyboard3D
+          onSelectProject={onSelectProject}
+          variant="inline"
+          isDeployedToStage={true}
+        />
       </div>
 
-      {/* Section Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg p-[1.5px] animated-ig-ring flex-shrink-0">
-            <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-[6.5px] flex items-center justify-center">
-              <Terminal className="w-4 h-4 text-ig-purple" />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-zinc-100 tracking-tight">
-              Technical Skills &amp; Stack
-            </h2>
-            <p className="text-xs text-neutral-500 dark:text-zinc-400">
-              Filter by domain and see which projects use each technology
-            </p>
-          </div>
-        </div>
+      {/* Hardware Console & Flight Telemetry Header (Zero AI-Slop Icon Box) */}
+      <div className="rounded-2xl border border-neutral-200/90 dark:border-zinc-800/90 bg-white dark:bg-[#0d0e13] p-4 sm:p-5 mb-4 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-neutral-100 dark:border-zinc-800/80">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950">
+                <Keyboard className="w-3 h-3 text-ig-pink" />
+                <span>SHIN-28 SWITCH MATRIX</span>
+              </span>
 
-        <div className="text-xs text-neutral-500 dark:text-zinc-400 font-medium tabular-nums">
-          Showing{" "}
-          <strong className="text-neutral-900 dark:text-zinc-100">
-            {filteredSkills.length}
-          </strong>{" "}
-          of {allSkills.length} technologies
-        </div>
-      </div>
-
-      {/* Interactive Filter Pills */}
-      <div
-        className="flex items-center gap-1.5 overflow-x-auto pb-4 no-scrollbar"
-        role="tablist"
-        aria-label="Filter technologies by category"
-      >
-        {filterTabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeFilter === tab.key;
-
-          return (
-            <button
-              key={tab.key}
-              type="button"
-              onClick={() => setActiveFilter(tab.key)}
-              role="tab"
-              aria-selected={isActive}
-              className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 border active:scale-95 ${
-                isActive
-                  ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 border-neutral-900 dark:border-zinc-100 shadow-sm"
-                  : "bg-white dark:bg-[#111116] text-neutral-600 dark:text-zinc-400 border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 hover:text-neutral-900 dark:hover:text-zinc-200"
-              }`}
-            >
-              <Icon
-                className={`w-3.5 h-3.5 ${
-                  isActive
-                    ? "text-ig-pink"
-                    : "text-neutral-400 dark:text-zinc-500"
-                }`}
-              />
-              <span>{tab.label}</span>
               <span
-                className={`text-[10px] tabular-nums px-1.5 py-0.2 rounded-full font-mono ${
-                  isActive
-                    ? "bg-white/20 dark:bg-neutral-900/15 text-white dark:text-neutral-900"
-                    : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
+                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
+                  isFlying
+                    ? "bg-ig-pink/10 text-ig-pink border-ig-pink/30"
+                    : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/25"
                 }`}
               >
-                {tab.count}
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    isFlying
+                      ? "bg-ig-pink animate-ping"
+                      : "bg-emerald-500 animate-pulse"
+                  }`}
+                />
+                <span>
+                  {isFlying
+                    ? `Deploying Keycaps (${landedIds.size}/${filteredSkills.length})...`
+                    : `${landedIds.size}/${filteredSkills.length} Keycaps Docked`}
+                </span>
               </span>
+            </div>
+
+            <p className="text-xs text-neutral-500 dark:text-zinc-400 mt-1.5">
+              Each 3D keycap flies from the mechanical keyboard into its own
+              switch socket below. Click any 3D keycap—or press{" "}
+              <kbd className="px-1.5 py-0.5 text-[10px] font-mono font-semibold rounded bg-neutral-100 dark:bg-zinc-800 text-neutral-800 dark:text-zinc-200 border border-neutral-200 dark:border-zinc-700">
+                A–Z
+              </kbd>{" "}
+              on your keyboard—to test switch travel &amp; inspect live code.
+            </p>
+          </div>
+
+          {/* Tactile Hardware Controls: Replay Flight, Wave 28, Audio Switch Profile */}
+          <div className="flex items-center gap-1.5 flex-wrap sm:flex-nowrap flex-shrink-0">
+            <button
+              type="button"
+              onClick={() => setFlightNonce((n) => n + 1)}
+              data-note="Watch all 3D keycaps eject from the keyboard and fly into their skill sockets."
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 transition-all active:scale-95 shadow-2xs"
+            >
+              <RotateCcw
+                className={`w-3.5 h-3.5 ${isFlying ? "animate-spin" : ""}`}
+              />
+              <span>Replay Flight</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => setIsAutoWaving((prev) => !prev)}
+              data-note="Run an automated mechanical typing wave across all docked keycaps."
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono font-semibold border transition-all active:scale-95 ${
+                isAutoWaving
+                  ? "bg-rose-500/15 text-rose-500 border-rose-500/30"
+                  : "bg-neutral-50 dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700"
+              }`}
+            >
+              {isAutoWaving ? (
+                <>
+                  <Square className="w-3 h-3 fill-current" />
+                  <span>Stop Wave</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-3 h-3 fill-current text-ig-pink" />
+                  <span>Wave</span>
+                </>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={cycleSoundProfile}
+              data-note="Cycle mechanical switch acoustics: Thocky, Clicky, Linear, or Mute."
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-neutral-50 dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 border border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 transition-colors"
+              title="Cycle mechanical switch sound profile"
+            >
+              {soundProfile === "mute" ? (
+                <VolumeX className="w-3.5 h-3.5 text-neutral-400" />
+              ) : (
+                <Volume2 className="w-3.5 h-3.5 text-ig-pink" />
+              )}
+              <span className="capitalize">{soundProfile}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Row 1: System X-Ray Bar (Filter Stack by Shipped Production System) */}
+        <div className="pt-3 flex flex-col gap-2.5">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mr-1 flex items-center gap-1 flex-shrink-0">
+              <Zap className="w-3 h-3 text-ig-pink" />
+              <span>System X-Ray:</span>
+            </span>
+
+            <button
+              type="button"
+              onClick={() => setProjectFilter(null)}
+              className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold transition-all border ${
+                projectFilter === null
+                  ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-zinc-950 border-neutral-900 dark:border-zinc-100"
+                  : "bg-neutral-50 dark:bg-zinc-900/80 text-neutral-600 dark:text-zinc-400 border-neutral-200/80 dark:border-zinc-800 hover:text-neutral-900 dark:hover:text-zinc-200"
+              }`}
+            >
+              All Systems
+            </button>
+
+            {SHIPPED_SYSTEMS.map((sys) => {
+              const isSelected = projectFilter === sys.id;
+              const keyCount = allSkillKeys.filter((k) =>
+                k.usedIn.some((u) => u.projectId === sys.id)
+              ).length;
+
+              return (
+                <button
+                  key={sys.id}
+                  type="button"
+                  onClick={() =>
+                    setProjectFilter((prev) =>
+                      prev === sys.id ? null : sys.id
+                    )
+                  }
+                  className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold transition-all border flex items-center gap-1.5 ${
+                    isSelected
+                      ? "bg-ig-pink text-white border-ig-pink shadow-2xs"
+                      : "bg-neutral-50 dark:bg-zinc-900/80 text-neutral-600 dark:text-zinc-400 border-neutral-200/80 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 hover:text-neutral-900 dark:hover:text-zinc-200"
+                  }`}
+                >
+                  <span>{sys.label}</span>
+                  <span
+                    className={`text-[9.5px] px-1 rounded ${
+                      isSelected
+                        ? "bg-black/20 text-white"
+                        : "bg-neutral-200/70 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
+                    }`}
+                  >
+                    {keyCount}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Row 2: Architectural Layer Filter Tabs */}
+          <div
+            className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5"
+            role="tablist"
+            aria-label="Filter keycaps by architectural domain"
+          >
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mr-1 flex items-center gap-1 flex-shrink-0">
+              <Sparkles className="w-3 h-3 text-ig-purple" />
+              <span>Layer:</span>
+            </span>
+
+            {domainTabs.map((tab) => {
+              const isActive = domainFilter === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setDomainFilter(tab.key)}
+                  className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-medium transition-all border flex items-center gap-1.5 ${
+                    isActive
+                      ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-zinc-950 border-neutral-900 dark:border-zinc-100 font-semibold"
+                      : "bg-white dark:bg-[#111218] text-neutral-600 dark:text-zinc-400 border-neutral-200/80 dark:border-zinc-800/90 hover:text-neutral-900 dark:hover:text-zinc-200"
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  <span
+                    className={`text-[9.5px] font-mono px-1 rounded ${
+                      isActive
+                        ? "bg-white/20 dark:bg-black/15 text-white dark:text-zinc-950"
+                        : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Active Shipped System Pipeline Banner (When a project X-Ray is selected) */}
+        {activeSystemInfo && (
+          <div className="mt-3.5 pt-3 border-t border-neutral-100 dark:border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 animate-fade-in">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-neutral-900 dark:text-zinc-100">
+                  {activeSystemInfo.label} Pipeline
+                </span>
+                <span className="text-[11px] text-neutral-500 dark:text-zinc-400">
+                  · {activeSystemInfo.summary}
+                </span>
+              </div>
+              <p className="text-[11px] font-mono text-ig-pink mt-0.5 truncate">
+                {activeSystemInfo.architecture}
+              </p>
+            </div>
+
+            {onSelectProject && (
+              <button
+                type="button"
+                onClick={() => onSelectProject(activeSystemInfo.id)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-ig-pink text-white hover:opacity-95 transition-opacity self-start sm:self-auto flex-shrink-0"
+              >
+                <span>Open {activeSystemInfo.label} Live Demo</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Docked Mechanical Switch Socket Matrix (2-Column Hardware Ledger) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {filteredSkills.map((skill, idx) => {
+          const isLanded = landedIds.has(skill.id);
+          const isJustLanded = Boolean(justLandedIds[skill.id]);
+          const isPressed = Boolean(pressedIds[skill.id]) || isJustLanded;
+          const isSpecOpen = expandedSpecId === skill.id;
+          const spec = getEngineeringSpecForSkill(skill);
+
+          return (
+            <div
+              key={skill.id}
+              className={`group/module rounded-2xl border transition-all duration-200 overflow-hidden ${
+                isSpecOpen
+                  ? "bg-white dark:bg-[#12131a] border-neutral-400 dark:border-zinc-600 shadow-md"
+                  : "bg-white dark:bg-[#0e0f15] border-neutral-200/90 dark:border-zinc-800/90 hover:border-neutral-300 dark:hover:border-zinc-700"
+              }`}
+            >
+              <div className="p-3.5 sm:p-4 flex items-start gap-3.5">
+                {/* LEFT: Recessed Mechanical Switch Socket + Docked 3D Keycap */}
+                <div className="flex flex-col items-center gap-1 flex-shrink-0">
+                  <button
+                    type="button"
+                    data-skill-socket={skill.id}
+                    onClick={() => triggerDockedSkill(skill, idx, true)}
+                    title={`Press ${skill.name} 3D keycap (or [${skill.keyTrigger}] on keyboard) to test switch & view code spec`}
+                    aria-label={`${skill.name} mechanical switch keycap`}
+                    className="group relative w-[46px] h-[48px] rounded-[9px] focus:outline-none select-none cursor-pointer flex-shrink-0"
+                  >
+                    {/* Anodized Aluminum Switch Socket Bezel */}
+                    <div
+                      className={`absolute -inset-[3px] rounded-[11px] pointer-events-none transition-all duration-300 ${
+                        isDark
+                          ? "bg-[#07080c] border border-white/10 shadow-[inset_0_2px_5px_rgba(0,0,0,0.95)]"
+                          : "bg-[#e2e8f0] border border-neutral-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.15)]"
+                      }`}
+                    />
+
+                    {/* Socket Landing Flash Ring */}
+                    {isJustLanded && (
+                      <span
+                        className="pointer-events-none absolute -inset-[4px] rounded-[12px] z-30 animate-ping"
+                        style={{
+                          border: `2px solid ${skill.color}`,
+                          boxShadow: `0 0 16px ${skill.color}`,
+                        }}
+                      />
+                    )}
+
+                    {/* Before landing: Exposed Switch Stem (+). Once landed: Physical 3D Keycap */}
+                    {!isLanded ? (
+                      <ExposedSwitchStem
+                        skill={skill}
+                        isDark={isDark}
+                        isIncoming={true}
+                      />
+                    ) : (
+                      <Keycap3DSurface
+                        skill={skill}
+                        isDark={isDark}
+                        isPressed={isPressed}
+                      />
+                    )}
+                  </button>
+
+                  {/* Micro Keybinding Label under Socket */}
+                  <span className="text-[9px] font-mono font-semibold text-neutral-400 dark:text-zinc-500 leading-none">
+                    [{skill.keyTrigger}]
+                  </span>
+                </div>
+
+                {/* RIGHT: Clean Engineering Telemetry & Interactive Actions */}
+                <div className="flex-1 min-w-0">
+                  {/* Top Row: Name + Core LED + Domain Tag */}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <h3 className="font-bold text-sm sm:text-[15px] text-neutral-900 dark:text-zinc-100 truncate">
+                        {skill.name}
+                      </h3>
+                      {skill.highlight && (
+                        <span
+                          className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase tracking-wider border flex-shrink-0"
+                          style={{
+                            backgroundColor: `${skill.color}18`,
+                            color: isDark ? "#f4f4f5" : "#18181b",
+                            borderColor: `${skill.color}55`,
+                          }}
+                        >
+                          <span
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{ backgroundColor: skill.color }}
+                          />
+                          CORE
+                        </span>
+                      )}
+                    </div>
+
+                    <span className="text-[10px] font-mono font-medium text-neutral-400 dark:text-zinc-500 flex-shrink-0">
+                      {skill.categoryLabel}
+                    </span>
+                  </div>
+
+                  {/* Middle Row: Concise Architectural Description */}
+                  <p className="text-xs text-neutral-600 dark:text-zinc-300 mt-1 leading-relaxed">
+                    {skill.description}
+                  </p>
+
+                  {/* Bottom Inline Bar: Clickable Project Links + Code Spec Drawer Trigger */}
+                  <div className="mt-2.5 flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {skill.usedIn.map((item) => {
+                        const isClickable =
+                          Boolean(item.projectId) && Boolean(onSelectProject);
+                        const matchedProject = item.projectId
+                          ? projectsData.find((p) => p.id === item.projectId)
+                          : null;
+
+                        return isClickable ? (
+                          <button
+                            key={item.label}
+                            type="button"
+                            onClick={() =>
+                              item.projectId &&
+                              onSelectProject?.(item.projectId)
+                            }
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-semibold bg-neutral-100 hover:bg-neutral-900 text-neutral-700 hover:text-white dark:bg-zinc-800/90 dark:hover:bg-zinc-100 dark:text-zinc-300 dark:hover:text-zinc-950 border border-neutral-200/80 dark:border-zinc-700/70 transition-colors active:scale-95"
+                            title={
+                              matchedProject
+                                ? `Open ${matchedProject.title} interactive demo`
+                                : item.label
+                            }
+                          >
+                            <span>{item.label}</span>
+                            <ArrowUpRight className="w-2.5 h-2.5 opacity-75" />
+                          </button>
+                        ) : (
+                          <span
+                            key={item.label}
+                            className="inline-flex items-center px-2 py-0.5 rounded-md text-[10.5px] font-medium bg-neutral-50 dark:bg-zinc-900 text-neutral-500 dark:text-zinc-400 border border-neutral-200/60 dark:border-zinc-800"
+                          >
+                            {item.label}
+                          </span>
+                        );
+                      })}
+                    </div>
+
+                    {/* Inspect Live Engineering Spec Button */}
+                    <button
+                      type="button"
+                      onClick={() => triggerDockedSkill(skill, idx, true)}
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border transition-colors ml-auto ${
+                        isSpecOpen
+                          ? "bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950 border-neutral-900 dark:border-zinc-100"
+                          : "bg-transparent text-neutral-500 dark:text-zinc-400 border-neutral-200 dark:border-zinc-800 hover:text-neutral-900 dark:hover:text-zinc-200 hover:border-neutral-300 dark:hover:border-zinc-700"
+                      }`}
+                    >
+                      <Code2 className="w-3 h-3 text-ig-pink" />
+                      <span>{isSpecOpen ? "Hide Spec ▲" : "Code Spec ▾"}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Expandable Production Code Spec Drawer */}
+              {isSpecOpen && (
+                <div className="border-t border-neutral-200 dark:border-zinc-800 bg-[#0b0d13] text-zinc-200 font-mono text-left animate-fade-in">
+                  <div className="px-3.5 py-2 bg-[#121620] border-b border-white/10 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <FileCode className="w-3.5 h-3.5 text-ig-pink flex-shrink-0" />
+                      <span className="text-[10px] text-zinc-300 truncate">
+                        {spec.filePath}
+                      </span>
+                      <span className="hidden sm:inline text-[9.5px] text-zinc-500 truncate">
+                        · {spec.architectureTier}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCopySpec(skill.id, spec.snippet)}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] bg-white/10 hover:bg-white/15 text-zinc-200 transition-colors flex-shrink-0"
+                    >
+                      {copiedId === skill.id ? (
+                        <>
+                          <Check className="w-2.5 h-2.5 text-emerald-400" />
+                          <span className="text-emerald-400">Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-2.5 h-2.5" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <pre className="p-3.5 text-[10.5px] leading-relaxed overflow-x-auto text-zinc-200">
+                    <code>{spec.snippet}</code>
+                  </pre>
+                </div>
+              )}
+            </div>
           );
         })}
       </div>
 
-      {/* Interactive Skill Cards Grid with Cursor Spotlight, Milled Hardware Lighting & Staggered Cascade */}
-      <div
-        key={activeFilter}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
-      >
-        {filteredSkills.map((skill, idx) => (
+      {/* Fixed Full-Viewport 3D Keycap Flight Portal (Renders Flying Keycaps from Sidebar Keyboard -> Skill Sockets) */}
+      {mounted &&
+        isFlying &&
+        createPortal(
           <div
-            key={`${skill.categoryKey}-${skill.name}`}
-            onMouseMove={handleCardMouseMove}
-            style={{ animationDelay: `${Math.min(idx * 22, 260)}ms` }}
-            className="stagger-item spotlight-card milled-card bg-white dark:bg-[#111116] border border-neutral-200/90 dark:border-zinc-800 border-t-neutral-300/80 dark:border-t-zinc-700/70 rounded-xl p-4 hover:-translate-y-0.5 hover:border-neutral-300 dark:hover:border-zinc-700 transition-all duration-200 flex flex-col justify-between gap-3"
+            aria-hidden="true"
+            className="fixed inset-0 z-[85] pointer-events-none select-none overflow-hidden"
           >
-            <div className="relative z-10">
-              {/* Top Row: Name + Core / Category Badge */}
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-bold text-sm sm:text-base text-neutral-900 dark:text-zinc-100">
-                    {skill.name}
-                  </h3>
-                  {skill.highlight && (
-                    <span
-                      className="w-2 h-2 rounded-full bg-ig-pink flex-shrink-0"
-                      title="Core Stack Technology"
-                    />
-                  )}
-                </div>
-
-                {(activeFilter === "all" || activeFilter === "core") && (
-                  <span className="text-[10.5px] font-medium text-neutral-500 dark:text-zinc-400 flex-shrink-0">
-                    {skill.categoryTitle}
-                  </span>
-                )}
+            {filteredSkills.map((skill) => (
+              <div
+                key={`flying-${skill.id}`}
+                ref={(el) => {
+                  flyingNodeRefs.current[skill.id] = el;
+                }}
+                style={{
+                  opacity: 0,
+                  left: 0,
+                  top: 0,
+                  width: "40px",
+                  height: "42px",
+                  transformOrigin: "center center",
+                  willChange: "transform, width, height, opacity",
+                  filter: `drop-shadow(0 14px 20px ${skill.color}66)`,
+                }}
+                className="fixed pointer-events-none"
+              >
+                <Keycap3DSurface
+                  skill={skill}
+                  isDark={isDark}
+                  isPressed={false}
+                />
               </div>
-
-              {/* Description */}
-              {skill.description && (
-                <p className="text-xs text-neutral-600 dark:text-zinc-300 mt-1.5 leading-relaxed">
-                  {skill.description}
-                </p>
-              )}
-            </div>
-
-            {/* Project Cross-Reference ("Used in") */}
-            {skill.usedIn && skill.usedIn.length > 0 && (
-              <div className="relative z-10 pt-2.5 border-t border-neutral-100 dark:border-zinc-800/80 flex flex-col gap-1.5">
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-zinc-500 flex items-center gap-1">
-                  <FolderCode className="w-3 h-3 text-ig-purple" />
-                  Used in Projects
-                </span>
-                <div className="flex flex-wrap gap-1">
-                  {skill.usedIn.map((projName) => (
-                    <span
-                      key={projName}
-                      className="px-2 py-0.5 rounded text-[11px] font-medium bg-neutral-100 dark:bg-zinc-800 text-neutral-700 dark:text-zinc-300"
-                    >
-                      {projName}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+            ))}
+          </div>,
+          document.body
+        )}
     </section>
   );
 };
