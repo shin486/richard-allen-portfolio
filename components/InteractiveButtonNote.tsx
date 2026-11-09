@@ -1,25 +1,35 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import { createPortal } from "react-dom";
 
-interface ActiveNoteState {
+interface TargetAnchor {
   text: string;
-  x: number;
-  y: number;
-  tailOffsetX: number;
+  targetCenterX: number;
+  targetTop: number;
+  targetBottom: number;
   placement: "top" | "bottom";
 }
 
 /**
  * Universal Cursor-Aware Interactive Button Note
- * - Renders an anchored micro-balloon pointing directly to any hovered button/control with [data-note]
- * - Smart de-duplication: defers to the Avatar's ProfileNote bubble when hovering inside #profile-header while visible
- * - Viewport-clamped (never clips off left, right, or top edges)
+ * - Matches the exact leveled single-line geometry, padding, and 2-dot thought tail of ProfileNote.tsx
+ * - Never uses CSS keyframe animations on the positioned wrapper (so translate3d(-50%, -100%, 0) is never overridden)
+ * - Measures real bubble width via useLayoutEffect so single-line bubbles stay leveled and clamped inside the viewport
  */
 export const InteractiveButtonNote: React.FC = () => {
   const [mounted, setMounted] = useState(false);
-  const [noteState, setNoteState] = useState<ActiveNoteState | null>(null);
+  const [anchor, setAnchor] = useState<TargetAnchor | null>(null);
+  const [clampedX, setClampedX] = useState<number>(0);
+  const [tailOffsetX, setTailOffsetX] = useState<number>(0);
+  const [isPopping, setIsPopping] = useState<boolean>(false);
+
   const activeTargetRef = useRef<HTMLElement | null>(null);
   const bubbleRef = useRef<HTMLDivElement | null>(null);
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -31,16 +41,15 @@ export const InteractiveButtonNote: React.FC = () => {
     };
   }, []);
 
-  const computePosition = useCallback((target: HTMLElement, text: string) => {
-    // If hovering inside #profile-header and the Avatar Thought Bubble is visible,
-    // let the Avatar's ProfileNote display the thought without a duplicate floating tooltip
+  const updateTargetAnchor = useCallback((target: HTMLElement, text: string) => {
+    // Defer to the Avatar's upper-head ProfileNote when hovering inside #profile-header while visible
     const inProfileHeader = Boolean(target.closest("#profile-header"));
     if (inProfileHeader) {
       const avatarAnchor = document.getElementById("profile-avatar-note-anchor");
       if (avatarAnchor) {
         const anchorRect = avatarAnchor.getBoundingClientRect();
         if (anchorRect.top >= 48 && anchorRect.bottom <= window.innerHeight) {
-          setNoteState(null);
+          setAnchor(null);
           return;
         }
       }
@@ -48,47 +57,58 @@ export const InteractiveButtonNote: React.FC = () => {
 
     const rect = target.getBoundingClientRect();
     if (rect.width === 0 && rect.height === 0) {
-      setNoteState(null);
+      setAnchor(null);
       return;
     }
 
-    const vw = window.innerWidth;
-    const margin = 12;
-    const estimatedWidth = Math.min(
-      vw - margin * 2,
-      Math.max(180, Math.min(340, text.length * 6.8 + 28))
-    );
-
     const targetCenterX = rect.left + rect.width / 2;
-    const minCenterX = margin + estimatedWidth / 2;
-    const maxCenterX = vw - margin - estimatedWidth / 2;
-    const clampedCenterX = Math.max(
-      minCenterX,
-      Math.min(maxCenterX, targetCenterX)
-    );
+    // Flip below only if the button is near the very top edge of the viewport (e.g. Sticky Navbar)
+    const placement: "top" | "bottom" = rect.top < 84 ? "bottom" : "top";
 
-    const tailOffsetX = Math.max(
-      -estimatedWidth / 2 + 16,
-      Math.min(estimatedWidth / 2 - 16, targetCenterX - clampedCenterX)
-    );
-
-    // Flip below if the button is near the top of the viewport (e.g., Sticky Navbar buttons)
-    const placement: "top" | "bottom" = rect.top < 96 ? "bottom" : "top";
-    const y = placement === "top" ? rect.top - 10 : rect.bottom + 10;
-
-    setNoteState({
-      text,
-      x: clampedCenterX,
-      y,
-      tailOffsetX,
-      placement,
+    setAnchor((prev) => {
+      if (!prev || prev.text !== text) {
+        setIsPopping(true);
+        setTimeout(() => setIsPopping(false), 200);
+      }
+      return {
+        text,
+        targetCenterX,
+        targetTop: rect.top,
+        targetBottom: rect.bottom,
+        placement,
+      };
     });
   }, []);
+
+  // Measure actual rendered single-line bubble width so it stays leveled and clamped within viewport
+  useLayoutEffect(() => {
+    if (!anchor) return;
+    const vw = window.innerWidth;
+    const margin = 16;
+    const bubbleEl = bubbleRef.current;
+    const bubbleWidth = bubbleEl ? bubbleEl.offsetWidth : 260;
+
+    const halfWidth = bubbleWidth / 2;
+    const minCenterX = margin + halfWidth;
+    const maxCenterX = Math.max(minCenterX, vw - margin - halfWidth);
+    const nextClampedX = Math.max(
+      minCenterX,
+      Math.min(maxCenterX, anchor.targetCenterX)
+    );
+
+    const maxTailShift = Math.max(0, halfWidth - 18);
+    const nextTailOffset = Math.max(
+      -maxTailShift,
+      Math.min(maxTailShift, anchor.targetCenterX - nextClampedX)
+    );
+
+    setClampedX(nextClampedX);
+    setTailOffsetX(nextTailOffset);
+  }, [anchor]);
 
   useEffect(() => {
     if (!mounted) return;
 
-    // Only activate cursor hover notes on fine pointer devices (mouse/trackpad)
     const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
     if (isCoarsePointer) return;
 
@@ -107,7 +127,7 @@ export const InteractiveButtonNote: React.FC = () => {
       }
 
       activeTargetRef.current = target;
-      computePosition(target, note);
+      updateTargetAnchor(target, note);
     };
 
     const handleMouseOut = (e: MouseEvent) => {
@@ -122,7 +142,7 @@ export const InteractiveButtonNote: React.FC = () => {
       hideTimerRef.current = setTimeout(() => {
         if (activeTargetRef.current === target) {
           activeTargetRef.current = null;
-          setNoteState(null);
+          setAnchor(null);
         }
       }, 90);
     };
@@ -131,15 +151,15 @@ export const InteractiveButtonNote: React.FC = () => {
       if (activeTargetRef.current) {
         const note = activeTargetRef.current.getAttribute("data-note");
         if (note) {
-          computePosition(activeTargetRef.current, note);
+          updateTargetAnchor(activeTargetRef.current, note);
         } else {
-          setNoteState(null);
+          setAnchor(null);
         }
       }
     };
 
     const handleMouseDown = () => {
-      setNoteState(null);
+      setAnchor(null);
     };
 
     document.addEventListener("mouseover", handleMouseOver, { passive: true });
@@ -155,49 +175,66 @@ export const InteractiveButtonNote: React.FC = () => {
       window.removeEventListener("resize", handleViewportChange);
       document.removeEventListener("mousedown", handleMouseDown);
     };
-  }, [mounted, computePosition]);
+  }, [mounted, updateTargetAnchor]);
 
-  if (!mounted || !noteState) return null;
+  if (!mounted || !anchor) return null;
+
+  // 16px vertical clearance so the 2-dot thought tail floats cleanly above/below the button without overlapping it
+  const y =
+    anchor.placement === "top"
+      ? anchor.targetTop - 16
+      : anchor.targetBottom + 16;
 
   return createPortal(
     <div
-      ref={bubbleRef}
       role="status"
       aria-live="polite"
       style={{
-        left: `${noteState.x}px`,
-        top: `${noteState.y}px`,
+        left: `${clampedX || anchor.targetCenterX}px`,
+        top: `${y}px`,
         transform:
-          noteState.placement === "top"
+          anchor.placement === "top"
             ? "translate3d(-50%, -100%, 0)"
             : "translate3d(-50%, 0, 0)",
       }}
-      className="fixed z-[90] pointer-events-none select-none transition-opacity duration-150 animate-fade-in"
+      className="fixed z-[90] pointer-events-none select-none"
     >
-      <div className="relative inline-flex items-center px-3 py-1.5 max-w-[min(340px,calc(100vw-24px))] pixel-balloon text-[9.5px] sm:text-[10px] font-pixel font-semibold leading-snug shadow-lg">
-        <span className="whitespace-normal break-words tracking-tight font-pixel text-center">
-          {noteState.text}
+      {/* Leveled Single-Line Conversational Bubble (Matches ProfileNote.tsx in Upper Head) */}
+      <div
+        ref={bubbleRef}
+        className={`relative inline-flex items-center px-3 py-1.5 sm:px-3.5 sm:py-2 w-max max-w-[calc(100vw-32px)] sm:max-w-none pixel-balloon text-[9px] sm:text-[10px] md:text-[10.5px] font-pixel font-semibold leading-none transition-transform duration-200 ${
+          isPopping ? "scale-105" : "scale-100"
+        }`}
+      >
+        <span className="whitespace-normal sm:whitespace-nowrap break-words tracking-tight font-pixel text-left leading-tight sm:leading-none">
+          {anchor.text}
         </span>
 
-        {/* Directional 8-Bit Pointer Tail */}
-        {noteState.placement === "top" ? (
-          <span
+        {/* Authentic 2-Dot Thought Tail (Matches ProfileNote.tsx) */}
+        {anchor.placement === "top" ? (
+          <div
             aria-hidden="true"
             style={{
-              left: `calc(50% + ${noteState.tailOffsetX}px)`,
+              left: `calc(50% + ${tailOffsetX}px)`,
               transform: "translateX(-50%)",
             }}
-            className="absolute -bottom-[6px] w-2.5 h-1.5 pixel-tail-dot"
-          />
+            className="absolute -bottom-3 flex flex-col items-center gap-0.5 pointer-events-none"
+          >
+            <span className="w-1.5 h-1.5 pixel-tail-dot flex-shrink-0" />
+            <span className="w-1 h-1 pixel-tail-dot flex-shrink-0" />
+          </div>
         ) : (
-          <span
+          <div
             aria-hidden="true"
             style={{
-              left: `calc(50% + ${noteState.tailOffsetX}px)`,
+              left: `calc(50% + ${tailOffsetX}px)`,
               transform: "translateX(-50%)",
             }}
-            className="absolute -top-[6px] w-2.5 h-1.5 pixel-tail-dot"
-          />
+            className="absolute -top-3 flex flex-col items-center gap-0.5 pointer-events-none"
+          >
+            <span className="w-1 h-1 pixel-tail-dot flex-shrink-0" />
+            <span className="w-1.5 h-1.5 pixel-tail-dot flex-shrink-0" />
+          </div>
         )}
       </div>
     </div>,
