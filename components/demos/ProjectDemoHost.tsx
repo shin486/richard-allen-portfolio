@@ -114,9 +114,9 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
           {/* Render Authentic Hardware Device Viewport */}
           {projectId === "palengkehub" && isPhoneMode ? (
             /* Authentic Mobile Phone Frame Chassis for PalengkeHub */
-            <div className="w-full h-[510px] sm:h-[530px] rounded-lg border border-neutral-200 dark:border-zinc-800 shadow-md overflow-hidden bg-neutral-100/70 dark:bg-zinc-950 p-2 sm:p-3 flex items-center justify-center relative">
-              {/* Chassis Top Controls */}
-              <div className="absolute top-2.5 right-3.5 z-30 flex items-center gap-1.5">
+            <div className="w-full h-[520px] sm:h-[530px] rounded-lg border border-neutral-200 dark:border-zinc-800 shadow-md overflow-hidden bg-neutral-100/70 dark:bg-zinc-950 p-1 sm:p-3 flex items-center justify-center relative">
+              {/* Chassis Top Controls (Desktop / Tablet) */}
+              <div className="hidden sm:flex absolute top-2.5 right-3.5 z-30 items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setIsPhoneMode(false)}
@@ -128,15 +128,15 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
                 </button>
               </div>
 
-              {/* Curved Phone Chassis */}
-              <div className="w-full max-w-[340px] sm:max-w-[350px] h-full rounded-[38px] border-[4px] border-zinc-800 dark:border-zinc-700 bg-[#F7F5F0] shadow-2xl relative flex flex-col overflow-hidden">
+              {/* Curved Phone Chassis (Edge-to-edge on mobile, framed phone on sm+) */}
+              <div className="w-full max-w-full sm:max-w-[350px] h-full rounded-[22px] sm:rounded-[38px] border-[2px] sm:border-[4px] border-zinc-800 dark:border-zinc-700 bg-[#F7F5F0] shadow-2xl relative flex flex-col overflow-hidden">
                 {/* Dynamic Island Pill */}
-                <div className="absolute top-1.5 inset-x-0 mx-auto w-24 h-3.5 bg-black rounded-full flex items-center justify-end pr-2 z-30 shadow-xs pointer-events-none">
+                <div className="hidden sm:flex absolute top-1.5 inset-x-0 mx-auto w-24 h-3.5 bg-black rounded-full items-center justify-end pr-2 z-30 shadow-xs pointer-events-none">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500/80" />
                 </div>
 
                 {/* Inner Mobile Screen */}
-                <div className="flex-1 w-full overflow-hidden pt-1.5">
+                <div className="flex-1 w-full overflow-hidden sm:pt-1.5">
                   <PalengkeHubDemo />
                 </div>
 
@@ -146,18 +146,18 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
             </div>
           ) : (
             /* Authentic Desktop Browser Chrome Window */
-            <div className="w-full h-[490px] sm:h-[520px] rounded-lg border border-neutral-200 dark:border-zinc-800 shadow-md overflow-hidden bg-white dark:bg-zinc-950 flex flex-col">
+            <div className="w-full h-[500px] sm:h-[520px] rounded-lg border border-neutral-200 dark:border-zinc-800 shadow-md overflow-hidden bg-white dark:bg-zinc-950 flex flex-col">
               {/* macOS Window Header */}
-              <div className="px-3 py-2 bg-neutral-100 dark:bg-zinc-900 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between gap-2 shrink-0">
+              <div className="px-2.5 sm:px-3 py-2 bg-neutral-100 dark:bg-zinc-900 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between gap-2 shrink-0">
                 {/* Traffic Lights */}
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="w-2.5 h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
+                <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+                  <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
+                  <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
+                  <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-zinc-400 dark:bg-zinc-700" />
                 </div>
 
                 {/* Center SSL Address Bar */}
-                <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-md bg-white dark:bg-zinc-800/80 border border-neutral-200 dark:border-zinc-700 text-[10.5px] font-mono text-neutral-600 dark:text-zinc-300 max-w-xs truncate shadow-2xs">
+                <div className="flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-md bg-white dark:bg-zinc-800/80 border border-neutral-200 dark:border-zinc-700 text-[10px] sm:text-[10.5px] font-mono text-neutral-600 dark:text-zinc-300 min-w-0 flex-1 max-w-[165px] xs:max-w-[220px] sm:max-w-xs truncate shadow-2xs">
                   <Lock className="w-2.5 h-2.5 text-zinc-400 shrink-0" />
                   <span className="truncate">{activeUrl}</span>
                 </div>
@@ -168,11 +168,11 @@ export const ProjectDemoHost: React.FC<ProjectDemoHostProps> = ({
                     <button
                       type="button"
                       onClick={() => setIsPhoneMode(true)}
-                      className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded flex items-center gap-1 hover:text-zinc-200 transition-colors"
+                      className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-1.5 sm:px-2 py-0.5 rounded flex items-center gap-1 hover:text-zinc-200 transition-colors"
                       title="Switch to Mobile Chassis"
                     >
                       <Smartphone className="w-3 h-3" />
-                      <span>Phone Frame</span>
+                      <span className="hidden xs:inline">Phone Frame</span>
                     </button>
                   )}
                   <span className="w-2 h-2 rounded-full bg-emerald-500" title="Live System Online" />

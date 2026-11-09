@@ -136,7 +136,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
               type="button"
               onClick={() => handleTabClick(tab.id)}
               data-note={tab.note}
-              className={`relative z-10 flex-1 sm:flex-initial flex items-center justify-center gap-2 py-3 sm:py-3.5 px-3 transition-colors duration-200 focus:outline-none ${
+              className={`relative z-10 flex-1 sm:flex-initial flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 min-h-[48px] py-2 sm:py-3.5 px-2 sm:px-3 transition-colors duration-200 focus:outline-none ${
                 isActive
                   ? "text-neutral-900 dark:text-zinc-100 font-semibold"
                   : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100"
@@ -146,14 +146,18 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
               role="tab"
             >
               <Icon
-                className={`w-5 h-5 sm:w-4 sm:h-4 transition-transform duration-200 ${
+                className={`w-4 h-4 transition-transform duration-200 ${
                   isActive
                     ? "text-neutral-900 dark:text-zinc-100 scale-105"
                     : "text-neutral-500 dark:text-zinc-400"
                 }`}
               />
-              <span className="text-xs tracking-wider uppercase font-bold hidden sm:inline">
-                {tab.label}
+              <span className="text-[10px] sm:text-xs tracking-wider uppercase font-bold">
+                {tab.id === "skills"
+                  ? "STACK"
+                  : tab.id === "certificates"
+                  ? "CERTS"
+                  : tab.label}
               </span>
               {typeof tab.count === "number" && (
                 <span

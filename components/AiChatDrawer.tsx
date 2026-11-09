@@ -288,7 +288,7 @@ const getLocalByteReply = (message: string): string => {
     lower.includes("hiring") ||
     lower.includes("opportunity")
   ) {
-    return "🐾 **Yes!** Richard is a 4th-year BS Information Technology student at **De La Salle Lipa** (graduating June 2027) and is **actively open for On-the-Job Training (OJT) and internship opportunities** in Full-Stack Web or Mobile Development. You can reach him directly at **richardallenliman@gmail.com** or on **LinkedIn**!";
+    return "🐾 **Yes!** Richard is a 4th-year BS Information Technology student at **De La Salle Lipa** (graduating June 2027) and is **actively open for On-the-Job Training (OJT) and internship opportunities** in Full-Stack Web or Mobile Development. You can reach him directly at **richardallen0901@gmail.com** or on **LinkedIn**!";
   }
   if (
     lower.includes("stack") ||
@@ -303,9 +303,10 @@ const getLocalByteReply = (message: string): string => {
     lower.includes("certificate") ||
     lower.includes("certification") ||
     lower.includes("cisco") ||
+    lower.includes("python") ||
     lower.includes("ccna")
   ) {
-    return "🐾 Richard holds **5 verified technical certifications**:\n\n• **CCNA: Enterprise Networking, Security, and Automation** (Cisco)\n• **CCNA: Switching, Routing, and Wireless Essentials** (Cisco)\n• **Legacy Responsive Web Design V8** (freeCodeCamp)\n• **Work Immersion Program (80 Hours)** (Creotec Philippines Inc.)\n• **12th Citezen's General Assembly & Tutorial** (DLSL)";
+    return "🐾 Richard holds **5 verified technical certifications**:\n\n• **Python Essentials 1** (Cisco Networking Academy)\n• **Python Essentials 2** (Cisco Networking Academy)\n• **Bridging Ethical Hacking and Data Analytics: Building Smarter and Safer Systems** (De La Salle Lipa, 2026)\n• **DevRoutes: Learning How to Learn with Roadmaps** (De La Salle Lipa / Swinburne University of Technology, 2026)\n• **AI Ethics and Governance** (USAID / Asia Open RAN Academy)";
   }
   if (
     lower.includes("school") ||
@@ -540,13 +541,13 @@ export const AiChatDrawer: React.FC = () => {
         {/* Main Floating Pup Button */}
         <button
           onClick={() => setIsOpen((prev) => !prev)}
-          className="group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full p-[2.5px] animated-ig-ring shadow-xl transition-transform hover:scale-105 active:scale-95 focus:outline-none"
+          className="group relative flex items-center justify-center w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 rounded-full p-[2.5px] animated-ig-ring shadow-xl transition-transform hover:scale-105 active:scale-95 focus:outline-none"
           aria-label={isOpen ? "Close Byte AI chat" : "Chat with Byte, Richard's AI assistant"}
           title="Chat with Byte (AI Portfolio Assistant)"
         >
           <div className="w-full h-full rounded-full bg-white dark:bg-[#111116] flex items-center justify-center transition-colors">
             {isOpen ? (
-              <X className="w-6 h-6 text-neutral-800 dark:text-zinc-100" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6 text-neutral-800 dark:text-zinc-100" />
             ) : (
               <AiDogAvatar size="lg" />
             )}
@@ -554,7 +555,7 @@ export const AiChatDrawer: React.FC = () => {
 
           {/* Live green status badge */}
           {!isOpen && (
-            <span className="absolute top-1 right-1 flex w-3 h-3">
+            <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 flex w-3 h-3">
               <span className="relative inline-flex w-3 h-3 rounded-full bg-emerald-500 border-2 border-white dark:border-[#111116]" />
             </span>
           )}
@@ -566,7 +567,7 @@ export const AiChatDrawer: React.FC = () => {
         <div
           role="dialog"
           aria-label="Byte AI Portfolio Companion"
-          className="fixed inset-x-3 bottom-22 z-50 sm:inset-x-auto sm:right-6 sm:bottom-24 w-auto sm:w-[400px] h-[540px] max-h-[82vh] bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-scale-up"
+          className="fixed inset-x-2.5 bottom-20 z-50 sm:inset-x-auto sm:right-6 sm:bottom-24 w-auto sm:w-[400px] h-[500px] sm:h-[540px] max-h-[80dvh] bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-scale-up"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-100 dark:border-zinc-800/80 bg-white dark:bg-[#111116] flex-shrink-0">

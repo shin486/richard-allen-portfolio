@@ -51,7 +51,7 @@ GUIDELINES FOR YOUR RESPONSES:
 1. Respond directly and conversationally to the user's message. Never include "* User Input:", "* Persona:", or internal chain-of-thought notes.
 2. If the user asks about multiple projects (e.g., "what did Richard do in ShinPay+ and PalengkeHub"), address ALL mentioned projects clearly.
 3. Only speak about information grounded in the facts above. Do NOT invent companies, salaries, unverified metrics, or projects.
-4. If asked about his availability or hiring, emphasize that he is actively open for OJT / internships and encourage reaching out via email at richardallenliman@gmail.com or his LinkedIn.
+4. If asked about his availability or hiring, emphasize that he is actively open for OJT / internships and encourage reaching out via email at richardallen0901@gmail.com or his LinkedIn.
 5. Keep answers well-structured (using bold text and bullet points • where helpful) and concise.
 `;
 

@@ -350,9 +350,72 @@ export default function ShinPayDemo() {
     /* Exact ShinPay+ Tactile Sage Design System from app/globals.css & Sidebar.tsx:
        --bg-primary: #fafbfa, --bg-secondary: #f4f6f4, --surface: #ffffff,
        --accent: #536c51, --accent-hover: #435641, --text-primary: #0f172a */
-    <div className="w-full h-full flex bg-[#fafbfa] text-[#0f172a] font-sans select-none overflow-hidden">
-      {/* Real ShinPay+ Left Sidebar (from components/Sidebar.tsx) */}
-      <aside className="w-40 sm:w-48 bg-[#f4f6f4] border-r border-black/8 flex flex-col justify-between p-2.5 shrink-0">
+    <div className="w-full h-full flex flex-col sm:flex-row bg-[#fafbfa] text-[#0f172a] font-sans select-none overflow-hidden">
+      {/* Mobile Compact Navigation & Tenant Bar (< sm) */}
+      <div className="sm:hidden bg-[#f4f6f4] border-b border-black/8 px-2.5 py-2 space-y-1.5 shrink-0">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <div className="w-6 h-6 rounded-md bg-[#536c51] text-white font-extrabold text-[11px] flex items-center justify-center shadow-xs shrink-0">
+              S
+            </div>
+            <span className="font-extrabold text-xs tracking-tight text-[#0f172a]">
+              ShinPay+
+            </span>
+          </div>
+
+          {/* Mobile Business Switcher */}
+          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+            {BUSINESSES.map((biz) => {
+              const active = biz.id === selectedBusinessId;
+              return (
+                <button
+                  key={biz.id}
+                  type="button"
+                  onClick={() => handleSelectBusiness(biz.id)}
+                  className={`px-2 py-1 rounded-md text-[10px] font-bold transition-all whitespace-nowrap ${
+                    active
+                      ? "bg-white text-[#0f172a] shadow-2xs border border-[#536c51]/30"
+                      : "text-[#475569] bg-black/5"
+                  }`}
+                >
+                  {biz.name}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Mobile Nav Tabs */}
+        <div className="grid grid-cols-4 gap-1">
+          {[
+            { id: "dashboard", label: "Overview", icon: LayoutDashboard },
+            { id: "employees", label: "People", icon: Users },
+            { id: "payroll", label: "Payroll", icon: Wallet },
+            { id: "payslip", label: "Payslip", icon: FileSpreadsheet },
+          ].map((item) => {
+            const Icon = item.icon;
+            const active = activeNav === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setActiveNav(item.id as typeof activeNav)}
+                className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-md text-[10px] font-semibold transition-all ${
+                  active
+                    ? "bg-[#536c51] text-white shadow-2xs"
+                    : "text-[#475569] bg-white/60 border border-black/5"
+                }`}
+              >
+                <Icon className="w-3 h-3 shrink-0" />
+                <span className="truncate">{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Real ShinPay+ Left Sidebar (Desktop / Tablet sm+) */}
+      <aside className="hidden sm:flex w-48 bg-[#f4f6f4] border-r border-black/8 flex-col justify-between p-2.5 shrink-0">
         <div>
           {/* Brand Logo */}
           <div className="flex items-center gap-2 px-1.5 pb-2.5 mb-2 border-b border-black/6">
@@ -475,30 +538,31 @@ export default function ShinPayDemo() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Action Bar */}
-        <header className="bg-white border-b border-black/8 px-3.5 py-2 flex items-center justify-between shrink-0">
+        <header className="bg-white border-b border-black/8 px-2.5 sm:px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 shrink-0">
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <h2 className="text-[13px] font-extrabold text-[#0f172a] truncate">
+              <h2 className="text-xs sm:text-[13px] font-extrabold text-[#0f172a] truncate">
                 {activeBusiness.name}
               </h2>
-              <span className="px-1.5 py-0.5 rounded bg-[#536c51]/12 text-[#536c51] text-[9.5px] font-bold">
+              <span className="hidden xs:inline-block px-1.5 py-0.5 rounded bg-[#536c51]/12 text-[#536c51] text-[9px] sm:text-[9.5px] font-bold whitespace-nowrap">
                 TIN: {activeBusiness.tin}
               </span>
             </div>
-            <p className="text-[10px] text-[#889687] truncate">
+            <p className="text-[9.5px] sm:text-[10px] text-[#889687] truncate">
               {activeBusiness.industry} · Cutoff: Oct 16–30, 2026
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               type="button"
               onClick={startTestSuite}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-100 border border-zinc-700 text-xs font-mono font-medium transition-colors"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-100 border border-zinc-700 text-[10.5px] sm:text-xs font-mono font-medium transition-colors"
               title="Execute client-side assertion checks against Philippine statutory deduction formulas"
             >
-              <Terminal className="w-3.5 h-3.5" />
-              <span>Run Statutory Test Suite</span>
+              <Terminal className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span className="hidden sm:inline">Run Statutory Test Suite</span>
+              <span className="sm:hidden">Test Suite</span>
             </button>
 
             <button
@@ -507,7 +571,7 @@ export default function ShinPayDemo() {
                 setDisbursed(true);
                 setActiveNav("payslip");
               }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-medium transition-colors shrink-0"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-md bg-[#536c51] sm:bg-zinc-100 hover:opacity-90 sm:hover:bg-zinc-200 text-white sm:text-zinc-950 text-[10.5px] sm:text-xs font-semibold sm:font-medium transition-colors shrink-0"
             >
               <Play className="w-3 h-3 fill-current" />
               <span>Run Payroll</span>

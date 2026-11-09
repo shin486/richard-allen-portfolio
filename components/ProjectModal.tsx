@@ -66,18 +66,18 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="project-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto"
       onClick={onClose}
     >
       {/* Modal Dialog Container */}
       <div
-        className="relative w-full max-w-4xl bg-white dark:bg-zinc-950 rounded-lg shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto max-h-[90vh] md:h-[620px] border border-neutral-200 dark:border-zinc-800 animate-scale-up my-auto"
+        className="relative w-full max-w-4xl bg-white dark:bg-zinc-950 rounded-lg shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto max-h-[92dvh] md:h-[620px] border border-neutral-200 dark:border-zinc-800 animate-scale-up my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-30 p-1.5 rounded-md bg-black/60 hover:bg-black/85 text-white transition-colors focus:outline-none backdrop-blur-sm"
+          className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-30 p-1.5 rounded-md bg-black/60 hover:bg-black/85 text-white transition-colors focus:outline-none backdrop-blur-sm"
           aria-label="Close dialog"
         >
           <X className="w-4 h-4" />
@@ -87,42 +87,42 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           /* Full-Modal Live Interactive Sandbox Mode */
           <div className="w-full flex-1 flex flex-col min-h-0 overflow-hidden bg-white dark:bg-zinc-950 animate-fade-in">
             {/* Modal Demo Top Bar */}
-            <div className="px-5 py-3 border-b border-neutral-200 dark:border-zinc-800 flex items-center justify-between pr-14 bg-neutral-50/50 dark:bg-zinc-900/50">
+            <div className="px-3.5 sm:px-5 py-2.5 sm:py-3 border-b border-neutral-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2 pr-12 sm:pr-14 bg-neutral-50/50 dark:bg-zinc-900/50">
               <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-base text-neutral-900 dark:text-zinc-100 truncate">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <h3 className="font-semibold text-sm sm:text-base text-neutral-900 dark:text-zinc-100 truncate">
                     {project.title}
                   </h3>
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded font-medium flex-shrink-0">
+                  <span className="font-mono text-[9.5px] sm:text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-1.5 sm:px-2 py-0.5 rounded font-medium flex-shrink-0">
                     Live Sandbox
                   </span>
                 </div>
-                <p className="text-xs text-neutral-500 dark:text-zinc-400 truncate">
+                <p className="hidden xs:block text-xs text-neutral-500 dark:text-zinc-400 truncate">
                   {project.subtitle}
                 </p>
               </div>
 
               <button
                 onClick={() => setIsLiveDemo(false)}
-                className="border border-zinc-800 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-100 text-xs font-medium px-2.5 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors flex-shrink-0"
+                className="border border-zinc-800 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-100 text-[11px] sm:text-xs font-medium px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors flex-shrink-0"
               >
                 Back to Details
               </button>
             </div>
 
             {/* Scrollable Demo Container */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col items-center">
+            <div className="flex-1 overflow-y-auto p-1.5 sm:p-6 flex flex-col items-center">
               <ProjectDemoHost projectId={project.id} />
             </div>
 
             {/* Bottom Controls */}
-            <div className="border-t border-neutral-200 dark:border-zinc-800 p-3 sm:p-4 flex items-center justify-between bg-neutral-50 dark:bg-zinc-950 font-mono">
-              <span className="text-xs text-zinc-500">
+            <div className="border-t border-neutral-200 dark:border-zinc-800 p-2.5 sm:p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 bg-neutral-50 dark:bg-zinc-950 font-mono">
+              <span className="text-[11px] sm:text-xs text-zinc-500 text-center sm:text-left">
                 Functional demo running directly in client sandbox.
               </span>
               <button
                 onClick={() => setIsLiveDemo(false)}
-                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3.5 py-1.5 rounded-md inline-flex items-center gap-2 transition-colors font-sans"
+                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3.5 py-1.5 rounded-md inline-flex items-center justify-center gap-2 transition-colors font-sans"
               >
                 Return to Overview &amp; Specs
               </button>
@@ -159,7 +159,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
         {/* Right: Project Details (scrollable with min-h-0 to avoid flex scroll locking) */}
         <div className="w-full md:w-[55%] flex-1 flex flex-col min-h-0 overflow-hidden">
           {/* Scrollable details area */}
-          <div className="flex-1 min-h-0 overflow-y-auto p-5 sm:p-6 flex flex-col gap-5 overscroll-contain">
+          <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 flex flex-col gap-4 sm:gap-5 overscroll-contain">
             {/* Title + Meta */}
             <div>
               <h3

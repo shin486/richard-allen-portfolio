@@ -472,9 +472,9 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
         </div>
       ) : (
         <div className="w-full">
-          {/* Quick Project Jump Pills (Wraps cleanly so no project pill gets cut off) */}
+          {/* Quick Project Jump Pills (Single horizontal swipe row on mobile, wraps cleanly on sm+) */}
           <div
-            className="flex flex-wrap items-center gap-1.5 pb-3"
+            className="flex items-center gap-1.5 pb-3 overflow-x-auto no-scrollbar sm:flex-wrap -mx-4 px-4 sm:mx-0 sm:px-0 touch-pan-x"
             role="tablist"
             aria-label="Select project slide"
           >
@@ -503,7 +503,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       ? "ShinPay+. Multi-tenant SaaS payroll engine on Next.js & Supabase."
                       : `${proj.title}: ${proj.subtitle}`
                   }
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border shrink-0 ${
                     isCurrent
                       ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 border-neutral-900 dark:border-zinc-100 shadow-sm"
                       : "bg-white dark:bg-[#111116] text-neutral-600 dark:text-zinc-400 border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 hover:text-neutral-900 dark:hover:text-zinc-200"
@@ -527,9 +527,9 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
           {/* Single Authentic Instagram Multi-Photo Carousel Post */}
           <article className="milled-card bg-white dark:bg-[#111116] border-y sm:border border-neutral-200 dark:border-zinc-800 sm:border-t-neutral-300/80 dark:sm:border-t-zinc-700/70 -mx-4 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden transition-all">
             {/* Instagram Post Header */}
-            <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-neutral-100 dark:border-zinc-800/80">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-full p-[2px] animated-ig-ring flex-shrink-0">
+            <div className="flex items-center justify-between gap-2 px-3 sm:px-5 py-3 border-b border-neutral-100 dark:border-zinc-800/80">
+              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full p-[2px] animated-ig-ring flex-shrink-0">
                   <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900">
                     <Image
                       src={profilePic}
@@ -541,23 +541,26 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </div>
                 </div>
                 <div className="min-w-0">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="font-bold text-xs sm:text-sm text-neutral-900 dark:text-zinc-100">
+                  <div className="flex items-center gap-1 sm:gap-1.5">
+                    <span className="font-bold text-xs sm:text-sm text-neutral-900 dark:text-zinc-100 truncate">
                       {profileData.username}
                     </span>
                     <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 fill-blue-500 flex-shrink-0" />
-                    <span className="text-neutral-300 dark:text-zinc-700">•</span>
-                    <span className="text-xs font-medium text-neutral-500 dark:text-zinc-400 truncate">
+                    <span className="hidden sm:inline text-neutral-300 dark:text-zinc-700">•</span>
+                    <span className="hidden sm:inline text-xs font-medium text-neutral-500 dark:text-zinc-400 truncate">
                       {activeProject.role}
                     </span>
                   </div>
+                  <p className="sm:hidden text-[10px] font-medium text-neutral-500 dark:text-zinc-400 truncate leading-tight">
+                    {activeProject.role}
+                  </p>
                 </div>
               </div>
 
               {/* Mode Toggle & Slide Counter Badge */}
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
                 {/* Live Interactive UI vs Static Poster Switcher with Spring-Physics Pill */}
-                <div className="relative grid grid-cols-2 items-center bg-neutral-100 dark:bg-zinc-800 p-0.5 rounded-full border border-neutral-200 dark:border-zinc-700/60 text-xs min-w-[146px] sm:min-w-[162px]">
+                <div className="relative grid grid-cols-2 items-center bg-neutral-100 dark:bg-zinc-800 p-0.5 rounded-full border border-neutral-200 dark:border-zinc-700/60 text-xs min-w-[128px] sm:min-w-[162px]">
                   <span
                     aria-hidden="true"
                     className={`spring-pill absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] rounded-full shadow-xs pointer-events-none ${
@@ -614,7 +617,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
             {isLiveDemoView ? (
               <div
                 ref={demoStageRef}
-                className={`relative w-full bg-neutral-100/70 dark:bg-[#0c0c10] p-3 sm:p-5 border-b border-neutral-100 dark:border-zinc-800 flex flex-col items-center justify-center transition-shadow duration-300 ${
+                className={`relative w-full bg-neutral-100/70 dark:bg-[#0c0c10] p-1.5 sm:p-5 border-b border-neutral-100 dark:border-zinc-800 flex flex-col items-center justify-center transition-shadow duration-300 ${
                   demoSpotlit ? "ring-2 ring-inset ring-pink-500/60" : ""
                 }`}
               >
@@ -965,7 +968,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                     </div>
 
                     {/* Connected Data Flow Nodes */}
-                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-1.5 sm:gap-2">
                       {pipeline.nodes.map((node, idx) => {
                         const handleMouseEnter = () => {
                           if (typeof window !== "undefined") {
@@ -982,21 +985,21 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                             <div
                               title={node.note}
                               onMouseEnter={handleMouseEnter}
-                              className="group/node inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-lg border border-neutral-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-800/60 text-xs font-medium cursor-default transition-all duration-200 hover:-translate-y-0.5 hover:border-neutral-300 dark:hover:border-zinc-700 shadow-2xs"
+                              className="group/node inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-lg border border-neutral-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-800/60 text-xs font-medium cursor-default transition-all duration-200 hover:-translate-y-0.5 hover:border-neutral-300 dark:hover:border-zinc-700 shadow-2xs w-full sm:w-auto"
                             >
                               <div className="flex-shrink-0">{node.icon}</div>
-                              <div className="flex items-center gap-1.5">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-zinc-400 font-mono">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-zinc-400 font-mono shrink-0">
                                   {node.layer}:
                                 </span>
-                                <span className="font-semibold text-neutral-900 dark:text-zinc-100">{node.tech}</span>
+                                <span className="font-semibold text-neutral-900 dark:text-zinc-100 truncate">{node.tech}</span>
                               </div>
                             </div>
 
-                            {/* Chevron Arrow Connector */}
+                            {/* Chevron Arrow Connector (Desktop/Tablet) */}
                             {idx < pipeline.nodes.length - 1 && (
                               <svg
-                                className="w-3.5 h-3.5 text-neutral-400 dark:text-zinc-600 flex-shrink-0 transition-transform group-hover/node:translate-x-0.5"
+                                className="hidden sm:block w-3.5 h-3.5 text-neutral-400 dark:text-zinc-600 flex-shrink-0 transition-transform group-hover/node:translate-x-0.5"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"

@@ -37,7 +37,7 @@ export const Highlights: React.FC<HighlightsProps> = ({ onOpenHighlight }) => {
       aria-label="Story Highlights"
       className="py-2.5 sm:py-3.5 border-b border-neutral-200/70 dark:border-zinc-800/80 -mx-4 px-4 sm:mx-0 sm:px-0"
     >
-      <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto no-scrollbar py-1">
+      <div className="flex items-center gap-3.5 xs:gap-4 sm:gap-6 overflow-x-auto no-scrollbar py-1.5 px-0.5 touch-pan-x overscroll-x-contain">
         {highlightsData.map((highlight, index) => {
           const Icon = getHighlightIcon(highlight.coverIcon);
           const highlightNote =

@@ -62,10 +62,10 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
       onMouseLeave={() => setIsHovered(false)}
       title="shin.dev — account switcher"
       aria-label="shin.dev, interactive 8-bit walking stickman. Opens account switcher"
-      className={`group relative flex items-center gap-2 py-1 px-2 -ml-2 rounded-xl focus:outline-none transition-colors hover:bg-neutral-100 dark:hover:bg-zinc-900/90 ${className}`}
+      className={`group relative flex items-center gap-1.5 sm:gap-2 py-1 px-1.5 sm:px-2 -ml-1.5 sm:-ml-2 rounded-xl focus:outline-none transition-colors hover:bg-neutral-100 dark:hover:bg-zinc-900/90 ${className}`}
     >
       {/* 8-Bit Canvas/SVG Stage */}
-      <div className="relative w-16 h-8 flex items-center justify-center overflow-hidden select-none">
+      <div className="relative w-10 sm:w-16 h-8 flex items-center justify-center overflow-hidden select-none shrink-0">
         {/* Pixel Horizon Ground Line (Scrolls when walking, pauses on hover) */}
         <div
           className="absolute bottom-1 left-0 w-32 h-[2px] pointer-events-none transition-all"
@@ -189,12 +189,12 @@ export const PixelStickmanJourney: React.FC<PixelStickmanJourneyProps> = ({
       </div>
 
       {/* Brand wordmark: anchors the stickman so it reads as an intentional logo, not a stray glyph */}
-      <span className="inline-flex items-baseline font-mono text-sm sm:text-base font-bold tracking-tight text-neutral-900 dark:text-white transition-colors">
+      <span className="inline-flex items-baseline font-mono text-xs sm:text-base font-bold tracking-tight text-neutral-900 dark:text-white transition-colors whitespace-nowrap">
         <span>shin</span>
         <span className="text-neutral-400 dark:text-zinc-500">.dev</span>
         <span
           aria-hidden="true"
-          className={`ml-0.5 inline-block w-[7px] h-[2px] bg-current self-end mb-[3px] ${
+          className={`ml-0.5 inline-block w-[5px] sm:w-[7px] h-[2px] bg-current self-end mb-[3px] ${
             isPaused ? "opacity-100" : "animate-pulse"
           }`}
         />

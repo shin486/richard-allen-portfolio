@@ -100,9 +100,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header className="sticky top-0 z-40 w-full bg-white/85 dark:bg-[#0B0B0F]/85 backdrop-blur-md border-b border-neutral-200 dark:border-zinc-800 transition-colors duration-200 rise-in">
-        <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
+        <nav className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-1.5 sm:gap-4">
           {/* Left Section: Stickman Walker & shin.dev_ Brand Logo */}
-          <div className="flex items-center gap-3 flex-shrink-0 justify-start">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0 justify-start">
             <div
               className="relative"
               ref={switcherRef}
@@ -226,20 +226,51 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </div>
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-zinc-200 transition-transform group-hover:translate-x-0.5 flex-shrink-0" />
                   </button>
+
+                  {/* Quick Socials & Resume Bar on Mobile */}
+                  <div className="sm:hidden mt-1.5 pt-2 border-t border-neutral-100 dark:border-zinc-800/80 px-2 pb-1 flex items-center justify-between gap-2">
+                    <a
+                      href={profileData.socials.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-neutral-100 dark:bg-zinc-800/70 text-[11px] font-semibold text-neutral-700 dark:text-zinc-200"
+                    >
+                      <Github className="w-3.5 h-3.5" />
+                      <span>GitHub</span>
+                    </a>
+                    <a
+                      href={profileData.socials.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-neutral-100 dark:bg-zinc-800/70 text-[11px] font-semibold text-neutral-700 dark:text-zinc-200"
+                    >
+                      <Linkedin className="w-3.5 h-3.5 text-blue-500" />
+                      <span>LinkedIn</span>
+                    </a>
+                    <a
+                      href={profileData.socials.resumeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-neutral-100 dark:bg-zinc-800/70 text-[11px] font-semibold text-neutral-700 dark:text-zinc-200"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-ig-pink" />
+                      <span>Resume</span>
+                    </a>
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Center Section: Centered View Switcher Toggle */}
-          <div className="flex-1 flex items-center justify-center px-2 min-w-0">
+          {/* Center Section: Centered View Switcher Toggle (shrink-0 prevents flex zero-width overflow collision on mobile) */}
+          <div className="flex items-center justify-center shrink-0">
             {onViewChange && (
-              <div className="flex items-center p-0.5 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-[11px] font-semibold shrink-0 shadow-2xs">
+              <div className="flex items-center p-0.5 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-[10.5px] sm:text-[11px] font-semibold shrink-0 shadow-2xs">
                 <button
                   type="button"
                   onClick={() => onViewChange("studio")}
                   data-note="Interactive Studio View with Instagram feed and 3D mechanical keyboard."
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all ${
+                  className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full transition-all whitespace-nowrap ${
                     activeView === "studio"
                       ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
                       : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-zinc-200"
@@ -254,7 +285,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   onClick={() => onViewChange("recruiter")}
                   data-note="Switch to Recruiter Dossier View for a high-density engineering spec sheet."
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all ${
+                  className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full transition-all whitespace-nowrap ${
                     activeView === "recruiter"
                       ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
                       : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-800 dark:hover:text-zinc-200"
@@ -269,7 +300,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Right Section: Search, Socials, Resume, Theme & Contact */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0 justify-end">
+          <div className="flex items-center gap-1 sm:gap-2.5 shrink-0 justify-end">
             {/* Desktop Search Field */}
             <div className="relative hidden md:block w-36 lg:w-48 xl:w-56">
               <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-neutral-400 dark:text-zinc-500">
@@ -308,7 +339,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               data-note="My GitHub. Green contribution squares, zero commit fudging."
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              className="hidden sm:inline-flex p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
               title="GitHub Profile"
               aria-label="GitHub Profile"
             >
@@ -320,7 +351,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               data-note="Connect with me on LinkedIn. Real developer network, zero corporate fluff."
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              className="hidden sm:inline-flex p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
               title="LinkedIn Profile"
               aria-label="LinkedIn Profile"
             >
@@ -332,7 +363,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               data-note="There is the resume. Grab it before someone else hires me first."
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              className="hidden sm:inline-flex p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
               title="Resume (PDF)"
               aria-label="Resume (PDF)"
             >
