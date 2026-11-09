@@ -51,6 +51,11 @@ export const ThemeToggle: React.FC = () => {
   return (
     <button
       onClick={toggleTheme}
+      data-note={
+        theme === "light"
+          ? "Switch to Dark Mode. Easier on developer eyes at 2 AM."
+          : "Warning: Light Mode ahead. High lumens, sunglasses recommended."
+      }
       className="relative p-2 rounded-lg text-neutral-600 dark:text-zinc-300 hover:text-black dark:hover:text-white bg-neutral-100 dark:bg-zinc-800/80 hover:bg-neutral-200 dark:hover:bg-zinc-700/80 border border-neutral-200 dark:border-zinc-700/60 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ig-pink/40"
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
       title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}

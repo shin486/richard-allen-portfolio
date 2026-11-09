@@ -150,6 +150,7 @@ export const CertificateGrid: React.FC = () => {
               <button
                 key={cert.id}
                 onClick={() => setCurrentSlide(index)}
+                data-note={`Verified credential: ${cert.title} (${cert.issuer}).`}
                 role="tab"
                 aria-selected={isCurrent}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
@@ -275,6 +276,7 @@ export const CertificateGrid: React.FC = () => {
                   e.stopPropagation();
                   goPrev();
                 }}
+                data-note="Previous certification slide."
                 aria-label="Previous certificate"
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/15 flex items-center justify-center backdrop-blur-md transition-all active:scale-95 shadow-lg"
               >
@@ -289,6 +291,7 @@ export const CertificateGrid: React.FC = () => {
                   e.stopPropagation();
                   goNext();
                 }}
+                data-note="Next certification slide."
                 aria-label="Next certificate"
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/15 flex items-center justify-center backdrop-blur-md transition-all active:scale-95 shadow-lg"
               >
@@ -314,6 +317,11 @@ export const CertificateGrid: React.FC = () => {
               <div className="flex items-center gap-3.5 text-neutral-700 dark:text-zinc-300">
                 <button
                   onClick={() => toggleLike(activeCert.id)}
+                  data-note={
+                    likedIds[activeCert.id]
+                      ? "Certificate liked."
+                      : "Like this credential (or double-tap the certificate)."
+                  }
                   className={`focus:outline-none transition-transform active:scale-125 ${
                     likedIds[activeCert.id]
                       ? "text-red-500 animate-heart-pop"
@@ -363,6 +371,11 @@ export const CertificateGrid: React.FC = () => {
               {/* Right Bookmark Icon */}
               <button
                 onClick={() => toggleSave(activeCert.id)}
+                data-note={
+                  savedIds[activeCert.id]
+                    ? "Credential bookmarked."
+                    : "Bookmark this certification."
+                }
                 className={`focus:outline-none transition-transform active:scale-125 ${
                   savedIds[activeCert.id]
                     ? "text-neutral-900 dark:text-zinc-100"

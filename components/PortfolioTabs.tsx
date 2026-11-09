@@ -36,6 +36,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
       icon: Grid,
       count: projectCount,
       sectionId: "portfolio-grid",
+      note: "Six full-stack & mobile applications with live interactive demos.",
     },
     {
       id: "skills" as PortfolioTabType,
@@ -44,6 +45,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
       icon: Tag,
       count: skillCategoriesCount,
       sectionId: "skills-section",
+      note: "Twenty-eight technologies across frontend, backend, mobile, and databases.",
     },
     {
       id: "certificates" as PortfolioTabType,
@@ -52,6 +54,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
       icon: Bookmark,
       count: certCount,
       sectionId: "certificates-section",
+      note: "Verified Cisco CCNA, Python, and AI Governance credentials.",
     },
     {
       id: "about" as PortfolioTabType,
@@ -59,6 +62,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
       subLabel: "Bio & Story",
       icon: UserCheck,
       sectionId: "about-section",
+      note: "My engineering philosophy, background, and developer journey.",
     },
   ];
 
@@ -131,6 +135,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
               }}
               type="button"
               onClick={() => handleTabClick(tab.id)}
+              data-note={tab.note}
               className={`relative z-10 flex-1 sm:flex-initial flex items-center justify-center gap-2 py-3 sm:py-3.5 px-3 transition-colors duration-200 focus:outline-none ${
                 isActive
                   ? "text-neutral-900 dark:text-zinc-100 font-semibold"

@@ -18,6 +18,7 @@ import { Reveal } from "@/components/Reveal";
 import { TechKeyboard3D } from "@/components/TechKeyboard3D";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { RecruiterDossierView } from "@/components/RecruiterDossierView";
+import { InteractiveButtonNote } from "@/components/InteractiveButtonNote";
 import { Project, projectsData } from "@/data/projects";
 import { skillsData } from "@/data/skills";
 import { certificatesData } from "@/data/certificates";
@@ -150,6 +151,7 @@ export default function HomePage() {
                 <ProfileHeader
                   onSelectTab={setActiveTab}
                   onNavigateToSection={scrollToSection}
+                  onOpenStories={() => handleOpenHighlight(0)}
                 />
               </div>
 
@@ -230,6 +232,9 @@ export default function HomePage() {
 
       {/* Instagram DM AI Portfolio Assistant (Only in Studio View) */}
       {viewMode === "studio" && <AiChatDrawer />}
+
+      {/* Universal Cursor-Aware Interactive Button Notes */}
+      <InteractiveButtonNote />
 
       {/* Footer */}
       <Footer />

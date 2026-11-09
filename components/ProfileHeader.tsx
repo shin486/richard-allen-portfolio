@@ -4,107 +4,121 @@ import React from "react";
 import Image from "next/image";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
+import { ProfileStats } from "./ProfileStats";
+import { VerifiedBadge } from "./VerifiedBadge";
+import { ProfileNote } from "./ProfileNote";
 
 interface ProfileHeaderProps {
   onSelectTab: (tab: string) => void;
   onNavigateToSection: (sectionId: string) => void;
+  onOpenStories?: () => void;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onSelectTab,
   onNavigateToSection,
+  onOpenStories,
 }) => {
+  const handleAvatarClick = () => {
+    if (onOpenStories) {
+      onOpenStories();
+    } else {
+      onSelectTab("projects");
+      onNavigateToSection("portfolio-grid");
+    }
+  };
+
   return (
-    <section id="profile-header" className="pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-5">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-7">
-        {/* Step 1: Clean, High-End Avatar Frame (No SVG ring, No level badge, No tooltip) */}
-        <div className="relative w-20 h-20 sm:w-28 sm:h-28 rounded-full p-1 bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 shadow-xl flex-shrink-0">
-          <div className="relative w-full h-full rounded-full overflow-hidden bg-neutral-900">
-            <Image
-              src={profilePic}
-              alt={profileData.name}
-              fill
-              sizes="(max-width: 640px) 80px, 112px"
-              className="w-full h-full rounded-full object-cover object-top filter contrast-[1.02]"
-              priority
+    <section
+      id="profile-header"
+      className="pt-14 sm:pt-16 md:pt-20 pb-4 sm:pb-6"
+    >
+      {/* Unified Responsive Instagram Profile Header */}
+      <div className="grid grid-cols-[auto_1fr] items-center sm:items-start gap-x-4 sm:gap-x-8 md:gap-x-12">
+        {/* Column 1: Circular Avatar with Functional Instagram Story Ring + Thought Bubble Note */}
+        <div className="col-start-1 row-start-1 sm:row-span-2 relative flex flex-col items-start flex-shrink-0">
+          {/* Retro Pixel Speech Bubble anchored cleanly above avatar container */}
+          <div
+            id="profile-avatar-note-anchor"
+            className="absolute bottom-[calc(100%+8px)] sm:bottom-[calc(100%+12px)] left-0 sm:left-2 z-30 pointer-events-auto"
+          >
+            <ProfileNote tailAlign="left" />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleAvatarClick}
+            data-note="Click my story ring to watch my developer highlights, or just hire me already."
+            aria-label="Open developer story highlights"
+            className="relative group cursor-pointer focus:outline-none text-left"
+          >
+            <div className="w-[76px] h-[76px] sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full p-[2.5px] sm:p-[3px] animated-ig-ring shadow-sm sm:shadow-md transition-transform duration-300 group-hover:scale-105 active:scale-95">
+              <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] sm:p-[2.5px] transition-colors duration-200">
+                <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900 flex items-center justify-center">
+                  <Image
+                    src={profilePic}
+                    alt={profileData.name}
+                    fill
+                    sizes="(max-width: 640px) 76px, (max-width: 768px) 128px, 144px"
+                    className="object-cover"
+                    priority
+                  />
+                  {/* Subtle inner vignette so the bright studio backdrop bridges smoothly into dark mode */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 rounded-full pointer-events-none shadow-[inset_0_0_16px_rgba(0,0,0,0.22)] dark:shadow-[inset_0_0_20px_rgba(0,0,0,0.38)]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Active Status Dot */}
+            <div className="absolute bottom-0 right-0 sm:bottom-1 sm:right-1 md:bottom-2 md:right-2 bg-emerald-500 text-white rounded-full p-0.5 sm:p-1 border-2 border-white dark:border-[#0B0B0F] shadow-sm">
+              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
+            </div>
+          </button>
+        </div>
+
+        {/* Column 2: Username & Interactive 3-Column Stats (Row 1 beside Avatar on mobile & desktop) */}
+        <div className="col-start-2 row-start-1 flex flex-col justify-center gap-2 sm:gap-3.5 min-w-0 pt-0.5 sm:pt-1">
+          {/* Username & Verified Rosette */}
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold sm:font-semibold text-base sm:text-xl md:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight">
+              {profileData.username}
+            </span>
+            <div
+              data-note="Yes, verified. De La Salle Lipa certified, zero buzzword fluff."
+              className="cursor-help inline-flex items-center"
+            >
+              <VerifiedBadge className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+            </div>
+          </div>
+
+          {/* Interactive 3-Column Stats Row ("Followers" theme directly below username) */}
+          <div className="min-w-0 w-full">
+            <ProfileStats
+              onStatClick={(sectionId, tabName) => {
+                if (tabName) onSelectTab(tabName);
+                onNavigateToSection(sectionId);
+              }}
             />
           </div>
         </div>
 
-        {/* Step 2: Streamlined Bio Hierarchy & Integrated Academic Timeline */}
-        <div className="flex flex-col justify-center space-y-2 min-w-0">
-          {/* Handle & Verification & Availability */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-base sm:text-lg font-bold text-neutral-900 dark:text-zinc-100 tracking-tight">
-              {profileData.username}
+        {/* Bio & Identity Block (Stacked underneath Avatar/Stats in mobile view, Column 2 on desktop) */}
+        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-2 sm:row-start-2 flex flex-col gap-0.5 sm:gap-1 pt-3 sm:pt-2.5">
+          <h1 className="font-bold text-xs sm:text-base text-neutral-900 dark:text-zinc-100 leading-snug">
+            {profileData.name}
+          </h1>
+          <p className="text-neutral-500 dark:text-zinc-400 font-normal text-xs sm:text-sm leading-snug">
+            {profileData.title}
+          </p>
+          <p className="text-neutral-700 dark:text-zinc-300 text-xs sm:text-sm leading-snug">
+            4th-year BSIT @{" "}
+            <span className="font-semibold text-neutral-900 dark:text-zinc-100">
+              De La Salle Lipa
             </span>
-            {/* Clean SVG Verified Checkmark */}
-            <svg
-              className="w-4 h-4 text-sky-400 fill-current shrink-0"
-              viewBox="0 0 24 24"
-              aria-label="Verified Developer Profile"
-            >
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-            </svg>
-            <span className="text-neutral-400 dark:text-zinc-600 font-mono text-xs hidden sm:inline">
-              •
-            </span>
-            {/* Availability Pulse Badge */}
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono text-[11px] whitespace-nowrap">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Available for OJT / Junior Roles
-            </span>
-          </div>
-
-          {/* Quantitative Stats Row */}
-          <div className="flex items-center gap-3 sm:gap-4 text-xs font-mono text-neutral-600 dark:text-zinc-400 py-0.5">
-            <button
-              type="button"
-              onClick={() => {
-                onSelectTab("projects");
-                onNavigateToSection("portfolio-grid");
-              }}
-              className="hover:text-neutral-950 dark:hover:text-zinc-100 transition-colors focus:outline-none"
-            >
-              <span className="font-bold text-neutral-950 dark:text-zinc-100">06</span> projects
-            </button>
-            <span className="text-neutral-300 dark:text-zinc-700">•</span>
-            <button
-              type="button"
-              onClick={() => {
-                onSelectTab("skills");
-                onNavigateToSection("skills-section");
-              }}
-              className="hover:text-neutral-950 dark:hover:text-zinc-100 transition-colors focus:outline-none"
-            >
-              <span className="font-bold text-neutral-950 dark:text-zinc-100">28</span> technologies
-            </button>
-            <span className="text-neutral-300 dark:text-zinc-700">•</span>
-            <button
-              type="button"
-              onClick={() => {
-                onSelectTab("certificates");
-                onNavigateToSection("certificates-section");
-              }}
-              className="hover:text-neutral-950 dark:hover:text-zinc-100 transition-colors focus:outline-none"
-            >
-              <span className="font-bold text-neutral-950 dark:text-zinc-100">05</span> credentials
-            </button>
-          </div>
-
-          {/* Name, Focus & Academic Credentials */}
-          <div className="space-y-0.5">
-            <h1 className="text-base sm:text-lg font-semibold tracking-tight text-neutral-950 dark:text-zinc-100">
-              {profileData.name}
-            </h1>
-            <p className="text-xs sm:text-sm text-neutral-600 dark:text-zinc-400 font-normal">
-              {profileData.title}
-            </p>
-            <p className="text-xs font-mono text-neutral-500 dark:text-zinc-500">
-              4th-Year BSIT Senior @ De La Salle Lipa{" "}
-              <span className="text-neutral-700 dark:text-zinc-400">(Graduating June 2027)</span>
-            </p>
-          </div>
+          </p>
         </div>
       </div>
     </section>

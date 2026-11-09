@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Mail, Send, MessageSquare, Check, FileText } from "lucide-react";
 import { profileData } from "@/data/profile";
+import profilePic from "@/assets/PROFILEPIC.png";
 
 export const ContactSection: React.FC = () => {
   const [subject, setSubject] = useState("");
@@ -45,10 +46,15 @@ export const ContactSection: React.FC = () => {
               <div className="w-full h-full bg-white dark:bg-[#111116] rounded-full p-[2px]">
                 <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900">
                   <Image
-                    src={profileData.avatarUrl}
+                    src={profilePic}
                     alt={profileData.name}
                     fill
+                    sizes="80px"
                     className="object-cover"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 rounded-full pointer-events-none shadow-[inset_0_0_12px_rgba(0,0,0,0.25)]"
                   />
                 </div>
               </div>
@@ -66,16 +72,12 @@ export const ContactSection: React.FC = () => {
               </p>
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              Available for OJT &amp; Internships
-            </div>
-
             <a
               href={profileData.socials.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
               download="Richard_Allen_Liman_Resume.pdf"
+              data-note="Download a clean PDF copy of my resume for your hiring team."
               className="inline-flex items-center justify-center gap-1.5 w-full px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-zinc-800 hover:bg-neutral-100 dark:hover:bg-zinc-700 text-neutral-800 dark:text-zinc-200 border border-neutral-300 dark:border-zinc-700 transition-all shadow-2xs active:scale-95"
             >
               <FileText className="w-3.5 h-3.5 text-neutral-600 dark:text-zinc-400" />
@@ -127,6 +129,7 @@ export const ContactSection: React.FC = () => {
             <button
               type="submit"
               disabled={!message.trim()}
+              data-note="Sends a direct message straight to my inbox. Response time: under 2 hours."
               className="w-full py-2.5 px-4 rounded-lg text-sm font-semibold text-white bg-ig-gradient hover:opacity-95 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
             >
               <Send className="w-4 h-4 -rotate-45" />

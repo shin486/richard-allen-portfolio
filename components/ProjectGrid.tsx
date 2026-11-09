@@ -496,6 +496,13 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   role="tab"
                   aria-selected={isCurrent}
                   title={`${proj.title} — ${proj.subtitle}`}
+                  data-note={
+                    proj.id === "palengkehub"
+                      ? "PalengkeHub. Defended capstone, zero bugs surrendered."
+                      : proj.id === "shinpay-plus"
+                      ? "ShinPay+. Multi-tenant SaaS payroll engine on Next.js & Supabase."
+                      : `${proj.title}: ${proj.subtitle}`
+                  }
                   className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
                     isCurrent
                       ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 border-neutral-900 dark:border-zinc-100 shadow-sm"
@@ -567,6 +574,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsLiveDemoView(true)}
+                    data-note="Interactive sandbox mode. Test the real UI right inside your browser."
                     aria-label="Launch live interactive UI"
                     className={`relative z-10 px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors duration-200 flex items-center justify-center gap-1.5 ${
                       isLiveDemoView
@@ -580,6 +588,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsLiveDemoView(false)}
+                    data-note="Switch to poster carousel view. Double-tap the image to drop a heart."
                     aria-label="View static poster preview"
                     className={`relative z-10 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-colors duration-200 flex items-center justify-center gap-1 ${
                       !isLiveDemoView
@@ -694,6 +703,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       e.stopPropagation();
                       goPrev();
                     }}
+                    data-note="Previous project slide."
                     aria-label="Previous project"
                     className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/15 flex items-center justify-center backdrop-blur-md transition-all active:scale-95 shadow-lg"
                   >
@@ -708,6 +718,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       e.stopPropagation();
                       goNext();
                     }}
+                    data-note="Swipe or click for the next project."
                     aria-label="Next project"
                     className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white border border-white/15 flex items-center justify-center backdrop-blur-md transition-all active:scale-95 shadow-lg"
                   >
@@ -728,6 +739,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       e.stopPropagation();
                       launchInteractiveDemo();
                     }}
+                    data-note="Launch the interactive sandbox and test this project live."
                     className="pointer-events-auto inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-zinc-950 hover:bg-zinc-200 shadow-md transition-colors"
                   >
                     <Play className="w-3.5 h-3.5 fill-current" />
@@ -744,6 +756,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 <div className="flex items-center gap-3.5 text-neutral-700 dark:text-zinc-300">
                   <button
                     onClick={(e) => toggleLike(activeProject.id, e)}
+                    data-note={
+                      likedIds[activeProject.id]
+                        ? "You liked this build. Taste recognized."
+                        : "Drop a heart on this project (or double-tap the poster)."
+                    }
                     className={`focus:outline-none transition-transform active:scale-125 ${
                       likedIds[activeProject.id]
                         ? "text-red-500 animate-heart-pop"
@@ -779,6 +796,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                         });
                       }
                     }}
+                    data-note="Have questions about this architecture? Send me a direct message."
                     className="hover:text-neutral-900 dark:hover:text-white transition-colors"
                     aria-label="Inquire or message about this project"
                     title="Send a message or inquire about this project"
@@ -815,6 +833,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 {/* Right Bookmark Icon */}
                 <button
                   onClick={(e) => toggleSave(activeProject.id, e)}
+                  data-note={
+                    savedIds[activeProject.id]
+                      ? "Saved to your shortlist."
+                      : "Bookmark this project to your recruiter shortlist."
+                  }
                   className={`focus:outline-none transition-transform active:scale-125 ${
                     savedIds[activeProject.id]
                       ? "text-neutral-900 dark:text-zinc-100"
@@ -890,6 +913,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       <button
                         type="button"
                         onClick={() => setIsBreakdownExpanded(false)}
+                        data-note="Collapse project feature specs."
                         className="text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300 font-semibold text-xs cursor-pointer inline-block"
                       >
                         less
@@ -903,6 +927,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       <button
                         type="button"
                         onClick={() => setIsBreakdownExpanded(true)}
+                        data-note="Unfold full system specs and key engineering features."
                         className="text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300 font-semibold text-xs cursor-pointer inline-block"
                       >
                         more

@@ -40,11 +40,22 @@ export const Highlights: React.FC<HighlightsProps> = ({ onOpenHighlight }) => {
       <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto no-scrollbar py-1">
         {highlightsData.map((highlight, index) => {
           const Icon = getHighlightIcon(highlight.coverIcon);
+          const highlightNote =
+            highlight.id === "capstone"
+              ? "PalengkeHub Capstone story. Defended thesis, real mobile commerce."
+              : highlight.id === "cisco-ccna"
+              ? "Dual Cisco CCNA & Python certified. Tap to view credentials."
+              : highlight.id === "ai-gemini"
+              ? "Live Google Gemini API integrations and USAID AI Governance."
+              : highlight.id === "dlsl-jpcs"
+              ? "BSIT @ De La Salle Lipa and JPCS developer community milestones."
+              : "80-hour corporate engineering immersion at Creotec Philippines.";
 
           return (
             <button
               key={highlight.id}
               onClick={() => onOpenHighlight(index)}
+              data-note={highlightNote}
               className="flex flex-col items-center gap-1.5 group flex-shrink-0 focus:outline-none transition-transform active:scale-95"
               aria-label={`View ${highlight.title} story highlight`}
             >

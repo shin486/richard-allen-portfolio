@@ -103,7 +103,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
           {/* Left Section: Stickman Walker & shin.dev_ Brand Logo */}
           <div className="flex items-center gap-3 flex-shrink-0 justify-start">
-            <div className="relative" ref={switcherRef} title="Richard Allen Liman — 4th-Year BSIT">
+            <div
+              className="relative"
+              ref={switcherRef}
+              data-note="Hey, that is my stickman. He is walking towards graduation, do not distract him."
+              title="Richard Allen Liman — 4th-Year BSIT"
+            >
               {/* 8-Bit Pixel Walking Stickman Journey (Pauses on Hover, Abstract Black/White) */}
               <PixelStickmanJourney onClick={() => setSwitcherOpen((prev) => !prev)} />
 
@@ -233,6 +238,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   type="button"
                   onClick={() => onViewChange("studio")}
+                  data-note="Interactive Studio View with Instagram feed and 3D mechanical keyboard."
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all ${
                     activeView === "studio"
                       ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
@@ -247,6 +253,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   type="button"
                   onClick={() => onViewChange("recruiter")}
+                  data-note="Switch to Recruiter Dossier View for a high-density engineering spec sheet."
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all ${
                     activeView === "recruiter"
                       ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-2xs font-bold"
@@ -298,6 +305,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <a
               href={profileData.socials.github}
+              data-note="My GitHub. Green contribution squares, zero commit fudging."
               target="_blank"
               rel="noopener noreferrer"
               className="p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
@@ -309,6 +317,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <a
               href={profileData.socials.linkedin}
+              data-note="Connect with me on LinkedIn. Real developer network, zero corporate fluff."
               target="_blank"
               rel="noopener noreferrer"
               className="p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
@@ -320,6 +329,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <a
               href={profileData.socials.resumeUrl}
+              data-note="There is the resume. Grab it before someone else hires me first."
               target="_blank"
               rel="noopener noreferrer"
               className="p-1.5 text-neutral-700 dark:text-zinc-300 hover:text-black dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
@@ -337,6 +347,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Primary Action Button */}
             <button
               onClick={() => scrollToSection("contact-section", "contact")}
+              data-note="Click Contact. We could literally be coworkers by next week."
               className="ml-1 hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white bg-ig-gradient hover:opacity-95 hover:shadow-xs active:scale-95 transition-all"
             >
               <Mail className="w-3.5 h-3.5" />
