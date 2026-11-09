@@ -142,8 +142,8 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
                   : "text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100"
               }`}
               aria-selected={isActive}
+              aria-label={tab.subLabel}
               role="tab"
-              title={tab.subLabel}
             >
               <Icon
                 className={`w-5 h-5 sm:w-4 sm:h-4 transition-transform duration-200 ${
