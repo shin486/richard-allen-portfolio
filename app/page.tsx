@@ -190,7 +190,9 @@ export default function HomePage() {
                   <SkillsSection onSelectProject={handleViewProject} />
                 )}
 
-                {activeTab === "certificates" && <CertificateGrid />}
+                {activeTab === "certificates" && (
+                  <CertificateGrid onSelectProject={handleViewProject} />
+                )}
 
                 {activeTab === "about" && <AboutSection />}
               </div>
