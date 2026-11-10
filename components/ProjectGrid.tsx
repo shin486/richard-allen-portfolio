@@ -304,6 +304,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
   const [likedIds, setLikedIds] = useState<Record<string, boolean>>({});
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
+  const [countsLoaded, setCountsLoaded] = useState(false);
   const countedProjectIdsRef = useRef<Record<string, boolean>>({});
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -404,8 +405,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
         if (data?.counts) {
           setLikeCounts(data.counts);
         }
+        setCountsLoaded(true);
       })
-      .catch(() => {});
+      .catch(() => {
+        setCountsLoaded(true);
+      });
   }, []);
 
   const recordProjectLikeOnServer = useCallback((id: string) => {
@@ -711,10 +715,25 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
             {isLiveDemoView ? (
               <div
                 ref={demoStageRef}
+                onDoubleClick={() => triggerDoubleTapHeart(activeProject.id)}
                 className={`relative w-full bg-neutral-100/70 dark:bg-[#0c0c10] p-1.5 sm:p-5 border-b border-neutral-100 dark:border-zinc-800 flex flex-col items-center justify-center transition-shadow duration-300 ${
                   demoSpotlit ? "ring-2 ring-inset ring-pink-500/60" : ""
                 }`}
               >
+                {/* Instagram Big Heart Double-Tap Pop Overlay */}
+                {heartPopId === activeProject.id && (
+                  <div className="absolute inset-0 z-40 pointer-events-none flex items-center justify-center">
+                    <div className="animate-ig-doubletap-heart filter drop-shadow-[0_0_24px_rgba(237,73,86,0.9)]">
+                      <svg
+                        className="w-24 h-24 sm:w-28 sm:h-28 fill-[#ED4956] stroke-white stroke-[1.5]"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+
                 {/* Functional Interactive Demo Host */}
                 <ProjectDemoHost projectId={activeProject.id} />
               </div>
@@ -964,8 +983,62 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 </button>
               </div>
 
+              {/* Real Instagram Likes Counter Line */}
+              {(() => {
+                const isProjectLiked = !!likedIds[activeProject.id];
+                const rawProjectCount = likeCounts[activeProject.id] ?? 0;
+                const displayProjectLikes = isProjectLiked
+                  ? Math.max(1, rawProjectCount)
+                  : rawProjectCount;
+
+                return (
+                  <p className="mt-2.5 text-xs font-semibold text-neutral-900 dark:text-zinc-100 tabular-nums">
+                    {!countsLoaded ? (
+                      <span className="text-neutral-400 dark:text-zinc-500 font-normal">
+                        Loading likes…
+                      </span>
+                    ) : displayProjectLikes === 0 ? (
+                      <span className="text-neutral-500 dark:text-zinc-400 font-normal">
+                        Be the first to like this project
+                      </span>
+                    ) : displayProjectLikes === 1 ? (
+                      isProjectLiked ? (
+                        <>
+                          1 like{" "}
+                          <span className="font-normal text-neutral-500 dark:text-zinc-400">
+                            · Liked by{" "}
+                            <strong className="font-semibold text-neutral-800 dark:text-zinc-200">
+                              you
+                            </strong>
+                          </span>
+                        </>
+                      ) : (
+                        "1 like"
+                      )
+                    ) : isProjectLiked ? (
+                      <>
+                        {displayProjectLikes.toLocaleString()} likes{" "}
+                        <span className="font-normal text-neutral-500 dark:text-zinc-400">
+                          · Liked by{" "}
+                          <strong className="font-semibold text-neutral-800 dark:text-zinc-200">
+                            you
+                          </strong>{" "}
+                          and{" "}
+                          <strong className="font-semibold text-neutral-800 dark:text-zinc-200">
+                            {displayProjectLikes - 1}{" "}
+                            {displayProjectLikes - 1 === 1 ? "other" : "others"}
+                          </strong>
+                        </span>
+                      </>
+                    ) : (
+                      `${displayProjectLikes.toLocaleString()} likes`
+                    )}
+                  </p>
+                );
+              })()}
+
               {/* Dynamic Post Caption Content */}
-              <div className="mt-3.5 space-y-3">
+              <div className="mt-2 space-y-3">
                 {/* Title, Role & Timeline */}
                 <div>
                   <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
