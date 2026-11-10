@@ -38,7 +38,7 @@ interface RecruiterDossierViewProps {
 const HERO_STATUS_NOTES: string[] = [
   "Open to Full-Stack & Mobile Developer roles",
   "Available for 500+ Hour OJT / Software Engineering Internship",
-  "Building offline-first React Native & Supabase PostgreSQL systems",
+  "Building cross-platform React Native & Supabase PostgreSQL systems",
   "4th-year BS Information Technology at De La Salle Lipa",
 ];
 
@@ -843,8 +843,8 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
 
           {/* Supporting Sentence (32px / mt-8 directly below <h1>) */}
           <p className="mt-8 max-w-3xl text-base sm:text-lg lg:text-xl text-[#9CA3AF] leading-[1.6] font-normal">
-            Full-Stack &amp; Mobile Developer specializing in offline-first React
-            Native applications and normalized PostgreSQL backends. 4th-year
+            Full-Stack &amp; Mobile Developer specializing in cross-platform React
+            Native applications and scalable PostgreSQL backends. 4th-year
             BSIT at De La Salle Lipa.
           </p>
 
