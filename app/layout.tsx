@@ -57,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+    <html lang="en" suppressHydrationWarning className="dark scroll-smooth">
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -65,20 +65,21 @@ export default function RootLayout({
               (function() {
                 try {
                   var saved = localStorage.getItem('theme');
-                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  if (saved === 'dark' || (!saved && prefersDark)) {
-                    document.documentElement.classList.add('dark');
-                  } else {
+                  if (saved === 'light') {
                     document.documentElement.classList.remove('dark');
+                  } else {
+                    document.documentElement.classList.add('dark');
                   }
-                } catch (e) {}
+                } catch (e) {
+                  document.documentElement.classList.add('dark');
+                }
               })();
             `,
           }}
         />
       </head>
       <body
-        className={`${inter.variable} font-sans bg-white dark:bg-[#0B0B0F] text-[#111111] dark:text-[#F5F5F5] min-h-screen flex flex-col antialiased selection:bg-pink-500/20 selection:text-pink-500 transition-colors duration-200`}
+        className={`${inter.variable} font-sans bg-white dark:bg-[#0A0A0B] text-[#111111] dark:text-[#F4F4F6] min-h-screen flex flex-col antialiased selection:bg-emerald-500/20 selection:text-emerald-400 transition-colors duration-200`}
       >
         {children}
       </body>

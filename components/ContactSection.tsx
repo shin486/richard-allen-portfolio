@@ -58,8 +58,8 @@ const TOPICS: TopicOption[] = [
   {
     id: "general",
     label: "General Inquiry",
-    subject: "Portfolio Inquiry — Richard Allen Liman",
-    placeholder: "Write a message to @shin486...",
+    subject: "Portfolio Inquiry · Richard Allen Liman",
+    placeholder: "Write a direct message to Richard Allen Liman...",
     starterText:
       "Hi Richard, just checked out your portfolio and wanted to connect!",
     note: "Send a general direct message.",
@@ -74,7 +74,13 @@ interface SentMessage {
   timestamp: string;
 }
 
-export const ContactSection: React.FC = () => {
+interface ContactSectionProps {
+  hideHeader?: boolean;
+}
+
+export const ContactSection: React.FC<ContactSectionProps> = ({
+  hideHeader = false,
+}) => {
   const [selectedTopicId, setSelectedTopicId] = useState<string>("ojt");
   const [senderEmail, setSenderEmail] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -161,76 +167,83 @@ export const ContactSection: React.FC = () => {
   return (
     <section
       id="contact-section"
-      className="py-8 sm:py-12 border-t border-neutral-200 dark:border-zinc-800/80"
+      className={
+        hideHeader
+          ? ""
+          : "py-8 sm:py-12 border-t border-neutral-200 dark:border-white/[0.08]"
+      }
     >
-      {/* Clean Editorial Section Header (Zero AI Gradient Icon Box) */}
-      <div className="flex flex-wrap items-baseline justify-between gap-2 mb-4">
-        <div className="flex items-center gap-2">
-          <h2 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-zinc-100 tracking-tight">
-            Direct Message
-          </h2>
-          <span className="text-neutral-300 dark:text-zinc-700">·</span>
-          <span className="text-xs font-mono text-neutral-500 dark:text-zinc-400">
-            @{profileData.username}
+      {/* Clean Editorial Section Header */}
+      {!hideHeader && (
+        <div className="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+          <div className="flex items-center gap-2">
+            <h2 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-[#F4F4F6] tracking-tight">
+              Direct Inbox
+            </h2>
+            <span className="text-neutral-300 dark:text-zinc-700">·</span>
+            <span className="text-xs font-mono text-neutral-500 dark:text-[#9CA3AF]">
+              Richard Allen Liman
+            </span>
+          </div>
+          <span className="text-[11px] font-mono text-neutral-400 dark:text-[#6B7280]">
+            Lipa City, PH (GMT+8)
           </span>
         </div>
-        <span className="text-[11px] font-mono text-neutral-400 dark:text-zinc-500">
-          Lipa City, PH (GMT+8)
-        </span>
-      </div>
+      )}
 
-      {/* Unified Instagram DM Thread × Linear Precision Card */}
-      <div className="milled-card bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800/90 rounded-2xl overflow-hidden transition-colors duration-200">
+      {/* Unified Direct Inbox × Linear Precision Card */}
+      <div className="bg-white dark:bg-[#111215] border border-neutral-200 dark:border-white/[0.08] dark:border-t-white/[0.14] rounded-2xl overflow-hidden transition-colors duration-200 shadow-2xl">
         {/* Top Bar: Thread Recipient + 1-Click Utility Pills */}
-        <div className="px-4 sm:px-5 py-3.5 border-b border-neutral-200/80 dark:border-zinc-800/80 flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#111116]">
-          {/* Left: Compact Recipient Identity */}
+        <div className="px-4 sm:px-6 py-4 border-b border-neutral-200/80 dark:border-white/[0.08] flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#111215]">
+          {/* Left: Compact Recipient Identity (Single Avatar in Direct Inbox) */}
           <div className="flex items-center gap-3 min-w-0">
-            <div className="relative w-9 h-9 rounded-full p-[1.5px] animated-ig-ring flex-shrink-0">
-              <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900">
-                <Image
-                  src={profilePic}
-                  alt={profileData.name}
-                  fill
-                  sizes="36px"
-                  className="object-cover"
-                />
-              </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#111116]" />
+            <div className="relative w-10 h-10 rounded-full overflow-hidden border border-neutral-200 dark:border-white/[0.14] flex-shrink-0 bg-neutral-900">
+              <Image
+                src={profilePic}
+                alt={profileData.name}
+                fill
+                sizes="40px"
+                className="object-cover"
+              />
             </div>
 
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-xs sm:text-sm text-neutral-900 dark:text-zinc-100 truncate">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-[#F4F4F6] truncate">
                   {profileData.name}
                 </span>
                 <VerifiedBadge className="w-3.5 h-3.5 flex-shrink-0" />
+                <span className="text-[11px] font-mono text-neutral-400 dark:text-[#6B7280]">
+                  · Lipa City, PH (GMT+8)
+                </span>
               </div>
-              <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">
-                Active now · Typically replies within 2 hours
+              <p className="text-[11px] text-neutral-500 dark:text-[#9CA3AF] truncate flex items-center gap-1.5 mt-0.5">
+                <span className="w-2 h-2 rounded-full bg-[#10B981] inline-block animate-pulse" />
+                <span>Active now · Typically replies within 2 hours</span>
               </p>
             </div>
           </div>
 
           {/* Right: 1-Click Copy Email + Resume + LinkedIn Dock */}
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={handleCopyEmail}
               data-note="Click to copy richardallen0901@gmail.com straight to your clipboard."
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium border transition-all active:scale-95 ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium border transition-all active:scale-95 ${
                 emailCopied
-                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
-                  : "bg-neutral-100/80 dark:bg-zinc-900 hover:bg-neutral-200/70 dark:hover:bg-zinc-800 text-neutral-700 dark:text-zinc-300 border-neutral-200/90 dark:border-zinc-800"
+                  ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-600 dark:text-[#10B981]"
+                  : "bg-neutral-100/80 dark:bg-[#17191E] hover:bg-neutral-200/70 dark:hover:border-[#10B981]/45 text-neutral-700 dark:text-[#F4F4F6] border-neutral-200/90 dark:border-white/[0.08]"
               }`}
             >
               {emailCopied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                  <Check className="w-3.5 h-3.5 text-[#10B981] flex-shrink-0" />
                   <span>Copied email</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-3.5 h-3.5 text-neutral-400 dark:text-zinc-500 flex-shrink-0" />
+                  <Copy className="w-3.5 h-3.5 text-neutral-400 dark:text-[#9CA3AF] flex-shrink-0" />
                   <span className="hidden sm:inline">
                     {profileData.socials.email}
                   </span>
@@ -245,11 +258,11 @@ export const ContactSection: React.FC = () => {
               rel="noopener noreferrer"
               download="Richard_Allen_Liman_Resume.pdf"
               data-note="Download a clean PDF copy of my resume for your hiring team."
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-neutral-100/80 dark:bg-zinc-900 hover:bg-neutral-200/70 dark:hover:bg-zinc-800 text-neutral-700 dark:text-zinc-300 border border-neutral-200/90 dark:border-zinc-800 transition-all active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-100/80 dark:bg-[#17191E] hover:bg-neutral-200/70 dark:hover:border-[#10B981]/45 text-neutral-700 dark:text-[#F4F4F6] border border-neutral-200/90 dark:border-white/[0.08] transition-all active:scale-95"
             >
-              <FileText className="w-3.5 h-3.5 text-neutral-500 dark:text-zinc-400" />
-              <span>Resume</span>
-              <ArrowUpRight className="w-3 h-3 text-neutral-400 dark:text-zinc-500" />
+              <FileText className="w-3.5 h-3.5 text-neutral-500 dark:text-[#9CA3AF]" />
+              <span>Download Resume (PDF)</span>
+              <ArrowUpRight className="w-3 h-3 text-neutral-400 dark:text-[#9CA3AF]" />
             </a>
 
             <a
@@ -258,39 +271,28 @@ export const ContactSection: React.FC = () => {
               rel="noopener noreferrer"
               data-note="Connect with me directly on LinkedIn."
               aria-label="LinkedIn Profile"
-              className="inline-flex items-center justify-center p-1.5 rounded-lg bg-neutral-100/80 dark:bg-zinc-900 hover:bg-neutral-200/70 dark:hover:bg-zinc-800 text-neutral-700 dark:text-zinc-300 border border-neutral-200/90 dark:border-zinc-800 transition-all active:scale-95"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-neutral-100/80 dark:bg-[#17191E] hover:bg-neutral-200/70 dark:hover:border-[#10B981]/45 text-neutral-700 dark:text-[#F4F4F6] border border-neutral-200/90 dark:border-white/[0.08] transition-all active:scale-95"
             >
               <Linkedin className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">LinkedIn</span>
             </a>
           </div>
         </div>
 
         {/* Middle: Authentic Conversation Stream */}
-        <div className="px-4 sm:px-6 py-5 bg-neutral-50/50 dark:bg-[#0D0D12] space-y-4">
-          {/* Incoming Message Bubble from Richard */}
-          <div className="flex items-end gap-2.5">
-            <div className="w-7 h-7 rounded-full overflow-hidden relative bg-neutral-900 ring-1 ring-neutral-200 dark:ring-zinc-800 flex-shrink-0 mb-0.5">
-              <Image
-                src={profilePic}
-                alt={profileData.name}
-                fill
-                sizes="28px"
-                className="object-cover"
-              />
+        <div className="px-4 sm:px-6 py-5 bg-neutral-50/50 dark:bg-[#0D0E11] space-y-4">
+          {/* Incoming Message Bubble from Richard (No duplicate avatar or handle spam) */}
+          <div className="space-y-1.5 max-w-2xl">
+            <div className="px-4 py-3 rounded-xl bg-white dark:bg-[#17191E] border border-neutral-200/80 dark:border-white/[0.08] text-xs sm:text-sm text-neutral-800 dark:text-[#F4F4F6] leading-relaxed">
+              Looking for a Full-Stack or Mobile developer for an OJT
+              internship, junior engineering role, or project build? Select a
+              topic below or send a direct message. It routes straight to my
+              inbox ({profileData.socials.email}).
             </div>
-
-            <div className="space-y-1 max-w-xl">
-              <div className="px-4 py-3 rounded-2xl rounded-bl-sm bg-white dark:bg-[#16161F] border border-neutral-200/80 dark:border-zinc-800/90 text-xs sm:text-sm text-neutral-800 dark:text-zinc-200 leading-relaxed shadow-2xs">
-                Hey! Looking for a Full-Stack or Mobile developer for an
-                internship, junior engineering role, or project build? Pick a
-                topic below or drop a message—it routes straight to my personal
-                inbox.
-              </div>
-              <div className="flex items-center gap-2 pl-1 text-[10px] font-mono text-neutral-400 dark:text-zinc-500">
-                <span>@{profileData.username}</span>
-                <span>·</span>
-                <span>Direct Inbox</span>
-              </div>
+            <div className="flex items-center gap-2 pl-1 text-[11px] font-mono text-neutral-400 dark:text-[#6B7280]">
+              <span>Direct Inbox</span>
+              <span>·</span>
+              <span>De La Salle Lipa · BSIT</span>
             </div>
           </div>
 

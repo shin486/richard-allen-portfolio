@@ -993,13 +993,9 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
 
                 return (
                   <p className="mt-2.5 text-xs font-semibold text-neutral-900 dark:text-zinc-100 tabular-nums">
-                    {!countsLoaded ? (
-                      <span className="text-neutral-400 dark:text-zinc-500 font-normal">
-                        Loading likes…
-                      </span>
-                    ) : displayProjectLikes === 0 ? (
+                    {!countsLoaded || displayProjectLikes === 0 ? (
                       <span className="text-neutral-500 dark:text-zinc-400 font-normal">
-                        Be the first to like this project
+                        Double-tap poster or tap heart to like this project
                       </span>
                     ) : displayProjectLikes === 1 ? (
                       isProjectLiked ? (
@@ -1042,14 +1038,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                 {/* Title, Role & Timeline */}
                 <div>
                   <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                    <span className="font-bold text-xs sm:text-sm text-neutral-900 dark:text-zinc-100">
-                      {profileData.username}
-                    </span>
                     <h3 className="font-bold text-base sm:text-lg text-neutral-900 dark:text-zinc-100">
                       {activeProject.title}
                     </h3>
                     <span className="text-xs font-medium text-neutral-500 dark:text-zinc-400">
-                      — {activeProject.subtitle}
+                      · {activeProject.subtitle}
                     </span>
                   </div>
 
@@ -1063,15 +1056,13 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </div>
                 </div>
 
-                {/* Instagram-Style Post Caption Body with "... more" / "less" Expansion */}
-                <div className="text-xs sm:text-sm text-neutral-600 dark:text-zinc-300 leading-relaxed">
-                  {isBreakdownExpanded ? (
-                    <div className="space-y-2.5 animate-fade-in">
-                      <p>{activeProject.description}</p>
-
-                      {/* Detailed Key Features & Architecture */}
-                      {activeProject.keyFeatures && activeProject.keyFeatures.length > 0 && (
-                        <div className="pt-2.5 border-t border-neutral-100 dark:border-zinc-800/80 space-y-1.5">
+                {/* Full Un-truncated Engineering Summary + Expandable Key Features */}
+                <div className="text-xs sm:text-sm text-neutral-600 dark:text-zinc-300 leading-relaxed space-y-2">
+                  <p>{activeProject.description}</p>
+                  {activeProject.keyFeatures && activeProject.keyFeatures.length > 0 && (
+                    <div>
+                      {isBreakdownExpanded ? (
+                        <div className="pt-2.5 border-t border-neutral-100 dark:border-zinc-800/80 space-y-1.5 animate-fade-in">
                           <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-700 dark:text-zinc-300 flex items-center gap-1.5">
                             <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
                             Key Features &amp; Architecture
@@ -1087,32 +1078,25 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                               </li>
                             ))}
                           </ul>
+                          <button
+                            type="button"
+                            onClick={() => setIsBreakdownExpanded(false)}
+                            className="text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300 font-semibold text-xs cursor-pointer inline-block pt-1"
+                          >
+                            Hide key features
+                          </button>
                         </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setIsBreakdownExpanded(true)}
+                          className="text-neutral-500 hover:text-neutral-800 dark:text-zinc-400 dark:hover:text-zinc-200 font-semibold text-xs cursor-pointer inline-flex items-center gap-1"
+                        >
+                          <span>View {activeProject.keyFeatures.length} key engineering features</span>
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        </button>
                       )}
-
-                      <button
-                        type="button"
-                        onClick={() => setIsBreakdownExpanded(false)}
-                        data-note="Collapse project feature specs."
-                        className="text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300 font-semibold text-xs cursor-pointer inline-block"
-                      >
-                        less
-                      </button>
                     </div>
-                  ) : (
-                    <p>
-                      {activeProject.description.length > 135
-                        ? `${activeProject.description.slice(0, 135).trim()}... `
-                        : `${activeProject.description} `}
-                      <button
-                        type="button"
-                        onClick={() => setIsBreakdownExpanded(true)}
-                        data-note="Unfold full system specs and key engineering features."
-                        className="text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300 font-semibold text-xs cursor-pointer inline-block"
-                      >
-                        more
-                      </button>
-                    </p>
                   )}
                 </div>
 
@@ -1128,14 +1112,14 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </div>
                 )}
 
-                {/* Visual System Architecture Pipeline */}
+                {/* Visual System Architecture Pipeline (With Permanently Visible Node Notes) */}
                 <div className="pt-3 border-t border-neutral-100 dark:border-zinc-800/80">
-                  <div className="p-3 sm:p-3.5 rounded-xl bg-neutral-50/80 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800/90 shadow-2xs">
+                  <div className="p-3 sm:p-4 rounded-xl bg-neutral-50/80 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800/90 shadow-2xs">
                     {/* Pipeline Header with Quality Indicator */}
-                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                    <div className="flex items-center justify-between gap-2 mb-3">
                       <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-ig-pink" />
-                        <span className="text-[10.5px] font-bold uppercase tracking-wider text-neutral-700 dark:text-zinc-300">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                        <span className="text-[10.5px] font-bold uppercase tracking-wider text-neutral-700 dark:text-zinc-300 font-mono">
                           Architecture Pipeline
                         </span>
                       </div>
@@ -1144,8 +1128,8 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                       </span>
                     </div>
 
-                    {/* Connected Data Flow Nodes */}
-                    <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-1.5 sm:gap-2">
+                    {/* Connected Data Flow Nodes with Exposed Sub-copy */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                       {pipeline.nodes.map((node, idx) => {
                         const handleMouseEnter = () => {
                           if (typeof window !== "undefined") {
@@ -1158,34 +1142,24 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                         };
 
                         return (
-                          <React.Fragment key={node.layer}>
-                            <div
-                              title={node.note}
-                              onMouseEnter={handleMouseEnter}
-                              className="group/node inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-lg border border-neutral-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-800/60 text-xs font-medium cursor-default transition-all duration-200 hover:-translate-y-0.5 hover:border-neutral-300 dark:hover:border-zinc-700 shadow-2xs w-full sm:w-auto"
-                            >
+                          <div
+                            key={node.layer}
+                            onMouseEnter={handleMouseEnter}
+                            className="group/node flex flex-col justify-between gap-1.5 p-2.5 rounded-lg border border-neutral-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-800/60 text-xs transition-all duration-200 hover:border-emerald-500/45 shadow-2xs"
+                          >
+                            <div className="flex items-center gap-1.5 min-w-0">
                               <div className="flex-shrink-0">{node.icon}</div>
-                              <div className="flex items-center gap-1.5 min-w-0">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-zinc-400 font-mono shrink-0">
-                                  {node.layer}:
-                                </span>
-                                <span className="font-semibold text-neutral-900 dark:text-zinc-100 truncate">{node.tech}</span>
-                              </div>
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-zinc-400 font-mono shrink-0">
+                                0{idx + 1} · {node.layer}:
+                              </span>
+                              <span className="font-semibold text-neutral-900 dark:text-zinc-100 truncate">
+                                {node.tech}
+                              </span>
                             </div>
-
-                            {/* Chevron Arrow Connector (Desktop/Tablet) */}
-                            {idx < pipeline.nodes.length - 1 && (
-                              <svg
-                                className="hidden sm:block w-3.5 h-3.5 text-neutral-400 dark:text-zinc-600 flex-shrink-0 transition-transform group-hover/node:translate-x-0.5"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2.5"
-                              >
-                                <polyline points="9 18 15 12 9 6" />
-                              </svg>
-                            )}
-                          </React.Fragment>
+                            <p className="text-[11px] text-neutral-500 dark:text-zinc-400 leading-snug">
+                              {node.note}
+                            </p>
+                          </div>
                         );
                       })}
                     </div>

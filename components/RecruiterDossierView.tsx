@@ -1,555 +1,1413 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Image from "next/image";
 import {
   FileText,
   Github,
   Linkedin,
-  Mail,
-  MapPin,
-  GraduationCap,
+  ArrowDown,
+  ArrowUpRight,
+  CheckCircle2,
   Play,
-  Terminal,
+  RotateCw,
+  ChevronLeft,
+  ChevronRight,
   Cpu,
-  Code2,
-  ShieldCheck,
-  Activity,
-  Database,
-  Smartphone,
-  GitBranch,
+  Layers,
+  Sparkles,
+  Check,
 } from "lucide-react";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 import { Project, projectsData } from "@/data/projects";
 import { ProjectModal } from "./ProjectModal";
+import { ProjectDemoHost } from "./demos/ProjectDemoHost";
+import {
+  KEYCAP_SKILLS,
+  Keycap3DSurface,
+  KeycapSkill,
+  getEngineeringSpecForSkill,
+} from "./TechKeyboard3D";
+import { ContactSection } from "./ContactSection";
 
 interface RecruiterDossierViewProps {
   onSwitchToStudio?: () => void;
 }
 
+const HERO_STATUS_NOTES: string[] = [
+  "Open to Full-Stack & Mobile Developer roles",
+  "Available for 500+ Hour OJT / Software Engineering Internship",
+  "Building offline-first React Native & Supabase PostgreSQL systems",
+  "4th-year BS Information Technology at De La Salle Lipa",
+];
+
+interface ArchitectureStage {
+  stageNumber: string;
+  layer: string;
+  tech: string;
+  techKey: string;
+  description: string;
+}
+
+interface ProjectArchitectureSpec {
+  qualityBadge: string;
+  timelineBadge: string;
+  cleanSubtitle: string;
+  stages: ArchitectureStage[];
+}
+
+const getProjectArchitectureSpec = (
+  project: Project
+): ProjectArchitectureSpec => {
+  switch (project.id) {
+    case "palengkehub":
+      return {
+        qualityBadge: "✓ iOS & Android Tested",
+        timelineBadge: "FULL-STACK DEVELOPER · SEP 2025 – OCT 2026",
+        cleanSubtitle:
+          "Public-Market Price Transparency & Offline-First Pre-Ordering",
+        stages: [
+          {
+            stageNumber: "01",
+            layer: "Client",
+            tech: "React Native (Expo)",
+            techKey: "React Native",
+            description:
+              "Cross-platform mobile client with gesture navigation, offline caching, and camera integration.",
+          },
+          {
+            stageNumber: "02",
+            layer: "Logic",
+            tech: "TypeScript",
+            techKey: "TypeScript",
+            description:
+              "Strict type contracts across buyer, vendor, and admin transactional flows.",
+          },
+          {
+            stageNumber: "03",
+            layer: "DB & Auth",
+            tech: "Supabase (PostgreSQL)",
+            techKey: "Supabase",
+            description:
+              "ACID PostgreSQL schemas, Row-Level Security (RLS), and realtime price updates.",
+          },
+        ],
+      };
+    case "shinpay-plus":
+      return {
+        qualityBadge: "✓ Multi-Tenant RLS Verified",
+        timelineBadge: "FULL-STACK DEVELOPER · JAN 2026 – APR 2026",
+        cleanSubtitle:
+          "Multi-Tenant Payroll & Statutory Compliance Engine",
+        stages: [
+          {
+            stageNumber: "01",
+            layer: "Frontend",
+            tech: "Next.js 14 App Router",
+            techKey: "Next.js",
+            description:
+              "Server Components, Server Actions, and responsive enterprise payroll dashboards deployed on Vercel.",
+          },
+          {
+            stageNumber: "02",
+            layer: "Logic & UI",
+            tech: "TypeScript",
+            techKey: "TypeScript",
+            description:
+              "Deterministic Philippine statutory math engine (BIR TRAIN, SSS 2025, PhilHealth 5%, Pag-IBIG).",
+          },
+          {
+            stageNumber: "03",
+            layer: "Database",
+            tech: "Supabase (PostgreSQL)",
+            techKey: "PostgreSQL",
+            description:
+              "Multi-tenant isolated PostgreSQL tables enforced by strict Row-Level Security policies.",
+          },
+        ],
+      };
+    case "itelect4-project":
+      return {
+        qualityBadge: "✓ Google Gemini AI Integrated",
+        timelineBadge: "FULL-STACK DEVELOPER · JAN 2026 – MAY 2026",
+        cleanSubtitle:
+          "AI-Powered Review & Full-Stack Microservice Platform",
+        stages: [
+          {
+            stageNumber: "01",
+            layer: "Client",
+            tech: "React (Vite)",
+            techKey: "React",
+            description:
+              "High-performance single-page application with protected JWT auth state and real-time review cards.",
+          },
+          {
+            stageNumber: "02",
+            layer: "Server & AI",
+            tech: "Express + Gemini AI",
+            techKey: "Express",
+            description:
+              "Rate-limited POST /api/ai microservice returning Zod-validated JSON evaluations from Google Gemini.",
+          },
+          {
+            stageNumber: "03",
+            layer: "Database",
+            tech: "MongoDB",
+            techKey: "MongoDB",
+            description:
+              "Document collections with indexed Mongoose ODM schemas and Bcrypt credential hashing.",
+          },
+        ],
+      };
+    case "auto-avenue-ims":
+      return {
+        qualityBadge: "✓ Real-Time POS Integration",
+        timelineBadge: "FULL-STACK DEVELOPER · AUG 2025 – DEC 2025",
+        cleanSubtitle:
+          "Automotive Inventory Management & Point-of-Sale Synchronization",
+        stages: [
+          {
+            stageNumber: "01",
+            layer: "UI Layer",
+            tech: "Bootstrap UI",
+            techKey: "Bootstrap",
+            description:
+              "Accessible inventory and checkout console built for service bay technicians and cashiers.",
+          },
+          {
+            stageNumber: "02",
+            layer: "Backend",
+            tech: "PHP REST Engine",
+            techKey: "PHP",
+            description:
+              "Automated stock reorder threshold engine and transactional Point-of-Sale synchronization.",
+          },
+          {
+            stageNumber: "03",
+            layer: "Database",
+            tech: "MySQL Relational DB",
+            techKey: "MySQL",
+            description:
+              "Normalized relational inventory schemas tracking 150+ automotive spare parts and supplier orders.",
+          },
+        ],
+      };
+    case "avms":
+      return {
+        qualityBadge: "✓ 99.9% SLA ITSM Framework",
+        timelineBadge: "SYSTEM DESIGNER · JAN 2025 – MAY 2025",
+        cleanSubtitle:
+          "Automated Campus Visitor Management & QR Access Control",
+        stages: [
+          {
+            stageNumber: "01",
+            layer: "Access Portal",
+            tech: "Campus QR Scanner",
+            techKey: "QR Access Control",
+            description:
+              "Visitor pre-registration, dynamic QR pass generation, and automated host check-in alerts.",
+          },
+          {
+            stageNumber: "02",
+            layer: "Security Core",
+            tech: "RBAC + MFA + Encryption",
+            techKey: "RBAC & MFA",
+            description:
+              "Role-based access control, multi-factor verification, and encrypted visitor audit trails.",
+          },
+          {
+            stageNumber: "03",
+            layer: "Operations",
+            tech: "ITSM Framework (99.9% SLA)",
+            techKey: "ITSM",
+            description:
+              "Structured incident, problem, and change management lifecycles engineered for campus security.",
+          },
+        ],
+      };
+    case "crave-cart":
+    default:
+      return {
+        qualityBadge: "✓ Full-Stack Ordering Flow",
+        timelineBadge: "WEB DEVELOPER · AUG 2024 – DEC 2024",
+        cleanSubtitle:
+          "Interactive Food Kiosk Browser & Express Order Server",
+        stages: [
+          {
+            stageNumber: "01",
+            layer: "Client UI",
+            tech: "Interactive Menu + Maps",
+            techKey: "JavaScript",
+            description:
+              "Responsive food kiosk interface with dynamic cart state and embedded Google Maps branch locator.",
+          },
+          {
+            stageNumber: "02",
+            layer: "API Server",
+            tech: "Node.js + Express",
+            techKey: "Node.js",
+            description:
+              "Lightweight REST routing for order validation, receipt calculation, and customer feedback.",
+          },
+          {
+            stageNumber: "03",
+            layer: "Storage",
+            tech: "Local Storage & JSON Store",
+            techKey: "Local Storage",
+            description:
+              "Client-side cart persistence paired with server-side JSON order and feedback logging.",
+          },
+        ],
+      };
+  }
+};
+
+type StackFilterDomain = "all" | "frontend" | "mobile" | "backend" | "tools";
+
+const STACK_FILTER_TABS: { id: StackFilterDomain; label: string }[] = [
+  { id: "all", label: "All 28 Keys" },
+  { id: "frontend", label: "Frontend" },
+  { id: "mobile", label: "Mobile" },
+  { id: "backend", label: "Backend & DB" },
+  { id: "tools", label: "Tools" },
+];
+
+const matchesStackDomain = (
+  skill: KeycapSkill,
+  domain: StackFilterDomain
+): boolean => {
+  if (domain === "all") return true;
+  if (domain === "frontend") {
+    return (
+      skill.category === "frontend" ||
+      ["typescript", "javascript", "html5", "css3"].includes(skill.id)
+    );
+  }
+  if (domain === "mobile") {
+    return [
+      "react-native",
+      "expo",
+      "react",
+      "typescript",
+      "supabase",
+    ].includes(skill.id);
+  }
+  if (domain === "backend") {
+    return (
+      skill.category === "backend" ||
+      ["sql", "php", "typescript"].includes(skill.id)
+    );
+  }
+  if (domain === "tools") {
+    return skill.category === "tools" || skill.category === "macro";
+  }
+  return true;
+};
+
+const SHORT_PROJECT_NAMES: Record<string, string> = {
+  palengkehub: "PalengkeHub",
+  "shinpay-plus": "ShinPay+",
+  "itelect4-project": "IT Elective 4",
+  "auto-avenue-ims": "Auto Avenue",
+  avms: "AVMS",
+  "crave-cart": "Crave Cart",
+};
+
+/**
+ * Live Coded PalengkeHub HTML/CSS UI Fragment
+ * Preserves the exact Lipa City Public Market interface and stall price comparisons
+ * inside a bounded mobile device stage, with a 1-click switch to the full multi-tab sandbox.
+ */
+const PalengkeHubLiveStage: React.FC<{
+  onLaunchFullSandbox: () => void;
+}> = ({ onLaunchFullSandbox }) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [reservedItems, setReservedItems] = useState<Record<string, boolean>>({
+    "bangus-deal": false,
+  });
+  const [activePriceItem, setActivePriceItem] = useState<
+    "bangus" | "kamatis" | "liempo" | "bigas"
+  >("bangus");
+
+  const toggleReserve = (key: string) => {
+    setReservedItems((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const PRICE_COMPARISONS = {
+    bangus: {
+      name: "Bangus (Dagupan Medium)",
+      unit: "per kg",
+      stalls: [
+        {
+          stall: "Aling Nena's Fresh Catch",
+          section: "Fish Sec · Stall A-04",
+          price: "₱180",
+          tag: "PINAKAMURA",
+          isLowest: true,
+        },
+        {
+          stall: "Mang Tonyo Dagupan Seafood",
+          section: "Fish Sec · Stall A-09",
+          price: "₱195",
+          tag: "+₱15 vs lowest",
+          isLowest: false,
+        },
+        {
+          stall: "Batangas Bay Catch",
+          section: "Fish Sec · Stall A-12",
+          price: "₱200",
+          tag: "Avg Market Price",
+          isLowest: false,
+        },
+      ],
+    },
+    kamatis: {
+      name: "Kamatis Tagalog (Fresh Harvest)",
+      unit: "per kg",
+      stalls: [
+        {
+          stall: "Ate Lorna Gulayan",
+          section: "Produce · Stall B-12",
+          price: "₱60",
+          tag: "PINAKAMURA",
+          isLowest: true,
+        },
+        {
+          stall: "Highland Farm Produce",
+          section: "Produce · Stall B-03",
+          price: "₱68",
+          tag: "+₱8 vs lowest",
+          isLowest: false,
+        },
+        {
+          stall: "Lipa Verde Stall",
+          section: "Produce · Stall B-18",
+          price: "₱75",
+          tag: "Avg Market Price",
+          isLowest: false,
+        },
+      ],
+    },
+    liempo: {
+      name: "Pork Liempo (Fresh Cut)",
+      unit: "per kg",
+      stalls: [
+        {
+          stall: "Kuya Bong Meat Shop",
+          section: "Meat Sec · Stall C-02",
+          price: "₱340",
+          tag: "PINAKAMURA",
+          isLowest: true,
+        },
+        {
+          stall: "Batangas Livestock Stall",
+          section: "Meat Sec · Stall C-08",
+          price: "₱355",
+          tag: "+₱15 vs lowest",
+          isLowest: false,
+        },
+        {
+          stall: "San Sebastian Prime Cuts",
+          section: "Meat Sec · Stall C-14",
+          price: "₱360",
+          tag: "Avg Market Price",
+          isLowest: false,
+        },
+      ],
+    },
+    bigas: {
+      name: "Sinandomeng Special (Bagong Ani)",
+      unit: "per kg",
+      stalls: [
+        {
+          stall: "Bigasan ni Mang Nestor",
+          section: "Grains · Stall D-01",
+          price: "₱52",
+          tag: "PINAKAMURA",
+          isLowest: true,
+        },
+        {
+          stall: "Golden Grain Lipa",
+          section: "Grains · Stall D-05",
+          price: "₱54",
+          tag: "+₱2 vs lowest",
+          isLowest: false,
+        },
+        {
+          stall: "Mindoro Rice Depot",
+          section: "Grains · Stall D-11",
+          price: "₱56",
+          tag: "Avg Market Price",
+          isLowest: false,
+        },
+      ],
+    },
+  };
+
+  const currentComparison = PRICE_COMPARISONS[activePriceItem];
+
+  return (
+    <div className="w-full max-w-[360px] mx-auto rounded-[28px] border-[4px] border-[#22242A] bg-[#0D0E11] overflow-hidden shadow-2xl">
+      {/* Device Top Status Bar */}
+      <div className="px-4 py-2.5 bg-[#111215] border-b border-white/[0.08] flex items-center justify-between text-[11px] font-mono">
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-[#F4F4F6]">PalengkeHub</span>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] text-[10px] font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+            LIPA LIVE
+          </span>
+        </div>
+        <span className="text-[10px] text-[#9CA3AF]">
+          BUKAS NGAYON · 4AM–7PM
+        </span>
+      </div>
+
+      {/* Scrollable 460px Live Coded App Viewport */}
+      <div className="h-[460px] overflow-y-auto p-3.5 space-y-3.5 text-left scrollbar-thin">
+        {/* Welcome Banner */}
+        <div className="p-3 rounded-xl bg-[#17191E] border border-white/[0.08]">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#10B981]">
+              Lipa City Public Market
+            </span>
+            <span className="text-[10px] font-mono text-[#6B7280]">
+              8 Tables · RLS Sync
+            </span>
+          </div>
+          <h4 className="text-sm font-semibold text-[#F4F4F6] mt-1">
+            Magandang Araw, Ka-Palengke!
+          </h4>
+          <p className="text-[11px] text-[#9CA3AF] mt-0.5 leading-snug">
+            Real-time stall price transparency &amp; offline-first pre-ordering across Lipa City stalls.
+          </p>
+
+          {/* Category Filter Chips */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pt-2.5 pb-0.5 no-scrollbar">
+            {["All", "Isda & Seafood", "Gulay", "Karne", "Bigas"].map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-2 py-0.5 rounded-md text-[10px] font-mono whitespace-nowrap border transition-colors ${
+                  selectedCategory === cat
+                    ? "bg-[#10B981]/20 border-[#10B981]/50 text-[#10B981] font-semibold"
+                    : "bg-[#111215] border-white/[0.08] text-[#9CA3AF] hover:text-[#F4F4F6]"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Featured Deal Card: May Diskwento · 10% OFF Dagupan Bangus */}
+        <div className="p-3 rounded-xl bg-[#111215] border border-[#10B981]/35 space-y-2">
+          <div className="flex items-center justify-between gap-2">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] font-mono text-[10px] font-semibold">
+              May Diskwento · 10% OFF
+            </span>
+            <span className="px-1.5 py-0.5 rounded bg-[#10B981] text-[#0A0A0B] font-mono text-[9.5px] font-bold">
+              PINAKAMURA
+            </span>
+          </div>
+
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <div className="text-xs font-semibold text-[#F4F4F6]">
+                Bangus (Dagupan Medium)
+              </div>
+              <div className="text-[11px] text-[#9CA3AF]">
+                Aling Nena&apos;s Fresh Catch · Stall A-04
+              </div>
+            </div>
+            <div className="text-right font-mono">
+              <div className="text-sm font-bold text-[#10B981]">₱180/kg</div>
+              <div className="text-[10px] text-[#6B7280] line-through">
+                ₱200/kg
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-1 flex items-center justify-between gap-2 border-t border-white/[0.06]">
+            <span className="text-[10px] font-mono text-[#9CA3AF]">
+              18 kg stock · Pickup 5:00 AM–6:30 PM
+            </span>
+            <button
+              type="button"
+              onClick={() => toggleReserve("bangus-deal")}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold transition-colors ${
+                reservedItems["bangus-deal"]
+                  ? "bg-[#10B981] text-[#0A0A0B]"
+                  : "bg-[#17191E] hover:border-[#10B981]/45 text-[#F4F4F6] border border-white/[0.12]"
+              }`}
+            >
+              {reservedItems["bangus-deal"] ? "✓ Reserved (1kg)" : "Pre-Order"}
+            </button>
+          </div>
+        </div>
+
+        {/* Presyo Check · Ikumpara sa Palengke (4 Commodities) */}
+        <div className="p-3 rounded-xl bg-[#17191E] border border-white/[0.08] space-y-2.5">
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <div className="text-xs font-semibold text-[#F4F4F6]">
+                Presyo Check · Ikumpara sa Palengke
+              </div>
+              <div className="text-[10px] font-mono text-[#9CA3AF]">
+                Compare live stall prices across 4 commodities
+              </div>
+            </div>
+          </div>
+
+          {/* 4 Commodity Switcher Pills */}
+          <div className="grid grid-cols-2 gap-1.5">
+            {[
+              { id: "bangus", label: "Bangus · ₱180" },
+              { id: "kamatis", label: "Kamatis Tagalog · ₱60" },
+              { id: "liempo", label: "Pork Liempo · ₱340" },
+              { id: "bigas", label: "Sinandomeng Special · ₱52" },
+            ].map((item) => {
+              const active = activePriceItem === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() =>
+                    setActivePriceItem(
+                      item.id as "bangus" | "kamatis" | "liempo" | "bigas"
+                    )
+                  }
+                  className={`px-2 py-1.5 rounded-lg text-[10.5px] font-mono text-left truncate border transition-colors ${
+                    active
+                      ? "bg-[#111215] border-[#10B981]/50 text-[#F4F4F6] font-semibold"
+                      : "bg-[#111215]/60 border-white/[0.06] text-[#9CA3AF] hover:text-[#F4F4F6]"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Stall Comparison List for Active Commodity */}
+          <div className="space-y-1.5 pt-1">
+            <div className="flex items-center justify-between text-[10.5px] font-mono text-[#9CA3AF]">
+              <span>{currentComparison.name}</span>
+              <span>{currentComparison.unit}</span>
+            </div>
+
+            {currentComparison.stalls.map((s) => (
+              <div
+                key={s.stall}
+                className={`p-2 rounded-lg border flex items-center justify-between gap-2 ${
+                  s.isLowest
+                    ? "bg-[#111215] border-[#10B981]/40"
+                    : "bg-[#111215]/60 border-white/[0.06]"
+                }`}
+              >
+                <div className="min-w-0">
+                  <div className="text-[11px] font-medium text-[#F4F4F6] truncate">
+                    {s.stall}
+                  </div>
+                  <div className="text-[10px] font-mono text-[#6B7280]">
+                    {s.section}
+                  </div>
+                </div>
+                <div className="text-right shrink-0 font-mono">
+                  <div
+                    className={`text-xs font-bold ${
+                      s.isLowest ? "text-[#10B981]" : "text-[#F4F4F6]"
+                    }`}
+                  >
+                    {s.price}
+                  </div>
+                  <div
+                    className={`text-[9.5px] ${
+                      s.isLowest
+                        ? "text-[#10B981] font-semibold"
+                        : "text-[#6B7280]"
+                    }`}
+                  >
+                    {s.tag}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Device Action Bar */}
+      <div className="px-3.5 py-2.5 bg-[#111215] border-t border-white/[0.08] flex items-center justify-between gap-2">
+        <span className="text-[10.5px] font-mono text-[#9CA3AF]">
+          Interactive UI Preview
+        </span>
+        <button
+          type="button"
+          onClick={onLaunchFullSandbox}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#17191E] hover:border-[#10B981]/45 text-[#F4F4F6] border border-white/[0.12] text-[11px] font-mono font-medium transition-colors"
+        >
+          <Play className="w-3 h-3 text-[#10B981] fill-current" />
+          <span>Full Sandbox</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+
 export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
   onSwitchToStudio,
 }) => {
+  // Hero cycling status thought
+  const [statusIndex, setStatusIndex] = useState<number>(0);
+
+  // Selected project in Section 3 (All 6 portfolio projects preserved: 1/6 through 6/6)
+  const [activeProjectIndex, setActiveProjectIndex] = useState<number>(0);
   const [selectedProjectForModal, setSelectedProjectForModal] =
     useState<Project | null>(null);
+  const [showInteractiveSandboxInStage, setShowInteractiveSandboxInStage] =
+    useState<boolean>(false);
 
-  const palengkehub = projectsData.find((p) => p.id === "palengkehub")!;
-  const shinpay = projectsData.find((p) => p.id === "shinpay-plus")!;
-  const autoAvenue = projectsData.find((p) => p.id === "auto-avenue-ims")!;
-  const itelect4 = projectsData.find((p) => p.id === "itelect4-project")!;
-  const avms = projectsData.find((p) => p.id === "avms")!;
+  // Section 4 SHIN-28 Keyboard state
+  const [stackFilter, setStackFilter] = useState<StackFilterDomain>("all");
+  const [selectedSkill, setSelectedSkill] = useState<KeycapSkill>(
+    KEYCAP_SKILLS.find((s) => s.id === "react") || KEYCAP_SKILLS[0]
+  );
+
+  const activeProject =
+    projectsData[activeProjectIndex] || projectsData[0];
+  const archSpec = getProjectArchitectureSpec(activeProject);
+
+  const handleCycleStatus = useCallback(() => {
+    setStatusIndex((prev) => (prev + 1) % HERO_STATUS_NOTES.length);
+  }, []);
+
+  const handleSelectProjectByIndex = useCallback((idx: number) => {
+    setActiveProjectIndex(idx);
+    setShowInteractiveSandboxInStage(false);
+  }, []);
+
+  const handleSelectProjectById = useCallback((projectId: string) => {
+    const foundIdx = projectsData.findIndex((p) => p.id === projectId);
+    if (foundIdx !== -1) {
+      setActiveProjectIndex(foundIdx);
+      setShowInteractiveSandboxInStage(false);
+    }
+    const workEl = document.getElementById("work");
+    if (workEl) {
+      workEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
+
+  const activeKeySpec = getEngineeringSpecForSkill(selectedSkill);
+
+  // Group 28 keys into 4 physical rows (7 keys per row)
+  const keyboardRows = [0, 1, 2, 3].map((rowIdx) =>
+    KEYCAP_SKILLS.slice(rowIdx * 7, (rowIdx + 1) * 7)
+  );
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-3.5 sm:px-6 py-5 sm:py-8 space-y-5 sm:space-y-6 animate-fade-in text-zinc-100 font-sans">
-      {/* 1. EXECUTIVE CANDIDATE HEADER */}
-      <section className="bg-zinc-950 border border-zinc-800/80 rounded-lg p-4 sm:p-7 shadow-xs">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-5 pb-4 sm:pb-5 border-b border-zinc-800/80">
-          <div className="flex items-start xs:items-center gap-3.5 sm:gap-5 w-full sm:w-auto">
-            <div className="w-14 h-14 xs:w-16 xs:h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden relative border border-zinc-800 shrink-0 bg-zinc-900">
+    <div className="min-h-screen w-full bg-[#0A0A0B] text-[#F4F4F6] font-sans selection:bg-[#10B981]/20 selection:text-[#10B981]">
+      {/* =====================================================================
+          SECTION 1: FIXED TOP NAVIGATION BAR (<header>)
+         ===================================================================== */}
+      <header className="sticky top-0 z-50 h-[60px] w-full bg-[#0A0A0B]/82 backdrop-blur-md border-b border-white/[0.08]">
+        <div className="max-w-[1200px] mx-auto h-full px-6 md:px-10 flex items-center justify-between gap-4">
+          {/* Left: shin.dev wordmark + Lipa City, PH (GMT+8) monospace badge */}
+          <div className="flex items-center gap-3 min-w-0">
+            <a
+              href="#"
+              className="text-base font-semibold tracking-[-0.025em] text-[#F4F4F6] hover:text-white transition-colors font-mono"
+            >
+              shin.dev
+            </a>
+            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md bg-[#111215] border border-white/[0.08] font-mono text-[11px] tracking-[0.05em] text-[#9CA3AF]">
+              Lipa City, PH (GMT+8)
+            </span>
+          </div>
+
+          {/* Center/Right: Clean anchor links, external icon links, and Resume CTA */}
+          <div className="flex items-center gap-1 sm:gap-5">
+            <nav
+              aria-label="Primary Navigation"
+              className="hidden md:flex items-center gap-6 text-xs font-mono tracking-[0.05em] text-[#9CA3AF]"
+            >
+              <a
+                href="#work"
+                className="hover:text-[#F4F4F6] transition-colors"
+              >
+                Work
+              </a>
+              <a
+                href="#architecture"
+                className="hover:text-[#F4F4F6] transition-colors"
+              >
+                Architecture
+              </a>
+              <a
+                href="#stack"
+                className="hover:text-[#F4F4F6] transition-colors"
+              >
+                Stack
+              </a>
+              <a
+                href="#contact"
+                className="hover:text-[#F4F4F6] transition-colors"
+              >
+                Contact
+              </a>
+            </nav>
+
+            <div className="flex items-center gap-2">
+              {onSwitchToStudio && (
+                <button
+                  type="button"
+                  onClick={onSwitchToStudio}
+                  title="Switch to Interactive Instagram Feed Mode (?view=studio)"
+                  className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#111215] hover:bg-[#17191E] hover:border-[#10B981]/45 text-[#9CA3AF] hover:text-[#F4F4F6] border border-white/[0.08] font-mono text-[11px] transition-colors"
+                >
+                  <span>Social View</span>
+                </button>
+              )}
+
+              <a
+                href={profileData.socials.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub Profile"
+                className="p-2 rounded-lg text-[#9CA3AF] hover:text-[#F4F4F6] hover:bg-[#111215] transition-colors"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+
+              <a
+                href={profileData.socials.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn Profile"
+                className="p-2 rounded-lg text-[#9CA3AF] hover:text-[#F4F4F6] hover:bg-[#111215] transition-colors"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+
+              <a
+                href={profileData.socials.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#F4F4F6] hover:bg-white text-[#0A0A0B] font-medium text-xs transition-all active:scale-95"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Resume (PDF)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Unified Centered 1200px Container (padding-inline: 24px on mobile 390px, 40px on tablet/desktop) */}
+      <div className="max-w-[1200px] mx-auto px-6 md:px-10">
+        {/* =====================================================================
+            SECTION 2: HERO SECTION (First Screen — copy.md §2 Compliant)
+           ===================================================================== */}
+        <section className="py-16 lg:py-24">
+          {/* Top Status Pill with Pulsing #10B981 Emerald Dot & Optional Thought Cycler */}
+          <div className="mb-6">
+            <button
+              type="button"
+              onClick={handleCycleStatus}
+              className="group inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#111215] border border-white/[0.08] hover:border-[#10B981]/45 text-xs font-mono tracking-[0.03em] text-[#F4F4F6] transition-colors text-left"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shrink-0" />
+              <span>{HERO_STATUS_NOTES[statusIndex]}</span>
+              <RotateCw className="w-3 h-3 text-[#6B7280] group-hover:text-[#10B981] transition-colors shrink-0 ml-0.5" />
+            </button>
+          </div>
+
+          {/* Clean Identity Avatar + Headline (<h1>) */}
+          <div className="flex items-center gap-4 sm:gap-5">
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border border-white/[0.14] bg-[#111215] shrink-0">
               <Image
                 src={profilePic}
                 alt={profileData.name}
                 fill
                 priority
-                sizes="80px"
+                sizes="64px"
                 className="object-cover"
               />
             </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                <h1 className="text-lg xs:text-xl sm:text-2xl font-semibold tracking-tight text-zinc-100">
-                  {profileData.name}
-                </h1>
-                <span className="font-mono text-[9.5px] sm:text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-1.5 sm:px-2 py-0.5 rounded whitespace-nowrap">
-                  VERIFIED CANDIDATE
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm font-medium text-zinc-400 mt-0.5 sm:mt-1">
-                Full-Stack &amp; Mobile Developer
-              </p>
-              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-3 gap-y-1 text-[11px] sm:text-xs text-zinc-500 font-mono mt-1.5">
-                <span className="flex items-center gap-1.5">
-                  <GraduationCap className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
-                  <span>BSIT, De La Salle Lipa (Graduating June 2027)</span>
-                </span>
-                <span className="hidden sm:inline">•</span>
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
-                  <span>Lipa City, Batangas, Philippines</span>
-                </span>
-              </div>
-            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.025em] text-[#F4F4F6] leading-[1.08]">
+              Richard Allen Liman
+            </h1>
           </div>
 
-          {/* Quick PDF Resume Action */}
-          <div className="flex flex-col sm:items-end gap-1.5 sm:gap-2 w-full sm:w-auto">
+          {/* Supporting Sentence (32px / mt-8 directly below <h1>) */}
+          <p className="mt-8 max-w-3xl text-base sm:text-lg lg:text-xl text-[#9CA3AF] leading-[1.6] font-normal">
+            Full-Stack &amp; Mobile Developer specializing in offline-first React
+            Native applications and normalized PostgreSQL backends. 4th-year
+            BSIT at De La Salle Lipa.
+          </p>
+
+          {/* Primary Action Row (32px / mt-8 below supporting sentence) */}
+          <div className="mt-8 flex flex-wrap items-center gap-3.5">
+            <a
+              href="#work"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#F4F4F6] hover:bg-white text-[#0A0A0B] font-medium text-sm transition-all active:scale-95"
+            >
+              <span>Explore Selected Work</span>
+              <ArrowDown className="w-4 h-4" />
+            </a>
+
             <a
               href={profileData.socials.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3.5 py-2 sm:py-1.5 rounded-md inline-flex items-center gap-2 transition-colors justify-center"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#111215] hover:bg-[#17191E] hover:border-[#10B981]/45 text-[#F4F4F6] border border-white/[0.08] font-medium text-sm transition-all active:scale-95"
             >
-              <FileText className="w-3.5 h-3.5" />
-              <span>Download Official Resume (PDF)</span>
+              <span>Download Resume (PDF)</span>
+              <ArrowUpRight className="w-4 h-4 text-[#9CA3AF]" />
             </a>
-            <span className="text-[11px] font-mono text-zinc-400 text-center sm:text-right">
-              Available for 500+ Hours OJT &amp; Full-Time
-            </span>
           </div>
-        </div>
 
-        {/* Contact Strip */}
-        <div className="pt-3.5 sm:pt-4 flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-2.5 sm:gap-3 text-xs font-mono">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+          {/* Quick-Proof Metrics Row (Bottom of Hero) */}
+          <div className="mt-12 pt-8 border-t border-white/[0.08] grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3">
+            {[
+              {
+                spec: "React Native & Expo",
+                sub: "Offline-First Mobile Clients",
+              },
+              {
+                spec: "TypeScript Strict",
+                sub: "End-to-End Type Contracts",
+              },
+              {
+                spec: "Supabase & PostgreSQL",
+                sub: "8+ Normalized RLS Tables",
+              },
+              {
+                spec: "28-Key Interactive Stack",
+                sub: "SHIN-28 Hardware Matrix",
+              },
+            ].map((pill) => (
+              <div
+                key={pill.spec}
+                className="px-4 py-3 rounded-xl bg-[#111215] border border-white/[0.08] border-t-white/[0.14] flex flex-col justify-between"
+              >
+                <span className="font-mono text-xs font-semibold tracking-[0.05em] text-[#F4F4F6]">
+                  {pill.spec}
+                </span>
+                <span className="text-xs text-[#9CA3AF] mt-1">{pill.sub}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* =====================================================================
+            SECTION 3: SELECTED WORK SHOWCASE (#work — 2-Column Split Studio Card)
+           ===================================================================== */}
+        <section
+          id="work"
+          className="py-16 border-t border-white/[0.08] scroll-mt-16"
+        >
+          {/* Section Header */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
+            <div>
+              <div className="font-mono text-xs tracking-[0.05em] text-[#10B981] uppercase">
+                01 // SELECTED ENGINEERING WORK
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-[#F4F4F6] mt-2">
+                Production Systems &amp; Case Studies
+              </h2>
+            </div>
+
+            {/* Slide Counter + Prev/Next Controls */}
+            <div className="flex items-center gap-2 self-start lg:self-auto">
+              <span className="font-mono text-xs tracking-[0.05em] text-[#9CA3AF] mr-2">
+                {activeProjectIndex + 1} / {projectsData.length}
+              </span>
+              <button
+                type="button"
+                onClick={() =>
+                  handleSelectProjectByIndex(
+                    (activeProjectIndex - 1 + projectsData.length) %
+                      projectsData.length
+                  )
+                }
+                aria-label="Previous project"
+                className="p-2 rounded-lg bg-[#111215] hover:bg-[#17191E] hover:border-[#10B981]/45 border border-white/[0.08] text-[#F4F4F6] transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  handleSelectProjectByIndex(
+                    (activeProjectIndex + 1) % projectsData.length
+                  )
+                }
+                aria-label="Next project"
+                className="p-2 rounded-lg bg-[#111215] hover:bg-[#17191E] hover:border-[#10B981]/45 border border-white/[0.08] text-[#F4F4F6] transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Named Project Switcher Tabs (All 6 Portfolio Projects: 01 through 06) */}
+          <div
+            role="tablist"
+            aria-label="Portfolio Projects"
+            className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 no-scrollbar"
+          >
+            {projectsData.map((proj, idx) => {
+              const isSelected = idx === activeProjectIndex;
+              const numLabel = `0${idx + 1}`;
+              const shortTitle = SHORT_PROJECT_NAMES[proj.id] || proj.title;
+              return (
+                <button
+                  key={proj.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isSelected}
+                  onClick={() => handleSelectProjectByIndex(idx)}
+                  className={`px-3.5 py-2 rounded-xl font-mono text-xs tracking-[0.05em] whitespace-nowrap border transition-all ${
+                    isSelected
+                      ? "bg-[#17191E] text-[#F4F4F6] border-[#10B981]/50 font-semibold shadow-sm"
+                      : "bg-[#111215] text-[#9CA3AF] border-white/[0.08] hover:text-[#F4F4F6] hover:border-white/[0.16]"
+                  }`}
+                >
+                  <span className="text-[#10B981] mr-1.5">{numLabel}</span>
+                  <span>{shortTitle}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* 2-Column Split Studio Showcase Card */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 lg:p-10 rounded-2xl bg-[#111215] border border-white/[0.08] border-t-white/[0.14]">
+            {/* Left Column (lg:col-span-5) — Bounded Interactive Product Stage */}
+            <div className="lg:col-span-5 flex flex-col justify-between gap-4">
+              {activeProject.id === "palengkehub" &&
+              !showInteractiveSandboxInStage ? (
+                <PalengkeHubLiveStage
+                  onLaunchFullSandbox={() =>
+                    setShowInteractiveSandboxInStage(true)
+                  }
+                />
+              ) : (
+                <div className="w-full rounded-2xl border border-white/[0.1] bg-[#0D0E11] overflow-hidden shadow-2xl">
+                  <div className="px-3.5 py-2 bg-[#17191E] border-b border-white/[0.08] flex items-center justify-between gap-2">
+                    <span className="font-mono text-[11px] text-[#F4F4F6] font-semibold">
+                      {activeProject.title} · Live Sandbox
+                    </span>
+                    {activeProject.id === "palengkehub" && (
+                      <button
+                        type="button"
+                        onClick={() => setShowInteractiveSandboxInStage(false)}
+                        className="text-[10.5px] font-mono text-[#10B981] hover:underline"
+                      >
+                        Lipa Market Card View
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-[480px] overflow-y-auto">
+                    <ProjectDemoHost projectId={activeProject.id} />
+                  </div>
+                </div>
+              )}
+
+              {/* Stage Caption & Fullscreen Modal Launcher */}
+              <div className="flex items-center justify-between gap-3 px-1">
+                <span className="font-mono text-[11px] text-[#6B7280] tracking-[0.05em]">
+                  STAGE {activeProjectIndex + 1} / {projectsData.length} · LIVE
+                  CODED ARTIFACT
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedProjectForModal(activeProject)}
+                  className="inline-flex items-center gap-1.5 font-mono text-xs text-[#10B981] hover:underline"
+                >
+                  <span>Expand Fullscreen</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Right Column (lg:col-span-7) — Full Engineering Case Study & Exposed Architecture */}
+            <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
+              <div className="space-y-5">
+                {/* Top Meta Row */}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-mono text-xs tracking-[0.05em] text-[#9CA3AF] uppercase">
+                    {archSpec.timelineBadge}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#10B981]/10 border border-[#10B981]/30 font-mono text-xs font-medium text-[#10B981]">
+                    {archSpec.qualityBadge}
+                  </span>
+                </div>
+
+                {/* Project Title (<h3>) & Clean Subtitle (Zero inline handles or em-dashes) */}
+                <div>
+                  <h3 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-[#F4F4F6]">
+                    {activeProject.title}
+                  </h3>
+                  <p className="text-base sm:text-lg text-[#9CA3AF] mt-1 font-normal">
+                    {archSpec.cleanSubtitle}
+                  </p>
+                </div>
+
+                {/* Full Un-truncated Engineering Summary */}
+                <p className="text-sm sm:text-base text-[#F4F4F6]/90 leading-[1.6]">
+                  {activeProject.description}
+                </p>
+
+                {/* Key Engineering Features List */}
+                {activeProject.keyFeatures &&
+                  activeProject.keyFeatures.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                      {activeProject.keyFeatures.slice(0, 4).map((feat, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-2 p-2.5 rounded-xl bg-[#17191E]/70 border border-white/[0.06] text-xs text-[#9CA3AF] leading-relaxed"
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0 mt-0.5" />
+                          <span>{feat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                {/* Exposed 3-Stage Architecture Pipeline Diagram (#architecture) */}
+                <div
+                  id="architecture"
+                  className="pt-4 border-t border-white/[0.08] space-y-3 scroll-mt-20"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <Layers className="w-4 h-4 text-[#10B981]" />
+                      <span className="font-mono text-xs tracking-[0.05em] uppercase text-[#F4F4F6] font-semibold">
+                        Architecture Pipeline
+                      </span>
+                    </div>
+                    <span className="font-mono text-[11px] text-[#6B7280]">
+                      3-Stage Verified Spec
+                    </span>
+                  </div>
+
+                  {/* 3 Exposed Stage Cards (Permanent Sub-Copy, Zero Hidden Tooltips) */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {archSpec.stages.map((stage) => (
+                      <div
+                        key={stage.stageNumber}
+                        className="p-3.5 rounded-xl bg-[#17191E] border border-white/[0.08] hover:border-[#10B981]/45 transition-colors flex flex-col justify-between gap-2"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between gap-1 font-mono text-[11px] tracking-[0.05em] text-[#6B7280] uppercase">
+                            <span>
+                              Stage {stage.stageNumber} · {stage.layer}
+                            </span>
+                          </div>
+                          <div className="text-sm font-semibold text-[#F4F4F6] mt-1 font-mono">
+                            {stage.tech}
+                          </div>
+                        </div>
+                        <p className="text-xs text-[#9CA3AF] leading-relaxed">
+                          {stage.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Footer: Tech Stack Tags + GitHub / Live Sandbox Links */}
+              <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-4">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {activeProject.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2.5 py-1 rounded-md bg-[#0A0A0B] border border-white/[0.08] font-mono text-[11px] text-[#9CA3AF]"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  {activeProject.githubUrl && (
+                    <a
+                      href={activeProject.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#17191E] hover:border-[#10B981]/45 text-[#F4F4F6] border border-white/[0.08] text-xs font-mono font-medium transition-colors"
+                    >
+                      <Github className="w-3.5 h-3.5" />
+                      <span>Source Code</span>
+                    </a>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProjectForModal(activeProject)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#F4F4F6] hover:bg-white text-[#0A0A0B] text-xs font-semibold transition-all active:scale-95"
+                  >
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>Launch Full Case Study</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================================
+            SECTION 4: INTERACTIVE TECH STACK (#stack — SHIN-28 Mechanical Keyboard Stage)
+           ===================================================================== */}
+        <section
+          id="stack"
+          className="py-16 border-t border-white/[0.08] scroll-mt-16"
+        >
+          {/* Section Header + Domain Filter Pills */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
+            <div>
+              <div className="font-mono text-xs tracking-[0.05em] text-[#10B981] uppercase">
+                02 // INTERACTIVE TECH STACK
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-[#F4F4F6] mt-2">
+                SHIN-28 Hardware Matrix
+              </h2>
+              <p className="text-sm text-[#9CA3AF] mt-1">
+                Click or hover any of the 28 mechanical keycaps to inspect its
+                architectural role and production usage.
+              </p>
+            </div>
+
+            {/* Domain Filter Pills */}
+            <div className="flex flex-wrap items-center gap-2">
+              {STACK_FILTER_TABS.map((tab) => {
+                const active = stackFilter === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setStackFilter(tab.id)}
+                    className={`px-3 py-1.5 rounded-xl font-mono text-xs tracking-[0.05em] border transition-colors ${
+                      active
+                        ? "bg-[#17191E] text-[#F4F4F6] border-[#10B981]/50 font-semibold"
+                        : "bg-[#111215] text-[#9CA3AF] border-white/[0.08] hover:text-[#F4F4F6]"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Split Keyboard + Live Inspector Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left (lg:col-span-7): Interactive 28-Key SHIN-28 Dark-Chassis Keyboard */}
+            <div className="lg:col-span-7 p-4 sm:p-6 rounded-2xl bg-[#111215] border border-white/[0.08] border-t-white/[0.14] shadow-2xl overflow-x-auto">
+              {/* Top Anodized Chassis Bar */}
+              <div className="flex items-center justify-between gap-2 pb-4 mb-4 border-b border-white/[0.08] min-w-[300px]">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#10B981]" />
+                  <span className="font-mono text-xs tracking-[0.05em] text-[#F4F4F6] font-semibold">
+                    SHIN-28 · DARK CHASSIS
+                  </span>
+                </div>
+                <span className="font-mono text-[11px] text-[#6B7280]">
+                  28 SWITCHES · 4×7 ORTHOLINEAR
+                </span>
+              </div>
+
+              {/* 4 Rows of 7 Keys — Scaled Responsively */}
+              <div className="space-y-2 sm:space-y-2.5 min-w-[300px]">
+                {keyboardRows.map((rowSkills, rIdx) => (
+                  <div
+                    key={rIdx}
+                    className="grid grid-cols-7 gap-1.5 sm:gap-2 justify-items-center"
+                  >
+                    {rowSkills.map((skill) => {
+                      const isDomainMatch = matchesStackDomain(
+                        skill,
+                        stackFilter
+                      );
+                      const isSelected = selectedSkill.id === skill.id;
+                      return (
+                        <button
+                          key={skill.id}
+                          type="button"
+                          onClick={() => setSelectedSkill(skill)}
+                          onMouseEnter={() => setSelectedSkill(skill)}
+                          aria-label={`${skill.name} [${skill.keyTrigger}]`}
+                          className={`group relative w-10 h-10 sm:w-11 sm:h-11 rounded-[8px] focus:outline-none transition-all duration-150 ${
+                            isDomainMatch ? "opacity-100" : "opacity-25"
+                          } ${
+                            isSelected
+                              ? "ring-2 ring-[#10B981] ring-offset-2 ring-offset-[#111215]"
+                              : ""
+                          }`}
+                        >
+                          <Keycap3DSurface
+                            skill={skill}
+                            isDark={true}
+                            isPressed={isSelected}
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+
+              {/* Bottom Chassis Legend */}
+              <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-[#6B7280] min-w-[300px]">
+                <span>PBT DOUBLE-SHOT KEYCAPS</span>
+                <span>ACTIVE KEY: [{selectedSkill.keyTrigger}]</span>
+              </div>
+            </div>
+
+            {/* Right (lg:col-span-5): Live Key Inspector Card */}
+            <div className="lg:col-span-5 p-6 rounded-2xl bg-[#111215] border border-white/[0.08] border-t-white/[0.14] space-y-5">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded bg-[#17191E] border border-white/[0.1] font-mono text-xs text-[#10B981]">
+                      [{selectedSkill.keyTrigger}]
+                    </span>
+                    <span className="font-mono text-xs uppercase tracking-[0.05em] text-[#9CA3AF]">
+                      {selectedSkill.categoryLabel}
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-semibold tracking-[-0.025em] text-[#F4F4F6] mt-2">
+                    {selectedSkill.name}
+                  </h3>
+                </div>
+
+                <div className="text-right font-mono">
+                  <div className="text-xs text-[#6B7280]">STATUS</div>
+                  <div className="text-sm font-semibold text-[#10B981] mt-0.5">
+                    Production Verified
+                  </div>
+                </div>
+              </div>
+
+              {/* Full Engineering Usage Description */}
+              <p className="text-sm text-[#9CA3AF] leading-[1.6]">
+                {selectedSkill.description}
+              </p>
+
+              {/* Architectural Spec Rows */}
+              <div className="grid grid-cols-1 gap-2.5 pt-2 border-t border-white/[0.08] font-mono text-xs">
+                <div className="p-3 rounded-xl bg-[#17191E] border border-white/[0.06]">
+                  <span className="text-[10px] uppercase tracking-[0.05em] text-[#6B7280] block">
+                    Architectural Tier
+                  </span>
+                  <span className="text-[#F4F4F6] mt-0.5 block">
+                    {activeKeySpec.architectureTier}
+                  </span>
+                </div>
+                <div className="p-3 rounded-xl bg-[#17191E] border border-white/[0.06]">
+                  <span className="text-[10px] uppercase tracking-[0.05em] text-[#6B7280] block">
+                    Reference Implementation
+                  </span>
+                  <span className="text-[#F4F4F6] mt-0.5 block truncate">
+                    {activeKeySpec.filePath}
+                  </span>
+                </div>
+              </div>
+
+              {/* Used In Project Pills (Clickable to jump to project in Section 3) */}
+              <div className="pt-2 border-t border-white/[0.08]">
+                <span className="font-mono text-[11px] uppercase tracking-[0.05em] text-[#6B7280] block mb-2.5">
+                  Used in:
+                </span>
+                {selectedSkill.usedIn.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {selectedSkill.usedIn.map((usage) => (
+                      <button
+                        key={usage.label}
+                        type="button"
+                        onClick={() => {
+                          if (usage.projectId) {
+                            handleSelectProjectById(usage.projectId);
+                          }
+                        }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#17191E] hover:border-[#10B981]/45 text-[#F4F4F6] border border-white/[0.08] font-mono text-xs transition-colors"
+                      >
+                        <span>{usage.label}</span>
+                        {usage.projectId && (
+                          <ArrowUpRight className="w-3 h-3 text-[#10B981]" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-xs font-mono text-[#9CA3AF]">
+                    Core Development &amp; CI/CD Workflow Tooling
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================================
+            SECTION 5: DIRECT INBOX CLOSING (#contact) & MINIMAL FOOTER
+           ===================================================================== */}
+        <section
+          id="contact"
+          className="py-16 border-t border-white/[0.08] scroll-mt-16"
+        >
+          <div className="mb-8">
+            <div className="font-mono text-xs tracking-[0.05em] text-[#10B981] uppercase">
+              03 // DIRECT LINE
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-[#F4F4F6] mt-2">
+              Start a Conversation
+            </h2>
+          </div>
+
+          <ContactSection hideHeader />
+        </section>
+
+        {/* Minimal Footer */}
+        <footer className="py-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#6B7280]">
+          <div>
+            Richard Allen Liman · De La Salle Lipa · Lipa City, PH
+          </div>
+          <div className="flex items-center gap-5">
             <a
               href={profileData.socials.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-100 transition-colors"
+              className="hover:text-[#F4F4F6] transition-colors"
             >
-              <Github className="w-3.5 h-3.5" />
-              <span>github.com/shin486</span>
+              GitHub
             </a>
             <a
               href={profileData.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-100 transition-colors"
+              className="hover:text-[#F4F4F6] transition-colors"
             >
-              <Linkedin className="w-3.5 h-3.5" />
-              <span>linkedin.com/in/richard-allen-liman</span>
+              LinkedIn
             </a>
             <a
-              href="mailto:richardallen0901@gmail.com"
-              className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-100 transition-colors"
+              href={profileData.socials.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#F4F4F6] transition-colors"
             >
-              <Mail className="w-3.5 h-3.5" />
-              <span>richardallen0901@gmail.com</span>
+              Resume (PDF)
             </a>
+            <span>© 2026</span>
           </div>
+        </footer>
+      </div>
 
-          {onSwitchToStudio && (
-            <button
-              type="button"
-              onClick={onSwitchToStudio}
-              className="inline-flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-200 transition-colors font-mono"
-            >
-              <span>Switch to Studio View →</span>
-            </button>
-          )}
-        </div>
-      </section>
-
-      {/* 2. CORE ENGINEERING METRICS STRIP */}
-      <section className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
-        {[
-          {
-            title: "3 Production Applications",
-            stat: "3 Live Deployments",
-            desc: "PalengkeHub (Capstone), ShinPay+ (SaaS), Auto Avenue (IMS)",
-            icon: Cpu,
-          },
-          {
-            title: "100% TypeScript",
-            stat: "Zero `any` Debt",
-            desc: "Zod runtime schema validation & strict end-to-end contracts",
-            icon: Code2,
-          },
-          {
-            title: "Supabase RLS Secured",
-            stat: "8+ Normalized Tables",
-            desc: "Strict tenant isolation policies & WebSocket Realtime broadcast",
-            icon: ShieldCheck,
-          },
-          {
-            title: "Automated Test Coverage",
-            stat: "Sub-Millisecond Engine",
-            desc: "Real-time client assertion suite verifying PH statutory tables",
-            icon: Activity,
-          },
-        ].map((item) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.title}
-              className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-3.5 sm:p-4 flex flex-col justify-between"
-            >
-              <div className="flex items-center justify-between gap-2 mb-1.5 sm:mb-2">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                  {item.title}
-                </span>
-                <Icon className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
-              </div>
-              <div>
-                <div className="text-sm sm:text-lg font-semibold font-mono text-zinc-100">
-                  {item.stat}
-                </div>
-                <p className="text-xs text-zinc-400 mt-1 leading-snug">
-                  {item.desc}
-                </p>
-              </div>
-            </div>
-          );
-        })}
-      </section>
-
-      {/* 3. FLAGSHIP PRODUCTION PROJECTS MATRIX */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-base font-semibold tracking-tight text-zinc-100">
-              Systems Architecture &amp; Flagship Projects
-            </h2>
-            <p className="text-xs text-zinc-500 font-mono mt-0.5">
-              Interactive sandboxes, architecture specifications, and production metrics
-            </p>
-          </div>
-          <span className="hidden sm:inline text-xs font-mono text-zinc-500">
-            Click &apos;Launch Sandbox&apos; to run in-browser
-          </span>
-        </div>
-
-        {/* Project 1: PalengkeHub */}
-        <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-4 sm:p-6 shadow-xs">
-          {/* Top row: Category badge on left, unified action buttons on right */}
-          <div className="flex flex-wrap items-center justify-between gap-2.5">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
-              CAPSTONE
-            </span>
-
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => setSelectedProjectForModal(palengkehub)}
-                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3 sm:px-3.5 py-1.5 rounded-md inline-flex items-center gap-1.5 sm:gap-2 transition-colors justify-center"
-              >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>Launch Sandbox</span>
-              </button>
-              <a
-                href="https://github.com/shin486/PalengkeHubFinal"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="border border-zinc-800 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-100 text-xs font-medium px-2.5 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
-                title="View GitHub Repository"
-              >
-                <Github className="w-3.5 h-3.5" />
-                <span>GitHub</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Title, Subtitle & Tech Stack */}
-          <h3 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-100 mt-3">
-            PalengkeHub
-          </h3>
-          <p className="text-xs sm:text-sm text-zinc-400">
-            Public-Market Price Transparency &amp; Pre-Ordering Platform
-          </p>
-          <p className="text-[11px] sm:text-xs text-zinc-500 font-mono mt-1">
-            React Native • Expo • TypeScript • Supabase Realtime • PostgreSQL RLS
-          </p>
-
-          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mt-2.5 sm:mt-3">
-            Engineered an offline-first mobile marketplace for municipal market vendors and buyers across Lipa City. 
-            Normalized 8+ PostgreSQL tables with strict Row-Level Security, sub-250ms WebSocket price discovery, and deterministic local mutation queue that auto-reconciles when cellular signal restores.
-          </p>
-
-          {/* 3-Column Architecture Spec Grid */}
-          <div className="mt-3.5 sm:mt-4 pt-3.5 sm:pt-4 border-t border-zinc-800/60 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 text-xs font-mono">
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Frontend / Client</span>
-              <span className="text-zinc-300">Expo • React Native • Offline Queue</span>
-            </div>
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Data Sync / Network</span>
-              <span className="text-zinc-300">Supabase Realtime (&lt;250ms WS)</span>
-            </div>
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Persistence &amp; Security</span>
-              <span className="text-zinc-300">PostgreSQL (8 Tables • Multi-Tenant RLS)</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Project 2: ShinPay+ */}
-        <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-4 sm:p-6 shadow-xs">
-          {/* Top row: Category badge on left, unified action buttons on right */}
-          <div className="flex flex-wrap items-center justify-between gap-2.5">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
-              FULL-STACK SAAS
-            </span>
-
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => setSelectedProjectForModal(shinpay)}
-                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3 sm:px-3.5 py-1.5 rounded-md inline-flex items-center gap-1.5 sm:gap-2 transition-colors justify-center"
-              >
-                <Terminal className="w-3.5 h-3.5" />
-                <span>Run Test Suite</span>
-              </button>
-              <a
-                href="https://github.com/shin486/ShinPay-"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="border border-zinc-800 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-100 text-xs font-medium px-2.5 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
-                title="View GitHub Repository"
-              >
-                <Github className="w-3.5 h-3.5" />
-                <span>GitHub</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Title, Subtitle & Tech Stack */}
-          <h3 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-100 mt-3">
-            ShinPay+
-          </h3>
-          <p className="text-xs sm:text-sm text-zinc-400">
-            Multi-Tenant Payroll &amp; Statutory Compliance Engine
-          </p>
-          <p className="text-[11px] sm:text-xs text-zinc-500 font-mono mt-1">
-            Next.js 14 App Router • TypeScript • Supabase PostgreSQL • Pure Math Engine
-          </p>
-
-          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mt-2.5 sm:mt-3">
-            Multi-tenant payroll and human resource SaaS engineered for Philippine enterprises. 
-            Implements tenant-isolated PostgreSQL tables via Supabase RLS, coupled with a zero-allocation mathematical engine computing BIR TRAIN withholding taxes, SSS 2025 schedules, PhilHealth 5% splits, and Pag-IBIG mandatory ceilings.
-          </p>
-
-          {/* 3-Column Architecture Spec Grid */}
-          <div className="mt-3.5 sm:mt-4 pt-3.5 sm:pt-4 border-t border-zinc-800/60 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 text-xs font-mono">
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Frontend / Client</span>
-              <span className="text-zinc-300">Next.js 14 (App Router) • TypeScript • Zod</span>
-            </div>
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Statutory Math Engine</span>
-              <span className="text-zinc-300">TRAIN • SSS • PhilHealth • Pag-IBIG</span>
-            </div>
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Persistence &amp; Security</span>
-              <span className="text-zinc-300">Supabase PostgreSQL • Multi-Tenant RLS</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Project 3: Auto Avenue */}
-        <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-4 sm:p-6 shadow-xs">
-          {/* Top row: Category badge on left, unified action buttons on right */}
-          <div className="flex flex-wrap items-center justify-between gap-2.5">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
-              IMS &amp; POS
-            </span>
-
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => setSelectedProjectForModal(autoAvenue)}
-                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3 sm:px-3.5 py-1.5 rounded-md inline-flex items-center gap-1.5 sm:gap-2 transition-colors justify-center"
-              >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>Launch Sandbox</span>
-              </button>
-              <a
-                href="https://github.com/shin486/auto-avenue-ims"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="border border-zinc-800 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-100 text-xs font-medium px-2.5 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
-                title="View GitHub Repository"
-              >
-                <Github className="w-3.5 h-3.5" />
-                <span>GitHub</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Title, Subtitle & Tech Stack */}
-          <h3 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-100 mt-3">
-            Auto Avenue
-          </h3>
-          <p className="text-xs sm:text-sm text-zinc-400">
-            Inventory Management &amp; POS Integration (150+ SKUs)
-          </p>
-          <p className="text-[11px] sm:text-xs text-zinc-500 font-mono mt-1">
-            PHP • MySQL • Point of Sale Integration • Bootstrap • Git
-          </p>
-
-          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed mt-2.5 sm:mt-3">
-            Engineered a centralized IMS for Auto Avenue Car Care Center managing 150+ automotive spare part and fluid SKUs. 
-            Synchronized live Point of Sale checkouts with inventory tables to eliminate stock reconciliation errors and trigger automated vendor purchase orders.
-          </p>
-
-          {/* 3-Column Architecture Spec Grid */}
-          <div className="mt-3.5 sm:mt-4 pt-3.5 sm:pt-4 border-t border-zinc-800/60 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 text-xs font-mono">
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Frontend / Client</span>
-              <span className="text-zinc-300">Responsive POS &amp; Inventory UI</span>
-            </div>
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Application Logic</span>
-              <span className="text-zinc-300">PHP • Real-Time Stock Reconciliation</span>
-            </div>
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase tracking-wider">Persistence &amp; Storage</span>
-              <span className="text-zinc-300">MySQL Schema • Automated Purchase Orders</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Secondary Technical Deliverables: AVMS & IT Elective 4 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
-          <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-4 sm:p-5 space-y-2.5 sm:space-y-3">
-            <div className="flex items-center justify-between gap-2">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
-                ITSM OPERATIONS
-              </span>
-              <button
-                type="button"
-                onClick={() => setSelectedProjectForModal(avms)}
-                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
-              >
-                <Play className="w-3 h-3 fill-current" />
-                <span>Launch Sandbox</span>
-              </button>
-            </div>
-            <div>
-              <h4 className="text-base font-semibold tracking-tight text-zinc-100">
-                AVMS
-              </h4>
-              <p className="text-xs text-zinc-400 mt-0.5">
-                Automated Visitor Management System
-              </p>
-              <p className="text-[11px] sm:text-xs text-zinc-500 font-mono mt-1">
-                Campus Security • QR Passes • RBAC / MFA Logs
-              </p>
-            </div>
-            <p className="text-xs text-zinc-300 leading-relaxed">
-              Campus security portal with encrypted QR access passes, 99.9% uptime SLA ITSM incident lifecycles, and RBAC / MFA verification logs.
-            </p>
-          </div>
-
-          <div className="bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-colors rounded-lg p-4 sm:p-5 space-y-2.5 sm:space-y-3">
-            <div className="flex items-center justify-between gap-2">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-2 py-0.5 rounded">
-                FULL-STACK &amp; AI
-              </span>
-              <button
-                type="button"
-                onClick={() => setSelectedProjectForModal(itelect4)}
-                className="bg-zinc-100 text-zinc-950 hover:bg-zinc-200 dark:bg-zinc-100 dark:text-zinc-950 text-xs font-medium px-3 py-1.5 rounded-md inline-flex items-center gap-1.5 transition-colors"
-              >
-                <Play className="w-3 h-3 fill-current" />
-                <span>Launch Sandbox</span>
-              </button>
-            </div>
-            <div>
-              <h4 className="text-base font-semibold tracking-tight text-zinc-100">
-                IT Elective 4
-              </h4>
-              <p className="text-xs text-zinc-400 mt-0.5">
-                AI Reviews &amp; Full-Stack Microservice
-              </p>
-              <p className="text-[11px] sm:text-xs text-zinc-500 font-mono mt-1">
-                React • Node.js Express • MongoDB • Google Gemini AI
-              </p>
-            </div>
-            <p className="text-xs text-zinc-300 leading-relaxed">
-              JWT-authenticated REST API with MongoDB, protected tenant routes, and a live Google Gemini AI endpoint (`POST /api/ai`) returning Zod-validated JSON reviews.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. CATEGORIZED TECH STACK MATRIX */}
-      <section className="bg-zinc-950 border border-zinc-800/80 rounded-lg p-4 sm:p-6 space-y-4">
-        <div>
-          <h2 className="text-base font-semibold tracking-tight text-zinc-100">
-            Categorized Technical Stack
-          </h2>
-          <p className="text-xs text-zinc-500 font-mono mt-0.5">
-            Validated technologies verified in production applications and coursework
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-          {/* Languages */}
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-400 pb-1.5 border-b border-zinc-800/60">
-              <Code2 className="w-3.5 h-3.5 text-zinc-400" />
-              <span className="uppercase tracking-wider text-[10px]">Languages</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {["TypeScript", "JavaScript (ES6+)", "SQL (PostgreSQL)", "PHP", "HTML5 & CSS3"].map((t) => (
-                <span
-                  key={t}
-                  className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Frontend & Mobile */}
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-400 pb-1.5 border-b border-zinc-800/60">
-              <Smartphone className="w-3.5 h-3.5 text-zinc-400" />
-              <span className="uppercase tracking-wider text-[10px]">Mobile &amp; Frontend</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {["React Native", "Expo", "React 19", "Next.js 14", "Vite", "Tailwind CSS", "Bootstrap"].map((t) => (
-                <span
-                  key={t}
-                  className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Backend & Database */}
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-400 pb-1.5 border-b border-zinc-800/60">
-              <Database className="w-3.5 h-3.5 text-zinc-400" />
-              <span className="uppercase tracking-wider text-[10px]">Backend &amp; Database</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {["Supabase", "PostgreSQL (RLS)", "Node.js", "Express", "MongoDB", "MySQL", "REST APIs"].map((t) => (
-                <span
-                  key={t}
-                  className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* DevOps & Quality */}
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-1.5 text-xs font-mono font-medium text-zinc-400 pb-1.5 border-b border-zinc-800/60">
-              <GitBranch className="w-3.5 h-3.5 text-zinc-400" />
-              <span className="uppercase tracking-wider text-[10px]">DevOps &amp; Quality</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {["GitHub Actions CI", "Git PR Workflow", "Vercel Deployments", "Zod Validation", "ITSM SLA Lifecycle", "Jest/Vitest"].map((t) => (
-                <span
-                  key={t}
-                  className="font-mono text-[11px] text-zinc-300 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Interactive Project Modal */}
+      {/* Fullscreen Case Study & Interactive Sandbox Modal */}
       <ProjectModal
         project={selectedProjectForModal}
         onClose={() => setSelectedProjectForModal(null)}
