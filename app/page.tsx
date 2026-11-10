@@ -16,6 +16,7 @@ import { AiChatDrawer } from "@/components/AiChatDrawer";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { Reveal } from "@/components/Reveal";
 import { TechKeyboard3D } from "@/components/TechKeyboard3D";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { RecruiterDossierView } from "@/components/RecruiterDossierView";
 import { Project, projectsData } from "@/data/projects";
 import { skillsData } from "@/data/skills";
@@ -119,6 +120,9 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen relative">
+      {/* Minimalist Instagram + Stickman Loading Screen (Active in Studio / Social View) */}
+      <LoadingScreen />
+
       {/* Layered Animated Background (Active in Social Studio Mode) */}
       <AnimatedBackground />
 
