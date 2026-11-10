@@ -303,6 +303,8 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
   const [isLiveDemoView, setIsLiveDemoView] = useState(true);
   const [likedIds, setLikedIds] = useState<Record<string, boolean>>({});
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
+  const countedProjectIdsRef = useRef<Record<string, boolean>>({});
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [demoSpotlit, setDemoSpotlit] = useState(false);
@@ -382,16 +384,85 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
   const heartPopTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastTapRef = useRef<{ id: string; time: number }>({ id: "", time: 0 });
 
-  const triggerDoubleTapHeart = useCallback((id: string) => {
-    setLikedIds((prev) => ({ ...prev, [id]: true }));
-    setHeartPopId(id);
-    if (heartPopTimerRef.current) {
-      clearTimeout(heartPopTimerRef.current);
-    }
-    heartPopTimerRef.current = setTimeout(() => {
-      setHeartPopId(null);
-    }, 920);
+  // Load persisted project likes & fetch real global like counts from /api/likes
+  useEffect(() => {
+    try {
+      const rawLiked = localStorage.getItem("shin486-liked-projects-v1");
+      if (rawLiked) setLikedIds(JSON.parse(rawLiked));
+
+      const rawCounted = localStorage.getItem("shin486-counted-projects-v1");
+      if (rawCounted) countedProjectIdsRef.current = JSON.parse(rawCounted);
+
+      const rawSaved = localStorage.getItem("shin486-saved-projects-v1");
+      if (rawSaved) setSavedIds(JSON.parse(rawSaved));
+    } catch {}
+
+    const ids = projectsData.map((p) => p.id).join(",");
+    fetch(`/api/likes?ids=${encodeURIComponent(ids)}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { counts?: Record<string, number> } | null) => {
+        if (data?.counts) {
+          setLikeCounts(data.counts);
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  const recordProjectLikeOnServer = useCallback((id: string) => {
+    setLikeCounts((prev) => ({
+      ...prev,
+      [id]: (prev[id] ?? 0) + 1,
+    }));
+
+    if (countedProjectIdsRef.current[id]) return;
+    countedProjectIdsRef.current = { ...countedProjectIdsRef.current, [id]: true };
+    try {
+      localStorage.setItem(
+        "shin486-counted-projects-v1",
+        JSON.stringify(countedProjectIdsRef.current)
+      );
+    } catch {}
+
+    fetch("/api/likes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { id?: string; count?: number } | null) => {
+        if (typeof data?.count === "number") {
+          setLikeCounts((prev) => ({
+            ...prev,
+            [id]: data.count!,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const triggerDoubleTapHeart = useCallback(
+    (id: string) => {
+      setLikedIds((prev) => {
+        const wasLiked = !!prev[id];
+        const next = { ...prev, [id]: true };
+        try {
+          localStorage.setItem("shin486-liked-projects-v1", JSON.stringify(next));
+        } catch {}
+        if (!wasLiked) {
+          recordProjectLikeOnServer(id);
+        }
+        return next;
+      });
+      setHeartPopId(id);
+      if (heartPopTimerRef.current) {
+        clearTimeout(heartPopTimerRef.current);
+      }
+      heartPopTimerRef.current = setTimeout(() => {
+        setHeartPopId(null);
+      }, 920);
+    },
+    [recordProjectLikeOnServer]
+  );
 
   useEffect(() => {
     return () => {
@@ -403,12 +474,35 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
 
   const toggleLike = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setLikedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+    setLikedIds((prev) => {
+      const wasLiked = !!prev[id];
+      const nowLiked = !wasLiked;
+      const next = { ...prev, [id]: nowLiked };
+      try {
+        localStorage.setItem("shin486-liked-projects-v1", JSON.stringify(next));
+      } catch {}
+
+      if (nowLiked) {
+        recordProjectLikeOnServer(id);
+      } else {
+        setLikeCounts((counts) => ({
+          ...counts,
+          [id]: Math.max(0, (counts[id] ?? 1) - 1),
+        }));
+      }
+      return next;
+    });
   };
 
   const toggleSave = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setSavedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+    setSavedIds((prev) => {
+      const next = { ...prev, [id]: !prev[id] };
+      try {
+        localStorage.setItem("shin486-saved-projects-v1", JSON.stringify(next));
+      } catch {}
+      return next;
+    });
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -764,7 +858,7 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                         ? "You liked this build. Taste recognized."
                         : "Drop a heart on this project (or double-tap the poster)."
                     }
-                    className={`focus:outline-none transition-transform active:scale-125 ${
+                    className={`inline-flex items-center gap-1.5 focus:outline-none transition-transform active:scale-125 ${
                       likedIds[activeProject.id]
                         ? "text-red-500 animate-heart-pop"
                         : "hover:text-red-500"
@@ -782,6 +876,16 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                           : ""
                       }`}
                     />
+                    {(likedIds[activeProject.id]
+                      ? Math.max(1, likeCounts[activeProject.id] ?? 0)
+                      : likeCounts[activeProject.id] ?? 0) > 0 && (
+                      <span className="text-xs font-bold tabular-nums text-neutral-900 dark:text-zinc-100">
+                        {(likedIds[activeProject.id]
+                          ? Math.max(1, likeCounts[activeProject.id] ?? 0)
+                          : likeCounts[activeProject.id] ?? 0
+                        ).toLocaleString()}
+                      </span>
+                    )}
                   </button>
 
                   <button

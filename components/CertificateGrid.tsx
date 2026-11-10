@@ -14,30 +14,115 @@ import { certificatesData } from "@/data/certificates";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 
+const LIKED_STORAGE_KEY = "shin486-liked-certs-v1";
+const COUNTED_STORAGE_KEY = "shin486-counted-certs-v1";
+const SAVED_STORAGE_KEY = "shin486-saved-certs-v1";
+
 export const CertificateGrid: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [likedIds, setLikedIds] = useState<Record<string, boolean>>({});
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
+  const [countsLoaded, setCountsLoaded] = useState(false);
+
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [heartPopId, setHeartPopId] = useState<string | null>(null);
   const heartPopTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastTapRef = useRef<{ id: string; time: number }>({ id: "", time: 0 });
+  const countedIdsRef = useRef<Record<string, boolean>>({});
 
   const totalSlides = certificatesData.length;
   const safeSlideIndex =
     totalSlides > 0 ? Math.min(currentSlide, totalSlides - 1) : 0;
   const activeCert = certificatesData[safeSlideIndex];
 
-  const triggerDoubleTapHeart = useCallback((id: string) => {
-    setLikedIds((prev) => ({ ...prev, [id]: true }));
-    setHeartPopId(id);
-    if (heartPopTimerRef.current) {
-      clearTimeout(heartPopTimerRef.current);
+  // Load persisted visitor like/save state + fetch real global like counts from /api/likes
+  useEffect(() => {
+    try {
+      const rawLiked = localStorage.getItem(LIKED_STORAGE_KEY);
+      if (rawLiked) setLikedIds(JSON.parse(rawLiked));
+
+      const rawCounted = localStorage.getItem(COUNTED_STORAGE_KEY);
+      if (rawCounted) countedIdsRef.current = JSON.parse(rawCounted);
+
+      const rawSaved = localStorage.getItem(SAVED_STORAGE_KEY);
+      if (rawSaved) setSavedIds(JSON.parse(rawSaved));
+    } catch {
+      // Ignore storage errors
     }
-    heartPopTimerRef.current = setTimeout(() => {
-      setHeartPopId(null);
-    }, 900);
+
+    const ids = certificatesData.map((c) => c.id).join(",");
+    fetch(`/api/likes?ids=${encodeURIComponent(ids)}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { counts?: Record<string, number> } | null) => {
+        if (data?.counts) {
+          setLikeCounts(data.counts);
+        }
+        setCountsLoaded(true);
+      })
+      .catch(() => {
+        setCountsLoaded(true);
+      });
   }, []);
+
+  const recordLikeOnServer = useCallback((id: string) => {
+    // Optimistically increment local state
+    setLikeCounts((prev) => ({
+      ...prev,
+      [id]: (prev[id] ?? 0) + 1,
+    }));
+
+    // Only hit the global increment endpoint once per certificate per browser
+    if (countedIdsRef.current[id]) return;
+    countedIdsRef.current = { ...countedIdsRef.current, [id]: true };
+    try {
+      localStorage.setItem(
+        COUNTED_STORAGE_KEY,
+        JSON.stringify(countedIdsRef.current)
+      );
+    } catch {}
+
+    fetch("/api/likes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { id?: string; count?: number } | null) => {
+        if (typeof data?.count === "number") {
+          setLikeCounts((prev) => ({
+            ...prev,
+            [id]: data.count!,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const triggerDoubleTapHeart = useCallback(
+    (id: string) => {
+      setLikedIds((prev) => {
+        const wasLiked = !!prev[id];
+        const next = { ...prev, [id]: true };
+        try {
+          localStorage.setItem(LIKED_STORAGE_KEY, JSON.stringify(next));
+        } catch {}
+        if (!wasLiked) {
+          recordLikeOnServer(id);
+        }
+        return next;
+      });
+
+      setHeartPopId(id);
+      if (heartPopTimerRef.current) {
+        clearTimeout(heartPopTimerRef.current);
+      }
+      heartPopTimerRef.current = setTimeout(() => {
+        setHeartPopId(null);
+      }, 900);
+    },
+    [recordLikeOnServer]
+  );
 
   useEffect(() => {
     return () => {
@@ -56,11 +141,35 @@ export const CertificateGrid: React.FC = () => {
   }, []);
 
   const toggleLike = (id: string) => {
-    setLikedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+    setLikedIds((prev) => {
+      const wasLiked = !!prev[id];
+      const nowLiked = !wasLiked;
+      const next = { ...prev, [id]: nowLiked };
+      try {
+        localStorage.setItem(LIKED_STORAGE_KEY, JSON.stringify(next));
+      } catch {}
+
+      if (nowLiked) {
+        recordLikeOnServer(id);
+      } else {
+        setLikeCounts((counts) => ({
+          ...counts,
+          [id]: Math.max(0, (counts[id] ?? 1) - 1),
+        }));
+      }
+
+      return next;
+    });
   };
 
   const toggleSave = (id: string) => {
-    setSavedIds((prev) => ({ ...prev, [id]: !prev[id] }));
+    setSavedIds((prev) => {
+      const next = { ...prev, [id]: !prev[id] };
+      try {
+        localStorage.setItem(SAVED_STORAGE_KEY, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -111,6 +220,8 @@ export const CertificateGrid: React.FC = () => {
 
   const isLiked = !!likedIds[activeCert.id];
   const isSaved = !!savedIds[activeCert.id];
+  const rawCount = likeCounts[activeCert.id] ?? 0;
+  const displayLikeCount = isLiked ? Math.max(1, rawCount) : rawCount;
 
   return (
     <section id="certificates-section" className="py-6 sm:py-8">
@@ -273,10 +384,10 @@ export const CertificateGrid: React.FC = () => {
             )}
           </div>
 
-          {/* 3. Instagram Action Bar, Likes, Caption & Timestamp */}
+          {/* 3. Instagram Action Bar, Real Likes Count, Caption & Timestamp */}
           <div className="px-4 sm:px-5 pt-3.5 pb-4 space-y-2">
             <div className="flex items-center justify-between">
-              {/* Left: Heart & Comment */}
+              {/* Left: Heart + Live Count & Comment */}
               <div className="flex items-center gap-4 text-neutral-700 dark:text-zinc-200">
                 <button
                   type="button"
@@ -286,7 +397,7 @@ export const CertificateGrid: React.FC = () => {
                       ? "Certificate liked."
                       : "Like this credential (or double-tap the certificate)."
                   }
-                  className={`focus:outline-none transition-transform active:scale-125 ${
+                  className={`inline-flex items-center gap-1.5 focus:outline-none transition-transform active:scale-125 ${
                     isLiked
                       ? "text-red-500 animate-heart-pop"
                       : "hover:text-red-500"
@@ -298,6 +409,11 @@ export const CertificateGrid: React.FC = () => {
                       isLiked ? "fill-red-500 text-red-500" : ""
                     }`}
                   />
+                  {countsLoaded && displayLikeCount > 0 && (
+                    <span className="text-xs font-bold tabular-nums text-neutral-900 dark:text-zinc-100">
+                      {displayLikeCount.toLocaleString()}
+                    </span>
+                  )}
                 </button>
 
                 <button
@@ -359,18 +475,47 @@ export const CertificateGrid: React.FC = () => {
               </button>
             </div>
 
-            {/* Authentic Instagram Likes Line */}
-            <p className="text-xs text-neutral-800 dark:text-zinc-200">
-              {isLiked ? (
+            {/* Real Instagram Likes Counter Line */}
+            <p className="text-xs font-semibold text-neutral-900 dark:text-zinc-100 tabular-nums">
+              {!countsLoaded ? (
+                <span className="text-neutral-400 dark:text-zinc-500 font-normal">
+                  Loading likes…
+                </span>
+              ) : displayLikeCount === 0 ? (
+                <span className="text-neutral-500 dark:text-zinc-400 font-normal">
+                  Be the first to like this certification
+                </span>
+              ) : displayLikeCount === 1 ? (
+                isLiked ? (
+                  <>
+                    1 like{" "}
+                    <span className="font-normal text-neutral-500 dark:text-zinc-400">
+                      · Liked by{" "}
+                      <strong className="font-semibold text-neutral-800 dark:text-zinc-200">
+                        you
+                      </strong>
+                    </span>
+                  </>
+                ) : (
+                  "1 like"
+                )
+              ) : isLiked ? (
                 <>
-                  Liked by <strong className="font-bold">you</strong> and{" "}
-                  <strong className="font-bold">dlsl.official</strong>
+                  {displayLikeCount.toLocaleString()} likes{" "}
+                  <span className="font-normal text-neutral-500 dark:text-zinc-400">
+                    · Liked by{" "}
+                    <strong className="font-semibold text-neutral-800 dark:text-zinc-200">
+                      you
+                    </strong>{" "}
+                    and{" "}
+                    <strong className="font-semibold text-neutral-800 dark:text-zinc-200">
+                      {displayLikeCount - 1}{" "}
+                      {displayLikeCount - 1 === 1 ? "other" : "others"}
+                    </strong>
+                  </span>
                 </>
               ) : (
-                <>
-                  Liked by <strong className="font-bold">dlsl.official</strong>{" "}
-                  and <strong className="font-bold">others</strong>
-                </>
+                `${displayLikeCount.toLocaleString()} likes`
               )}
             </p>
 
