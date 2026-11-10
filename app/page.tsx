@@ -24,28 +24,28 @@ import { certificatesData } from "@/data/certificates";
 import { highlightsData } from "@/data/highlights";
 
 export default function HomePage() {
-  const [viewMode, setViewMode] = useState<"studio" | "recruiter">("recruiter");
+  const [viewMode, setViewMode] = useState<"studio" | "recruiter">("studio");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<string>("projects");
   const [activeCarouselProject, setActiveCarouselProject] =
     useState<Project | null>(projectsData[0] || null);
 
   useEffect(() => {
-    // Check URL query param (?view=studio or ?view=feed activates Instagram feed; default / is clean Taste Skill view)
+    // Check URL query param (?view=recruiter activates Recruiter Dossier; default / is Social Studio view)
     const params = new URLSearchParams(window.location.search);
     const viewParam = params.get("view");
-    if (viewParam === "studio" || viewParam === "feed") {
-      setViewMode("studio");
-    } else if (viewParam === "recruiter") {
+    if (viewParam === "recruiter") {
       setViewMode("recruiter");
+    } else if (viewParam === "studio" || viewParam === "feed") {
+      setViewMode("studio");
     }
   }, []);
 
   const handleViewChange = (mode: "studio" | "recruiter") => {
     setViewMode(mode);
     const url = new URL(window.location.href);
-    if (mode === "studio") {
-      url.searchParams.set("view", "studio");
+    if (mode === "recruiter") {
+      url.searchParams.set("view", "recruiter");
     } else {
       url.searchParams.delete("view");
     }
