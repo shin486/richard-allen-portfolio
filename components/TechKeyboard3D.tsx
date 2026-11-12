@@ -1313,47 +1313,40 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
             : "bg-white/60 border-neutral-200/80 shadow-sm"
         }`}
       >
-      {/* Top Floating Header — Clean & minimal (zero unwanted buttons) */}
+      {/* Top Floating Header — Apple Minimalist Restraint */}
       <div className="flex items-center justify-between mb-2 px-1 gap-2">
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
-            <h2 className="text-sm sm:text-base xl:text-lg font-black tracking-wider uppercase text-neutral-900 dark:text-zinc-100">
-              SKILLS
+            <h2 className="text-xs sm:text-sm font-mono font-bold uppercase tracking-wider text-neutral-900 dark:text-zinc-100">
+              SHIN-28
             </h2>
-            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-ig-pink/15 text-ig-pink border border-ig-pink/30">
+            <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-medium bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-400 border border-neutral-200 dark:border-zinc-700/80">
               28 KEYS
             </span>
           </div>
-          <p className="text-[10px] font-mono text-neutral-500 dark:text-zinc-400 truncate">
-            {isMobile
-              ? "(tap any keycap below)"
-              : "(press a key or tap below)"}
+          <p className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500 truncate mt-0.5">
+            {isMobile ? "(tap any keycap below)" : "(press a-z or tap keycaps)"}
           </p>
         </div>
 
-        {/* Minimal Audio & Minimize Controls */}
-        <div className="flex items-center gap-1 flex-shrink-0">
+        {/* Minimal Audio & Minimize Controls (Zero Symbols) */}
+        <div className="flex items-center gap-1.5 flex-shrink-0">
           <button
             onClick={cycleSoundProfile}
-            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-mono font-medium bg-neutral-100 dark:bg-zinc-900/90 border border-neutral-200/90 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300 hover:border-ig-pink transition-colors"
+            className="px-2 py-0.5 rounded-md text-[10px] font-mono text-neutral-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100 border border-neutral-200 dark:border-zinc-800 hover:border-neutral-400 dark:hover:border-zinc-600 transition-colors cursor-pointer"
             title="Cycle mechanical switch sound profile"
           >
-            {soundProfile === "mute" ? (
-              <VolumeX className="w-3 h-3 text-neutral-400" />
-            ) : (
-              <Volume2 className="w-3 h-3 text-ig-pink" />
-            )}
-            <span className="capitalize">{soundProfile}</span>
+            Sound: {soundProfile === "mute" ? "Off" : soundProfile}
           </button>
 
           {variant === "sidebar" && (
             <button
               onClick={() => setIsMinimized(true)}
-              className="p-1 rounded-md bg-neutral-100 dark:bg-zinc-900/90 border border-neutral-200/90 dark:border-zinc-800 text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+              className="px-1.5 py-0.5 rounded-md bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-[10px] font-mono text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
               title="Minimize 3D Keyboard"
               aria-label="Minimize 3D Keyboard"
             >
-              <Minimize2 className="w-3 h-3" />
+              Hide
             </button>
           )}
         </div>
@@ -1539,179 +1532,116 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         </div>
       )}
 
-      {/* Skill Inspector HUD — styled as the keyboard's integrated display panel (matches chassis in Dark/Light mode) */}
+      {/* Skill Inspector HUD — Apple Minimalist Restraint */}
       <div
-        className={`mt-2 rounded-xl border p-2.5 transition-colors duration-300 ${
+        className={`mt-2 rounded-xl border p-3 transition-colors duration-200 ${
           isDark
-            ? "bg-[#0b0c11] border-white/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.65)]"
-            : "bg-white border-neutral-200 shadow-[inset_0_1px_3px_rgba(0,0,0,0.07)]"
+            ? "bg-[#0c0d12] border-zinc-800/80 shadow-xs"
+            : "bg-white border-neutral-200/80 shadow-xs"
         }`}
       >
         {/* Row 1: Skill Icon + Name + Key badge + Wave button */}
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-2.5 min-w-0">
             <div
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm border border-white/15"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 border border-white/10"
               style={{ backgroundColor: selectedSkill.color }}
             >
               {selectedSkill.renderIcon()}
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <h3 className="font-bold text-xs sm:text-sm text-neutral-900 dark:text-zinc-100 truncate">
+                <h3 className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-zinc-100 truncate">
                   {selectedSkill.name}
                 </h3>
-                <span className="px-1 py-0.2 rounded text-[9px] font-mono font-semibold bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300 border border-neutral-200 dark:border-zinc-700 flex-shrink-0">
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono text-neutral-500 dark:text-zinc-400 bg-neutral-100 dark:bg-zinc-800/80 border border-neutral-200/80 dark:border-zinc-700/80 shrink-0">
                   [{selectedSkill.keyTrigger}]
                 </span>
               </div>
-              <p className="text-[10px] font-medium text-ig-pink truncate">
+              <p className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500 truncate mt-0.5">
                 {selectedSkill.categoryLabel}
               </p>
             </div>
           </div>
 
-          {/* Auto-Wave across all 28 keys button */}
-          <button
-            onClick={() => setIsAutoPlaying((prev) => !prev)}
-            className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-mono font-semibold border transition-all flex-shrink-0 ${
-              isAutoPlaying
-                ? "bg-rose-500/15 text-rose-400 border-rose-500/30 animate-pulse"
-                : "bg-neutral-100 dark:bg-zinc-800/90 text-neutral-700 dark:text-zinc-300 border-neutral-200 dark:border-zinc-700 hover:border-ig-pink"
-            }`}
-            title="Play an automated mechanical typing wave across all 28 skills"
-          >
-            {isAutoPlaying ? (
-              <>
-                <Square className="w-2.5 h-2.5 fill-current" />
-                <span>Stop</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-2.5 h-2.5 fill-current" />
-                <span>Wave 28</span>
-              </>
-            )}
-          </button>
-        </div>
-
-        {/* Row 2: Short 1-line description */}
-        <p className="mt-1 text-[11px] text-neutral-600 dark:text-zinc-400 leading-snug line-clamp-2">
-          {selectedSkill.description}
-        </p>
-
-        {/* Row 3: Connected Project Pills */}
-        <div className="mt-1.5 pt-1.5 border-t border-neutral-100 dark:border-zinc-800/80 flex items-center gap-1.5 flex-wrap">
-          <span className="text-[9px] font-mono uppercase tracking-wider text-neutral-400 dark:text-zinc-500 flex items-center gap-0.5">
-            <Layers className="w-2.5 h-2.5 text-ig-purple" />
-            Used in:
-          </span>
-          {selectedSkill.usedIn.map((item) => {
-            const isClickable = !!item.projectId && !!onSelectProject;
-            const matchedProject = item.projectId
-              ? projectsData.find((p) => p.id === item.projectId)
-              : null;
-
-            return isClickable ? (
-              <button
-                key={item.label}
-                type="button"
-                onClick={() =>
-                  item.projectId && onSelectProject?.(item.projectId)
-                }
-                className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-semibold bg-ig-pink/10 hover:bg-ig-pink/20 text-ig-pink border border-ig-pink/25 transition-colors active:scale-95"
-                title={
-                  matchedProject
-                    ? `Jump to ${matchedProject.title} live demo`
-                    : item.label
-                }
-              >
-                <span>{item.label}</span>
-                <ArrowUpRight className="w-2.5 h-2.5" />
-              </button>
-            ) : (
-              <span
-                key={item.label}
-                className="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-medium bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300"
-              >
-                {item.label}
-              </span>
-            );
-          })}
-        </div>
-
-        {/* Row 4: Engineering Spec Drawer Toggle */}
-        <div className="mt-2 pt-1.5 border-t border-neutral-100 dark:border-zinc-800/80 flex items-center justify-between gap-1.5">
+          {/* Clean text Wave button (Zero symbols) */}
           <button
             type="button"
-            onClick={() => setShowSpecDrawer((prev) => !prev)}
-            className={`w-full inline-flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[10px] font-mono font-bold transition-all shadow-2xs ${
-              showSpecDrawer
-                ? "bg-blue-600 text-white shadow-xs"
-                : "bg-neutral-100 dark:bg-zinc-800/80 hover:bg-neutral-200 dark:hover:bg-zinc-750 text-neutral-800 dark:text-zinc-200 border border-neutral-200/80 dark:border-zinc-700/80"
+            onClick={() => setIsAutoPlaying((prev) => !prev)}
+            className={`px-2.5 py-1 rounded-md text-[10px] font-mono font-medium border transition-all shrink-0 cursor-pointer ${
+              isAutoPlaying
+                ? "bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950 border-neutral-900 dark:border-zinc-100 animate-pulse"
+                : "bg-neutral-50 dark:bg-zinc-900/80 text-neutral-700 dark:text-zinc-300 border-neutral-200 dark:border-zinc-800 hover:border-neutral-400 dark:hover:border-zinc-600"
             }`}
+            title="Play automatic mechanical typing wave across all 28 skills"
           >
-            <span className="flex items-center gap-1.5">
-              <Code2 className="w-3.5 h-3.5 text-blue-400" />
-              <span>Engineering Spec Drawer</span>
-            </span>
-            <span className="text-[9px] opacity-80">
-              {showSpecDrawer ? "Hide Spec ▲" : "Inspect Spec ▼"}
-            </span>
+            {isAutoPlaying ? "Stop Wave" : "Wave"}
           </button>
         </div>
 
-        {/* Collapsible Architecture Spec Drawer */}
-        {showSpecDrawer && (
-          <div className="mt-2 rounded-xl bg-[#0d1117] border border-white/10 overflow-hidden text-left font-mono animate-fade-in shadow-lg">
-            {/* Spec Header & Content */}
-            {(() => {
-              const spec = getCurrentSpec(selectedSkill);
-              return (
-                <>
-                  <div className="px-3 py-1.5 bg-[#161b22] border-b border-white/10 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <FileCode className="w-3 h-3 text-blue-400 shrink-0" />
-                      <span className="text-[9.5px] text-zinc-300 truncate">
-                        {spec.filePath}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleCopySpec(spec.snippet)}
-                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] bg-white/10 hover:bg-white/15 text-zinc-300 transition-colors shrink-0"
-                      title="Copy code snippet"
-                    >
-                      {copiedSpec ? (
-                        <>
-                          <Check className="w-2.5 h-2.5 text-emerald-400" />
-                          <span className="text-emerald-400">Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-2.5 h-2.5" />
-                          <span>Copy</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  {/* Spec Tier Badge */}
-                  <div className="px-3 py-1 bg-white/[0.02] border-b border-white/5 text-[9px] text-zinc-400 truncate">
-                    <span className="text-zinc-500">Tier:</span> {spec.architectureTier}
-                  </div>
-
-                  {/* Code Content */}
-                  <div className="p-2.5 overflow-x-auto text-[10px] leading-relaxed text-zinc-200 max-h-52 overflow-y-auto">
-                    <pre className="font-mono whitespace-pre text-[9.5px]">
-                      <code>{spec.snippet}</code>
-                    </pre>
-                  </div>
-                </>
-              );
-            })()}
+        {/* Row 2: Applied Production Systems (Zero Dictionary Fluff) */}
+        <div className="mt-2.5 pt-2 border-t border-neutral-100 dark:border-zinc-800/80 space-y-1.5">
+          <div className="flex items-center justify-between text-[10px] font-mono text-neutral-400 dark:text-zinc-500">
+            <span>// APPLIED IN PRODUCTION</span>
+            <span>
+              {selectedSkill.usedIn.length}{" "}
+              {selectedSkill.usedIn.length === 1 ? "APP" : "APPS"}
+            </span>
           </div>
-        )}
+
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {selectedSkill.usedIn.length > 0 ? (
+              selectedSkill.usedIn.map((item) => {
+                const isClickable =
+                  Boolean(item.projectId) && Boolean(onSelectProject);
+                const matchedProject = item.projectId
+                  ? projectsData.find((p) => p.id === item.projectId)
+                  : null;
+
+                return (
+                  <div key={item.label} className="flex items-center gap-1">
+                    {isClickable ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          item.projectId && onSelectProject?.(item.projectId)
+                        }
+                        className="px-2 py-0.5 rounded-md text-[10px] font-mono font-medium bg-neutral-100 dark:bg-zinc-800/80 hover:bg-neutral-900 hover:text-white dark:hover:bg-zinc-100 dark:hover:text-zinc-950 text-neutral-700 dark:text-zinc-300 border border-neutral-200/80 dark:border-zinc-700/80 transition-all cursor-pointer"
+                        title={
+                          matchedProject
+                            ? `Open ${matchedProject.title} demo`
+                            : item.label
+                        }
+                      >
+                        View {item.label} →
+                      </button>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-neutral-100 dark:bg-zinc-800/80 text-neutral-600 dark:text-zinc-400 border border-neutral-200/80 dark:border-zinc-700/80">
+                        {item.label}
+                      </span>
+                    )}
+
+                    {matchedProject?.githubUrl && (
+                      <a
+                        href={matchedProject.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-1.5 py-0.5 rounded-md text-[9.5px] font-mono text-neutral-400 hover:text-neutral-900 dark:hover:text-zinc-100 border border-neutral-200/60 dark:border-zinc-800 hover:border-neutral-400 dark:hover:border-zinc-600 transition-colors"
+                        title="View verified GitHub repository"
+                      >
+                        Source
+                      </a>
+                    )}
+                  </div>
+                );
+              })
+            ) : (
+              <span className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500">
+                Academic &amp; Core Systems Foundations
+              </span>
+            )}
+          </div>
+        </div>
       </div>
       </div>
     </div>
