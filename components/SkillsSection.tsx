@@ -9,18 +9,10 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import {
-  ArrowUpRight,
   Check,
   Code2,
   Copy,
   FileCode,
-  Keyboard,
-  Play,
-  RotateCcw,
-  Square,
-  Volume2,
-  VolumeX,
-  Zap,
 } from "lucide-react";
 import { projectsData } from "@/data/projects";
 import {
@@ -562,196 +554,135 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
         />
       </div>
 
-      {/* Hardware Console & Flight Telemetry Header (Zero AI-Slop Icon Box) */}
+      {/* Hardware Console & Switch Matrix Header (Apple Minimalist Professional) */}
       <div className="rounded-2xl border border-neutral-200/90 dark:border-zinc-800/90 bg-white dark:bg-[#0d0e13] p-4 sm:p-5 mb-4 shadow-2xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-neutral-100 dark:border-zinc-800/80">
           <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold uppercase tracking-wider bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950">
-                <Keyboard className="w-3 h-3 text-ig-pink" />
-                <span>SHIN-28 SWITCH MATRIX</span>
-              </span>
-
-              <span
-                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border ${
-                  isFlying
-                    ? "bg-ig-pink/10 text-ig-pink border-ig-pink/30"
-                    : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/25"
-                }`}
-              >
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    isFlying
-                      ? "bg-ig-pink animate-ping"
-                      : "bg-emerald-500 animate-pulse"
-                  }`}
-                />
-                <span>
-                  {isFlying
-                    ? `Deploying Keycaps (${landedIds.size}/${filteredSkills.length})...`
-                    : `${landedIds.size}/${filteredSkills.length} Keycaps Docked`}
-                </span>
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold tracking-tight text-neutral-900 dark:text-zinc-100">
+                Switch Matrix
+              </h2>
+              <span className="text-[11px] font-mono text-neutral-400 dark:text-zinc-500">
+                {isFlying
+                  ? `Deploying (${landedIds.size}/${filteredSkills.length})`
+                  : `${landedIds.size}/${filteredSkills.length} Docked`}
               </span>
             </div>
-
-            <p className="text-xs text-neutral-500 dark:text-zinc-400 mt-1.5">
-              Each 3D keycap flies from the mechanical keyboard into its own
-              switch socket below. Click any 3D keycap—or press{" "}
-              <kbd className="px-1.5 py-0.5 text-[10px] font-mono font-semibold rounded bg-neutral-100 dark:bg-zinc-800 text-neutral-800 dark:text-zinc-200 border border-neutral-200 dark:border-zinc-700">
-                A–Z
-              </kbd>{" "}
-              on your keyboard—to test switch travel &amp; inspect live code.
+            <p className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
+              Click any keycap or press A–Z to test switch travel and inspect live source code.
             </p>
           </div>
 
-          {/* Tactile Hardware Controls: Replay Flight, Wave 28, Audio Switch Profile */}
-          <div className="flex items-center gap-1.5 flex-wrap sm:flex-nowrap flex-shrink-0">
+          {/* Minimalist Apple Text Actions (Zero Symbols) */}
+          <div className="flex items-center gap-1.5 flex-wrap sm:flex-nowrap shrink-0">
             <button
               type="button"
               onClick={() => setFlightNonce((n) => n + 1)}
-              data-note="Watch all 3D keycaps eject from the keyboard and fly into their skill sockets."
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-zinc-100 dark:hover:bg-white dark:text-zinc-950 transition-all active:scale-95 shadow-2xs"
+              data-note="Replay flight animation for all 3D keycaps."
+              className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-neutral-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100 hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors"
             >
-              <RotateCcw
-                className={`w-3.5 h-3.5 ${isFlying ? "animate-spin" : ""}`}
-              />
-              <span>Replay Flight</span>
+              {isFlying ? "Deploying..." : "Reset"}
             </button>
 
             <button
               type="button"
               onClick={() => setIsAutoWaving((prev) => !prev)}
-              data-note="Run an automated mechanical typing wave across all docked keycaps."
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono font-semibold border transition-all active:scale-95 ${
+              data-note="Run mechanical typing wave across keycaps."
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 isAutoWaving
-                  ? "bg-rose-500/15 text-rose-500 border-rose-500/30"
-                  : "bg-neutral-50 dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700"
+                  ? "bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-semibold"
+                  : "text-neutral-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100 hover:bg-neutral-100 dark:hover:bg-zinc-800"
               }`}
             >
-              {isAutoWaving ? (
-                <>
-                  <Square className="w-3 h-3 fill-current" />
-                  <span>Stop Wave</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3 h-3 fill-current text-ig-pink" />
-                  <span>Wave</span>
-                </>
-              )}
+              {isAutoWaving ? "Stop Wave" : "Wave"}
             </button>
 
             <button
               type="button"
               onClick={cycleSoundProfile}
-              data-note="Cycle mechanical switch acoustics: Thocky, Clicky, Linear, or Mute."
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-neutral-50 dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 border border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 transition-colors"
-              title="Cycle mechanical switch sound profile"
+              data-note="Cycle mechanical switch acoustics."
+              className="px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium border border-neutral-200 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300 hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors capitalize"
+              title="Cycle switch acoustics: Thocky, Clicky, Linear, Mute"
             >
-              {soundProfile === "mute" ? (
-                <VolumeX className="w-3.5 h-3.5 text-neutral-400" />
-              ) : (
-                <Volume2 className="w-3.5 h-3.5 text-ig-pink" />
-              )}
-              <span className="capitalize">{soundProfile}</span>
+              Sound: {soundProfile}
             </button>
           </div>
         </div>
 
-        {/* Row 1: System X-Ray Bar (Filter Stack by Shipped Production System) */}
-        <div className="pt-3 flex flex-col gap-2.5">
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mr-1 flex items-center gap-1 flex-shrink-0">
-              <Zap className="w-3 h-3 text-ig-pink" />
-              <span>System X-Ray:</span>
+        {/* Apple Segmented Controls & System Filter */}
+        <div className="pt-3.5 space-y-2.5">
+          {/* Apple Segmented Domain Switcher */}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 dark:text-zinc-500 shrink-0">
+              Domain
             </span>
-
-            <button
-              type="button"
-              onClick={() => setProjectFilter(null)}
-              className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold transition-all border ${
-                projectFilter === null
-                  ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-zinc-950 border-neutral-900 dark:border-zinc-100"
-                  : "bg-neutral-50 dark:bg-zinc-900/80 text-neutral-600 dark:text-zinc-400 border-neutral-200/80 dark:border-zinc-800 hover:text-neutral-900 dark:hover:text-zinc-200"
-              }`}
+            <div
+              className="inline-flex p-1 rounded-xl bg-neutral-100 dark:bg-zinc-900 border border-neutral-200/70 dark:border-zinc-800 shrink-0"
+              role="tablist"
+              aria-label="Filter keycaps by architectural domain"
             >
-              All Systems
-            </button>
-
-            {SHIPPED_SYSTEMS.map((sys) => {
-              const isSelected = projectFilter === sys.id;
-              const keyCount = allSkillKeys.filter((k) =>
-                k.usedIn.some((u) => u.projectId === sys.id)
-              ).length;
-
-              return (
-                <button
-                  key={sys.id}
-                  type="button"
-                  onClick={() =>
-                    setProjectFilter((prev) =>
-                      prev === sys.id ? null : sys.id
-                    )
-                  }
-                  className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold transition-all border flex items-center gap-1.5 ${
-                    isSelected
-                      ? "bg-ig-pink text-white border-ig-pink shadow-2xs"
-                      : "bg-neutral-50 dark:bg-zinc-900/80 text-neutral-600 dark:text-zinc-400 border-neutral-200/80 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 hover:text-neutral-900 dark:hover:text-zinc-200"
-                  }`}
-                >
-                  <span>{sys.label}</span>
-                  <span
-                    className={`text-[9.5px] px-1 rounded ${
-                      isSelected
-                        ? "bg-black/20 text-white"
-                        : "bg-neutral-200/70 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
+              {domainTabs.map((tab) => {
+                const isActive = domainFilter === tab.key;
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setDomainFilter(tab.key)}
+                    className={`px-3 py-1 rounded-lg text-xs transition-all whitespace-nowrap ${
+                      isActive
+                        ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-zinc-100 shadow-xs font-semibold"
+                        : "text-neutral-500 hover:text-neutral-800 dark:hover:text-zinc-200 font-medium"
                     }`}
                   >
-                    {keyCount}
-                  </span>
-                </button>
-              );
-            })}
+                    <span>{tab.label}</span>
+                    <span className="text-[10px] font-mono ml-1.5 opacity-60">
+                      {tab.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Row 2: Architectural Layer Filter Tabs */}
-          <div
-            className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5"
-            role="tablist"
-            aria-label="Filter keycaps by architectural domain"
-          >
-            <span className="text-[10px] font-mono font-bold uppercase tracking-[0.14em] text-neutral-400 dark:text-zinc-500 mr-1.5 flex items-center flex-shrink-0">
-              <span>01 // LAYER</span>
+          {/* Secondary Scope: Subtle Text Filter for Systems */}
+          <div className="flex items-center gap-2 text-xs overflow-x-auto no-scrollbar pt-0.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 dark:text-zinc-500 shrink-0">
+              Project
             </span>
-
-            {domainTabs.map((tab) => {
-              const isActive = domainFilter === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  type="button"
-                  role="tab"
-                  aria-selected={isActive}
-                  onClick={() => setDomainFilter(tab.key)}
-                  className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[11px] font-medium transition-all border flex items-center gap-1.5 ${
-                    isActive
-                      ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-zinc-950 border-neutral-900 dark:border-zinc-100 font-semibold"
-                      : "bg-white dark:bg-[#111218] text-neutral-600 dark:text-zinc-400 border-neutral-200/80 dark:border-zinc-800/90 hover:text-neutral-900 dark:hover:text-zinc-200"
-                  }`}
-                >
-                  <span>{tab.label}</span>
-                  <span
-                    className={`text-[9.5px] font-mono px-1 rounded ${
-                      isActive
-                        ? "bg-white/20 dark:bg-black/15 text-white dark:text-zinc-950"
-                        : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
+            <div className="flex items-center gap-1 shrink-0">
+              <button
+                type="button"
+                onClick={() => setProjectFilter(null)}
+                className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors ${
+                  projectFilter === null
+                    ? "text-neutral-900 dark:text-zinc-100 font-bold underline underline-offset-4"
+                    : "text-neutral-400 dark:text-zinc-500 hover:text-neutral-700 dark:hover:text-zinc-300"
+                }`}
+              >
+                All
+              </button>
+              {SHIPPED_SYSTEMS.map((sys) => {
+                const isSelected = projectFilter === sys.id;
+                return (
+                  <button
+                    key={sys.id}
+                    type="button"
+                    onClick={() =>
+                      setProjectFilter((prev) => (prev === sys.id ? null : sys.id))
+                    }
+                    className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors ${
+                      isSelected
+                        ? "text-neutral-900 dark:text-zinc-100 font-bold underline underline-offset-4"
+                        : "text-neutral-400 dark:text-zinc-500 hover:text-neutral-700 dark:hover:text-zinc-300"
                     }`}
                   >
-                    {tab.count}
-                  </span>
-                </button>
-              );
-            })}
+                    {sys.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -776,10 +707,9 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
               <button
                 type="button"
                 onClick={() => onSelectProject(activeSystemInfo.id)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-ig-pink text-white hover:opacity-95 transition-opacity self-start sm:self-auto flex-shrink-0"
+                className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950 hover:opacity-90 transition-opacity self-start sm:self-auto shrink-0"
               >
-                <span>Open {activeSystemInfo.label} Live Demo</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <span>Open {activeSystemInfo.label} Demo</span>
               </button>
             )}
           </div>
@@ -919,7 +849,6 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                             }
                           >
                             <span>{item.label}</span>
-                            <ArrowUpRight className="w-2.5 h-2.5 opacity-75" />
                           </button>
                         ) : (
                           <span
