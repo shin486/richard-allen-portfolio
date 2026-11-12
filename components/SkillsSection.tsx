@@ -8,12 +8,6 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import {
-  Check,
-  Code2,
-  Copy,
-  FileCode,
-} from "lucide-react";
 import { projectsData } from "@/data/projects";
 import {
   ExposedSwitchStem,
@@ -716,8 +710,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
         )}
       </div>
 
-      {/* Docked Mechanical Switch Socket Matrix (2-Column Hardware Ledger) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {/* Docked Mechanical Switch Socket Matrix (Apple Minimalist Hardware Ledger) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
         {filteredSkills.map((skill, idx) => {
           const isLanded = landedIds.has(skill.id);
           const isJustLanded = Boolean(justLandedIds[skill.id]);
@@ -728,154 +722,122 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
           return (
             <div
               key={skill.id}
-              className={`group/module rounded-2xl border transition-all duration-200 overflow-hidden ${
+              className={`group/module rounded-xl border transition-all duration-200 overflow-hidden ${
                 isSpecOpen
-                  ? "bg-white dark:bg-[#12131a] border-neutral-400 dark:border-zinc-600 shadow-md"
-                  : "bg-white dark:bg-[#0e0f15] border-neutral-200/90 dark:border-zinc-800/90 hover:border-neutral-300 dark:hover:border-zinc-700"
+                  ? "bg-white dark:bg-[#12131a] border-neutral-400 dark:border-zinc-600 shadow-sm"
+                  : "bg-white dark:bg-[#0e0f15] border-neutral-200/80 dark:border-zinc-800/80 hover:border-neutral-300 dark:hover:border-zinc-700"
               }`}
             >
-              <div className="p-3.5 sm:p-4 flex items-start gap-3.5">
+              <div className="p-3 sm:px-3.5 flex items-center justify-between gap-3">
                 {/* LEFT: Recessed Mechanical Switch Socket + Docked 3D Keycap */}
-                <div className="flex flex-col items-center gap-1 flex-shrink-0">
-                  <button
-                    type="button"
-                    data-skill-socket={skill.id}
-                    onClick={() => triggerDockedSkill(skill, idx, true)}
-                    title={`Press ${skill.name} 3D keycap (or [${skill.keyTrigger}] on keyboard) to test switch & view code spec`}
-                    aria-label={`${skill.name} mechanical switch keycap`}
-                    className="group relative w-[46px] h-[48px] rounded-[9px] focus:outline-none select-none cursor-pointer flex-shrink-0"
-                  >
-                    {/* Anodized Aluminum Switch Socket Bezel */}
-                    <div
-                      className={`absolute -inset-[3px] rounded-[11px] pointer-events-none transition-all duration-300 ${
-                        isDark
-                          ? "bg-[#07080c] border border-white/10 shadow-[inset_0_2px_5px_rgba(0,0,0,0.95)]"
-                          : "bg-[#e2e8f0] border border-neutral-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.15)]"
-                      }`}
-                    />
-
-                    {/* Socket Landing Flash Ring */}
-                    {isJustLanded && (
-                      <span
-                        className="pointer-events-none absolute -inset-[4px] rounded-[12px] z-30 animate-ping"
-                        style={{
-                          border: `2px solid ${skill.color}`,
-                          boxShadow: `0 0 16px ${skill.color}`,
-                        }}
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex flex-col items-center gap-0.5 shrink-0">
+                    <button
+                      type="button"
+                      data-skill-socket={skill.id}
+                      onClick={() => triggerDockedSkill(skill, idx, true)}
+                      title={`Press ${skill.name} keycap (or [${skill.keyTrigger}] on keyboard) to inspect spec`}
+                      aria-label={`${skill.name} mechanical switch keycap`}
+                      className="group relative w-[40px] h-[42px] rounded-[9px] focus:outline-none select-none cursor-pointer shrink-0"
+                    >
+                      {/* Anodized Aluminum Switch Socket Bezel */}
+                      <div
+                        className={`absolute -inset-[2.5px] rounded-[10px] pointer-events-none transition-all duration-300 ${
+                          isDark
+                            ? "bg-[#07080c] border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.95)]"
+                            : "bg-[#e2e8f0] border border-neutral-300 shadow-[inset_0_2px_3px_rgba(0,0,0,0.15)]"
+                        }`}
                       />
-                    )}
 
-                    {/* Before landing: Exposed Switch Stem (+). Once landed: Physical 3D Keycap */}
-                    {!isLanded ? (
-                      <ExposedSwitchStem
-                        skill={skill}
-                        isDark={isDark}
-                        isIncoming={true}
-                      />
-                    ) : (
-                      <Keycap3DSurface
-                        skill={skill}
-                        isDark={isDark}
-                        isPressed={isPressed}
-                      />
-                    )}
-                  </button>
-
-                  {/* Micro Keybinding Label under Socket */}
-                  <span className="text-[9px] font-mono font-semibold text-neutral-400 dark:text-zinc-500 leading-none">
-                    [{skill.keyTrigger}]
-                  </span>
-                </div>
-
-                {/* RIGHT: Clean Engineering Telemetry & Interactive Actions */}
-                <div className="flex-1 min-w-0">
-                  {/* Top Row: Name + Core LED + Domain Tag */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <h3 className="font-bold text-sm sm:text-[15px] text-neutral-900 dark:text-zinc-100 truncate">
-                        {skill.name}
-                      </h3>
-                      {skill.highlight && (
+                      {/* Socket Landing Flash Ring */}
+                      {isJustLanded && (
                         <span
-                          className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase tracking-wider border flex-shrink-0"
+                          className="pointer-events-none absolute -inset-[3px] rounded-[11px] z-30 animate-ping"
                           style={{
-                            backgroundColor: `${skill.color}18`,
-                            color: isDark ? "#f4f4f5" : "#18181b",
-                            borderColor: `${skill.color}55`,
+                            border: `2px solid ${skill.color}`,
+                            boxShadow: `0 0 14px ${skill.color}`,
                           }}
-                        >
-                          <span
-                            className="w-1.5 h-1.5 rounded-full"
-                            style={{ backgroundColor: skill.color }}
-                          />
-                          CORE
-                        </span>
+                        />
                       )}
-                    </div>
 
-                    <span className="text-[10px] font-mono font-medium text-neutral-400 dark:text-zinc-500 flex-shrink-0">
-                      {skill.categoryLabel}
+                      {!isLanded ? (
+                        <ExposedSwitchStem
+                          skill={skill}
+                          isDark={isDark}
+                          isIncoming={true}
+                        />
+                      ) : (
+                        <Keycap3DSurface
+                          skill={skill}
+                          isDark={isDark}
+                          isPressed={isPressed}
+                        />
+                      )}
+                    </button>
+                    <span className="text-[8.5px] font-mono text-neutral-400 dark:text-zinc-500 leading-none">
+                      [{skill.keyTrigger}]
                     </span>
                   </div>
 
-                  {/* Middle Row: Concise Architectural Description */}
-                  <p className="text-xs text-neutral-600 dark:text-zinc-300 mt-1 leading-relaxed">
-                    {skill.description}
-                  </p>
+                  {/* Identification & Applied Production Systems */}
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-zinc-100 truncate">
+                        {skill.name}
+                      </h3>
+                      <span className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500 shrink-0">
+                        {skill.categoryLabel}
+                      </span>
+                    </div>
 
-                  {/* Bottom Inline Bar: Clickable Project Links + Code Spec Drawer Trigger */}
-                  <div className="mt-2.5 flex items-center justify-between gap-2 flex-wrap">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      {skill.usedIn.map((item) => {
+                    {/* Applied Projects Row */}
+                    <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
+                      {skill.usedIn.map((item, pIdx) => {
                         const isClickable =
                           Boolean(item.projectId) && Boolean(onSelectProject);
-                        const matchedProject = item.projectId
-                          ? projectsData.find((p) => p.id === item.projectId)
-                          : null;
 
-                        return isClickable ? (
-                          <button
-                            key={item.label}
-                            type="button"
-                            onClick={() =>
-                              item.projectId &&
-                              onSelectProject?.(item.projectId)
-                            }
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-semibold bg-neutral-100 hover:bg-neutral-900 text-neutral-700 hover:text-white dark:bg-zinc-800/90 dark:hover:bg-zinc-100 dark:text-zinc-300 dark:hover:text-zinc-950 border border-neutral-200/80 dark:border-zinc-700/70 transition-colors active:scale-95"
-                            title={
-                              matchedProject
-                                ? `Open ${matchedProject.title} interactive demo`
-                                : item.label
-                            }
-                          >
-                            <span>{item.label}</span>
-                          </button>
-                        ) : (
+                        return (
                           <span
                             key={item.label}
-                            className="inline-flex items-center px-2 py-0.5 rounded-md text-[10.5px] font-medium bg-neutral-50 dark:bg-zinc-900 text-neutral-500 dark:text-zinc-400 border border-neutral-200/60 dark:border-zinc-800"
+                            className="inline-flex items-center text-[10.5px] font-mono text-neutral-400 dark:text-zinc-500"
                           >
-                            {item.label}
+                            {isClickable ? (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  item.projectId &&
+                                  onSelectProject?.(item.projectId)
+                                }
+                                className="hover:text-neutral-900 dark:hover:text-zinc-200 hover:underline underline-offset-2 transition-colors"
+                                title={`Jump to ${item.label}`}
+                              >
+                                {item.label}
+                              </button>
+                            ) : (
+                              <span>{item.label}</span>
+                            )}
+                            {pIdx < skill.usedIn.length - 1 && (
+                              <span className="ml-1.5 text-neutral-300 dark:text-zinc-700">·</span>
+                            )}
                           </span>
                         );
                       })}
                     </div>
-
-                    {/* Inspect Live Engineering Spec Button */}
-                    <button
-                      type="button"
-                      onClick={() => triggerDockedSkill(skill, idx, true)}
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold border transition-colors ml-auto ${
-                        isSpecOpen
-                          ? "bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950 border-neutral-900 dark:border-zinc-100"
-                          : "bg-transparent text-neutral-500 dark:text-zinc-400 border-neutral-200 dark:border-zinc-800 hover:text-neutral-900 dark:hover:text-zinc-200 hover:border-neutral-300 dark:hover:border-zinc-700"
-                      }`}
-                    >
-                      <Code2 className="w-3 h-3 text-ig-pink" />
-                      <span>{isSpecOpen ? "Hide Spec ▲" : "Code Spec ▾"}</span>
-                    </button>
                   </div>
                 </div>
+
+                {/* RIGHT: Understated Apple Text Action */}
+                <button
+                  type="button"
+                  onClick={() => triggerDockedSkill(skill, idx, true)}
+                  className={`px-2.5 py-1 rounded-md text-[11px] font-mono font-medium transition-colors shrink-0 ${
+                    isSpecOpen
+                      ? "text-neutral-900 dark:text-zinc-100 font-semibold underline underline-offset-4"
+                      : "text-neutral-400 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200"
+                  }`}
+                >
+                  {isSpecOpen ? "Close Spec" : "Inspect Spec"}
+                </button>
               </div>
 
               {/* Expandable Production Code Spec Drawer */}
@@ -883,7 +845,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                 <div className="border-t border-neutral-200 dark:border-zinc-800 bg-[#0b0d13] text-zinc-200 font-mono text-left animate-fade-in">
                   <div className="px-3.5 py-2 bg-[#121620] border-b border-white/10 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5 min-w-0">
-                      <FileCode className="w-3.5 h-3.5 text-ig-pink flex-shrink-0" />
+                      <span className="text-[10px] text-neutral-400">FILE //</span>
                       <span className="text-[10px] text-zinc-300 truncate">
                         {spec.filePath}
                       </span>
@@ -895,19 +857,9 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                     <button
                       type="button"
                       onClick={() => handleCopySpec(skill.id, spec.snippet)}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] bg-white/10 hover:bg-white/15 text-zinc-200 transition-colors flex-shrink-0"
+                      className="px-2 py-0.5 rounded text-[9.5px] font-mono bg-white/10 hover:bg-white/15 text-zinc-200 transition-colors shrink-0"
                     >
-                      {copiedId === skill.id ? (
-                        <>
-                          <Check className="w-2.5 h-2.5 text-emerald-400" />
-                          <span className="text-emerald-400">Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-2.5 h-2.5" />
-                          <span>Copy</span>
-                        </>
-                      )}
+                      {copiedId === skill.id ? "Copied" : "Copy"}
                     </button>
                   </div>
 
