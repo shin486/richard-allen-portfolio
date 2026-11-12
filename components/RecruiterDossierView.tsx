@@ -60,11 +60,13 @@ interface ProjectArchitectureSpec {
 const getProjectArchitectureSpec = (
   project: Project
 ): ProjectArchitectureSpec => {
+  const dynamicTimelineBadge = `${project.role.toUpperCase()} · ${project.year.toUpperCase()}`;
+
   switch (project.id) {
     case "palengkehub":
       return {
         qualityBadge: "✓ iOS & Android Tested",
-        timelineBadge: "FULL-STACK DEVELOPER · SEP 2025 – OCT 2026",
+        timelineBadge: dynamicTimelineBadge,
         cleanSubtitle:
           "Public-Market Price Transparency & Offline-First Pre-Ordering",
         stages: [
@@ -97,7 +99,7 @@ const getProjectArchitectureSpec = (
     case "shinpay-plus":
       return {
         qualityBadge: "✓ Multi-Tenant RLS Verified",
-        timelineBadge: "FULL-STACK DEVELOPER · JAN 2026 – APR 2026",
+        timelineBadge: dynamicTimelineBadge,
         cleanSubtitle:
           "Multi-Tenant Payroll & Statutory Compliance Engine",
         stages: [
@@ -130,7 +132,7 @@ const getProjectArchitectureSpec = (
     case "itelect4-project":
       return {
         qualityBadge: "✓ Google Gemini AI Integrated",
-        timelineBadge: "FULL-STACK DEVELOPER · JAN 2026 – MAY 2026",
+        timelineBadge: dynamicTimelineBadge,
         cleanSubtitle:
           "AI-Powered Review & Full-Stack Microservice Platform",
         stages: [
@@ -163,7 +165,7 @@ const getProjectArchitectureSpec = (
     case "auto-avenue-ims":
       return {
         qualityBadge: "✓ Real-Time POS Integration",
-        timelineBadge: "FULL-STACK DEVELOPER · AUG 2025 – DEC 2025",
+        timelineBadge: dynamicTimelineBadge,
         cleanSubtitle:
           "Automotive Inventory Management & Point-of-Sale Synchronization",
         stages: [
@@ -196,7 +198,7 @@ const getProjectArchitectureSpec = (
     case "avms":
       return {
         qualityBadge: "✓ 99.9% SLA ITSM Framework",
-        timelineBadge: "SYSTEM DESIGNER · JAN 2025 – MAY 2025",
+        timelineBadge: dynamicTimelineBadge,
         cleanSubtitle:
           "Automated Campus Visitor Management & QR Access Control",
         stages: [
@@ -230,7 +232,7 @@ const getProjectArchitectureSpec = (
     default:
       return {
         qualityBadge: "✓ Full-Stack Ordering Flow",
-        timelineBadge: "WEB DEVELOPER · AUG 2024 – DEC 2024",
+        timelineBadge: dynamicTimelineBadge,
         cleanSubtitle:
           "Interactive Food Kiosk Browser & Express Order Server",
         stages: [
@@ -332,6 +334,77 @@ const PalengkeHubLiveStage: React.FC<{
 
   const toggleReserve = (key: string) => {
     setReservedItems((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleCategorySelect = (cat: string) => {
+    setSelectedCategory(cat);
+    if (cat === "Isda & Seafood") {
+      setActivePriceItem("bangus");
+    } else if (cat === "Gulay") {
+      setActivePriceItem("kamatis");
+    } else if (cat === "Karne") {
+      setActivePriceItem("liempo");
+    } else if (cat === "Bigas") {
+      setActivePriceItem("bigas");
+    }
+  };
+
+  const handleCommoditySelect = (id: "bangus" | "kamatis" | "liempo" | "bigas") => {
+    setActivePriceItem(id);
+    if (id === "bangus") setSelectedCategory("Isda & Seafood");
+    else if (id === "kamatis") setSelectedCategory("Gulay");
+    else if (id === "liempo") setSelectedCategory("Karne");
+    else if (id === "bigas") setSelectedCategory("Bigas");
+  };
+
+  const FEATURED_DEALS: Record<
+    "bangus" | "kamatis" | "liempo" | "bigas",
+    {
+      title: string;
+      stall: string;
+      dealPrice: string;
+      origPrice: string;
+      discount: string;
+      stockNote: string;
+      reserveKey: string;
+    }
+  > = {
+    bangus: {
+      title: "Bangus (Dagupan Medium)",
+      stall: "Aling Nena's Fresh Catch · Stall A-04",
+      dealPrice: "₱180/kg",
+      origPrice: "₱200/kg",
+      discount: "May Diskwento · 10% OFF",
+      stockNote: "18 kg stock · Pickup 5:00 AM–6:30 PM",
+      reserveKey: "bangus-deal",
+    },
+    kamatis: {
+      title: "Kamatis Tagalog (Fresh Harvest)",
+      stall: "Ate Lorna Gulayan · Stall B-12",
+      dealPrice: "₱60/kg",
+      origPrice: "₱75/kg",
+      discount: "Sariwang Ani · 20% OFF",
+      stockNote: "25 kg stock · Morning Harvest",
+      reserveKey: "kamatis-deal",
+    },
+    liempo: {
+      title: "Pork Liempo (Fresh Cut)",
+      stall: "Kuya Bong Meat Shop · Stall C-02",
+      dealPrice: "₱340/kg",
+      origPrice: "₱360/kg",
+      discount: "Batangas Native · 5% OFF",
+      stockNote: "12 kg remaining · Batangas Local",
+      reserveKey: "liempo-deal",
+    },
+    bigas: {
+      title: "Sinandomeng Special (Bagong Ani)",
+      stall: "Bigasan ni Mang Nestor · Stall D-01",
+      dealPrice: "₱52/kg",
+      origPrice: "₱56/kg",
+      discount: "Direct Mill · 7% OFF",
+      stockNote: "40 sacks on hand · Wholesale/Retail",
+      reserveKey: "bigas-deal",
+    },
   };
 
   const PRICE_COMPARISONS = {
@@ -445,12 +518,13 @@ const PalengkeHubLiveStage: React.FC<{
     },
   };
 
+  const currentDeal = FEATURED_DEALS[activePriceItem];
   const currentComparison = PRICE_COMPARISONS[activePriceItem];
 
   return (
     <div className="w-full max-w-[360px] mx-auto rounded-[28px] border-[4px] border-[#22242A] bg-[#0D0E11] overflow-hidden shadow-2xl">
       {/* Device Top Status Bar */}
-      <div className="px-4 py-2.5 bg-[#111215] border-b border-white/[0.08] flex items-center justify-between text-[11px] font-mono">
+      <div className="px-4 py-2.5 bg-[#111215] border-b border-white/[0.08] flex items-center justify-between text-xs font-mono">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-[#F4F4F6]">PalengkeHub</span>
           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] text-[10px] font-semibold">
@@ -471,14 +545,14 @@ const PalengkeHubLiveStage: React.FC<{
             <span className="text-[10px] font-mono uppercase tracking-wider text-[#10B981]">
               Lipa City Public Market
             </span>
-            <span className="text-[10px] font-mono text-[#6B7280]">
+            <span className="text-[10px] font-mono text-[#9CA3AF]">
               8 Tables · RLS Sync
             </span>
           </div>
           <h4 className="text-sm font-semibold text-[#F4F4F6] mt-1">
             Magandang Araw, Ka-Palengke!
           </h4>
-          <p className="text-[11px] text-[#9CA3AF] mt-0.5 leading-snug">
+          <p className="text-xs text-[#9CA3AF] mt-0.5 leading-snug">
             Real-time stall price transparency &amp; offline-first pre-ordering across Lipa City stalls.
           </p>
 
@@ -488,7 +562,7 @@ const PalengkeHubLiveStage: React.FC<{
               <button
                 key={cat}
                 type="button"
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => handleCategorySelect(cat)}
                 className={`px-2 py-0.5 rounded-md text-[10px] font-mono whitespace-nowrap border transition-colors ${
                   selectedCategory === cat
                     ? "bg-[#10B981]/20 border-[#10B981]/50 text-[#10B981] font-semibold"
@@ -501,13 +575,13 @@ const PalengkeHubLiveStage: React.FC<{
           </div>
         </div>
 
-        {/* Featured Deal Card: May Diskwento · 10% OFF Dagupan Bangus */}
+        {/* Featured Deal Card: Dynamically updates with active category / commodity */}
         <div className="p-3 rounded-xl bg-[#111215] border border-[#10B981]/35 space-y-2">
           <div className="flex items-center justify-between gap-2">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] font-mono text-[10px] font-semibold">
-              May Diskwento · 10% OFF
+              {currentDeal.discount}
             </span>
-            <span className="px-1.5 py-0.5 rounded bg-[#10B981] text-[#0A0A0B] font-mono text-[9.5px] font-bold">
+            <span className="px-1.5 py-0.5 rounded bg-[#10B981] text-[#0A0A0B] font-mono text-[10px] font-bold">
               PINAKAMURA
             </span>
           </div>
@@ -515,34 +589,34 @@ const PalengkeHubLiveStage: React.FC<{
           <div className="flex items-start justify-between gap-2">
             <div>
               <div className="text-xs font-semibold text-[#F4F4F6]">
-                Bangus (Dagupan Medium)
+                {currentDeal.title}
               </div>
-              <div className="text-[11px] text-[#9CA3AF]">
-                Aling Nena&apos;s Fresh Catch · Stall A-04
+              <div className="text-xs text-[#9CA3AF]">
+                {currentDeal.stall}
               </div>
             </div>
             <div className="text-right font-mono">
-              <div className="text-sm font-bold text-[#10B981]">₱180/kg</div>
-              <div className="text-[10px] text-[#6B7280] line-through">
-                ₱200/kg
+              <div className="text-sm font-bold text-[#10B981]">{currentDeal.dealPrice}</div>
+              <div className="text-[10px] text-[#9CA3AF] line-through">
+                {currentDeal.origPrice}
               </div>
             </div>
           </div>
 
           <div className="pt-1 flex items-center justify-between gap-2 border-t border-white/[0.06]">
             <span className="text-[10px] font-mono text-[#9CA3AF]">
-              18 kg stock · Pickup 5:00 AM–6:30 PM
+              {currentDeal.stockNote}
             </span>
             <button
               type="button"
-              onClick={() => toggleReserve("bangus-deal")}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold transition-colors ${
-                reservedItems["bangus-deal"]
+              onClick={() => toggleReserve(currentDeal.reserveKey)}
+              className={`px-2.5 py-1 rounded-lg text-xs font-mono font-semibold transition-colors ${
+                reservedItems[currentDeal.reserveKey]
                   ? "bg-[#10B981] text-[#0A0A0B]"
                   : "bg-[#17191E] hover:border-[#10B981]/45 text-[#F4F4F6] border border-white/[0.12]"
               }`}
             >
-              {reservedItems["bangus-deal"] ? "✓ Reserved (1kg)" : "Pre-Order"}
+              {reservedItems[currentDeal.reserveKey] ? "✓ Reserved" : "Pre-Order"}
             </button>
           </div>
         </div>
@@ -574,11 +648,11 @@ const PalengkeHubLiveStage: React.FC<{
                   key={item.id}
                   type="button"
                   onClick={() =>
-                    setActivePriceItem(
+                    handleCommoditySelect(
                       item.id as "bangus" | "kamatis" | "liempo" | "bigas"
                     )
                   }
-                  className={`px-2 py-1.5 rounded-lg text-[10.5px] font-mono text-left truncate border transition-colors ${
+                  className={`px-2 py-1.5 rounded-lg text-xs font-mono text-left truncate border transition-colors ${
                     active
                       ? "bg-[#111215] border-[#10B981]/50 text-[#F4F4F6] font-semibold"
                       : "bg-[#111215]/60 border-white/[0.06] text-[#9CA3AF] hover:text-[#F4F4F6]"
@@ -592,7 +666,7 @@ const PalengkeHubLiveStage: React.FC<{
 
           {/* Stall Comparison List for Active Commodity */}
           <div className="space-y-1.5 pt-1">
-            <div className="flex items-center justify-between text-[10.5px] font-mono text-[#9CA3AF]">
+            <div className="flex items-center justify-between text-xs font-mono text-[#9CA3AF]">
               <span>{currentComparison.name}</span>
               <span>{currentComparison.unit}</span>
             </div>
@@ -607,10 +681,10 @@ const PalengkeHubLiveStage: React.FC<{
                 }`}
               >
                 <div className="min-w-0">
-                  <div className="text-[11px] font-medium text-[#F4F4F6] truncate">
+                  <div className="text-xs font-medium text-[#F4F4F6] truncate">
                     {s.stall}
                   </div>
-                  <div className="text-[10px] font-mono text-[#6B7280]">
+                  <div className="text-[10px] font-mono text-[#9CA3AF]">
                     {s.section}
                   </div>
                 </div>
@@ -623,10 +697,10 @@ const PalengkeHubLiveStage: React.FC<{
                     {s.price}
                   </div>
                   <div
-                    className={`text-[9.5px] ${
+                    className={`text-[10px] ${
                       s.isLowest
                         ? "text-[#10B981] font-semibold"
-                        : "text-[#6B7280]"
+                        : "text-[#9CA3AF]"
                     }`}
                   >
                     {s.tag}
@@ -640,13 +714,13 @@ const PalengkeHubLiveStage: React.FC<{
 
       {/* Bottom Device Action Bar */}
       <div className="px-3.5 py-2.5 bg-[#111215] border-t border-white/[0.08] flex items-center justify-between gap-2">
-        <span className="text-[10.5px] font-mono text-[#9CA3AF]">
+        <span className="text-xs font-mono text-[#9CA3AF]">
           Interactive UI Preview
         </span>
         <button
           type="button"
           onClick={onLaunchFullSandbox}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#17191E] hover:border-[#10B981]/45 text-[#F4F4F6] border border-white/[0.12] text-[11px] font-mono font-medium transition-colors"
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#17191E] hover:border-[#10B981]/45 text-[#F4F4F6] border border-white/[0.12] text-xs font-mono font-medium transition-colors"
         >
           <Play className="w-3 h-3 text-[#10B981] fill-current" />
           <span>Full Sandbox</span>
@@ -722,7 +796,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
             >
               shin.dev
             </a>
-            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md bg-[#111215] border border-white/[0.08] font-mono text-[11px] tracking-[0.05em] text-[#9CA3AF]">
+            <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md bg-[#111215] border border-white/[0.08] font-mono text-xs tracking-[0.05em] text-[#9CA3AF]">
               Lipa City, PH (GMT+8)
             </span>
           </div>
@@ -765,7 +839,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                   type="button"
                   onClick={onSwitchToStudio}
                   title="Switch to Interactive Instagram Feed Mode (?view=studio)"
-                  className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#111215] hover:bg-[#17191E] hover:border-[#10B981]/45 text-[#9CA3AF] hover:text-[#F4F4F6] border border-white/[0.08] font-mono text-[11px] transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#111215] hover:bg-[#17191E] hover:border-[#10B981]/45 text-[#9CA3AF] hover:text-[#F4F4F6] border border-white/[0.08] font-mono text-xs transition-colors"
                 >
                   <span>Social View</span>
                 </button>
@@ -816,11 +890,12 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
             <button
               type="button"
               onClick={handleCycleStatus}
+              title="Click to cycle status note"
               className="group inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#111215] border border-white/[0.08] hover:border-[#10B981]/45 text-xs font-mono tracking-[0.03em] text-[#F4F4F6] transition-colors text-left"
             >
               <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shrink-0" />
               <span>{HERO_STATUS_NOTES[statusIndex]}</span>
-              <RotateCw className="w-3 h-3 text-[#6B7280] group-hover:text-[#10B981] transition-colors shrink-0 ml-0.5" />
+              <RotateCw className="w-3 h-3 text-[#9CA3AF] group-hover:text-[#10B981] transition-colors shrink-0 ml-0.5" />
             </button>
           </div>
 
@@ -953,6 +1028,59 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
             </div>
           </div>
 
+          {/* Executive Bento Quick-Scan Grid (All 6 Systems Visible in 5 Seconds) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+            {projectsData.map((proj, idx) => {
+              const isSelected = idx === activeProjectIndex;
+              const numLabel = `0${idx + 1}`;
+              const shortTitle = SHORT_PROJECT_NAMES[proj.id] || proj.title;
+              return (
+                <button
+                  key={proj.id}
+                  type="button"
+                  onClick={() => {
+                    handleSelectProjectByIndex(idx);
+                    const showcaseEl = document.getElementById("project-showcase-stage");
+                    if (showcaseEl) {
+                      showcaseEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                    }
+                  }}
+                  className={`p-3.5 rounded-xl border text-left transition-all flex flex-col justify-between gap-2.5 group cursor-pointer ${
+                    isSelected
+                      ? "bg-[#17191E] border-[#10B981]/60 shadow-lg ring-1 ring-[#10B981]/30"
+                      : "bg-[#111215] border-white/[0.08] hover:bg-[#15171D] hover:border-white/[0.18]"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2 w-full">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="font-mono text-xs font-semibold text-[#10B981] shrink-0">
+                        {numLabel}
+                      </span>
+                      <span className="text-sm font-semibold text-[#F4F4F6] group-hover:text-white transition-colors truncate">
+                        {shortTitle}
+                      </span>
+                    </div>
+                    <span className="font-mono text-[10px] uppercase px-1.5 py-0.5 rounded bg-white/[0.06] text-[#9CA3AF] shrink-0">
+                      {proj.category}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-[#9CA3AF] line-clamp-2 leading-relaxed">
+                    {proj.subtitle}
+                  </p>
+
+                  <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/[0.06] text-xs font-mono text-[#9CA3AF]">
+                    <span className="truncate max-w-[170px]">{proj.technologies.slice(0, 2).join(" · ")}</span>
+                    <span className={`inline-flex items-center gap-1 shrink-0 ${isSelected ? "text-[#10B981] font-medium" : "text-[#9CA3AF] group-hover:text-[#F4F4F6]"}`}>
+                      <span>{isSelected ? "Active View" : "Inspect"}</span>
+                      <ArrowUpRight className="w-3 h-3" />
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
           {/* Named Project Switcher Tabs (All 6 Portfolio Projects: 01 through 06) */}
           <div
             role="tablist"
@@ -984,7 +1112,10 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
           </div>
 
           {/* 2-Column Split Studio Showcase Card */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 lg:p-10 rounded-2xl bg-[#111215] border border-white/[0.08] border-t-white/[0.14]">
+          <div
+            id="project-showcase-stage"
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 lg:p-10 rounded-2xl bg-[#111215] border border-white/[0.08] border-t-white/[0.14]"
+          >
             {/* Left Column (lg:col-span-5) — Bounded Interactive Product Stage */}
             <div className="lg:col-span-5 flex flex-col justify-between gap-4">
               {activeProject.id === "palengkehub" &&
@@ -995,22 +1126,23 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                   }
                 />
               ) : (
-                <div className="w-full rounded-2xl border border-white/[0.1] bg-[#0D0E11] overflow-hidden shadow-2xl">
-                  <div className="px-3.5 py-2 bg-[#17191E] border-b border-white/[0.08] flex items-center justify-between gap-2">
-                    <span className="font-mono text-[11px] text-[#F4F4F6] font-semibold">
-                      {activeProject.title} · Live Sandbox
-                    </span>
-                    {activeProject.id === "palengkehub" && (
+                <div className="w-full flex flex-col gap-2">
+                  {activeProject.id === "palengkehub" && (
+                    <div className="flex items-center justify-between px-1">
                       <button
                         type="button"
                         onClick={() => setShowInteractiveSandboxInStage(false)}
-                        className="text-[10.5px] font-mono text-[#10B981] hover:underline"
+                        className="inline-flex items-center gap-1.5 text-xs font-mono text-[#10B981] hover:underline"
                       >
-                        Lipa Market Card View
+                        <ChevronLeft className="w-3.5 h-3.5" />
+                        <span>Return to Lipa Market View</span>
                       </button>
-                    )}
-                  </div>
-                  <div className="max-h-[480px] overflow-y-auto">
+                      <span className="text-xs font-mono text-[#9CA3AF]">
+                        Multi-Tab Sandbox
+                      </span>
+                    </div>
+                  )}
+                  <div className="w-full rounded-2xl overflow-hidden shadow-2xl">
                     <ProjectDemoHost projectId={activeProject.id} />
                   </div>
                 </div>
@@ -1018,7 +1150,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
 
               {/* Stage Caption & Fullscreen Modal Launcher */}
               <div className="flex items-center justify-between gap-3 px-1">
-                <span className="font-mono text-[11px] text-[#6B7280] tracking-[0.05em]">
+                <span className="font-mono text-xs text-[#9CA3AF] tracking-[0.05em]">
                   STAGE {activeProjectIndex + 1} / {projectsData.length} · LIVE
                   CODED ARTIFACT
                 </span>
@@ -1089,7 +1221,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                         Architecture Pipeline
                       </span>
                     </div>
-                    <span className="font-mono text-[11px] text-[#6B7280]">
+                    <span className="font-mono text-xs text-[#9CA3AF]">
                       3-Stage Verified Spec
                     </span>
                   </div>
@@ -1102,7 +1234,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                         className="p-3.5 rounded-xl bg-[#17191E] border border-white/[0.08] hover:border-[#10B981]/45 transition-colors flex flex-col justify-between gap-2"
                       >
                         <div>
-                          <div className="flex items-center justify-between gap-1 font-mono text-[11px] tracking-[0.05em] text-[#6B7280] uppercase">
+                          <div className="flex items-center justify-between gap-1 font-mono text-xs tracking-[0.05em] text-[#9CA3AF] uppercase">
                             <span>
                               Stage {stage.stageNumber} · {stage.layer}
                             </span>
@@ -1126,7 +1258,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                   {activeProject.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="px-2.5 py-1 rounded-md bg-[#0A0A0B] border border-white/[0.08] font-mono text-[11px] text-[#9CA3AF]"
+                      className="px-2.5 py-1 rounded-md bg-[#0A0A0B] border border-white/[0.08] font-mono text-xs text-[#9CA3AF]"
                     >
                       {tech}
                     </span>
@@ -1216,7 +1348,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                     SHIN-28 · DARK CHASSIS
                   </span>
                 </div>
-                <span className="font-mono text-[11px] text-[#6B7280]">
+                <span className="font-mono text-xs text-[#9CA3AF]">
                   28 SWITCHES · 4×7 ORTHOLINEAR
                 </span>
               </div>
@@ -1262,7 +1394,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
               </div>
 
               {/* Bottom Chassis Legend */}
-              <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-[#6B7280] min-w-[300px]">
+              <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between text-xs font-mono text-[#9CA3AF] min-w-[300px]">
                 <span>PBT DOUBLE-SHOT KEYCAPS</span>
                 <span>ACTIVE KEY: [{selectedSkill.keyTrigger}]</span>
               </div>
@@ -1286,7 +1418,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                 </div>
 
                 <div className="text-right font-mono">
-                  <div className="text-xs text-[#6B7280]">STATUS</div>
+                  <div className="text-xs text-[#9CA3AF]">STATUS</div>
                   <div className="text-sm font-semibold text-[#10B981] mt-0.5">
                     Production Verified
                   </div>
@@ -1301,7 +1433,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
               {/* Architectural Spec Rows */}
               <div className="grid grid-cols-1 gap-2.5 pt-2 border-t border-white/[0.08] font-mono text-xs">
                 <div className="p-3 rounded-xl bg-[#17191E] border border-white/[0.06]">
-                  <span className="text-[10px] uppercase tracking-[0.05em] text-[#6B7280] block">
+                  <span className="text-[10px] uppercase tracking-[0.05em] text-[#9CA3AF] block">
                     Architectural Tier
                   </span>
                   <span className="text-[#F4F4F6] mt-0.5 block">
@@ -1309,7 +1441,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                   </span>
                 </div>
                 <div className="p-3 rounded-xl bg-[#17191E] border border-white/[0.06]">
-                  <span className="text-[10px] uppercase tracking-[0.05em] text-[#6B7280] block">
+                  <span className="text-[10px] uppercase tracking-[0.05em] text-[#9CA3AF] block">
                     Reference Implementation
                   </span>
                   <span className="text-[#F4F4F6] mt-0.5 block truncate">
@@ -1320,7 +1452,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
 
               {/* Used In Project Pills (Clickable to jump to project in Section 3) */}
               <div className="pt-2 border-t border-white/[0.08]">
-                <span className="font-mono text-[11px] uppercase tracking-[0.05em] text-[#6B7280] block mb-2.5">
+                <span className="font-mono text-xs uppercase tracking-[0.05em] text-[#9CA3AF] block mb-2.5">
                   Used in:
                 </span>
                 {selectedSkill.usedIn.length > 0 ? (
@@ -1373,7 +1505,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
         </section>
 
         {/* Minimal Footer */}
-        <footer className="py-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#6B7280]">
+        <footer className="py-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#9CA3AF]">
           <div>
             Richard Allen Liman · De La Salle Lipa · Lipa City, PH
           </div>

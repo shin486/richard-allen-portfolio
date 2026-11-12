@@ -116,7 +116,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {switcherOpen && (
                 <div className="absolute left-0 mt-2 w-72 sm:w-80 bg-white dark:bg-[#14141A] border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-2 z-50 animate-scale-up">
                   <div className="px-3 py-1.5 flex items-center justify-between">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 dark:text-zinc-500">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-neutral-600 dark:text-zinc-400">
                       Switch View
                     </span>
                     <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
@@ -265,7 +265,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Center Section: Centered View Switcher Toggle (shrink-0 prevents flex zero-width overflow collision on mobile) */}
           <div className="flex items-center justify-center shrink-0">
             {onViewChange && (
-              <div className="flex items-center p-0.5 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-[10.5px] sm:text-[11px] font-semibold shrink-0 shadow-2xs">
+              <div className="flex items-center p-0.5 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-xs font-semibold shrink-0 shadow-2xs">
                 <button
                   type="button"
                   onClick={() => onViewChange("studio")}

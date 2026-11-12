@@ -164,7 +164,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
                   className={`text-[10px] tabular-nums px-1.5 py-0.2 rounded-full hidden sm:inline transition-all duration-200 ${
                     isActive
                       ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 font-bold"
-                      : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
+                      : "bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-300"
                   }`}
                 >
                   {tab.count}

@@ -1317,10 +1317,10 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
       <div className="flex items-center justify-between mb-2 px-1 gap-2">
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
-            <h2 className="text-sm sm:text-base xl:text-lg font-black tracking-wider uppercase bg-gradient-to-b from-neutral-900 via-neutral-700 to-neutral-400 dark:from-white dark:via-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent">
+            <h2 className="text-sm sm:text-base xl:text-lg font-black tracking-wider uppercase text-neutral-900 dark:text-zinc-100">
               SKILLS
             </h2>
-            <span className="px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold bg-ig-pink/15 text-ig-pink border border-ig-pink/30">
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-ig-pink/15 text-ig-pink border border-ig-pink/30">
               28 KEYS
             </span>
           </div>
@@ -1369,11 +1369,11 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
       >
         {/* Dynamic Ambient Underglow — Matches Dark Mode vs Light Mode */}
         <div
-          className="absolute w-56 h-40 sm:w-64 sm:h-48 rounded-full blur-2xl pointer-events-none transition-all duration-500"
+          className="absolute w-56 h-40 sm:w-64 sm:h-48 rounded-full blur-2xl pointer-events-none transition-all duration-500 opacity-60 hover:opacity-90"
           style={{
             background: isDark
-              ? "radial-gradient(circle, rgba(221,42,123,0.34) 0%, rgba(245,133,41,0.15) 45%, transparent 75%)"
-              : "radial-gradient(circle, rgba(221,42,123,0.18) 0%, rgba(59,130,246,0.12) 45%, transparent 70%)",
+              ? "radial-gradient(circle, rgba(221,42,123,0.22) 0%, rgba(245,133,41,0.08) 45%, transparent 75%)"
+              : "radial-gradient(circle, rgba(221,42,123,0.12) 0%, rgba(59,130,246,0.06) 45%, transparent 70%)",
           }}
         />
 

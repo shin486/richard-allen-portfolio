@@ -199,7 +199,7 @@ export default function HomePage() {
           {/* Open Right-Side Space: Sticky 3D Mechanical Tech Stack Keyboard */}
           <aside
             aria-label="3D Mechanical Tech Stack Keyboard"
-            className="hidden xl:block sticky top-20 pt-2 pb-24 rise-in overflow-visible"
+            className="hidden xl:block sticky top-20 max-h-[calc(100vh-5.5rem)] overflow-y-auto no-scrollbar pt-2 pb-6 rise-in overscroll-contain pr-1"
             style={{ animationDelay: "240ms" }}
           >
             <TechKeyboard3D

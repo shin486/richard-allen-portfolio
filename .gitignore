@@ -30,3 +30,7 @@ yar-error.log*
 # vercel
 .vercel
 vercel.json
+
+# ide & local configs
+.gemini/
+.impeccable/config.local.json

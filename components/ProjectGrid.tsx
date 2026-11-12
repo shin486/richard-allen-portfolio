@@ -86,7 +86,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             brandClass: "border-blue-500/50 bg-blue-950/20 text-blue-300 dark:text-blue-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(59,130,246,0.3)]",
             icon: (
-              <span className="w-3.5 h-3.5 rounded-[2.5px] bg-[#3178C6] text-[8px] font-black text-white flex items-center justify-center font-mono leading-none">
+              <span className="w-4 h-4 rounded-[3px] bg-[#3178C6] text-[10px] font-black text-white flex items-center justify-center font-mono leading-none">
                 TS
               </span>
             ),
@@ -127,7 +127,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             brandClass: "border-blue-500/50 bg-blue-950/20 text-blue-300 dark:text-blue-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(59,130,246,0.3)]",
             icon: (
-              <span className="w-3.5 h-3.5 rounded-[2.5px] bg-[#3178C6] text-[8px] font-black text-white flex items-center justify-center font-mono leading-none">
+              <span className="w-4 h-4 rounded-[3px] bg-[#3178C6] text-[10px] font-black text-white flex items-center justify-center font-mono leading-none">
                 TS
               </span>
             ),
@@ -1119,11 +1119,11 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                     <div className="flex items-center justify-between gap-2 mb-3">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className="text-[10.5px] font-bold uppercase tracking-wider text-neutral-700 dark:text-zinc-300 font-mono">
+                        <span className="text-xs font-bold uppercase tracking-wider text-neutral-800 dark:text-zinc-200 font-mono">
                           Architecture Pipeline
                         </span>
                       </div>
-                      <span className="text-[10.5px] font-semibold text-emerald-700 dark:text-emerald-400 font-mono flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-md border border-emerald-200/60 dark:border-emerald-800/50">
+                      <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 font-mono flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-md border border-emerald-200/60 dark:border-emerald-800/50">
                         {pipeline.qualityTag}
                       </span>
                     </div>

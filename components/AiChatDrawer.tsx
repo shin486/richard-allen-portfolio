@@ -649,9 +649,9 @@ export const AiChatDrawer: React.FC = () => {
                 <div className="px-3.5 py-2.5 rounded-2xl rounded-bl-sm bg-white dark:bg-[#16161D] text-neutral-500 dark:text-zinc-400 border border-neutral-200/80 dark:border-zinc-800 flex items-center gap-2 text-xs">
                   <span>Byte is fetching</span>
                   <span className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-ig-pink animate-bounce [animation-delay:-0.3s]" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-ig-purple animate-bounce [animation-delay:-0.15s]" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-ig-orange animate-bounce" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-ig-pink animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-ig-purple animate-pulse [animation-delay:180ms]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-ig-orange animate-pulse [animation-delay:360ms]" />
                   </span>
                 </div>
               </div>

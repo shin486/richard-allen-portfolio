@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T13:59:20Z",
+  "title": "Design System: Richard Allen Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Electric Magenta",
+        "canonical": "#DD2A7B",
+        "tonalRamp": ["#3b051e", "#680a37", "#991353", "#c41e6c", "#dd2a7b", "#e75f9e", "#f19ac2", "#fae2ee"]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Terminal Emerald",
+        "canonical": "#10B981",
+        "tonalRamp": ["#022c22", "#064e3b", "#065f46", "#047857", "#10b981", "#34d399", "#6ee7b7", "#d1fae5"]
+      },
+      "primary-gradient-start": {
+        "role": "primary",
+        "displayName": "Sunset Orange",
+        "canonical": "#F58529",
+        "tonalRamp": ["#431407", "#7c2d12", "#9a3412", "#c2410c", "#f58529", "#fb923c", "#fdba74", "#ffedd5"]
+      },
+      "primary-gradient-end": {
+        "role": "primary",
+        "displayName": "Royal Purple",
+        "canonical": "#8134AF",
+        "tonalRamp": ["#2e1065", "#4c1d95", "#5b21b6", "#6d28d9", "#8134af", "#a855f7", "#c084fc", "#f3e8ff"]
+      },
+      "neutral-dark": {
+        "role": "neutral",
+        "displayName": "Jet Obsidian",
+        "canonical": "#0A0A0B",
+        "tonalRamp": ["#050505", "#0a0a0b", "#111215", "#17191e", "#27272a", "#52525b", "#9ca3af", "#f4f4f6"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero display and major section titles." },
+      "headline": { "displayName": "Headline", "purpose": "Project and category titles." },
+      "title": { "displayName": "Title", "purpose": "Card headers and modal titles." },
+      "body": { "displayName": "Body", "purpose": "Descriptions, bio, and project summaries." },
+      "label": { "displayName": "Label / Monospace", "purpose": "Code specs, metrics, tech tags, and timeframes." },
+      "micro": { "displayName": "Micro", "purpose": "Story highlight timestamps, sub-category chips, and secondary metadata." },
+      "badge": { "displayName": "Badge", "purpose": "Keycap short-labels, numeric slide counters, and live verification chips." },
+      "retro": { "displayName": "Retro Pixel", "purpose": "Silkscreen font for 8-bit stickman micro-narratives." }
+    },
+    "shadows": [
+      {
+        "name": "milled-card",
+        "value": "inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 10px 28px -8px rgba(0, 0, 0, 0.55)",
+        "purpose": "Milled hardware card with directional overhead light rim."
+      },
+      {
+        "name": "pixel-balloon",
+        "value": "0 -3px 0 0 #3b3b4f, 0 3px 0 0 #3b3b4f, -3px 0 0 0 #3b3b4f, 3px 0 0 0 #3b3b4f, 0 6px 16px rgba(0, 0, 0, 0.65)",
+        "purpose": "Stepped retro RPG pixel shadow."
+      },
+      {
+        "name": "beacon-pulse",
+        "value": "0 0 0 5px rgba(255, 255, 255, 0)",
+        "purpose": "Subtle radar pulse on active live demos."
+      }
+    ],
+    "motion": [
+      {
+        "name": "spring-physics",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Spring pill tabs and segmented control slider."
+      },
+      {
+        "name": "rise-in-ease",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Fluid entrance animations and reveal triggers."
+      }
+    ],
+    "breakpoints": [
+      { "name": "xs", "value": "380px" },
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Aurora Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary action button with 3-stop sunset aurora gradient and tactile lift.",
+      "html": "<button class=\"ds-btn-primary\">Explore Projects</button>",
+      "css": ".ds-btn-primary { background: linear-gradient(45deg, #F58529 0%, #DD2A7B 50%, #8134AF 100%); color: #FFFFFF; font-family: Inter, sans-serif; font-size: 14px; font-weight: 600; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease; display: inline-flex; align-items: center; justify-content: center; } .ds-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(221, 42, 123, 0.35); } .ds-btn-primary:active { transform: scale(0.98); }"
+    },
+    {
+      "name": "Terminal Emerald Button",
+      "kind": "button",
+      "refersTo": "button-terminal",
+      "description": "Monospace action button for live test runner, sandbox launch, and verified operations.",
+      "html": "<button class=\"ds-btn-terminal\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"currentColor\" style=\"margin-right:6px\"><polygon points=\"5 3 19 12 5 21 5 3\"/></svg>Run Test Assertions</button>",
+      "css": ".ds-btn-terminal { background: #17191E; color: #10B981; border: 1px solid rgba(255, 255, 255, 0.12); font-family: ui-monospace, monospace; font-size: 11px; font-weight: 500; padding: 6px 14px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; transition: all 0.2s ease; } .ds-btn-terminal:hover { border-color: rgba(16, 185, 129, 0.45); background: #1d2128; transform: translateY(-1px); } .ds-btn-terminal:active { transform: scale(0.98); }"
+    },
+    {
+      "name": "Milled Hardware Card",
+      "kind": "card",
+      "refersTo": "card-milled",
+      "description": "Precision dark-mode card with milled top specular highlight and subtle border.",
+      "html": "<div class=\"ds-card-milled\"><div class=\"ds-card-title\">PalengkeHub Capstone</div><p class=\"ds-card-desc\">Offline-first mobile marketplace for price discovery across public market stalls.</p></div>",
+      "css": ".ds-card-milled { background: #16161D; color: #F4F4F6; border: 1px solid #27272A; border-radius: 16px; padding: 22px; box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 10px 28px -8px rgba(0, 0, 0, 0.55); font-family: Inter, sans-serif; transition: border-color 0.2s ease; } .ds-card-milled:hover { border-color: rgba(221, 42, 123, 0.4); } .ds-card-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: #FFFFFF; } .ds-card-desc { font-size: 13px; line-height: 1.5; color: #9CA3AF; margin: 0; }"
+    },
+    {
+      "name": "Verified Proof Badge",
+      "kind": "chip",
+      "refersTo": "badge-status",
+      "description": "Status badge denoting verified credentials, active OJT availability, or passing tests.",
+      "html": "<span class=\"ds-badge-status\"><span class=\"ds-badge-dot\"></span>Open for OJT</span>",
+      "css": ".ds-badge-status { display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #10B981; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 6px; letter-spacing: 0.03em; } .ds-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #10B981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.6); }"
+    },
+    {
+      "name": "Spring Segmented Control",
+      "kind": "nav",
+      "refersTo": "nav-spring",
+      "description": "Pill-style navigation toggle with spring-physics easing.",
+      "html": "<div class=\"ds-tab-container\"><button class=\"ds-tab-item active\">Projects (6)</button><button class=\"ds-tab-item\">Skills (28)</button><button class=\"ds-tab-item\">Certificates (5)</button></div>",
+      "css": ".ds-tab-container { display: inline-flex; background: #111116; border: 1px solid #27272A; border-radius: 9999px; padding: 4px; gap: 4px; font-family: Inter, sans-serif; font-size: 12px; font-weight: 500; } .ds-tab-item { background: transparent; border: none; color: #9CA3AF; padding: 6px 14px; border-radius: 9999px; cursor: pointer; transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1); } .ds-tab-item.active { background: #1F1F27; color: #FFFFFF; font-weight: 600; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); } .ds-tab-item:hover:not(.active) { color: #F4F4F6; }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Tactile search input with subtle shortcut key tag.",
+      "html": "<div class=\"ds-input-wrapper\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#9CA3AF\" stroke-width=\"2\" style=\"margin-right:8px\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input class=\"ds-input-field\" type=\"text\" placeholder=\"Search projects, skills...\" /><kbd class=\"ds-input-kbd\">⌘K</kbd></div>",
+      "css": ".ds-input-wrapper { display: inline-flex; align-items: center; background: #111116; border: 1px solid #27272A; border-radius: 10px; padding: 6px 12px; width: 260px; transition: border-color 0.2s ease, box-shadow 0.2s ease; } .ds-input-wrapper:focus-within { border-color: #DD2A7B; box-shadow: 0 0 0 3px rgba(221, 42, 123, 0.15); } .ds-input-field { background: transparent; border: none; outline: none; color: #F4F4F6; font-family: Inter, sans-serif; font-size: 13px; width: 100%; } .ds-input-field::placeholder { color: #6B7280; } .ds-input-kbd { font-family: ui-monospace, monospace; font-size: 10px; background: #1C1C24; border: 1px solid #33333F; color: #9CA3AF; padding: 2px 5px; border-radius: 4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Cybernetic Social Atelier",
+    "overview": "The design system bridges two complementary worlds: the human warmth and expressive vibrancy of modern social media (Instagram profiles, story highlight reels, 8-bit stickman micro-narratives, and 3D mechanical hardware) and the uncompromising clarity of high-density engineering dossiers (terminal emerald accents, architecture sequence diagrams, and mathematical test runners).\n\nRather than forcing a single compromise mode, the system deliberately supports dual synchronized expressions: the Social Studio (creative feed view with Three.js mechanical keycaps) and the Recruiter Dossier (?view=recruiter, an executive jet-black workspace tailored for 30-second candidate evaluation). Both share a unified design engineering philosophy: tactile, responsive surfaces that respond physically to touch and cursor position, paired with strict truthfulness in technical claims.",
+    "keyCharacteristics": [
+      "Tactile Materiality: Milled top highlights, radial cursor-reactive spotlight sheens, and physical spring-physics tabs replace generic flat boxes.",
+      "Dual Accent Hierarchy: Vibrant sunset aurora gradients (#F58529 to #8134AF) signal interactive discovery, while Terminal Emerald (#10B981) is reserved exclusively for verified engineering proof, active test assertions, and status badges.",
+      "Anti-Boilerplate Integrity: Every widget, stat, and interactive sandbox represents real production code or verified academic deliverables; no placeholder cards or fabricated metrics."
+    ],
+    "rules": [
+      {
+        "name": "The Proof-in-Emerald Rule",
+        "body": "The color #10B981 (Terminal Emerald) may never be used for purely decorative illustrations or generic buttons. It is strictly reserved for verified technical proof: passing tests, verified credentials, live sandbox status, and availability indicators.",
+        "section": "colors"
+      },
+      {
+        "name": "The Gradient Hierarchy Rule",
+        "body": "The full 4-stop Sunset Aurora gradient is restricted to high-intent discovery focal points (the profile avatar ring, featured story triggers, and main logo marks). Secondary UI controls must use solid or 2-stop muted treatments to prevent visual noise.",
+        "section": "colors"
+      },
+      {
+        "name": "The Monospace For Truth Rule",
+        "body": "Every numerical metric, date timestamp, table name, database key, architectural layer (e.g. Client, API, PostgreSQL), and terminal output must be rendered in monospace typography.",
+        "section": "typography"
+      },
+      {
+        "name": "The Milled Edge Rule",
+        "body": "Dark mode cards must never rely on high-blur black drop shadows alone; they must incorporate a 1px specular top rim (inset 0 1px 0 0 rgba(255, 255, 255, 0.08)) to define form boundaries against deep backgrounds.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do maintain strict parity between claim and proof: every project listed must have working code, architecture breakdowns, or an interactive sandbox.",
+      "Do preserve the dual-view architecture: recruiters must always have 1-click access to the high-density RecruiterDossierView (?view=recruiter).",
+      "Do enforce prefers-reduced-motion: disable 3D keyboard spring loops and continuous stickman scrolling for users with motion sensitivity.",
+      "Do use monospace typography (JetBrains Mono / SF Mono) for all system metrics, code snippets, dates, and database terminology."
+    ],
+    "donts": [
+      "Don't use Terminal Emerald (#10B981) for purely decorative backgrounds, generic badges, or unverified claims.",
+      "Don't add generic stock illustrations or floating gradient blobs that lack interactive or semantic meaning.",
+      "Don't use muddy, ungrounded black drop shadows (box-shadow: 0 10px 30px #000); always use stepped tonal surfaces and milled inner highlights.",
+      "Don't break keyboard navigation or screen reader accessibility when introducing Three.js canvas components."
+    ]
+  }
+}
