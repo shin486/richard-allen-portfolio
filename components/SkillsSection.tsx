@@ -11,7 +11,6 @@ import { createPortal } from "react-dom";
 import { projectsData } from "@/data/projects";
 import {
   ExposedSwitchStem,
-  getEngineeringSpecForSkill,
   KEYCAP_SKILLS,
   Keycap3DSurface,
   KeycapSkill,
@@ -76,8 +75,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
   const [projectFilter, setProjectFilter] = useState<string | null>(null);
   const [soundProfile, setSoundProfile] = useState<SoundProfile>("thocky");
   const [pressedIds, setPressedIds] = useState<Record<string, boolean>>({});
-  const [expandedSpecId, setExpandedSpecId] = useState<string | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [spotlightSkill, setSpotlightSkill] = useState<KeycapSkill | null>(null);
   const [isAutoWaving, setIsAutoWaving] = useState(false);
 
   // Flight choreography state
@@ -223,7 +221,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
 
   // Trigger a docked 3D keycap inside SkillsSection
   const triggerDockedSkill = useCallback(
-    (skill: KeycapSkill, index = 0, toggleSpec = true) => {
+    (skill: KeycapSkill, index = 0, openSpotlight = true) => {
       playSwitchSound(soundProfileRef.current, index, 1);
 
       setPressedIds((prev) => ({ ...prev, [skill.id]: true }));
@@ -231,8 +229,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
         setPressedIds((prev) => ({ ...prev, [skill.id]: false }));
       }, 160);
 
-      if (toggleSpec) {
-        setExpandedSpecId((prev) => (prev === skill.id ? null : skill.id));
+      if (openSpotlight) {
+        setSpotlightSkill(skill);
       }
     },
     [playSwitchSound]
@@ -244,6 +242,10 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
       setFlightNonce((n) => n + 1);
     };
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSpotlightSkill(null);
+        return;
+      }
       const target = e.target as HTMLElement | null;
       if (
         target &&
@@ -497,12 +499,6 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
     }
   };
 
-  const handleCopySpec = (skillId: string, code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedId(skillId);
-    setTimeout(() => setCopiedId(null), 2000);
-  };
-
   const activeSystemInfo = useMemo(
     () => SHIPPED_SYSTEMS.find((s) => s.id === projectFilter) || null,
     [projectFilter]
@@ -716,17 +712,11 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
           const isLanded = landedIds.has(skill.id);
           const isJustLanded = Boolean(justLandedIds[skill.id]);
           const isPressed = Boolean(pressedIds[skill.id]) || isJustLanded;
-          const isSpecOpen = expandedSpecId === skill.id;
-          const spec = getEngineeringSpecForSkill(skill);
 
           return (
             <div
               key={skill.id}
-              className={`group/module rounded-xl border transition-all duration-200 overflow-hidden ${
-                isSpecOpen
-                  ? "bg-white dark:bg-[#12131a] border-neutral-400 dark:border-zinc-600 shadow-sm"
-                  : "bg-white dark:bg-[#0e0f15] border-neutral-200/80 dark:border-zinc-800/80 hover:border-neutral-300 dark:hover:border-zinc-700"
-              }`}
+              className="group/module rounded-xl border transition-all duration-200 bg-white dark:bg-[#0e0f15] border-neutral-200/80 dark:border-zinc-800/80 hover:border-neutral-300 dark:hover:border-zinc-700"
             >
               <div className="p-3.5 sm:px-4 sm:py-3.5 flex items-center justify-between gap-4">
                 {/* LEFT: Recessed Mechanical Switch Socket + Docked 3D Keycap */}
@@ -736,7 +726,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                       type="button"
                       data-skill-socket={skill.id}
                       onClick={() => triggerDockedSkill(skill, idx, true)}
-                      title={`Press ${skill.name} keycap (or [${skill.keyTrigger}] on keyboard) to inspect spec`}
+                      title={`Press ${skill.name} keycap (or [${skill.keyTrigger}] on keyboard) to view applied proof`}
                       aria-label={`${skill.name} mechanical switch keycap`}
                       className="group relative w-[40px] h-[42px] rounded-[9px] focus:outline-none select-none cursor-pointer shrink-0"
                     >
@@ -830,48 +820,136 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => triggerDockedSkill(skill, idx, true)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors shrink-0 ${
-                    isSpecOpen
-                      ? "text-neutral-900 dark:text-zinc-100 font-semibold underline underline-offset-4"
-                      : "text-neutral-400 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200 hover:bg-neutral-100 dark:hover:bg-zinc-800/80"
-                  }`}
+                  className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-neutral-400 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200 hover:bg-neutral-100 dark:hover:bg-zinc-800/80 transition-colors shrink-0"
                 >
-                  {isSpecOpen ? "Close Spec" : "Inspect Spec"}
+                  View Proof
                 </button>
               </div>
-
-              {/* Expandable Production Code Spec Drawer */}
-              {isSpecOpen && (
-                <div className="border-t border-neutral-200 dark:border-zinc-800 bg-[#0b0d13] text-zinc-200 font-mono text-left animate-fade-in">
-                  <div className="px-3.5 py-2 bg-[#121620] border-b border-white/10 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <span className="text-[10px] text-neutral-400">FILE //</span>
-                      <span className="text-[10px] text-zinc-300 truncate">
-                        {spec.filePath}
-                      </span>
-                      <span className="hidden sm:inline text-[9.5px] text-zinc-500 truncate">
-                        · {spec.architectureTier}
-                      </span>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCopySpec(skill.id, spec.snippet)}
-                      className="px-2 py-0.5 rounded text-[9.5px] font-mono bg-white/10 hover:bg-white/15 text-zinc-200 transition-colors shrink-0"
-                    >
-                      {copiedId === skill.id ? "Copied" : "Copy"}
-                    </button>
-                  </div>
-
-                  <pre className="p-3.5 text-[10.5px] leading-relaxed overflow-x-auto text-zinc-200">
-                    <code>{spec.snippet}</code>
-                  </pre>
-                </div>
-              )}
             </div>
           );
         })}
       </div>
+
+      {/* Apple-Style Minimalist Hardware Spotlight Sheet */}
+      {spotlightSkill && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${spotlightSkill.name} Technical Details`}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+          onClick={() => setSpotlightSkill(null)}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-white dark:bg-[#111218] border border-neutral-200 dark:border-zinc-800 p-5 sm:p-6 shadow-2xl relative animate-scale-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-start justify-between gap-3 pb-4 border-b border-neutral-100 dark:border-zinc-800/80">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-11 shrink-0 flex items-center justify-center">
+                  <Keycap3DSurface
+                    skill={spotlightSkill}
+                    isDark={isDark}
+                    isPressed={false}
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-bold text-neutral-900 dark:text-zinc-100">
+                      {spotlightSkill.name}
+                    </h3>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-400">
+                      [{spotlightSkill.keyTrigger}]
+                    </span>
+                  </div>
+                  <p className="text-xs font-mono text-neutral-500 dark:text-zinc-400 mt-0.5">
+                    {spotlightSkill.categoryLabel}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSpotlightSkill(null)}
+                className="px-2.5 py-1 rounded-lg text-xs font-mono text-neutral-400 hover:text-neutral-900 dark:hover:text-zinc-100 hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+
+            {/* Applied Systems Body */}
+            <div className="py-4 space-y-3">
+              <span className="text-[10px] font-mono uppercase tracking-[0.12em] text-neutral-400 dark:text-zinc-500 block">
+                // APPLIED IN {spotlightSkill.usedIn.length} PRODUCTION APPS
+              </span>
+
+              <div className="space-y-2.5">
+                {spotlightSkill.usedIn.map((item) => {
+                  const matched = item.projectId
+                    ? projectsData.find((p) => p.id === item.projectId)
+                    : null;
+
+                  return (
+                    <div
+                      key={item.label}
+                      className="p-3.5 rounded-xl border border-neutral-200/80 dark:border-zinc-800/80 bg-neutral-50/50 dark:bg-zinc-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                    >
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-xs text-neutral-900 dark:text-zinc-100">
+                            {matched ? matched.title : item.label}
+                          </span>
+                          {matched && (
+                            <span className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500">
+                              · {matched.year}
+                            </span>
+                          )}
+                        </div>
+                        {matched && (
+                          <p className="text-[11px] text-neutral-500 dark:text-zinc-400 line-clamp-1 mt-0.5">
+                            {matched.subtitle || matched.role}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {matched && onSelectProject && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onSelectProject(matched.id);
+                              setSpotlightSkill(null);
+                            }}
+                            className="px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950 hover:opacity-90 transition-opacity"
+                          >
+                            Live Demo
+                          </button>
+                        )}
+                        {matched?.githubUrl && (
+                          <a
+                            href={matched.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-2.5 py-1 rounded-md text-[11px] font-mono text-neutral-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100 border border-neutral-200 dark:border-zinc-800 hover:border-neutral-400 dark:hover:border-zinc-600 transition-colors"
+                          >
+                            Source Code
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="pt-3 border-t border-neutral-100 dark:border-zinc-800/80 flex items-center justify-between text-[11px] font-mono text-neutral-400 dark:text-zinc-500">
+              <span>PRESS [ESC] TO CLOSE</span>
+              <span>VERIFIED PRODUCTION STACK</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Fixed Full-Viewport 3D Keycap Flight Portal (Renders Flying Keycaps from Sidebar Keyboard -> Skill Sockets) */}
       {mounted &&
