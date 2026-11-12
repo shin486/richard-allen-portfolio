@@ -8,7 +8,6 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { projectsData } from "@/data/projects";
 import {
   ExposedSwitchStem,
   KEYCAP_SKILLS,
@@ -75,7 +74,6 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
   const [projectFilter, setProjectFilter] = useState<string | null>(null);
   const [soundProfile, setSoundProfile] = useState<SoundProfile>("thocky");
   const [pressedIds, setPressedIds] = useState<Record<string, boolean>>({});
-  const [spotlightSkill, setSpotlightSkill] = useState<KeycapSkill | null>(null);
   const [isAutoWaving, setIsAutoWaving] = useState(false);
 
   // Flight choreography state
@@ -221,17 +219,13 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
 
   // Trigger a docked 3D keycap inside SkillsSection
   const triggerDockedSkill = useCallback(
-    (skill: KeycapSkill, index = 0, openSpotlight = true) => {
+    (skill: KeycapSkill, index = 0) => {
       playSwitchSound(soundProfileRef.current, index, 1);
 
       setPressedIds((prev) => ({ ...prev, [skill.id]: true }));
       setTimeout(() => {
         setPressedIds((prev) => ({ ...prev, [skill.id]: false }));
       }, 160);
-
-      if (openSpotlight) {
-        setSpotlightSkill(skill);
-      }
     },
     [playSwitchSound]
   );
@@ -242,10 +236,6 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
       setFlightNonce((n) => n + 1);
     };
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSpotlightSkill(null);
-        return;
-      }
       const target = e.target as HTMLElement | null;
       if (
         target &&
@@ -480,7 +470,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
     const interval = setInterval(() => {
       if (step < filteredSkills.length) {
         const target = filteredSkills[step];
-        triggerDockedSkill(target, step, false);
+        triggerDockedSkill(target, step);
         step++;
       } else {
         setIsAutoWaving(false);
@@ -574,7 +564,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
               </span>
             </div>
             <p className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
-              Click any keycap or press A–Z to test switch travel and inspect live source code.
+              Click any 3D keycap or press A–Z to test mechanical switch travel and actuation.
             </p>
           </div>
 
@@ -731,240 +721,70 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
           return (
             <div
               key={skill.id}
-              className="group/module rounded-xl border transition-all duration-200 bg-white dark:bg-[#0e0f15] border-neutral-200/80 dark:border-zinc-800/80 hover:border-neutral-300 dark:hover:border-zinc-700"
+              onClick={() => triggerDockedSkill(skill, idx)}
+              className="group/module rounded-xl border transition-all duration-200 bg-white dark:bg-[#0e0f15] border-neutral-200/80 dark:border-zinc-800/80 hover:border-neutral-300 dark:hover:border-zinc-700 cursor-pointer select-none"
+              title={`Click or press [${skill.keyTrigger}] to test switch travel`}
             >
-              <div className="p-3.5 sm:px-4 sm:py-3.5 flex items-center justify-between gap-4">
+              <div className="p-3 sm:px-4 sm:py-3 flex items-center gap-4">
                 {/* LEFT: Recessed Mechanical Switch Socket + Docked 3D Keycap */}
-                <div className="flex items-center gap-4 min-w-0 flex-1">
-                  <div className="w-11 shrink-0 flex flex-col items-center gap-1">
-                    <button
-                      type="button"
-                      data-skill-socket={skill.id}
-                      onClick={() => triggerDockedSkill(skill, idx, true)}
-                      title={`Press ${skill.name} keycap (or [${skill.keyTrigger}] on keyboard) to view applied proof`}
-                      aria-label={`${skill.name} mechanical switch keycap`}
-                      className="group relative w-[40px] h-[42px] rounded-[9px] focus:outline-none select-none cursor-pointer shrink-0"
-                    >
-                      {/* Anodized Aluminum Switch Socket Bezel */}
-                      <div
-                        className={`absolute -inset-[2.5px] rounded-[10px] pointer-events-none transition-all duration-300 ${
-                          isDark
-                            ? "bg-[#07080c] border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.95)]"
-                            : "bg-[#e2e8f0] border border-neutral-300 shadow-[inset_0_2px_3px_rgba(0,0,0,0.15)]"
-                        }`}
+                <div className="w-11 shrink-0 flex flex-col items-center gap-1">
+                  <div
+                    data-skill-socket={skill.id}
+                    className="group relative w-[40px] h-[42px] rounded-[9px] focus:outline-none select-none shrink-0"
+                  >
+                    {/* Anodized Aluminum Switch Socket Bezel */}
+                    <div
+                      className={`absolute -inset-[2.5px] rounded-[10px] pointer-events-none transition-all duration-300 ${
+                        isDark
+                          ? "bg-[#07080c] border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.95)]"
+                          : "bg-[#e2e8f0] border border-neutral-300 shadow-[inset_0_2px_3px_rgba(0,0,0,0.15)]"
+                      }`}
+                    />
+
+                    {/* Socket Landing Flash Ring */}
+                    {isJustLanded && (
+                      <span
+                        className="pointer-events-none absolute -inset-[3px] rounded-[11px] z-30 animate-ping"
+                        style={{
+                          border: `2px solid ${skill.color}`,
+                          boxShadow: `0 0 14px ${skill.color}`,
+                        }}
                       />
+                    )}
 
-                      {/* Socket Landing Flash Ring */}
-                      {isJustLanded && (
-                        <span
-                          className="pointer-events-none absolute -inset-[3px] rounded-[11px] z-30 animate-ping"
-                          style={{
-                            border: `2px solid ${skill.color}`,
-                            boxShadow: `0 0 14px ${skill.color}`,
-                          }}
-                        />
-                      )}
-
-                      {!isLanded ? (
-                        <ExposedSwitchStem
-                          skill={skill}
-                          isDark={isDark}
-                          isIncoming={true}
-                        />
-                      ) : (
-                        <Keycap3DSurface
-                          skill={skill}
-                          isDark={isDark}
-                          isPressed={isPressed}
-                        />
-                      )}
-                    </button>
-                    <span className="text-[9px] font-mono font-medium text-neutral-400 dark:text-zinc-500 leading-none">
-                      [{skill.keyTrigger}]
-                    </span>
+                    {!isLanded ? (
+                      <ExposedSwitchStem
+                        skill={skill}
+                        isDark={isDark}
+                        isIncoming={true}
+                      />
+                    ) : (
+                      <Keycap3DSurface
+                        skill={skill}
+                        isDark={isDark}
+                        isPressed={isPressed}
+                      />
+                    )}
                   </div>
-
-                  {/* Identification & Applied Production Systems */}
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-semibold text-sm sm:text-[15px] text-neutral-900 dark:text-zinc-100 truncate">
-                        {skill.name}
-                      </h3>
-                      <span className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500 shrink-0">
-                        {skill.categoryLabel}
-                      </span>
-                    </div>
-
-                    {/* Applied Projects Row */}
-                    <div className="flex items-center gap-1.5 flex-wrap mt-1">
-                      {skill.usedIn.map((item, pIdx) => {
-                        const isClickable =
-                          Boolean(item.projectId) && Boolean(onSelectProject);
-
-                        return (
-                          <span
-                            key={item.label}
-                            className="inline-flex items-center text-[11px] font-mono text-neutral-400 dark:text-zinc-500"
-                          >
-                            {isClickable ? (
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  item.projectId &&
-                                  onSelectProject?.(item.projectId)
-                                }
-                                className="hover:text-neutral-900 dark:hover:text-zinc-200 hover:underline underline-offset-2 transition-colors"
-                                title={`Jump to ${item.label}`}
-                              >
-                                {item.label}
-                              </button>
-                            ) : (
-                              <span>{item.label}</span>
-                            )}
-                            {pIdx < skill.usedIn.length - 1 && (
-                              <span className="ml-1.5 text-neutral-300 dark:text-zinc-700">·</span>
-                            )}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <span className="text-[9px] font-mono font-medium text-neutral-400 dark:text-zinc-500 leading-none">
+                    [{skill.keyTrigger}]
+                  </span>
                 </div>
 
-                {/* RIGHT: Understated Apple Text Action */}
-                <button
-                  type="button"
-                  onClick={() => triggerDockedSkill(skill, idx, true)}
-                  className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-neutral-400 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200 hover:bg-neutral-100 dark:hover:bg-zinc-800/80 transition-colors shrink-0"
-                >
-                  View Proof
-                </button>
+                {/* Identification */}
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-sm sm:text-[15px] text-neutral-900 dark:text-zinc-100 truncate group-hover/module:text-neutral-950 dark:group-hover/module:text-white transition-colors">
+                    {skill.name}
+                  </h3>
+                  <p className="text-[11px] font-mono text-neutral-400 dark:text-zinc-500 mt-0.5">
+                    {skill.categoryLabel}
+                  </p>
+                </div>
               </div>
             </div>
           );
         })}
       </div>
-
-      {/* Apple-Style Minimalist Hardware Spotlight Sheet */}
-      {spotlightSkill && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${spotlightSkill.name} Technical Details`}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
-          onClick={() => setSpotlightSkill(null)}
-        >
-          <div
-            className="w-full max-w-lg rounded-2xl bg-white dark:bg-[#111218] border border-neutral-200 dark:border-zinc-800 p-5 sm:p-6 shadow-2xl relative animate-scale-up"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="flex items-start justify-between gap-3 pb-4 border-b border-neutral-100 dark:border-zinc-800/80">
-              <div className="flex items-center gap-3">
-                <div className="relative w-10 h-11 shrink-0 flex items-center justify-center">
-                  <Keycap3DSurface
-                    skill={spotlightSkill}
-                    isDark={isDark}
-                    isPressed={false}
-                  />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base font-bold text-neutral-900 dark:text-zinc-100">
-                      {spotlightSkill.name}
-                    </h3>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-400">
-                      [{spotlightSkill.keyTrigger}]
-                    </span>
-                  </div>
-                  <p className="text-xs font-mono text-neutral-500 dark:text-zinc-400 mt-0.5">
-                    {spotlightSkill.categoryLabel}
-                  </p>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setSpotlightSkill(null)}
-                className="px-2.5 py-1 rounded-lg text-xs font-mono text-neutral-400 hover:text-neutral-900 dark:hover:text-zinc-100 hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors"
-              >
-                Close
-              </button>
-            </div>
-
-            {/* Applied Systems Body */}
-            <div className="py-4 space-y-3">
-              <span className="text-[10px] font-mono uppercase tracking-[0.12em] text-neutral-400 dark:text-zinc-500 block">
-                // APPLIED IN {spotlightSkill.usedIn.length} PRODUCTION APPS
-              </span>
-
-              <div className="space-y-2.5">
-                {spotlightSkill.usedIn.map((item) => {
-                  const matched = item.projectId
-                    ? projectsData.find((p) => p.id === item.projectId)
-                    : null;
-
-                  return (
-                    <div
-                      key={item.label}
-                      className="p-3.5 rounded-xl border border-neutral-200/80 dark:border-zinc-800/80 bg-neutral-50/50 dark:bg-zinc-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-                    >
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-xs text-neutral-900 dark:text-zinc-100">
-                            {matched ? matched.title : item.label}
-                          </span>
-                          {matched && (
-                            <span className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500">
-                              · {matched.year}
-                            </span>
-                          )}
-                        </div>
-                        {matched && (
-                          <p className="text-[11px] text-neutral-500 dark:text-zinc-400 line-clamp-1 mt-0.5">
-                            {matched.subtitle || matched.role}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
-                        {matched && onSelectProject && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              onSelectProject(matched.id);
-                              setSpotlightSkill(null);
-                            }}
-                            className="px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950 hover:opacity-90 transition-opacity"
-                          >
-                            Live Demo
-                          </button>
-                        )}
-                        {matched?.githubUrl && (
-                          <a
-                            href={matched.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-2.5 py-1 rounded-md text-[11px] font-mono text-neutral-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-100 border border-neutral-200 dark:border-zinc-800 hover:border-neutral-400 dark:hover:border-zinc-600 transition-colors"
-                          >
-                            Source Code
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="pt-3 border-t border-neutral-100 dark:border-zinc-800/80 flex items-center justify-between text-[11px] font-mono text-neutral-400 dark:text-zinc-500">
-              <span>PRESS [ESC] TO CLOSE</span>
-              <span>VERIFIED PRODUCTION STACK</span>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Fixed Full-Viewport 3D Keycap Flight Portal (Renders Flying Keycaps from Sidebar Keyboard -> Skill Sockets) */}
       {mounted &&
