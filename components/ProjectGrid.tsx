@@ -68,7 +68,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Client",
             tech: "React Native (Expo)",
             techKey: "React Native",
-            note: "React Native (Expo): Cross-platform mobile client with gesture nav and camera integration.",
+            note: "Cross-platform mobile client with gesture navigation and camera barcode scanning.",
             brandClass: "border-cyan-500/50 bg-cyan-950/20 text-cyan-300 dark:text-cyan-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(6,182,212,0.3)]",
             icon: (
@@ -84,7 +84,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Logic",
             tech: "TypeScript",
             techKey: "TypeScript",
-            note: "TypeScript: Strict type contracts across buyer, vendor, and admin transactional flows.",
+            note: "Strict type contracts across buyer, vendor, and admin transactional flows.",
             brandClass: "border-blue-500/50 bg-blue-950/20 text-blue-300 dark:text-blue-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(59,130,246,0.3)]",
             icon: (
@@ -97,7 +97,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "DB & Auth",
             tech: "Supabase (PostgreSQL)",
             techKey: "Supabase",
-            note: "Supabase: ACID PostgreSQL schemas, Row-Level Security (RLS), and realtime price updates.",
+            note: "ACID PostgreSQL schemas, Row-Level Security (RLS), and realtime price updates.",
             brandClass: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300 dark:text-emerald-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(16,185,129,0.3)]",
             icon: (
@@ -116,7 +116,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Frontend",
             tech: "Next.js 14 App Router",
             techKey: "Next.js",
-            note: "Next.js 14: Server Components, Server Actions, and lightning SSR deployed on Vercel.",
+            note: "Server Components, Server Actions, and lightning SSR deployed on Vercel.",
             brandClass: "border-white/50 bg-zinc-800/40 text-zinc-100",
             haloClass: "hover:shadow-[0_0_14px_rgba(255,255,255,0.25)]",
             icon: <span className="font-mono font-black text-[10px] text-white">N</span>,
@@ -125,7 +125,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Logic & UI",
             tech: "TypeScript (Tailwind)",
             techKey: "TypeScript",
-            note: "TypeScript: Philippine statutory tax math (SSS, PhilHealth, Pag-IBIG) & tenant isolation.",
+            note: "Philippine statutory tax computations (SSS, PhilHealth, Pag-IBIG) & tenant isolation.",
             brandClass: "border-blue-500/50 bg-blue-950/20 text-blue-300 dark:text-blue-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(59,130,246,0.3)]",
             icon: (
@@ -138,7 +138,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Database",
             tech: "Supabase (PostgreSQL RLS)",
             techKey: "PostgreSQL",
-            note: "PostgreSQL: Multi-tenant isolated schemas with strict Row-Level Security policies.",
+            note: "Multi-tenant isolated schemas with strict Row-Level Security policies.",
             brandClass: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300 dark:text-emerald-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(16,185,129,0.3)]",
             icon: (
@@ -157,7 +157,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Client",
             tech: "React (Vite)",
             techKey: "React",
-            note: "React + Vite: High-performance SPA with modern component state and clean styling.",
+            note: "High-performance SPA with modern component state and clean styling.",
             brandClass: "border-cyan-500/50 bg-cyan-950/20 text-cyan-300 dark:text-cyan-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(6,182,212,0.3)]",
             icon: (
@@ -173,7 +173,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Server & AI",
             tech: "Express + Gemini AI",
             techKey: "Express",
-            note: "Express + Gemini AI: Rate-limited POST /api/ai returning Zod-validated JSON evaluations.",
+            note: "Rate-limited POST /api/ai endpoint returning Zod-validated JSON evaluations.",
             brandClass: "border-amber-500/50 bg-amber-950/20 text-amber-300 dark:text-amber-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(245,158,11,0.3)]",
             icon: <Cpu className="w-3.5 h-3.5 text-amber-400" />,
@@ -182,7 +182,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Database",
             tech: "MongoDB",
             techKey: "MongoDB",
-            note: "MongoDB: Document collections with indexed Mongoose ODM models.",
+            note: "Document collections with indexed Mongoose ODM models.",
             brandClass: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300 dark:text-emerald-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(16,185,129,0.3)]",
             icon: <Database className="w-3.5 h-3.5 text-emerald-400" />,
@@ -197,7 +197,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "UI Layer",
             tech: "Bootstrap UI",
             techKey: "Bootstrap",
-            note: "Bootstrap: Rapid, accessible dashboard layout designed for auto repair shop technicians.",
+            note: "Rapid, accessible dashboard layout designed for auto repair shop technicians.",
             brandClass: "border-purple-500/50 bg-purple-950/20 text-purple-300 dark:text-purple-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(168,85,247,0.3)]",
             icon: <Code2 className="w-3.5 h-3.5 text-purple-400" />,
@@ -206,7 +206,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Backend",
             tech: "PHP REST Engine",
             techKey: "PHP",
-            note: "PHP REST Engine: Automated stock reorder calculation and direct POS transactional sync.",
+            note: "Automated stock reorder calculation and direct POS transactional sync.",
             brandClass: "border-indigo-500/50 bg-indigo-950/20 text-indigo-300 dark:text-indigo-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(99,102,241,0.3)]",
             icon: <Server className="w-3.5 h-3.5 text-indigo-400" />,
@@ -215,7 +215,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Database",
             tech: "MySQL Relational DB",
             techKey: "MySQL",
-            note: "MySQL: Relational inventory schemas with transactional integrity and reorder alerts.",
+            note: "Relational inventory schemas with transactional integrity and reorder alerts.",
             brandClass: "border-sky-500/50 bg-sky-950/20 text-sky-300 dark:text-sky-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(14,165,233,0.3)]",
             icon: <Database className="w-3.5 h-3.5 text-sky-400" />,
@@ -230,7 +230,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Access Portal",
             tech: "Campus QR Scanner",
             techKey: "QR Access Control",
-            note: "Campus QR Portal: Online pre-registration, QR-coded badges, and host notifications.",
+            note: "Online pre-registration, QR-coded badges, and host notifications.",
             brandClass: "border-orange-500/50 bg-orange-950/20 text-orange-300 dark:text-orange-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(249,115,22,0.3)]",
             icon: <QrCode className="w-3.5 h-3.5 text-orange-400" />,
@@ -239,7 +239,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Security Core",
             tech: "RBAC + MFA + Encryption",
             techKey: "RBAC & MFA",
-            note: "Security: Role-based access control, multi-factor auth, and encrypted audit trails.",
+            note: "Role-based access control, multi-factor auth, and encrypted audit trails.",
             brandClass: "border-rose-500/50 bg-rose-950/20 text-rose-300 dark:text-rose-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(244,63,94,0.3)]",
             icon: <Shield className="w-3.5 h-3.5 text-rose-400" />,
@@ -248,7 +248,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Operations",
             tech: "ITSM Framework (99.9% SLA)",
             techKey: "ITSM",
-            note: "ITSM Framework: Structured incident/problem lifecycles and 99.9% uptime SLA.",
+            note: "Structured incident/problem lifecycles and 99.9% uptime SLA.",
             brandClass: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300 dark:text-emerald-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(16,185,129,0.3)]",
             icon: <Server className="w-3.5 h-3.5 text-emerald-400" />,
@@ -264,7 +264,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Client UI",
             tech: "Interactive Menu + Maps",
             techKey: "JavaScript",
-            note: "Interactive Menu: Digital food kiosk browser with embedded Google Maps store locator.",
+            note: "Digital food kiosk browser with embedded Google Maps store locator.",
             brandClass: "border-teal-500/50 bg-teal-950/20 text-teal-300 dark:text-teal-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(20,184,166,0.3)]",
             icon: <LayoutGrid className="w-3.5 h-3.5 text-teal-400" />,
@@ -273,7 +273,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "API Server",
             tech: "Node.js + Express",
             techKey: "Node.js",
-            note: "Node.js + Express: Lightweight REST routing, order validation, and receipt formatting.",
+            note: "Lightweight REST routing, order validation, and receipt formatting.",
             brandClass: "border-green-500/50 bg-green-950/20 text-green-300 dark:text-green-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(34,197,94,0.3)]",
             icon: <Server className="w-3.5 h-3.5 text-green-400" />,
@@ -282,7 +282,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             layer: "Storage",
             tech: "Local Storage & JSON Store",
             techKey: "Local Storage",
-            note: "Local Storage: Client state cart persistence and file-based feedback logging.",
+            note: "Client state cart persistence and file-based feedback logging.",
             brandClass: "border-amber-500/50 bg-amber-950/20 text-amber-300 dark:text-amber-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(245,158,11,0.3)]",
             icon: <Database className="w-3.5 h-3.5 text-amber-400" />,
@@ -1114,57 +1114,54 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
                   </div>
                 )}
 
-                {/* Visual System Architecture Pipeline (With Permanently Visible Node Notes) */}
-                <div className="pt-3 border-t border-neutral-100 dark:border-zinc-800/80">
-                  <div className="p-3 sm:p-4 rounded-xl bg-neutral-50/80 dark:bg-zinc-900/60 border border-neutral-200/80 dark:border-zinc-800/90 shadow-2xs">
-                    {/* Pipeline Header with Quality Indicator */}
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span className="text-xs font-bold uppercase tracking-wider text-neutral-800 dark:text-zinc-200 font-mono">
-                          Architecture Pipeline
-                        </span>
-                      </div>
-                      <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 font-mono flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-md border border-emerald-200/60 dark:border-emerald-800/50">
-                        {pipeline.qualityTag}
-                      </span>
-                    </div>
+                {/* System Architecture Specification */}
+                <div className="pt-4 mt-1 border-t border-neutral-200/70 dark:border-zinc-800">
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-[0.14em] text-neutral-400 dark:text-zinc-500">
+                      // SYSTEM ARCHITECTURE
+                    </span>
+                    <span className="text-[10.5px] font-mono font-medium text-emerald-600 dark:text-emerald-400">
+                      {pipeline.qualityTag}
+                    </span>
+                  </div>
 
-                    {/* Connected Data Flow Nodes with Exposed Sub-copy */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                      {pipeline.nodes.map((node, idx) => {
-                        const handleMouseEnter = () => {
-                          if (typeof window !== "undefined") {
-                            window.dispatchEvent(
-                              new CustomEvent("shin-tech-hover", {
-                                detail: { tech: node.techKey },
-                              })
-                            );
-                          }
-                        };
+                  {/* Clean Non-Nested Architectural Flow */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 sm:divide-x divide-neutral-200/70 dark:divide-zinc-800/80">
+                    {pipeline.nodes.map((node, idx) => {
+                      const handleMouseEnter = () => {
+                        if (typeof window !== "undefined") {
+                          window.dispatchEvent(
+                            new CustomEvent("shin-tech-hover", {
+                              detail: { tech: node.techKey },
+                            })
+                          );
+                        }
+                      };
 
-                        return (
-                          <div
-                            key={node.layer}
-                            onMouseEnter={handleMouseEnter}
-                            className="group/node flex flex-col justify-between gap-1.5 p-2.5 rounded-lg border border-neutral-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-800/60 text-xs transition-all duration-200 hover:border-emerald-500/45 shadow-2xs"
-                          >
-                            <div className="flex items-center gap-1.5 min-w-0">
-                              <div className="flex-shrink-0">{node.icon}</div>
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-zinc-400 font-mono shrink-0">
-                                0{idx + 1} · {node.layer}:
-                              </span>
-                              <span className="font-semibold text-neutral-900 dark:text-zinc-100 truncate">
-                                {node.tech}
-                              </span>
-                            </div>
-                            <p className="text-[11px] text-neutral-500 dark:text-zinc-400 leading-snug">
-                              {node.note}
-                            </p>
+                      return (
+                        <div
+                          key={node.layer}
+                          onMouseEnter={handleMouseEnter}
+                          className="group/node flex flex-col gap-1 sm:px-3.5 first:pl-0 last:pr-0 cursor-default transition-colors"
+                        >
+                          <div className="flex items-center gap-1.5 text-[10px] font-mono text-neutral-400 dark:text-zinc-500">
+                            <span>0{idx + 1} //</span>
+                            <span className="uppercase tracking-wider font-semibold">
+                              {node.layer}
+                            </span>
                           </div>
-                        );
-                      })}
-                    </div>
+
+                          <div className="flex items-center gap-1.5 text-xs font-semibold text-neutral-900 dark:text-zinc-100">
+                            <div className="flex-shrink-0">{node.icon}</div>
+                            <span>{node.tech}</span>
+                          </div>
+
+                          <p className="text-[11px] text-neutral-500 dark:text-zinc-400 leading-relaxed pt-0.5">
+                            {node.note}
+                          </p>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
