@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { User, Code2, Sparkles, Laptop, Smartphone, GraduationCap, MapPin } from "lucide-react";
+import { User, Code2, Palette, Laptop, Smartphone, GraduationCap, MapPin } from "lucide-react";
 import { profileData } from "@/data/profile";
 
 export const AboutSection: React.FC = () => {
@@ -70,9 +70,12 @@ export const AboutSection: React.FC = () => {
         {/* Focus Areas Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2">
           <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/70 dark:border-zinc-800 flex flex-col gap-1.5">
-            <div className="flex items-center gap-2 text-neutral-900 dark:text-zinc-100 font-semibold text-xs sm:text-sm">
-              <Laptop className="w-4 h-4 text-ig-purple" />
-              <span>Full-Stack &amp; Web</span>
+            <div className="flex items-center justify-between text-neutral-900 dark:text-zinc-100 font-semibold text-xs sm:text-sm">
+              <span className="flex items-center gap-2">
+                <Laptop className="w-4 h-4 text-ig-purple" />
+                <span>Full-Stack &amp; Web</span>
+              </span>
+              <span className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500 font-normal">01</span>
             </div>
             <p className="text-xs text-neutral-600 dark:text-zinc-300 leading-normal">
               Building responsive frontend interfaces with React/Next.js and connecting robust SQL/Supabase backends.
@@ -80,9 +83,12 @@ export const AboutSection: React.FC = () => {
           </div>
 
           <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/70 dark:border-zinc-800 flex flex-col gap-1.5">
-            <div className="flex items-center gap-2 text-neutral-900 dark:text-zinc-100 font-semibold text-xs sm:text-sm">
-              <Smartphone className="w-4 h-4 text-ig-pink" />
-              <span>Mobile App Dev</span>
+            <div className="flex items-center justify-between text-neutral-900 dark:text-zinc-100 font-semibold text-xs sm:text-sm">
+              <span className="flex items-center gap-2">
+                <Smartphone className="w-4 h-4 text-ig-pink" />
+                <span>Mobile App Dev</span>
+              </span>
+              <span className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500 font-normal">02</span>
             </div>
             <p className="text-xs text-neutral-600 dark:text-zinc-300 leading-normal">
               Developing cross-platform mobile apps with React Native and Expo for everyday utility.
@@ -90,9 +96,12 @@ export const AboutSection: React.FC = () => {
           </div>
 
           <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-zinc-900/60 border border-neutral-200/70 dark:border-zinc-800 flex flex-col gap-1.5 sm:col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 text-neutral-900 dark:text-zinc-100 font-semibold text-xs sm:text-sm">
-              <Sparkles className="w-4 h-4 text-ig-orange" />
-              <span>UI/UX &amp; Prototyping</span>
+            <div className="flex items-center justify-between text-neutral-900 dark:text-zinc-100 font-semibold text-xs sm:text-sm">
+              <span className="flex items-center gap-2">
+                <Palette className="w-4 h-4 text-ig-orange" />
+                <span>UI/UX &amp; Prototyping</span>
+              </span>
+              <span className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500 font-normal">03</span>
             </div>
             <p className="text-xs text-neutral-600 dark:text-zinc-300 leading-normal">
               Wireframing intuitive user flows in Figma and turning them into accessible components with Tailwind CSS.

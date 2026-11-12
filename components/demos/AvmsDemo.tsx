@@ -10,7 +10,6 @@ import {
   Activity,
   KeyRound,
   RotateCcw,
-  Sparkles,
 } from "lucide-react";
 
 export const AvmsDemo: React.FC = () => {

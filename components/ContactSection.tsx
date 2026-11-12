@@ -8,7 +8,6 @@ import {
   FileText,
   ArrowUpRight,
   CornerDownLeft,
-  Sparkles,
   Linkedin,
 } from "lucide-react";
 import { profileData } from "@/data/profile";
@@ -360,10 +359,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 type="button"
                 onClick={() => setMessage(activeTopic.starterText)}
                 data-note="Auto-fill a quick starter message for this topic."
-                className="inline-flex items-center gap-1 text-[11px] font-mono text-neutral-500 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-200 transition-colors"
+                className="inline-flex items-center text-[10px] font-mono uppercase tracking-wider text-neutral-400 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200 transition-colors"
               >
-                <Sparkles className="w-3 h-3 text-ig-pink" />
-                <span>Use template</span>
+                <span>[ INSERT STARTER → ]</span>
               </button>
             )}
           </div>

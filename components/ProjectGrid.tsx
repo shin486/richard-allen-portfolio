@@ -20,7 +20,9 @@ import {
   Calendar,
   User,
   Play,
-  Sparkles,
+  Cpu,
+  QrCode,
+  LayoutGrid,
   Smartphone,
   Database,
   Server,
@@ -174,7 +176,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             note: "Express + Gemini AI: Rate-limited POST /api/ai returning Zod-validated JSON evaluations.",
             brandClass: "border-amber-500/50 bg-amber-950/20 text-amber-300 dark:text-amber-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(245,158,11,0.3)]",
-            icon: <Sparkles className="w-3.5 h-3.5 text-amber-400" />,
+            icon: <Cpu className="w-3.5 h-3.5 text-amber-400" />,
           },
           {
             layer: "Database",
@@ -231,7 +233,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             note: "Campus QR Portal: Online pre-registration, QR-coded badges, and host notifications.",
             brandClass: "border-orange-500/50 bg-orange-950/20 text-orange-300 dark:text-orange-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(249,115,22,0.3)]",
-            icon: <Sparkles className="w-3.5 h-3.5 text-orange-400" />,
+            icon: <QrCode className="w-3.5 h-3.5 text-orange-400" />,
           },
           {
             layer: "Security Core",
@@ -265,7 +267,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
             note: "Interactive Menu: Digital food kiosk browser with embedded Google Maps store locator.",
             brandClass: "border-teal-500/50 bg-teal-950/20 text-teal-300 dark:text-teal-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(20,184,166,0.3)]",
-            icon: <Sparkles className="w-3.5 h-3.5 text-teal-400" />,
+            icon: <LayoutGrid className="w-3.5 h-3.5 text-teal-400" />,
           },
           {
             layer: "API Server",

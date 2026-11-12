@@ -148,12 +148,12 @@ The palette balances deep space darkness with radiant warmth, anchored by high-c
 
 ## Typography
 
-**Display Font:** Inter (with `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif` fallback)  
-**Body Font:** Inter (with system sans fallback)  
-**Label/Mono Font:** JetBrains Mono / SFMono-Regular (with `Menlo, Monaco, Consolas, monospace` fallback)  
-**Retro Pixel Accent:** Silkscreen (used exclusively for the 8-bit stickman thought balloon and retro RPG micro-copy)
+**Display Font:** Geist Sans (with Inter, `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif` fallback)  
+**Body Font:** Geist Sans (with Inter, system sans fallback)  
+**Technical Mono (The Signature Register):** Geist Mono / JetBrains Mono (with `SFMono-Regular, Menlo, Monaco, Consolas, monospace` fallback)  
+**Retro Pixel Accent:** Silkscreen (used for the 8-bit stickman thought balloon, journey milestones, and retro interactive copy)
 
-**Character:** Modern, clean, and highly legible Swiss typography in body copy, grounded by crisp technical monospacing for system specifications and architectural layers.
+**Character:** Swiss minimalist restraint inspired by the **Bryl Lim design system** (`bryllim/bryl-minimal-design`). Typography, casing, and tracking establish hierarchy instead of icon fluff or excessive scale jumps. Monospaced uppercase micro-labels drive structural navigation and architectural layering.
 
 ### Hierarchy
 - **Display** (Bold 700, 2.5rem / 40px, line-height 1.15, letter-spacing -0.025em): Portfolio title, hero value proposition, and main dossier section headers.

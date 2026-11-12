@@ -17,7 +17,6 @@ import {
   Keyboard,
   Play,
   RotateCcw,
-  Sparkles,
   Square,
   Volume2,
   VolumeX,
@@ -721,9 +720,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
             role="tablist"
             aria-label="Filter keycaps by architectural domain"
           >
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500 mr-1 flex items-center gap-1 flex-shrink-0">
-              <Sparkles className="w-3 h-3 text-ig-purple" />
-              <span>Layer:</span>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-[0.14em] text-neutral-400 dark:text-zinc-500 mr-1.5 flex items-center flex-shrink-0">
+              <span>01 // LAYER</span>
             </span>
 
             {domainTabs.map((tab) => {

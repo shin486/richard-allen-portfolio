@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   Maximize2,
   Compass,
-  Sparkles,
   Volume2,
   VolumeX,
   ExternalLink,
@@ -443,7 +442,7 @@ export const WarmStudioHero3D: React.FC = () => {
           {/* Hero Main Headline */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-zinc-100 leading-[1.05]">
             Engineering tactile, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 via-zinc-300 to-amber-200/80">
+            <span className="text-zinc-200">
               purpose-built software.
             </span>
           </h1>

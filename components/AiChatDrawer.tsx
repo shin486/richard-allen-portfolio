@@ -5,7 +5,6 @@ import {
   Send,
   X,
   RotateCcw,
-  Sparkles,
   Code2,
   Briefcase,
   GraduationCap,
@@ -584,11 +583,14 @@ export const AiChatDrawer: React.FC = () => {
                   <span className="font-bold text-sm text-neutral-900 dark:text-zinc-100">
                     Byte
                   </span>
+                  <span className="text-[9.5px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-zinc-400">
+                    AI // OJT
+                  </span>
                 </div>
-                <p className="text-[11px] text-neutral-500 dark:text-zinc-400">
+                <p className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500">
                   {isLoading
-                    ? "Fetching information..."
-                    : "AI Portfolio Assistant • Ready to answer questions"}
+                    ? "FETCHING TELEMETRY..."
+                    : "PORTFOLIO COMPANION // READY"}
                 </p>
               </div>
             </div>

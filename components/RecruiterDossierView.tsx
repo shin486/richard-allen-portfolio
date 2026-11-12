@@ -15,7 +15,6 @@ import {
   ChevronRight,
   Cpu,
   Layers,
-  Sparkles,
   Check,
 } from "lucide-react";
 import { profileData } from "@/data/profile";

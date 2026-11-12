@@ -13,6 +13,8 @@ const config: Config = {
         xs: "380px",
       },
       fontFamily: {
+        sans: ["var(--font-geist-sans)", "var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "'JetBrains Mono'", "SFMono-Regular", "Menlo", "monospace"],
         pixel: ["'Silkscreen'", "monospace"],
       },
       colors: {

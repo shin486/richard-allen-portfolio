@@ -230,40 +230,52 @@ export default function AutoAvenueDemo() {
       <main className="flex-1 overflow-y-auto p-3 space-y-3">
         {/* 4 Dashboard Grid Cards from dashboard.php */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <div className="bg-white rounded-lg p-2.5 shadow-2xs border-t-4 border-[#4CAF50]">
-            <h3 className="text-[10px] font-bold uppercase text-[#666666]">
-              Total Products
-            </h3>
+          <div className="bg-white rounded-lg p-2.5 shadow-2xs border border-neutral-200">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[10px] font-bold uppercase text-[#666666]">
+                Total Products
+              </h3>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4CAF50]" />
+            </div>
             <div className="text-[16px] font-extrabold text-[#333333] mt-0.5">
               {products.length}
             </div>
             <div className="text-[9.5px] text-[#666666]">All products in inventory</div>
           </div>
 
-          <div className="bg-white rounded-lg p-2.5 shadow-2xs border-t-4 border-[#2196F3]">
-            <h3 className="text-[10px] font-bold uppercase text-[#666666]">
-              Total Sales
-            </h3>
+          <div className="bg-white rounded-lg p-2.5 shadow-2xs border border-neutral-200">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[10px] font-bold uppercase text-[#666666]">
+                Total Sales
+              </h3>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2196F3]" />
+            </div>
             <div className="text-[16px] font-extrabold text-[#333333] mt-0.5">
               {sales.length}
             </div>
             <div className="text-[9.5px] text-[#666666]">All-time sales transactions</div>
           </div>
 
-          <div className="bg-white rounded-lg p-2.5 shadow-2xs border-t-4 border-[#9C27B0]">
-            <h3 className="text-[10px] font-bold uppercase text-[#666666]">
-              Inventory Value
-            </h3>
+          <div className="bg-white rounded-lg p-2.5 shadow-2xs border border-neutral-200">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[10px] font-bold uppercase text-[#666666]">
+                Inventory Value
+              </h3>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#9C27B0]" />
+            </div>
             <div className="text-[15px] font-extrabold text-[#333333] mt-0.5">
               ₱{inventoryValue.toLocaleString("en-PH")}
             </div>
             <div className="text-[9.5px] text-[#666666]">Total stock valuation</div>
           </div>
 
-          <div className="bg-white rounded-lg p-2.5 shadow-2xs border-t-4 border-[#ff9800]">
-            <h3 className="text-[10px] font-bold uppercase text-[#666666]">
-              Low Stock Items
-            </h3>
+          <div className="bg-white rounded-lg p-2.5 shadow-2xs border border-neutral-200">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[10px] font-bold uppercase text-[#666666]">
+                Low Stock Items
+              </h3>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff9800]" />
+            </div>
             <div className="text-[16px] font-extrabold text-[#f44336] mt-0.5">
               {lowStockProducts.length}
             </div>

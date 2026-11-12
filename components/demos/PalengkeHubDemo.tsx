@@ -18,7 +18,7 @@ import {
   Star,
   Tag,
   Navigation,
-  Sparkles,
+  LayoutGrid,
   Wifi,
   WifiOff,
   Flame,
@@ -1429,7 +1429,7 @@ export default function PalengkeHubDemo() {
       <div className="bg-[#FDF9F3] border-t border-[#E2D6C1] px-2 py-1.5 grid grid-cols-5 gap-1 shrink-0">
         {[
           { id: "home", label: "Home", icon: Store },
-          { id: "stalls", label: "Stalls", icon: Sparkles },
+          { id: "stalls", label: "Stalls", icon: LayoutGrid },
           { id: "map", label: "Market Map", icon: MapPin },
           { id: "cart", label: `Basket (${totalItems})`, icon: ShoppingBag },
           { id: "pass", label: "Pickup Pass", icon: QrCode },

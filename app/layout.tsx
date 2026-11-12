@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 const inter = Inter({
@@ -79,7 +81,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} font-sans bg-white dark:bg-[#0A0A0B] text-[#111111] dark:text-[#F4F4F6] min-h-screen flex flex-col antialiased selection:bg-emerald-500/20 selection:text-emerald-400 transition-colors duration-200`}
+        className={`${GeistSans.variable} ${GeistMono.variable} ${inter.variable} font-sans bg-white dark:bg-[#0A0A0B] text-[#111111] dark:text-[#F4F4F6] min-h-screen flex flex-col antialiased selection:bg-emerald-500/20 selection:text-emerald-400 transition-colors duration-200`}
       >
         {children}
       </body>
