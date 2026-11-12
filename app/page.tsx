@@ -18,6 +18,7 @@ import { Reveal } from "@/components/Reveal";
 import { TechKeyboard3D } from "@/components/TechKeyboard3D";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { RecruiterDossierView } from "@/components/RecruiterDossierView";
+import { KeyboardShortcutsHUD } from "@/components/KeyboardShortcutsHUD";
 import { Project, projectsData } from "@/data/projects";
 import { skillsData } from "@/data/skills";
 import { certificatesData } from "@/data/certificates";
@@ -113,6 +114,10 @@ export default function HomePage() {
       <main className="flex-1 w-full relative">
         <RecruiterDossierView
           onSwitchToStudio={() => handleViewChange("studio")}
+        />
+        <KeyboardShortcutsHUD
+          onToggleRecruiter={() => handleViewChange("studio")}
+          isRecruiterView={true}
         />
       </main>
     );
@@ -224,6 +229,12 @@ export default function HomePage() {
 
       {/* Instagram DM AI Portfolio Assistant */}
       <AiChatDrawer />
+
+      {/* Bryl Lim Signature: Developer Keyboard Shortcuts HUD */}
+      <KeyboardShortcutsHUD
+        onToggleRecruiter={() => handleViewChange("recruiter")}
+        isRecruiterView={false}
+      />
 
       {/* Footer */}
       <Footer />

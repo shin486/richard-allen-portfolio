@@ -544,6 +544,21 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
         />
       </div>
 
+      {/* Bryl Lim Minimalist Numbered Section Header */}
+      <div className="flex items-baseline justify-between border-b border-neutral-200/80 dark:border-zinc-800/80 pb-3 mb-4">
+        <div className="flex items-baseline gap-2">
+          <span className="font-mono text-xs text-neutral-400 dark:text-zinc-500">
+            03 —
+          </span>
+          <h2 className="text-xs sm:text-sm font-mono uppercase tracking-[0.14em] font-semibold text-neutral-900 dark:text-zinc-100">
+            3D Switch Matrix &amp; Hardware Stack
+          </h2>
+        </div>
+        <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400 dark:text-zinc-500">
+          28 HARDWARE KEYS
+        </span>
+      </div>
+
       {/* Hardware Console & Switch Matrix Header (Apple Minimalist Professional) */}
       <div className="rounded-2xl border border-neutral-200/90 dark:border-zinc-800/90 bg-white dark:bg-[#0d0e13] p-4 sm:p-5 mb-4 shadow-2xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-neutral-100 dark:border-zinc-800/80">

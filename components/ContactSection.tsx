@@ -172,20 +172,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           : "py-8 sm:py-12 border-t border-neutral-200 dark:border-white/[0.08]"
       }
     >
-      {/* Clean Editorial Section Header */}
+      {/* Bryl Lim Minimalist Numbered Section Header */}
       {!hideHeader && (
-        <div className="flex flex-wrap items-baseline justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <h2 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-[#F4F4F6] tracking-tight">
-              Direct Inbox
-            </h2>
-            <span className="text-neutral-300 dark:text-zinc-700">·</span>
-            <span className="text-xs font-mono text-neutral-500 dark:text-[#9CA3AF]">
-              Richard Allen Liman
+        <div className="flex items-baseline justify-between border-b border-neutral-200/80 dark:border-zinc-800/80 pb-3 mb-4">
+          <div className="flex items-baseline gap-2">
+            <span className="font-mono text-xs text-neutral-400 dark:text-zinc-500">
+              05 —
             </span>
+            <h2 className="text-xs sm:text-sm font-mono uppercase tracking-[0.14em] font-semibold text-neutral-900 dark:text-[#F4F4F6]">
+              Direct Inbox &amp; Dispatch
+            </h2>
           </div>
-          <span className="text-[11px] font-mono text-neutral-400 dark:text-[#6B7280]">
-            Lipa City, PH (GMT+8)
+          <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400 dark:text-zinc-500">
+            LIPA CITY, PH (GMT+8)
           </span>
         </div>
       )}

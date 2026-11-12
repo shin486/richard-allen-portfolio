@@ -225,11 +225,19 @@ export const CertificateGrid: React.FC = () => {
 
   return (
     <section id="certificates-section" className="py-6 sm:py-8">
-      {/* Section Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <h2 className="text-lg sm:text-xl font-bold text-neutral-900 dark:text-zinc-100 tracking-tight">
-          Certifications
-        </h2>
+      {/* Bryl Lim Minimalist Numbered Section Header */}
+      <div className="flex items-baseline justify-between border-b border-neutral-200/80 dark:border-zinc-800/80 pb-3 mb-4">
+        <div className="flex items-baseline gap-2">
+          <span className="font-mono text-xs text-neutral-400 dark:text-zinc-500">
+            04 —
+          </span>
+          <h2 className="text-xs sm:text-sm font-mono uppercase tracking-[0.14em] font-semibold text-neutral-900 dark:text-zinc-100">
+            Verified Certifications &amp; Accreditations
+          </h2>
+        </div>
+        <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400 dark:text-zinc-500">
+          CISCO CCNA &amp; AI
+        </span>
       </div>
 
       <div className="w-full">
