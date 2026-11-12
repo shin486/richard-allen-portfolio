@@ -728,10 +728,10 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                   : "bg-white dark:bg-[#0e0f15] border-neutral-200/80 dark:border-zinc-800/80 hover:border-neutral-300 dark:hover:border-zinc-700"
               }`}
             >
-              <div className="p-3 sm:px-3.5 flex items-center justify-between gap-3">
+              <div className="p-3.5 sm:px-4 sm:py-3.5 flex items-center justify-between gap-4">
                 {/* LEFT: Recessed Mechanical Switch Socket + Docked 3D Keycap */}
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex flex-col items-center gap-0.5 shrink-0">
+                <div className="flex items-center gap-4 min-w-0 flex-1">
+                  <div className="w-11 shrink-0 flex flex-col items-center gap-1">
                     <button
                       type="button"
                       data-skill-socket={skill.id}
@@ -774,15 +774,15 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                         />
                       )}
                     </button>
-                    <span className="text-[8.5px] font-mono text-neutral-400 dark:text-zinc-500 leading-none">
+                    <span className="text-[9px] font-mono font-medium text-neutral-400 dark:text-zinc-500 leading-none">
                       [{skill.keyTrigger}]
                     </span>
                   </div>
 
                   {/* Identification & Applied Production Systems */}
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-sm text-neutral-900 dark:text-zinc-100 truncate">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-semibold text-sm sm:text-[15px] text-neutral-900 dark:text-zinc-100 truncate">
                         {skill.name}
                       </h3>
                       <span className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500 shrink-0">
@@ -791,7 +791,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                     </div>
 
                     {/* Applied Projects Row */}
-                    <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
+                    <div className="flex items-center gap-1.5 flex-wrap mt-1">
                       {skill.usedIn.map((item, pIdx) => {
                         const isClickable =
                           Boolean(item.projectId) && Boolean(onSelectProject);
@@ -799,7 +799,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                         return (
                           <span
                             key={item.label}
-                            className="inline-flex items-center text-[10.5px] font-mono text-neutral-400 dark:text-zinc-500"
+                            className="inline-flex items-center text-[11px] font-mono text-neutral-400 dark:text-zinc-500"
                           >
                             {isClickable ? (
                               <button
@@ -830,10 +830,10 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => triggerDockedSkill(skill, idx, true)}
-                  className={`px-2.5 py-1 rounded-md text-[11px] font-mono font-medium transition-colors shrink-0 ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors shrink-0 ${
                     isSpecOpen
                       ? "text-neutral-900 dark:text-zinc-100 font-semibold underline underline-offset-4"
-                      : "text-neutral-400 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200"
+                      : "text-neutral-400 dark:text-zinc-500 hover:text-neutral-900 dark:hover:text-zinc-200 hover:bg-neutral-100 dark:hover:bg-zinc-800/80"
                   }`}
                 >
                   {isSpecOpen ? "Close Spec" : "Inspect Spec"}
