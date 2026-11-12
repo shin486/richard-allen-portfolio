@@ -1505,33 +1505,6 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         </div>
       </div>
 
-      {/* Deployed Status Banner when TECH STACK tab is active */}
-      {isDeployedToStage && variant === "sidebar" && (
-        <div
-          className={`mb-2 rounded-xl border px-3 py-2 flex items-center justify-between gap-2 text-[10px] font-mono ${
-            isDark
-              ? "bg-ig-pink/10 border-ig-pink/30 text-zinc-200"
-              : "bg-ig-pink/10 border-ig-pink/30 text-neutral-800"
-          }`}
-        >
-          <div className="flex items-center gap-1.5 min-w-0">
-            <span className="w-2 h-2 rounded-full bg-ig-pink animate-ping flex-shrink-0" />
-            <span className="truncate font-semibold">
-              ← {deployedIds.size} Keycaps Docked in Tech Stack
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={() =>
-              window.dispatchEvent(new CustomEvent("shin-replay-keycap-flight"))
-            }
-            className="px-2 py-0.5 rounded-md bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 font-bold hover:opacity-90 transition-opacity flex-shrink-0"
-          >
-            Replay Flight
-          </button>
-        </div>
-      )}
-
       {/* Skill Inspector HUD — Apple Minimalist Restraint */}
       <div
         className={`mt-2 rounded-xl border p-3 transition-colors duration-200 ${
