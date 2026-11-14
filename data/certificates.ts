@@ -33,7 +33,7 @@ export const certificatesData: Certificate[] = [
       "Issued by Google for Education (Valid through November 14, 2029). Applied generative AI workflows, prompt engineering, and Google AI tools.",
     postDate: "NOVEMBER 14, 2026",
     year: "2026",
-    image: "/certificates/gemini-certified-student-university.svg",
+    image: "/certificates/gemini-certified-student-university.png",
   },
   {
     id: "tesda-aws-cloud-practitioner",
@@ -49,7 +49,7 @@ export const certificatesData: Certificate[] = [
       "Course Completion via TESDA Online Program (ID: CyiKhpQwvZ). AWS cloud architecture, EC2, S3, Lambda, IAM security, VPC networking, and cloud governance.",
     postDate: "NOVEMBER 14, 2026",
     year: "2026",
-    image: "/certificates/tesda-aws-cloud-practitioner.svg",
+    image: "/certificates/tesda-aws-cloud-practitioner.png",
   },
   {
     id: "tesda-aws-ai-practitioner",
@@ -65,7 +65,7 @@ export const certificatesData: Certificate[] = [
       "Course Completion via TESDA Online Program (ID: euZ5LSGDal). Foundation models, RAG, prompt engineering, Amazon Bedrock, SageMaker, and responsible AI.",
     postDate: "NOVEMBER 14, 2026",
     year: "2026",
-    image: "/certificates/tesda-aws-ai-practitioner.svg",
+    image: "/certificates/tesda-aws-ai-practitioner.png",
   },
   {
     id: "tesda-azure-ai-fundamentals",
@@ -82,7 +82,7 @@ export const certificatesData: Certificate[] = [
       "Course Completion via TESDA Online Program (ID: ZhUJwes83g). Azure AI workloads, computer vision, natural language processing, and conversational AI.",
     postDate: "NOVEMBER 14, 2026",
     year: "2026",
-    image: "/certificates/tesda-azure-ai-fundamentals.svg",
+    image: "/certificates/tesda-azure-ai-fundamentals.png",
   },
   {
     id: "tesda-fundamentals-of-ai",
@@ -98,7 +98,7 @@ export const certificatesData: Certificate[] = [
       "Course Completion via TESDA Online Program (ID: VEhlLGlH6y). Machine learning lifecycles, supervised/unsupervised learning, neural networks, and model evaluation.",
     postDate: "NOVEMBER 14, 2026",
     year: "2026",
-    image: "/certificates/tesda-fundamentals-of-ai.svg",
+    image: "/certificates/tesda-fundamentals-of-ai.png",
   },
   {
     id: "python-essentials-1",
