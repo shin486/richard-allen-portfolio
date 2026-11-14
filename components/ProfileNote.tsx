@@ -130,7 +130,7 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
         {/* Authentic 8-bit Retro RPG Thought Tail Blocks leading down to avatar */}
         <div
           aria-hidden="true"
-          className={`absolute -bottom-3 flex flex-col items-center gap-0.5 pointer-events-none ${
+          className={`absolute -bottom-3.5 flex flex-col items-center gap-1 pointer-events-none ${
             isLeft
               ? "left-8 sm:left-14 md:left-16"
               : "left-1/2 -translate-x-1/2"

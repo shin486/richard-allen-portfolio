@@ -31,16 +31,16 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   return (
     <section
       id="profile-header"
-      className="pt-14 sm:pt-16 md:pt-20 pb-4 sm:pb-6"
+      className="pt-16 sm:pt-20 md:pt-24 pb-4 sm:pb-6"
     >
       {/* Unified Responsive Instagram Profile Header */}
-      <div className="grid grid-cols-[auto_1fr] items-center gap-x-5 sm:gap-x-8 md:gap-x-12">
+      <div className="grid grid-cols-[auto_1fr] items-start gap-x-5 sm:gap-x-8 md:gap-x-12">
         {/* Column 1: Circular Avatar with Functional Instagram Story Ring + Thought Bubble Note */}
-        <div className="col-start-1 row-start-1 sm:row-span-2 self-center relative flex flex-col items-start flex-shrink-0">
+        <div className="col-start-1 row-start-1 sm:row-span-2 self-start relative flex flex-col items-start flex-shrink-0">
           {/* Retro Pixel Speech Bubble anchored cleanly above upper head */}
           <div
             id="profile-avatar-note-anchor"
-            className="absolute bottom-[calc(100%+10px)] sm:bottom-[calc(100%+14px)] left-0 sm:left-1 z-30 pointer-events-auto"
+            className="absolute bottom-[calc(100%+14px)] sm:bottom-[calc(100%+18px)] left-0 sm:left-1 z-30 pointer-events-auto"
           >
             <ProfileNote tailAlign="left" />
           </div>
@@ -80,7 +80,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
 
         {/* Column 2: Username & Interactive 3-Column Stats (Leveled beside Avatar on mobile & desktop) */}
-        <div className="col-start-2 row-start-1 self-center sm:self-end flex flex-col justify-center gap-2 sm:gap-3 min-w-0">
+        <div className="col-start-2 row-start-1 self-center sm:self-end flex flex-col justify-center gap-2 sm:gap-2.5 pt-1 sm:pt-2.5 min-w-0">
           {/* Username & Verified Rosette */}
           <div className="flex items-center gap-1.5">
             <span className="font-bold sm:font-semibold text-base sm:text-xl md:text-2xl text-neutral-900 dark:text-zinc-100 tracking-tight leading-none">
@@ -106,7 +106,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
 
         {/* Bio & Identity Block (Stacked underneath Avatar/Stats in mobile view, leveled in Column 2 on desktop) */}
-        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-2 sm:row-start-2 self-start flex flex-col gap-0.5 sm:gap-1 pt-3 sm:pt-3">
+        <div className="col-span-2 sm:col-span-1 sm:col-start-2 row-start-2 sm:row-start-2 self-start flex flex-col gap-0.5 sm:gap-1 pt-3 sm:pt-2.5">
           <h1 className="font-bold text-xs sm:text-base text-neutral-900 dark:text-zinc-100 leading-snug">
             {profileData.name}
           </h1>
