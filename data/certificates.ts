@@ -21,21 +21,6 @@ export interface Certificate {
  */
 export const certificatesData: Certificate[] = [
   {
-    id: "gemini-certified-student-university",
-    title: "Gemini Certified Student (University)",
-    shortTitle: "Gemini Certified",
-    issuer: "Google for Education",
-    credentialType: "Certification",
-    validThrough: "November 14, 2029",
-    focus:
-      "Applied generative AI workflows, prompt engineering, and Google AI tools.",
-    caption:
-      "Issued by Google for Education (Valid through November 14, 2029). Applied generative AI workflows, prompt engineering, and Google AI tools.",
-    postDate: "NOVEMBER 14, 2026",
-    year: "2026",
-    image: "/certificates/gemini-certified-student-university.png",
-  },
-  {
     id: "tesda-aws-cloud-practitioner",
     title: "AWS Certified Cloud Practitioner (CLF-C02) — Course Completion",
     shortTitle: "AWS Cloud (TESDA)",
@@ -50,6 +35,21 @@ export const certificatesData: Certificate[] = [
     postDate: "NOVEMBER 14, 2026",
     year: "2026",
     image: "/certificates/tesda-aws-cloud-practitioner.png",
+  },
+  {
+    id: "gemini-certified-student-university",
+    title: "Gemini Certified Student (University)",
+    shortTitle: "Gemini Certified",
+    issuer: "Google for Education",
+    credentialType: "Certification",
+    validThrough: "November 14, 2029",
+    focus:
+      "Applied generative AI workflows, prompt engineering, and Google AI tools.",
+    caption:
+      "Issued by Google for Education (Valid through November 14, 2029). Applied generative AI workflows, prompt engineering, and Google AI tools.",
+    postDate: "NOVEMBER 14, 2026",
+    year: "2026",
+    image: "/certificates/gemini-certified-student-university.png",
   },
   {
     id: "tesda-aws-ai-practitioner",
