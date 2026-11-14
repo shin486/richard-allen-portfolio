@@ -189,10 +189,66 @@ export async function disburseBatchPayroll(batchId: string) {
   });
 }`,
   },
+  "aws-cloud": {
+    filePath: "infra/aws/cloud-architecture.ts",
+    architectureTier: "Cloud & Infra · EC2, S3, Lambda, IAM & VPC (CLF-C02)",
+    language: "typescript",
+    snippet: `// AWS Cloud Architecture & Least-Privilege IAM Policy Spec
+export const awsInfrastructureSpec = {
+  credential: "AWS Certified Cloud Practitioner (CLF-C02)",
+  computeAndStorage: ["EC2 Auto-Scaling", "S3 Object Storage", "AWS Lambda"],
+  securityAndNetwork: ["IAM Least-Privilege Roles", "Multi-AZ VPC Subnets"],
+  hostedSystems: ["PalengkeHub (Supabase/AWS)", "ShinPay+ (Supabase/AWS)"],
+};`,
+  },
+  "amazon-bedrock": {
+    filePath: "lib/ai/bedrock-rag-pipeline.ts",
+    architectureTier: "GenAI & RAG · Foundation Models & Guardrails (AIF-C01)",
+    language: "typescript",
+    snippet: `// Amazon Bedrock Retrieval-Augmented Generation (RAG) & Guardrails
+export const bedrockRagConfig = {
+  credential: "AWS Certified AI Practitioner (AIF-C01)",
+  capabilities: ["Foundation Models", "Vector RAG Pipelines", "Prompt Engineering"],
+  governance: ["Bedrock Guardrails", "SageMaker Model Evaluation", "Responsible AI"],
+};`,
+  },
+  "azure-ai": {
+    filePath: "lib/ai/azure-cognitive-services.ts",
+    architectureTier: "Cloud AI · Vision, NLP & Conversational Workloads",
+    language: "typescript",
+    snippet: `// Microsoft Azure AI Fundamentals Workload Configuration
+export const azureAiWorkloads = {
+  credential: "Microsoft Azure AI Fundamentals",
+  services: ["Computer Vision", "Natural Language Processing", "Conversational AI"],
+  deployment: "Cognitive Services REST & SDK Pipelines",
+};`,
+  },
+  "google-gemini": {
+    filePath: "app/api/chat/route.ts",
+    architectureTier: "Applied AI · Multimodal LLM & Prompt Engineering",
+    language: "typescript",
+    snippet: `// Google Gemini 2.5 Flash Grounded Assistant Pipeline
+export const geminiWorkflowConfig = {
+  credential: "Gemini Certified Student (University) — Google for Education",
+  validThrough: "2029-11-14",
+  focus: ["Applied Generative AI Workflows", "System Prompt Engineering", "Google AI"],
+};`,
+  },
+  "machine-learning": {
+    filePath: "lib/ml/model-evaluation.py",
+    architectureTier: "AI & Models · Supervised/Unsupervised Learning & Neural Nets",
+    language: "python",
+    snippet: `# Machine Learning Lifecycle & Classification/Regression Evaluation
+ML_COMPETENCIES = {
+    "credential": "Fundamentals of Artificial Intelligence",
+    "paradigms": ["Supervised Learning", "Unsupervised Clustering", "Neural Networks"],
+    "evaluation": ["Precision / Recall / F1", "Cross-Validation", "Overfitting Control"],
+}`,
+  },
 };
 
 /**
- * Custom crisp SVG icons for all 28 technologies + 1 mechanical 2U Wave keycap
+ * Custom crisp SVG icons for all 32 technologies + 1 mechanical 4U Wave keycap
  * Automatically matches system / site Dark Mode and Light Mode
  */
 export const KEYCAP_SKILLS: KeycapSkill[] = [
@@ -674,7 +730,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     ),
   },
 
-  // ================= ROW 5: ENVIRONMENT & 2U MECHANICAL WAVE KEY =================
+  // ================= ROW 5 & ROW 6: ENVIRONMENT, CLOUD/AI & 4U WAVE KEY =================
   {
     id: "linux",
     name: "Linux",
@@ -731,40 +787,133 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     ),
   },
   {
-    id: "powerbi-uipath",
-    name: "PowerBI & UiPath",
-    shortLabel: "BI/RPA",
+    id: "aws-cloud",
+    name: "AWS Cloud",
+    shortLabel: "AWS",
     keyTrigger: "1",
     category: "tools",
-    categoryLabel: "Analytics & RPA",
-    color: "#EAB308",
-    wallColor: "#A16207",
-    textColor: "#111827",
-    description: "Business data visualization dashboards & Robotic Process Automation.",
-    usedIn: [{ label: "Academic Coursework" }],
+    categoryLabel: "Cloud & Infra",
+    color: "#FF9900",
+    wallColor: "#B45309",
+    highlight: true,
+    description:
+      "Backed by AWS Certified Cloud Practitioner (CLF-C02) completion (EC2, S3, Lambda, IAM, VPC, cloud architecture & pricing) plus underlying AWS cloud hosting for PalengkeHub and ShinPay+.",
+    usedIn: [
+      { label: "AWS CLF-C02" },
+      { label: "PalengkeHub", projectId: "palengkehub" },
+      { label: "ShinPay+", projectId: "shinpay-plus" },
+    ],
     renderIcon: () => (
-      <span className="font-mono font-black text-[9px] sm:text-[10px] text-neutral-950 leading-none">
-        BI
+      <span className="font-mono font-black text-[9px] sm:text-[10px] tracking-tighter text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)] leading-none">
+        AWS
       </span>
     ),
   },
-  // 2U Wide Mechanical Wave Keycap (completes the 6-column matrix)
+  {
+    id: "amazon-bedrock",
+    name: "Amazon Bedrock",
+    shortLabel: "BRK",
+    keyTrigger: "2",
+    category: "tools",
+    categoryLabel: "GenAI & RAG",
+    color: "#0D9488",
+    wallColor: "#115E59",
+    highlight: true,
+    description:
+      "Backed by AWS Certified AI Practitioner (AIF-C01) completion (Foundation Models, RAG pipelines, Prompt Engineering, SageMaker, Guardrails & Responsible AI).",
+    usedIn: [
+      { label: "AWS AIF-C01" },
+      { label: "RAG & Guardrails" },
+    ],
+    renderIcon: () => (
+      <span className="font-mono font-black text-[9px] sm:text-[10px] tracking-tighter text-white leading-none">
+        BRK
+      </span>
+    ),
+  },
+  {
+    id: "azure-ai",
+    name: "Azure AI",
+    shortLabel: "AZ",
+    keyTrigger: "3",
+    category: "tools",
+    categoryLabel: "Cloud AI",
+    color: "#0078D4",
+    wallColor: "#1E40AF",
+    highlight: true,
+    description:
+      "Backed by Microsoft Azure AI Fundamentals completion (Computer Vision, Natural Language Processing, Conversational AI & Cognitive Services).",
+    usedIn: [
+      { label: "Azure AI Fundamentals" },
+      { label: "NLP & Vision" },
+    ],
+    renderIcon: () => (
+      <span className="font-mono font-black text-[10px] sm:text-[11px] tracking-tighter text-white leading-none">
+        AZ
+      </span>
+    ),
+  },
+  {
+    id: "google-gemini",
+    name: "Google Gemini",
+    shortLabel: "GEM",
+    keyTrigger: "4",
+    category: "tools",
+    categoryLabel: "Applied AI",
+    color: "#4285F4",
+    wallColor: "#1D4ED8",
+    highlight: true,
+    description:
+      "Backed by Gemini Certified Student (University) from Google for Education (Applied generative AI workflows, prompt engineering & AI-assisted development).",
+    usedIn: [
+      { label: "Gemini Certified" },
+      { label: "IT Elective 4", projectId: "itelect4-project" },
+    ],
+    renderIcon: () => (
+      <span className="font-mono font-black text-[9px] sm:text-[10px] tracking-tighter text-white leading-none">
+        GEM
+      </span>
+    ),
+  },
+  {
+    id: "machine-learning",
+    name: "Machine Learning",
+    shortLabel: "ML",
+    keyTrigger: "6",
+    category: "tools",
+    categoryLabel: "AI & Models",
+    color: "#7C3AED",
+    wallColor: "#5B21B6",
+    highlight: true,
+    description:
+      "Backed by Fundamentals of Artificial Intelligence completion (Supervised & unsupervised learning, neural networks, classification/regression & model evaluation).",
+    usedIn: [
+      { label: "AI Fundamentals" },
+      { label: "Neural Networks & ML" },
+    ],
+    renderIcon: () => (
+      <span className="font-mono font-black text-[10px] sm:text-[11px] tracking-tighter text-white leading-none">
+        ML
+      </span>
+    ),
+  },
+  // 4U Wide Mechanical Wave Keycap (completes the 6x6 matrix with zero empty gaps)
   {
     id: "macro-play",
     name: "Auto-Demo Wave",
-    shortLabel: "WAVE 28",
+    shortLabel: "WAVE 32",
     keyTrigger: "ENTER",
     category: "macro",
     categoryLabel: "Mechanical Macro",
     color: "#18181B",
     wallColor: "#09090B",
-    description: "Plays an automated mechanical typing wave across all 28 skills on the board.",
+    description: "Plays an automated mechanical typing wave across all 32 skills on the board.",
     usedIn: [{ label: "3D Keyboard Lab" }],
     renderIcon: () => (
       <div className="flex items-center justify-center gap-1">
         <Play className="w-2.5 h-2.5 text-white fill-white" />
         <span className="text-[7.5px] font-mono font-bold text-white tracking-wider">
-          WAVE 28
+          WAVE 32
         </span>
       </div>
     ),
@@ -1211,6 +1360,12 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
       }
       if (e.metaKey || e.ctrlKey || e.altKey) return;
 
+      const isActiveViewportInstance =
+        variant === "sidebar"
+          ? window.innerWidth >= 1280
+          : window.innerWidth < 1280;
+      if (!isActiveViewportInstance) return;
+
       const keyUpper = e.key.toUpperCase();
       const matchedIndex = KEYCAP_SKILLS.findIndex(
         (s) => s.keyTrigger === keyUpper
@@ -1240,13 +1395,32 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
       }
     };
 
+    const handleSkillSelect = (e: Event) => {
+      const customEvent = e as CustomEvent<{ id: string }>;
+      const skillId = customEvent.detail?.id;
+      if (!skillId) return;
+
+      const matchedSkill = KEYCAP_SKILLS.find(
+        (s) => s.id === skillId && s.category !== "macro"
+      );
+      if (matchedSkill) {
+        setSelectedSkill(matchedSkill);
+        setPressedIds((prev) => ({ ...prev, [matchedSkill.id]: true }));
+        setTimeout(() => {
+          setPressedIds((prev) => ({ ...prev, [matchedSkill.id]: false }));
+        }, 160);
+      }
+    };
+
     window.addEventListener("shin-tech-hover", handleTechHover);
+    window.addEventListener("shin-select-skill", handleSkillSelect);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("shin-tech-hover", handleTechHover);
+      window.removeEventListener("shin-select-skill", handleSkillSelect);
     };
-  }, [triggerKeycap]);
+  }, [triggerKeycap, variant]);
 
   // Check if a keycap belongs to the currently active project in the feed
   const isSkillInActiveProject = useCallback(
@@ -1318,14 +1492,14 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
             <h2 className="text-xs sm:text-sm font-mono font-bold uppercase tracking-wider text-neutral-900 dark:text-zinc-100">
-              SHIN-28
+              SHIN-32
             </h2>
             <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-medium bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-zinc-400 border border-neutral-200 dark:border-zinc-700/80">
-              28 KEYS
+              32 SKILLS
             </span>
           </div>
           <p className="text-[10px] font-mono text-neutral-400 dark:text-zinc-500 truncate mt-0.5">
-            {isMobile ? "(tap any keycap below)" : "(press a-z or tap keycaps)"}
+            {isMobile ? "(tap any keycap below)" : "(press a-z, 1-6 or tap keycaps)"}
           </p>
         </div>
 
@@ -1407,7 +1581,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                 : "bg-[#f1f5f9] border-neutral-200"
             }`}
           >
-            {/* 6 Columns Grid: Rows 1-4 = 24 skills, Row 5 = 4 skills + 1 2U Wave Keycap */}
+            {/* 6 Columns Grid: Rows 1-5 = 30 skills, Row 6 = 2 skills + 1 4U Wave Keycap */}
             <div className="grid grid-cols-6 gap-1 xs:gap-1.5 sm:gap-1.5">
               {KEYCAP_SKILLS.map((skill, idx) => {
                 const isPressed = !!pressedIds[skill.id];
@@ -1431,7 +1605,7 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                     aria-label={`${skill.name} (${skill.keyTrigger})`}
                     className={`group relative ${
                       isWideKey
-                        ? "col-span-2 w-full"
+                        ? "col-span-4 w-full"
                         : "w-[34px] xs:w-[37px] sm:w-[40px] xl:w-[36px] 2xl:w-[40px]"
                     } h-[36px] xs:h-[39px] sm:h-[42px] xl:h-[38px] 2xl:h-[42px] rounded-[7px] sm:rounded-[8px] focus:outline-none select-none`}
                   >
@@ -1486,8 +1660,8 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
               />
               <span>
                 {isDeployedToStage
-                  ? `DEPLOYED (${deployedIds.size}/28)`
-                  : "SHIN-28"}
+                  ? `DEPLOYED (${deployedIds.size}/32)`
+                  : "SHIN-32"}
               </span>
             </span>
             <span
@@ -1546,11 +1720,18 @@ export const TechKeyboard3D: React.FC<TechKeyboard3DProps> = ({
                 ? "bg-neutral-900 text-white dark:bg-zinc-100 dark:text-zinc-950 border-neutral-900 dark:border-zinc-100 animate-pulse"
                 : "bg-neutral-50 dark:bg-zinc-900/80 text-neutral-700 dark:text-zinc-300 border-neutral-200 dark:border-zinc-800 hover:border-neutral-400 dark:hover:border-zinc-600"
             }`}
-            title="Play automatic mechanical typing wave across all 28 skills"
+            title="Play automatic mechanical typing wave across all 32 skills"
           >
-            {isAutoPlaying ? "Stop Wave" : "Wave"}
+            {isAutoPlaying ? "Stop Wave" : "Wave 32"}
           </button>
         </div>
+
+        {/* Inspector / Proof Details */}
+        {selectedSkill.description && (
+          <p className="mt-2 text-[11px] leading-relaxed text-neutral-600 dark:text-zinc-400">
+            {selectedSkill.description}
+          </p>
+        )}
 
         {/* Row 2: Applied Production Systems (Zero Dictionary Fluff) */}
         <div className="mt-2.5 pt-2 border-t border-neutral-100 dark:border-zinc-800/80 space-y-1.5">

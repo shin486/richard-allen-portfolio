@@ -269,7 +269,7 @@ const getProjectArchitectureSpec = (
 type StackFilterDomain = "all" | "frontend" | "mobile" | "backend" | "tools";
 
 const STACK_FILTER_TABS: { id: StackFilterDomain; label: string }[] = [
-  { id: "all", label: "All 28 Keys" },
+  { id: "all", label: "All 32 Keys" },
   { id: "frontend", label: "Frontend" },
   { id: "mobile", label: "Mobile" },
   { id: "backend", label: "Backend & DB" },
@@ -784,9 +784,10 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
 
   const activeKeySpec = getEngineeringSpecForSkill(selectedSkill);
 
-  // Group 28 keys into 4 physical rows (7 keys per row)
+  // Group 32 skill keys into 4 physical rows (8 keys per row)
+  const skillKeysOnly = KEYCAP_SKILLS.filter((s) => s.category !== "macro");
   const keyboardRows = [0, 1, 2, 3].map((rowIdx) =>
-    KEYCAP_SKILLS.slice(rowIdx * 7, (rowIdx + 1) * 7)
+    skillKeysOnly.slice(rowIdx * 8, (rowIdx + 1) * 8)
   );
 
   return (
@@ -968,8 +969,8 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                 sub: "8+ Normalized RLS Tables",
               },
               {
-                spec: "28-Key Interactive Stack",
-                sub: "SHIN-28 Hardware Matrix",
+                spec: "32-Key Interactive Stack",
+                sub: "SHIN-32 Hardware Matrix",
               },
             ].map((pill) => (
               <div
@@ -1314,10 +1315,10 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                 02 // INTERACTIVE TECH STACK
               </div>
               <h2 className="text-2xl sm:text-3xl font-semibold tracking-[-0.025em] text-[#F4F4F6] mt-2">
-                SHIN-28 Hardware Matrix
+                SHIN-32 Hardware Matrix
               </h2>
               <p className="text-sm text-[#9CA3AF] mt-1">
-                Click or hover any of the 28 mechanical keycaps to inspect its
+                Click or hover any of the 32 mechanical keycaps (or press A–Z, 1–6) to inspect its
                 architectural role and production usage.
               </p>
             </div>
@@ -1346,27 +1347,27 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
 
           {/* Split Keyboard + Live Inspector Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left (lg:col-span-7): Interactive 28-Key SHIN-28 Dark-Chassis Keyboard */}
+            {/* Left (lg:col-span-7): Interactive 32-Key SHIN-32 Dark-Chassis Keyboard */}
             <div className="lg:col-span-7 p-4 sm:p-6 rounded-2xl bg-[#111215] border border-white/[0.08] border-t-white/[0.14] shadow-2xl overflow-x-auto">
               {/* Top Anodized Chassis Bar */}
               <div className="flex items-center justify-between gap-2 pb-4 mb-4 border-b border-white/[0.08] min-w-[300px]">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#10B981]" />
                   <span className="font-mono text-xs tracking-[0.05em] text-[#F4F4F6] font-semibold">
-                    SHIN-28 · DARK CHASSIS
+                    SHIN-32 · DARK CHASSIS
                   </span>
                 </div>
                 <span className="font-mono text-xs text-[#9CA3AF]">
-                  28 SWITCHES · 4×7 ORTHOLINEAR
+                  32 SWITCHES · 4×8 ORTHOLINEAR
                 </span>
               </div>
 
-              {/* 4 Rows of 7 Keys — Scaled Responsively */}
+              {/* 4 Rows of 8 Keys — Scaled Responsively */}
               <div className="space-y-2 sm:space-y-2.5 min-w-[300px]">
                 {keyboardRows.map((rowSkills, rIdx) => (
                   <div
                     key={rIdx}
-                    className="grid grid-cols-7 gap-1.5 sm:gap-2 justify-items-center"
+                    className="grid grid-cols-8 gap-1.5 sm:gap-2 justify-items-center"
                   >
                     {rowSkills.map((skill) => {
                       const isDomainMatch = matchesStackDomain(

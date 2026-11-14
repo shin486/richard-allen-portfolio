@@ -191,59 +191,55 @@ export const skillsData: SkillCategory[] = [
         description: "React Native mobile development & testing",
         usedIn: ["PalengkeHub"],
       },
-      {
-        name: "PowerBI & UiPath",
-        description: "Data visualization & basic Robotic Process Automation",
-        usedIn: ["Academic Coursework"],
-      },
     ],
   },
   {
-    title: "Cloud & Infrastructure",
-    categoryKey: "cloud",
+    title: "Cloud & AI",
+    categoryKey: "cloud-ai",
     description:
-      "Cloud architecture, serverless compute, IAM security, and managed hosting",
+      "Cloud infrastructure, generative AI workflows, RAG pipelines, and machine learning",
     skills: [
       {
-        name: "AWS (EC2, S3, Lambda, IAM, VPC)",
+        name: "AWS Cloud",
         highlight: true,
         description:
-          "Cloud compute, object storage, serverless functions, identity governance, and VPC networking",
-        usedIn: ["AWS CLF-C02 Course Completion"],
+          "Backed by AWS Certified Cloud Practitioner (CLF-C02) completion (EC2, S3, Lambda, IAM, VPC, cloud architecture & pricing) plus underlying AWS cloud hosting for PalengkeHub and ShinPay+.",
+        usedIn: ["AWS CLF-C02", "PalengkeHub", "ShinPay+"],
       },
       {
-        name: "Microsoft Azure (AI Fundamentals)",
+        name: "Amazon Bedrock",
         highlight: true,
         description:
-          "Azure AI workloads, cognitive services, NLP, and conversational AI pipelines",
-        usedIn: ["TESDA Azure AI Course Completion"],
+          "Backed by AWS Certified AI Practitioner (AIF-C01) completion (Foundation Models, RAG pipelines, Prompt Engineering, SageMaker, Guardrails & Responsible AI).",
+        usedIn: ["AWS AIF-C01", "RAG & Guardrails"],
       },
       {
-        name: "Render",
-        description: "Managed backend service & Node/Express web hosting",
-        usedIn: ["IT Elective 4 Project"],
-      },
-    ],
-  },
-  {
-    title: "AI & Applied ML",
-    categoryKey: "ai",
-    description:
-      "Generative AI workflows, retrieval augmentation, and model fundamentals",
-    skills: [
-      {
-        name: "Generative AI / LLMs (RAG, Prompt Engineering, Amazon Bedrock, Google Gemini)",
+        name: "Azure AI",
         highlight: true,
         description:
-          "Applied LLM integrations, retrieval-augmented generation, prompt design, and responsible AI",
-        usedIn: ["Portfolio (Byte AI)", "Google Gemini Certified", "TESDA AIF-C01"],
+          "Backed by Microsoft Azure AI Fundamentals completion (Computer Vision, Natural Language Processing, Conversational AI & Cognitive Services).",
+        usedIn: ["Azure AI Fundamentals", "NLP & Vision"],
+      },
+      {
+        name: "Google Gemini",
+        highlight: true,
+        description:
+          "Backed by Gemini Certified Student (University) from Google for Education (Applied generative AI workflows, prompt engineering & AI-assisted development).",
+        usedIn: ["Gemini Certified", "IT Elective 4 Project"],
+      },
+      {
+        name: "Machine Learning",
+        highlight: true,
+        description:
+          "Backed by Fundamentals of Artificial Intelligence completion (Supervised & unsupervised learning, neural networks, classification/regression & model evaluation).",
+        usedIn: ["AI Fundamentals", "Neural Networks & ML"],
       },
     ],
   },
 ];
 
 /**
- * Shared Cloud & AI stack supplement groups rendered alongside the SHIN-28 matrix
+ * Shared Cloud & AI stack supplement groups rendered in Recruiter Dossier
  * so Cloud & AI credentials connect directly to deployment and infrastructure tags.
  */
 export const cloudAiStackGroups = [
