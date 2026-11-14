@@ -198,4 +198,71 @@ export const skillsData: SkillCategory[] = [
       },
     ],
   },
+  {
+    title: "Cloud & Infrastructure",
+    categoryKey: "cloud",
+    description:
+      "Cloud architecture, serverless compute, IAM security, and managed hosting",
+    skills: [
+      {
+        name: "AWS (EC2, S3, Lambda, IAM, VPC)",
+        highlight: true,
+        description:
+          "Cloud compute, object storage, serverless functions, identity governance, and VPC networking",
+        usedIn: ["AWS CLF-C02 Course Completion"],
+      },
+      {
+        name: "Microsoft Azure (AI Fundamentals)",
+        highlight: true,
+        description:
+          "Azure AI workloads, cognitive services, NLP, and conversational AI pipelines",
+        usedIn: ["TESDA Azure AI Course Completion"],
+      },
+      {
+        name: "Render",
+        description: "Managed backend service & Node/Express web hosting",
+        usedIn: ["IT Elective 4 Project"],
+      },
+    ],
+  },
+  {
+    title: "AI & Applied ML",
+    categoryKey: "ai",
+    description:
+      "Generative AI workflows, retrieval augmentation, and model fundamentals",
+    skills: [
+      {
+        name: "Generative AI / LLMs (RAG, Prompt Engineering, Amazon Bedrock, Google Gemini)",
+        highlight: true,
+        description:
+          "Applied LLM integrations, retrieval-augmented generation, prompt design, and responsible AI",
+        usedIn: ["Portfolio (Byte AI)", "Google Gemini Certified", "TESDA AIF-C01"],
+      },
+    ],
+  },
 ];
+
+/**
+ * Shared Cloud & AI stack supplement groups rendered alongside the SHIN-28 matrix
+ * so Cloud & AI credentials connect directly to deployment and infrastructure tags.
+ */
+export const cloudAiStackGroups = [
+  {
+    id: "cloud-infra",
+    label: "Cloud & Infrastructure",
+    tags: [
+      "AWS (EC2, S3, Lambda, IAM, VPC)",
+      "Microsoft Azure (AI Fundamentals)",
+      "Vercel",
+      "Supabase",
+      "Render",
+    ],
+  },
+  {
+    id: "ai-ml",
+    label: "AI & Applied ML",
+    tags: [
+      "Generative AI / LLMs (RAG, Prompt Engineering, Amazon Bedrock, Google Gemini)",
+    ],
+  },
+] as const;

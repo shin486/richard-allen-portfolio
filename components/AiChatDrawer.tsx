@@ -294,18 +294,25 @@ const getLocalByteReply = (message: string): string => {
     lower.includes("skill") ||
     lower.includes("technolog") ||
     lower.includes("language") ||
-    lower.includes("framework")
+    lower.includes("framework") ||
+    lower.includes("bedrock") ||
+    lower.includes("rag")
   ) {
-    return "🐾 Here's what I fetched on Richard's core technical stack:\n\n• **Frontend & Mobile:** React, Next.js 14, React Native, TypeScript, Tailwind CSS\n• **Backend & Databases:** Supabase, PostgreSQL, Node.js, Express, PHP, MySQL, MongoDB\n• **Tools & Workflow:** Git, GitHub, Vercel, Vite, Figma, Expo";
+    return "🐾 Here's what I fetched on Richard's core technical stack:\n\n• **Cloud & Infrastructure:** AWS (EC2, S3, Lambda, IAM, VPC), Microsoft Azure (AI Fundamentals), Vercel, Supabase, Render\n• **AI & Applied ML:** Generative AI / LLMs (RAG, Prompt Engineering, Amazon Bedrock, Google Gemini)\n• **Frontend & Mobile:** React, Next.js 14, React Native, TypeScript, Tailwind CSS\n• **Backend & Databases:** Supabase, PostgreSQL, Node.js, Express, PHP, MySQL, MongoDB\n• **Tools & Workflow:** Git, GitHub, Vite, Figma, Expo";
   }
   if (
     lower.includes("certificate") ||
     lower.includes("certification") ||
+    lower.includes("credential") ||
+    lower.includes("gemini") ||
+    lower.includes("aws") ||
+    lower.includes("azure") ||
+    lower.includes("tesda") ||
     lower.includes("cisco") ||
     lower.includes("python") ||
     lower.includes("ccna")
   ) {
-    return "🐾 Richard holds **5 verified technical certifications**:\n\n• **Python Essentials 1** (Cisco Networking Academy)\n• **Python Essentials 2** (Cisco Networking Academy)\n• **Bridging Ethical Hacking and Data Analytics: Building Smarter and Safer Systems** (De La Salle Lipa, 2026)\n• **DevRoutes: Learning How to Learn with Roadmaps** (De La Salle Lipa / Swinburne University of Technology, 2026)\n• **AI Ethics and Governance** (USAID / Asia Open RAN Academy)";
+    return "🐾 Richard holds **10 verified credentials & course completions**, led by 5 Cloud & AI credentials earned on Nov 14, 2026:\n\n• **Gemini Certified Student (University)** — Google for Education (Valid through Nov 14, 2029)\n• **AWS Certified Cloud Practitioner (CLF-C02) — Course Completion** — TESDA Online Program (ID: `CyiKhpQwvZ`)\n• **AWS Certified AI Practitioner (AIF-C01) — Course Completion** — TESDA Online Program (ID: `euZ5LSGDal`)\n• **Microsoft AI Course: Azure AI Fundamentals — Course Completion** — TESDA Online Program (ID: `ZhUJwes83g`)\n• **Fundamentals of Artificial Intelligence — Course Completion** — TESDA Online Program (ID: `VEhlLGlH6y`)\n\nPlus Cisco **Python Essentials 1 & 2**, **AI Ethics and Governance** (USAID), **Bridging Ethical Hacking and Data Analytics**, and **DevRoutes**.";
   }
   if (
     lower.includes("school") ||

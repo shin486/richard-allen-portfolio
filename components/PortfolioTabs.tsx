@@ -45,7 +45,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
       icon: Tag,
       count: skillCategoriesCount,
       sectionId: "skills-section",
-      note: "Twenty-eight technologies across frontend, backend, mobile, and databases.",
+      note: `${skillCategoriesCount} technologies across cloud, applied AI, frontend, backend, and mobile.`,
     },
     {
       id: "certificates" as PortfolioTabType,
@@ -54,7 +54,7 @@ export const PortfolioTabs: React.FC<PortfolioTabsProps> = ({
       icon: Bookmark,
       count: certCount,
       sectionId: "certificates-section",
-      note: "Verified Cisco CCNA, Python, and AI Governance credentials.",
+      note: "Verified Google Gemini, AWS & Azure TESDA course completions, Cisco Python, and AI credentials.",
     },
     {
       id: "about" as PortfolioTabType,

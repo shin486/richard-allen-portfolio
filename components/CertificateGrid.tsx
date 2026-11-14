@@ -9,6 +9,7 @@ import {
   Bookmark,
   CheckCircle2,
   MessageCircle,
+  ExternalLink,
 } from "lucide-react";
 import { certificatesData } from "@/data/certificates";
 import { profileData } from "@/data/profile";
@@ -232,11 +233,11 @@ export const CertificateGrid: React.FC = () => {
             04 —
           </span>
           <h2 className="text-xs sm:text-sm font-mono uppercase tracking-[0.14em] font-semibold text-neutral-900 dark:text-zinc-100">
-            Verified Certifications &amp; Accreditations
+            Verified Credentials &amp; Course Completions
           </h2>
         </div>
         <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400 dark:text-zinc-500">
-          CISCO CCNA &amp; AI
+          CLOUD · AI · CISCO
         </span>
       </div>
 
@@ -255,7 +256,7 @@ export const CertificateGrid: React.FC = () => {
                 key={cert.id}
                 type="button"
                 onClick={() => setCurrentSlide(index)}
-                data-note={`Verified credential: ${cert.title} (${cert.issuer}).`}
+                data-note={`${cert.credentialType ?? "Verified credential"}: ${cert.title} (${cert.issuer}).`}
                 role="tab"
                 aria-selected={isCurrent}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
@@ -271,7 +272,7 @@ export const CertificateGrid: React.FC = () => {
                       : "text-neutral-400 dark:text-zinc-500"
                   }`}
                 >
-                  0{index + 1}
+                  {String(index + 1).padStart(2, "0")}
                 </span>
                 <span className="whitespace-nowrap">{cert.shortTitle}</span>
               </button>
@@ -304,6 +305,9 @@ export const CertificateGrid: React.FC = () => {
                 </div>
                 <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate leading-tight">
                   {activeCert.issuer}
+                  {activeCert.credentialType
+                    ? ` · ${activeCert.credentialType}`
+                    : ""}
                 </p>
               </div>
             </div>
@@ -539,6 +543,47 @@ export const CertificateGrid: React.FC = () => {
                 — {activeCert.caption}
               </span>
             </p>
+
+            {/* Structured Credential Verification Metadata */}
+            {(activeCert.credentialType ||
+              activeCert.credentialId ||
+              activeCert.validThrough ||
+              activeCert.verifyUrl) && (
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                {activeCert.credentialType && (
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[10px] uppercase tracking-wider font-semibold border ${
+                      activeCert.credentialType === "Certification"
+                        ? "border-[#10B981]/40 bg-[#10B981]/10 text-emerald-700 dark:text-[#10B981]"
+                        : "border-neutral-300 dark:border-zinc-700 bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300"
+                    }`}
+                  >
+                    {activeCert.credentialType}
+                  </span>
+                )}
+                {activeCert.credentialId && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[11px] bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300">
+                    ID: {activeCert.credentialId}
+                  </span>
+                )}
+                {activeCert.validThrough && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[11px] bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-zinc-400">
+                    Valid through {activeCert.validThrough}
+                  </span>
+                )}
+                {activeCert.verifyUrl && (
+                  <a
+                    href={activeCert.verifyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono text-[11px] font-medium border border-[#10B981]/35 bg-[#10B981]/10 text-emerald-700 dark:text-[#10B981] hover:bg-[#10B981]/20 transition-colors"
+                  >
+                    <span>Verify at e-tesda.gov.ph</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
+              </div>
+            )}
 
             {/* Instagram Post Timestamp */}
             <p className="text-[10px] uppercase tracking-wider text-neutral-400 dark:text-zinc-500 font-mono pt-0.5">

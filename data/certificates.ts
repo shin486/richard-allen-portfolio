@@ -1,8 +1,15 @@
+export type CredentialType = "Certification" | "Course Completion";
+
 export interface Certificate {
   id: string;
   title: string;
   shortTitle: string;
   issuer: string;
+  credentialType?: CredentialType;
+  credentialId?: string;
+  verifyUrl?: string;
+  validThrough?: string;
+  focus?: string;
   caption: string;
   postDate: string;
   year?: string;
@@ -10,9 +17,89 @@ export interface Certificate {
 }
 
 /**
- * Verified certifications only — presented as clean Instagram posts.
+ * Verified certifications & course completions — presented cleanly across views.
  */
 export const certificatesData: Certificate[] = [
+  {
+    id: "gemini-certified-student-university",
+    title: "Gemini Certified Student (University)",
+    shortTitle: "Gemini Certified",
+    issuer: "Google for Education",
+    credentialType: "Certification",
+    validThrough: "November 14, 2029",
+    focus:
+      "Applied generative AI workflows, prompt engineering, and Google AI tools.",
+    caption:
+      "Issued by Google for Education (Valid through November 14, 2029). Applied generative AI workflows, prompt engineering, and Google AI tools.",
+    postDate: "NOVEMBER 14, 2026",
+    year: "2026",
+    image: "/certificates/gemini-certified-student-university.svg",
+  },
+  {
+    id: "tesda-aws-cloud-practitioner",
+    title: "AWS Certified Cloud Practitioner (CLF-C02) — Course Completion",
+    shortTitle: "AWS Cloud (TESDA)",
+    issuer: "TESDA Online Program",
+    credentialType: "Course Completion",
+    credentialId: "CyiKhpQwvZ",
+    verifyUrl: "https://e-tesda.gov.ph",
+    focus:
+      "AWS cloud architecture, EC2, S3, Lambda, IAM security, VPC networking, and cloud governance.",
+    caption:
+      "Course Completion via TESDA Online Program (ID: CyiKhpQwvZ). AWS cloud architecture, EC2, S3, Lambda, IAM security, VPC networking, and cloud governance.",
+    postDate: "NOVEMBER 14, 2026",
+    year: "2026",
+    image: "/certificates/tesda-aws-cloud-practitioner.svg",
+  },
+  {
+    id: "tesda-aws-ai-practitioner",
+    title: "AWS Certified AI Practitioner (AIF-C01) — Course Completion",
+    shortTitle: "AWS AI (TESDA)",
+    issuer: "TESDA Online Program",
+    credentialType: "Course Completion",
+    credentialId: "euZ5LSGDal",
+    verifyUrl: "https://e-tesda.gov.ph",
+    focus:
+      "Foundation models, RAG, prompt engineering, Amazon Bedrock, SageMaker, and responsible AI.",
+    caption:
+      "Course Completion via TESDA Online Program (ID: euZ5LSGDal). Foundation models, RAG, prompt engineering, Amazon Bedrock, SageMaker, and responsible AI.",
+    postDate: "NOVEMBER 14, 2026",
+    year: "2026",
+    image: "/certificates/tesda-aws-ai-practitioner.svg",
+  },
+  {
+    id: "tesda-azure-ai-fundamentals",
+    title:
+      "Microsoft Artificial Intelligence Course: Azure AI Fundamentals — Course Completion",
+    shortTitle: "Azure AI (TESDA)",
+    issuer: "TESDA Online Program",
+    credentialType: "Course Completion",
+    credentialId: "ZhUJwes83g",
+    verifyUrl: "https://e-tesda.gov.ph",
+    focus:
+      "Azure AI workloads, computer vision, natural language processing, and conversational AI.",
+    caption:
+      "Course Completion via TESDA Online Program (ID: ZhUJwes83g). Azure AI workloads, computer vision, natural language processing, and conversational AI.",
+    postDate: "NOVEMBER 14, 2026",
+    year: "2026",
+    image: "/certificates/tesda-azure-ai-fundamentals.svg",
+  },
+  {
+    id: "tesda-fundamentals-of-ai",
+    title: "Fundamentals of Artificial Intelligence — Course Completion",
+    shortTitle: "AI Fundamentals (TESDA)",
+    issuer: "TESDA Online Program",
+    credentialType: "Course Completion",
+    credentialId: "VEhlLGlH6y",
+    verifyUrl: "https://e-tesda.gov.ph",
+    focus:
+      "Machine learning lifecycles, supervised/unsupervised learning, neural networks, and model evaluation.",
+    caption:
+      "Course Completion via TESDA Online Program (ID: VEhlLGlH6y). Machine learning lifecycles, supervised/unsupervised learning, neural networks, and model evaluation.",
+    postDate: "NOVEMBER 14, 2026",
+    year: "2026",
+    image: "/certificates/tesda-fundamentals-of-ai.svg",
+  },
   {
     id: "python-essentials-1",
     title: "Python Essentials 1",

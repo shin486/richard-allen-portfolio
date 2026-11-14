@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { profileData } from "@/data/profile";
 import { skillsData } from "@/data/skills";
+import { certificatesData } from "@/data/certificates";
 
 interface ProfileStatsProps {
   onStatClick?: (sectionId: string, tabName?: string) => void;
@@ -54,7 +55,8 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ onStatClick }) => {
     28;
 
   const projectsTarget = Number(profileData.stats.projects) || 6;
-  const certsTarget = Number(profileData.stats.certificates) || 5;
+  const certsTarget =
+    certificatesData.length || Number(profileData.stats.certificates) || 10;
 
   const projectsCount = useOdometerCount(projectsTarget, 580, 60);
   const techCount = useOdometerCount(totalTechnologies, 680, 120);
@@ -85,7 +87,7 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ onStatClick }) => {
       <button
         type="button"
         onClick={() => handleScroll("skills-section", "skills")}
-        data-note="Twenty-eight technologies. React Native, Next.js, and Supabase ready."
+        data-note={`${totalTechnologies} technologies across web, mobile, cloud infrastructure, and applied AI.`}
         className="group flex-1 sm:flex-initial flex flex-col items-center sm:items-start text-center sm:text-left focus:outline-none transition-transform duration-200 hover:-translate-y-0.5 active:scale-95 min-w-0"
       >
         <span className="font-bold tabular-nums text-neutral-900 dark:text-zinc-100 text-sm sm:text-lg group-hover:text-ig-purple transition-colors leading-none">
@@ -99,7 +101,7 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ onStatClick }) => {
       <button
         type="button"
         onClick={() => handleScroll("certificates-section", "certificates")}
-        data-note="Dual Cisco CCNA certified. Yes, I know how to subnet in my head."
+        data-note="Google Gemini Certified, AWS & Azure TESDA course completions, Cisco Python & AI."
         className="group flex-1 sm:flex-initial flex flex-col items-center sm:items-start text-center sm:text-left focus:outline-none transition-transform duration-200 hover:-translate-y-0.5 active:scale-95 min-w-0"
       >
         <span className="font-bold tabular-nums text-neutral-900 dark:text-zinc-100 text-sm sm:text-lg group-hover:text-ig-orange transition-colors leading-none">

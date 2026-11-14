@@ -7,6 +7,11 @@ const ABACUS_BASE = "https://abacus.jasoncameron.dev";
 
 const ALLOWED_IDS = new Set([
   // Certificates
+  "gemini-certified-student-university",
+  "tesda-aws-cloud-practitioner",
+  "tesda-aws-ai-practitioner",
+  "tesda-azure-ai-fundamentals",
+  "tesda-fundamentals-of-ai",
   "python-essentials-1",
   "python-essentials-2",
   "ethical-hacking-data-analytics",

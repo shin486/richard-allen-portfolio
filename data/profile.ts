@@ -80,8 +80,8 @@ export const profileData: ProfileData = {
 
   stats: {
     projects: "06",
-    technologies: "28",
-    certificates: "05",
+    technologies: "32",
+    certificates: "10",
   },
 
   socials: {

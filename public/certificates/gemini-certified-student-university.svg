@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Gemini Certified Student (University) Credential">
+  <defs>
+    <linearGradient id="bg-gemini" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0B0F" />
+      <stop offset="100%" stop-color="#13161D" />
+    </linearGradient>
+    <linearGradient id="accent-gemini" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4285F4" />
+      <stop offset="45%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    <pattern id="grid-gemini" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#FFFFFF" stroke-opacity="0.035" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg-gemini)" />
+  <rect width="1200" height="900" fill="url(#grid-gemini)" />
+
+  <!-- Outer Precision Frame -->
+  <rect x="44" y="44" width="1112" height="812" rx="20" fill="#111215" stroke="#FFFFFF" stroke-opacity="0.1" stroke-width="1.5" />
+  <rect x="44" y="44" width="1112" height="5" rx="2" fill="url(#accent-gemini)" />
+
+  <!-- Corner Registration Marks -->
+  <path d="M 76 92 L 76 76 L 92 76" fill="none" stroke="#9CA3AF" stroke-opacity="0.45" stroke-width="1.5" />
+  <path d="M 1108 76 L 1124 76 L 1124 92" fill="none" stroke="#9CA3AF" stroke-opacity="0.45" stroke-width="1.5" />
+  <path d="M 76 808 L 76 824 L 92 824" fill="none" stroke="#9CA3AF" stroke-opacity="0.45" stroke-width="1.5" />
+  <path d="M 1108 824 L 1124 824 L 1124 808" fill="none" stroke="#9CA3AF" stroke-opacity="0.45" stroke-width="1.5" />
+
+  <!-- Top Header Bar -->
+  <g font-family="'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace">
+    <text x="96" y="122" fill="#9CA3AF" font-size="18" letter-spacing="3.2" font-weight="600">GOOGLE FOR EDUCATION</text>
+    <rect x="822" y="96" width="282" height="40" rx="20" fill="#10B981" fill-opacity="0.12" stroke="#10B981" stroke-opacity="0.45" stroke-width="1.2" />
+    <circle cx="848" cy="116" r="5" fill="#10B981" />
+    <text x="865" y="122" fill="#10B981" font-size="15" letter-spacing="2" font-weight="700">CERTIFICATION</text>
+  </g>
+
+  <line x1="96" y1="164" x2="1104" y2="164" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1" />
+
+  <!-- Main Credential Typography -->
+  <text x="96" y="238" fill="#9CA3AF" font-family="'SFMono-Regular', Consolas, monospace" font-size="16" letter-spacing="2.8">EARNED CREDENTIAL RECORD</text>
+
+  <text x="96" y="316" fill="#F4F4F6" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="58" font-weight="700" letter-spacing="-1.4">
+    Gemini Certified Student
+  </text>
+  <text x="96" y="378" fill="#D1D5DB" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="40" font-weight="500" letter-spacing="-0.6">
+    (University Track)
+  </text>
+
+  <!-- Gemini Four-Point Star Mark (Restrained Geometric Emblem) -->
+  <g transform="translate(1036, 294)">
+    <circle cx="0" cy="0" r="46" fill="#17191E" stroke="#FFFFFF" stroke-opacity="0.1" stroke-width="1.5" />
+    <path d="M 0 -24 C 3 -6 6 -3 24 0 C 6 3 3 6 0 24 C -3 6 -6 3 -24 0 C -6 -3 -3 -6 0 -24 Z" fill="url(#accent-gemini)" />
+  </g>
+
+  <!-- Recipient -->
+  <text x="96" y="456" fill="#9CA3AF" font-family="'SFMono-Regular', Consolas, monospace" font-size="15" letter-spacing="2.5">ISSUED TO</text>
+  <text x="96" y="502" fill="#F4F4F6" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="34" font-weight="600" letter-spacing="-0.5">
+    Richard Allen Liman
+  </text>
+
+  <!-- Focus Summary Box -->
+  <rect x="96" y="544" width="1008" height="108" rx="14" fill="#17191E" stroke="#FFFFFF" stroke-opacity="0.07" stroke-width="1.2" />
+  <text x="124" y="580" fill="#9CA3AF" font-family="'SFMono-Regular', Consolas, monospace" font-size="14" letter-spacing="2.4">FOCUS &amp; COMPETENCIES</text>
+  <text x="124" y="618" fill="#E5E7EB" font-family="'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="22" font-weight="400">
+    Applied generative AI workflows, prompt engineering, and Google AI tools.
+  </text>
+
+  <!-- Bottom Metadata Grid -->
+  <line x1="96" y1="696" x2="1104" y2="696" stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="1" />
+
+  <g font-family="'SFMono-Regular', Consolas, monospace">
+    <text x="96" y="742" fill="#9CA3AF" font-size="14" letter-spacing="2.2">ISSUED DATE</text>
+    <text x="96" y="778" fill="#F4F4F6" font-size="22" font-weight="600">NOV 14, 2026</text>
+
+    <text x="410" y="742" fill="#9CA3AF" font-size="14" letter-spacing="2.2">VALID THROUGH</text>
+    <text x="410" y="778" fill="#10B981" font-size="22" font-weight="600">NOV 14, 2029</text>
+
+    <text x="740" y="742" fill="#9CA3AF" font-size="14" letter-spacing="2.2">ISSUING AUTHORITY</text>
+    <text x="740" y="778" fill="#F4F4F6" font-size="22" font-weight="600">Google for Education</text>
+  </g>
+</svg>

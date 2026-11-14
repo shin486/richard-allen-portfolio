@@ -16,6 +16,7 @@ import {
   SoundProfile,
   TechKeyboard3D,
 } from "./TechKeyboard3D";
+import { cloudAiStackGroups } from "@/data/skills";
 
 type DomainFilterKey =
   | "all"
@@ -784,6 +785,35 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
             </div>
           );
         })}
+      </div>
+
+      {/* Supplementary Cloud & Applied AI Stack Row */}
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        {cloudAiStackGroups.map((group) => (
+          <div
+            key={group.id}
+            className="milled-card rounded-xl border border-neutral-200/80 dark:border-zinc-800/80 bg-white dark:bg-[#111116] p-4 transition-colors"
+          >
+            <div className="flex items-center justify-between gap-2 mb-2.5">
+              <span className="font-mono text-[11px] uppercase tracking-wider font-semibold text-neutral-800 dark:text-zinc-200">
+                {group.label}
+              </span>
+              <span className="font-mono text-[10px] text-neutral-500 dark:text-zinc-400">
+                {group.id === "cloud-infra" ? "CLOUD & DEPLOY" : "LLM & RAG"}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {group.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2.5 py-1 rounded-lg bg-neutral-100/90 dark:bg-zinc-900 border border-neutral-200/90 dark:border-zinc-800 text-xs font-medium text-neutral-800 dark:text-zinc-200 leading-snug"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Fixed Full-Viewport 3D Keycap Flight Portal (Renders Flying Keycaps from Sidebar Keyboard -> Skill Sockets) */}

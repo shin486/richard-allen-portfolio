@@ -220,8 +220,8 @@ export const AboutSection: React.FC = () => {
               03 // AI &amp; Infrastructure
             </span>
             <p className="text-xs text-neutral-600 dark:text-zinc-400 leading-relaxed">
-              Gemini multimodal API integrations, vector embeddings, and Cisco
-              CCNA routing and switching fundamentals.
+              Google Gemini &amp; AWS/Azure AI workflows, RAG &amp; prompt
+              engineering, cloud IAM/VPC fundamentals, and Cisco Python.
             </p>
           </div>
         </div>

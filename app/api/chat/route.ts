@@ -45,7 +45,7 @@ ${skillsData
   .join("\n")}
 
 CERTIFICATIONS:
-${certificatesData.map((c) => `- ${c.title} (Issued by: ${c.issuer}${c.year ? `, ${c.year}` : ""})`).join("\n")}
+${certificatesData.map((c) => `- ${c.title} (${c.credentialType ?? "Verified Credential"}, Issued by: ${c.issuer}${c.postDate ? `, Issued: ${c.postDate}` : ""}${c.validThrough ? `, Valid through: ${c.validThrough}` : ""}${c.credentialId ? `, ID: ${c.credentialId}` : ""})`).join("\n")}
 
 GUIDELINES FOR YOUR RESPONSES:
 1. Respond directly and conversationally to the user's message. Never include "* User Input:", "* Persona:", or internal chain-of-thought notes.
@@ -191,15 +191,19 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
   }
 
   if (
-    /\b(stack|skill|technolog|language|framework|database|frontend|backend|mobile|tools)\b/.test(
+    /\b(stack|skill|technolog|language|framework|database|frontend|backend|mobile|tools|cloud|aws|azure|bedrock|rag|llm)\b/.test(
       lower
     )
   ) {
-    return `🐾 Here's what I fetched on Richard's technical stack and where he used each tool:\n\n• **Frontend & Mobile:** React (IT Elective 4), Next.js 14 (ShinPay+), React Native (PalengkeHub), TypeScript (ShinPay+, IT Elective 4), JavaScript, Tailwind CSS, Bootstrap\n• **Backend & Databases:** Supabase & PostgreSQL (PalengkeHub, ShinPay+), Node.js & Express (IT Elective 4, Crave Cart), PHP & MySQL (Auto Avenue), MongoDB (IT Elective 4)\n• **Workflow & Security:** Git, GitHub, Vercel, Row-Level Security (RLS), JWT Auth, ITSM / RBAC`;
+    return `🐾 Here's what I fetched on Richard's technical stack and where he used each tool:\n\n• **Cloud & Infrastructure:** AWS (EC2, S3, Lambda, IAM, VPC), Microsoft Azure (AI Fundamentals), Vercel, Supabase, Render\n• **AI & Applied ML:** Generative AI / LLMs (RAG, Prompt Engineering, Amazon Bedrock, Google Gemini)\n• **Frontend & Mobile:** React (IT Elective 4), Next.js 14 (ShinPay+), React Native (PalengkeHub), TypeScript (ShinPay+, IT Elective 4), JavaScript, Tailwind CSS, Bootstrap\n• **Backend & Databases:** Supabase & PostgreSQL (PalengkeHub, ShinPay+), Node.js & Express (IT Elective 4, Crave Cart), PHP & MySQL (Auto Avenue), MongoDB (IT Elective 4)\n• **Workflow & Security:** Git, GitHub, Row-Level Security (RLS), JWT Auth, ITSM / RBAC`;
   }
 
-  if (/\b(certificate|certification|certified|cisco|ccna|freecodecamp|creotec)\b/.test(lower)) {
-    return `🐾 Richard holds **5 verified certifications**:\n\n• **CCNA: Enterprise Networking, Security, and Automation** — Cisco (2026)\n• **CCNA: Switching, Routing, and Wireless Essentials** — Cisco (2025)\n• **Legacy Responsive Web Design V8** — freeCodeCamp (2024)\n• **Work Immersion Program (80 Hours)** — Creotec Philippines Inc. (2023)\n• **12th Citezen's General Assembly & Tutorial** — De La Salle Lipa (2023)`;
+  if (
+    /\b(certificate|certification|certified|credential|gemini|aws|azure|tesda|python|cisco|ccna|devroutes|ethics)\b/.test(
+      lower
+    )
+  ) {
+    return `🐾 Richard holds **10 verified credentials & course completions**, led by 5 Cloud & AI credentials issued on **November 14, 2026**:\n\n• **Gemini Certified Student (University)** — Google for Education (Valid through November 14, 2029)\n• **AWS Certified Cloud Practitioner (CLF-C02) — Course Completion** — TESDA Online Program (ID: \`CyiKhpQwvZ\` · \`https://e-tesda.gov.ph\`)\n• **AWS Certified AI Practitioner (AIF-C01) — Course Completion** — TESDA Online Program (ID: \`euZ5LSGDal\` · \`https://e-tesda.gov.ph\`)\n• **Microsoft Artificial Intelligence Course: Azure AI Fundamentals — Course Completion** — TESDA Online Program (ID: \`ZhUJwes83g\` · \`https://e-tesda.gov.ph\`)\n• **Fundamentals of Artificial Intelligence — Course Completion** — TESDA Online Program (ID: \`VEhlLGlH6y\` · \`https://e-tesda.gov.ph\`)\n\nPlus Cisco **Python Essentials 1 & 2**, **AI Ethics and Governance** (USAID), **Bridging Ethical Hacking and Data Analytics**, and **DevRoutes**.`;
   }
 
   if (

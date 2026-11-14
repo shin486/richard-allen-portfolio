@@ -22,6 +22,8 @@ import profilePic from "@/assets/PROFILEPIC.png";
 import { Project, projectsData } from "@/data/projects";
 import { ProjectModal } from "./ProjectModal";
 import { ProjectDemoHost } from "./demos/ProjectDemoHost";
+import { cloudAiStackGroups } from "@/data/skills";
+import { certificatesData } from "@/data/certificates";
 import {
   KEYCAP_SKILLS,
   Keycap3DSurface,
@@ -742,11 +744,18 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
   const [showInteractiveSandboxInStage, setShowInteractiveSandboxInStage] =
     useState<boolean>(false);
 
-  // Section 4 SHIN-28 Keyboard state
+  // Section 4 SHIN-28 Keyboard & Credentials Ledger state
   const [stackFilter, setStackFilter] = useState<StackFilterDomain>("all");
   const [selectedSkill, setSelectedSkill] = useState<KeycapSkill>(
     KEYCAP_SKILLS.find((s) => s.id === "react") || KEYCAP_SKILLS[0]
   );
+  const [credentialFilter, setCredentialFilter] = useState<"recent" | "all">(
+    "recent"
+  );
+  const visibleCredentials =
+    credentialFilter === "recent"
+      ? certificatesData.slice(0, 5)
+      : certificatesData;
 
   const activeProject =
     projectsData[activeProjectIndex] || projectsData[0];
@@ -1480,6 +1489,152 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                   </span>
                 )}
               </div>
+            </div>
+          </div>
+
+          {/* Cloud, Infrastructure & Applied AI Stack Strip */}
+          <div className="mt-8 pt-8 border-t border-white/[0.08] grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {cloudAiStackGroups.map((group) => (
+              <div
+                key={group.id}
+                className="p-5 rounded-2xl bg-[#111215] border border-white/[0.08] border-t-white/[0.14]"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-xs tracking-[0.05em] uppercase text-[#F4F4F6] font-semibold">
+                    {group.label}
+                  </span>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.05em] text-[#9CA3AF]">
+                    {group.id === "cloud-infra" ? "CLOUD & DEPLOY" : "LLM & RAG"}
+                  </span>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {group.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1.5 rounded-lg bg-[#17191E] border border-white/[0.08] text-xs font-medium text-[#F4F4F6] leading-snug"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Verified Credentials & TESDA Course Completions Ledger */}
+          <div className="mt-8 pt-8 border-t border-white/[0.08]">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-5">
+              <div>
+                <div className="font-mono text-xs tracking-[0.05em] text-[#9CA3AF] uppercase">
+                  CREDENTIAL &amp; COURSEWORK LEDGER
+                </div>
+                <h3 className="text-lg sm:text-xl font-semibold tracking-[-0.02em] text-[#F4F4F6] mt-1">
+                  Cloud, AI &amp; Verified Credentials
+                </h3>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCredentialFilter("recent")}
+                  className={`px-3 py-1.5 rounded-xl font-mono text-xs tracking-[0.04em] border transition-colors ${
+                    credentialFilter === "recent"
+                      ? "bg-[#17191E] text-[#F4F4F6] border-[#10B981]/50 font-semibold"
+                      : "bg-[#111215] text-[#9CA3AF] border-white/[0.08] hover:text-[#F4F4F6]"
+                  }`}
+                >
+                  Nov 2026 Cloud &amp; AI (5)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCredentialFilter("all")}
+                  className={`px-3 py-1.5 rounded-xl font-mono text-xs tracking-[0.04em] border transition-colors ${
+                    credentialFilter === "all"
+                      ? "bg-[#17191E] text-[#F4F4F6] border-[#10B981]/50 font-semibold"
+                      : "bg-[#111215] text-[#9CA3AF] border-white/[0.08] hover:text-[#F4F4F6]"
+                  }`}
+                >
+                  All Credentials ({certificatesData.length})
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {visibleCredentials.map((cert, index) => {
+                const isCertification = cert.credentialType === "Certification";
+                const spanFullRow =
+                  credentialFilter === "recent" && index === 0;
+
+                return (
+                  <article
+                    key={cert.id}
+                    className={`p-4 sm:p-5 rounded-2xl bg-[#111215] border border-white/[0.08] border-t-white/[0.14] flex flex-col justify-between gap-3 ${
+                      spanFullRow ? "md:col-span-2" : ""
+                    }`}
+                  >
+                    <div>
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-3">
+                        <h4 className="text-sm font-semibold text-[#F4F4F6] leading-snug min-w-0">
+                          {cert.title}
+                        </h4>
+                        <span
+                          className={`self-start flex-shrink-0 px-2.5 py-0.5 rounded-md font-mono text-[10px] uppercase tracking-[0.05em] font-semibold border ${
+                            isCertification
+                              ? "border-[#10B981]/45 bg-[#10B981]/10 text-[#10B981]"
+                              : "border-white/[0.14] bg-[#17191E] text-[#E5E7EB]"
+                          }`}
+                        >
+                          {cert.credentialType ?? "Credential"}
+                        </span>
+                      </div>
+
+                      <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] text-[#9CA3AF]">
+                        <span>{cert.issuer}</span>
+                        <span aria-hidden="true">·</span>
+                        <span>Issued {cert.postDate}</span>
+                        {cert.validThrough && (
+                          <>
+                            <span aria-hidden="true">·</span>
+                            <span className="text-[#10B981]">
+                              Valid through {cert.validThrough}
+                            </span>
+                          </>
+                        )}
+                      </div>
+
+                      <p className="mt-2.5 text-xs text-[#D1D5DB] leading-relaxed">
+                        {cert.focus ?? cert.caption}
+                      </p>
+                    </div>
+
+                    {(cert.credentialId || cert.verifyUrl) && (
+                      <div className="pt-2.5 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
+                        {cert.credentialId ? (
+                          <span className="text-[#9CA3AF]">
+                            Credential ID:{" "}
+                            <span className="text-[#F4F4F6] font-semibold">
+                              {cert.credentialId}
+                            </span>
+                          </span>
+                        ) : (
+                          <span />
+                        )}
+                        {cert.verifyUrl && (
+                          <a
+                            href={cert.verifyUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[#10B981] hover:underline font-medium"
+                          >
+                            <span>e-tesda.gov.ph</span>
+                            <ArrowUpRight className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
             </div>
           </div>
         </section>

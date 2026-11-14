@@ -155,6 +155,17 @@ export const highlightsData: HighlightGroup[] = [
         duration: 6000,
       },
       {
+        id: "ai-cloud-2026",
+        type: "certificate",
+        heading: "Google Gemini & Cloud/AI Track",
+        subheading: "Google for Education · TESDA Online Program",
+        description:
+          "Earned Gemini Certified Student (University, valid through Nov 2029) plus four TESDA Course Completions in AWS Cloud Practitioner, AWS AI Practitioner, Azure AI Fundamentals, and Fundamentals of AI.",
+        badge: "Nov 2026 Credentials",
+        timeAgo: "Nov 14, 2026",
+        duration: 6000,
+      },
+      {
         id: "ai-2",
         type: "certificate",
         heading: "AI Ethics and Governance",
