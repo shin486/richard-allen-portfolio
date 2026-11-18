@@ -44,8 +44,8 @@ ${skillsData
   )
   .join("\n")}
 
-CERTIFICATIONS:
-${certificatesData.map((c) => `- ${c.title} (${c.credentialType ?? "Verified Credential"}, Issued by: ${c.issuer}${c.postDate ? `, Issued: ${c.postDate}` : ""}${c.validThrough ? `, Valid through: ${c.validThrough}` : ""}${c.credentialId ? `, ID: ${c.credentialId}` : ""})`).join("\n")}
+CERTIFICATIONS (Classified into AI & Machine Learning, Cloud & DevOps, Engineering, and Security & Data):
+${certificatesData.map((c) => `- [${c.categoryLabel}] ${c.title} (${c.credentialType ?? "Verified Credential"}, Issued by: ${c.issuer}${c.postDate ? `, Issued: ${c.postDate}` : ""}${c.validThrough ? `, Valid through: ${c.validThrough}` : ""}${c.credentialId ? `, ID: ${c.credentialId}` : ""})`).join("\n")}
 
 GUIDELINES FOR YOUR RESPONSES:
 1. Respond directly and conversationally to the user's message. Never include "* User Input:", "* Persona:", or internal chain-of-thought notes.
@@ -203,7 +203,7 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
       lower
     )
   ) {
-    return `🐾 Richard holds **10 verified credentials & course completions**, led by 5 Cloud & AI credentials issued on **November 14, 2026**:\n\n• **AWS Certified Cloud Practitioner (CLF-C02) — Course Completion** — TESDA Online Program (ID: \`CyiKhpQwvZ\` · \`https://e-tesda.gov.ph\`)\n• **Gemini Certified Student (University)** — Google for Education (Valid through November 14, 2029)\n• **AWS Certified AI Practitioner (AIF-C01) — Course Completion** — TESDA Online Program (ID: \`euZ5LSGDal\` · \`https://e-tesda.gov.ph\`)\n• **Microsoft Artificial Intelligence Course: Azure AI Fundamentals — Course Completion** — TESDA Online Program (ID: \`ZhUJwes83g\` · \`https://e-tesda.gov.ph\`)\n• **Fundamentals of Artificial Intelligence — Course Completion** — TESDA Online Program (ID: \`VEhlLGlH6y\` · \`https://e-tesda.gov.ph\`)\n\nPlus Cisco **Python Essentials 1 & 2**, **AI Ethics and Governance** (USAID), **Bridging Ethical Hacking and Data Analytics**, and **DevRoutes**.`;
+    return `🐾 Richard holds **10 verified credentials & course completions** organized across **4 classifications**:\n\n**AI & Machine Learning (5):**\n• **Gemini Certified Student (University)** — Google for Education (Valid through November 14, 2029)\n• **AWS Certified AI Practitioner (AIF-C01) — Course Completion** — TESDA Online Program (ID: \`euZ5LSGDal\`)\n• **Microsoft Artificial Intelligence Course: Azure AI Fundamentals — Course Completion** — TESDA Online Program (ID: \`ZhUJwes83g\`)\n• **Fundamentals of Artificial Intelligence — Course Completion** — TESDA Online Program (ID: \`VEhlLGlH6y\`)\n• **AI Ethics and Governance** — USAID · Asia Open RAN Academy\n\n**Cloud & DevOps (1):**\n• **AWS Certified Cloud Practitioner (CLF-C02) — Course Completion** — TESDA Online Program (ID: \`CyiKhpQwvZ\`)\n\n**Engineering (3):**\n• **Python Essentials 1 & 2** — Cisco Networking Academy · Python Institute\n• **DevRoutes: Learning How to Learn with Roadmaps** — JPCS — De La Salle Lipa Chapter\n\n**Security & Data (1):**\n• **Bridging Ethical Hacking and Data Analytics** — De La Salle Lipa · Swinburne University`;
   }
 
   if (

@@ -10,8 +10,13 @@ import {
   CheckCircle2,
   MessageCircle,
   ExternalLink,
+  ArrowUpRight,
 } from "lucide-react";
-import { certificatesData } from "@/data/certificates";
+import {
+  CERTIFICATE_CATEGORIES,
+  CertificateCategory,
+  certificatesData,
+} from "@/data/certificates";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
 
@@ -20,6 +25,9 @@ const COUNTED_STORAGE_KEY = "shin486-counted-certs-v1";
 const SAVED_STORAGE_KEY = "shin486-saved-certs-v1";
 
 export const CertificateGrid: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<
+    "all" | CertificateCategory
+  >("all");
   const [currentSlide, setCurrentSlide] = useState(0);
   const [likedIds, setLikedIds] = useState<Record<string, boolean>>({});
   const [savedIds, setSavedIds] = useState<Record<string, boolean>>({});
@@ -31,11 +39,41 @@ export const CertificateGrid: React.FC = () => {
   const heartPopTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastTapRef = useRef<{ id: string; time: number }>({ id: "", time: 0 });
   const countedIdsRef = useRef<Record<string, boolean>>({});
+  const carouselStageRef = useRef<HTMLElement | null>(null);
 
-  const totalSlides = certificatesData.length;
+  const filteredCertificates =
+    selectedCategory === "all"
+      ? certificatesData
+      : certificatesData.filter((cert) => cert.category === selectedCategory);
+
+  const totalSlides = filteredCertificates.length;
   const safeSlideIndex =
     totalSlides > 0 ? Math.min(currentSlide, totalSlides - 1) : 0;
-  const activeCert = certificatesData[safeSlideIndex];
+  const activeCert = filteredCertificates[safeSlideIndex] ?? certificatesData[0];
+
+  const handleCategoryChange = (category: "all" | CertificateCategory) => {
+    setSelectedCategory(category);
+    setCurrentSlide(0);
+  };
+
+  const handleSelectCertFromDirectory = (certId: string) => {
+    const idxInFiltered = filteredCertificates.findIndex((c) => c.id === certId);
+    if (idxInFiltered !== -1) {
+      setCurrentSlide(idxInFiltered);
+    } else {
+      setSelectedCategory("all");
+      const idxInAll = certificatesData.findIndex((c) => c.id === certId);
+      if (idxInAll !== -1) {
+        setCurrentSlide(idxInAll);
+      }
+    }
+    if (carouselStageRef.current) {
+      carouselStageRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  };
 
   // Load persisted visitor like/save state + fetch real global like counts from /api/likes
   useEffect(() => {
@@ -224,6 +262,11 @@ export const CertificateGrid: React.FC = () => {
   const rawCount = likeCounts[activeCert.id] ?? 0;
   const displayLikeCount = isLiked ? Math.max(1, rawCount) : rawCount;
 
+  const visibleCategoryGroups =
+    selectedCategory === "all"
+      ? CERTIFICATE_CATEGORIES
+      : CERTIFICATE_CATEGORIES.filter((cat) => cat.id === selectedCategory);
+
   return (
     <section id="certificates-section" className="py-6 sm:py-8">
       {/* Bryl Lim Minimalist Numbered Section Header */}
@@ -237,18 +280,81 @@ export const CertificateGrid: React.FC = () => {
           </h2>
         </div>
         <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400 dark:text-zinc-500">
-          CLOUD · AI · CISCO
+          AI · CLOUD · ENGINEERING · SECURITY
         </span>
       </div>
 
-      <div className="w-full">
-        {/* Quick Certificate Jump Pills */}
+      <div className="w-full space-y-3">
+        {/* Bryl Lim Classification Filter Tabs */}
         <div
-          className="flex items-center gap-1.5 overflow-x-auto pb-3 no-scrollbar sm:flex-wrap -mx-4 px-4 sm:mx-0 sm:px-0 touch-pan-x"
+          className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar sm:flex-wrap -mx-4 px-4 sm:mx-0 sm:px-0 touch-pan-x"
+          role="tablist"
+          aria-label="Filter certifications by classification"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={selectedCategory === "all"}
+            onClick={() => handleCategoryChange("all")}
+            className={`flex-shrink-0 px-3 py-1.5 rounded-lg font-mono text-xs tracking-wide transition-all flex items-center gap-1.5 border ${
+              selectedCategory === "all"
+                ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 border-neutral-900 dark:border-zinc-100 font-semibold shadow-sm"
+                : "bg-neutral-50 dark:bg-[#111116] text-neutral-600 dark:text-zinc-400 border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 hover:text-neutral-900 dark:hover:text-zinc-200"
+            }`}
+          >
+            <span>All Classifications</span>
+            <span
+              className={`px-1.5 py-0.2 rounded text-[10px] tabular-nums ${
+                selectedCategory === "all"
+                  ? "bg-white/20 dark:bg-black/15 text-white dark:text-neutral-900"
+                  : "bg-neutral-200/70 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
+              }`}
+            >
+              {certificatesData.length}
+            </span>
+          </button>
+
+          {CERTIFICATE_CATEGORIES.map((cat) => {
+            const count = certificatesData.filter(
+              (c) => c.category === cat.id
+            ).length;
+            const isSelected = selectedCategory === cat.id;
+
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                onClick={() => handleCategoryChange(cat.id)}
+                className={`flex-shrink-0 px-3 py-1.5 rounded-lg font-mono text-xs tracking-wide transition-all flex items-center gap-1.5 border ${
+                  isSelected
+                    ? "bg-neutral-900 dark:bg-zinc-100 text-white dark:text-neutral-900 border-neutral-900 dark:border-zinc-100 font-semibold shadow-sm"
+                    : "bg-neutral-50 dark:bg-[#111116] text-neutral-600 dark:text-zinc-400 border-neutral-200 dark:border-zinc-800 hover:border-neutral-300 dark:hover:border-zinc-700 hover:text-neutral-900 dark:hover:text-zinc-200"
+                }`}
+              >
+                <span>{cat.label}</span>
+                <span
+                  className={`px-1.5 py-0.2 rounded text-[10px] tabular-nums ${
+                    isSelected
+                      ? "bg-white/20 dark:bg-black/15 text-white dark:text-neutral-900"
+                      : "bg-neutral-200/70 dark:bg-zinc-800 text-neutral-500 dark:text-zinc-400"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Quick Certificate Jump Pills (Filtered by Active Classification) */}
+        <div
+          className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar sm:flex-wrap -mx-4 px-4 sm:mx-0 sm:px-0 touch-pan-x"
           role="tablist"
           aria-label="Select certificate slide"
         >
-          {certificatesData.map((cert, index) => {
+          {filteredCertificates.map((cert, index) => {
             const isCurrent = index === safeSlideIndex;
 
             return (
@@ -256,7 +362,7 @@ export const CertificateGrid: React.FC = () => {
                 key={cert.id}
                 type="button"
                 onClick={() => setCurrentSlide(index)}
-                data-note={`${cert.credentialType ?? "Verified credential"}: ${cert.title} (${cert.issuer}).`}
+                data-note={`${cert.categoryLabel} · ${cert.credentialType ?? "Verified credential"}: ${cert.title} (${cert.issuer}).`}
                 role="tab"
                 aria-selected={isCurrent}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex items-center gap-1.5 border ${
@@ -281,7 +387,10 @@ export const CertificateGrid: React.FC = () => {
         </div>
 
         {/* Clean Authentic Instagram Multi-Photo Carousel Post */}
-        <article className="milled-card bg-white dark:bg-[#111116] border-y sm:border border-neutral-200 dark:border-zinc-800 sm:border-t-neutral-300/80 dark:sm:border-t-zinc-700/70 -mx-4 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden transition-all">
+        <article
+          ref={carouselStageRef}
+          className="milled-card bg-white dark:bg-[#111116] border-y sm:border border-neutral-200 dark:border-zinc-800 sm:border-t-neutral-300/80 dark:sm:border-t-zinc-700/70 -mx-4 sm:mx-0 rounded-none sm:rounded-2xl overflow-hidden transition-all scroll-mt-20"
+        >
           {/* 1. Instagram Post Header */}
           <div className="flex items-center justify-between gap-2 px-3.5 sm:px-5 py-3 border-b border-neutral-100 dark:border-zinc-800/80">
             <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
@@ -297,13 +406,16 @@ export const CertificateGrid: React.FC = () => {
                 </div>
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5 flex-wrap">
                   <span className="font-bold text-xs sm:text-sm text-neutral-900 dark:text-zinc-100 truncate">
                     {profileData.username}
                   </span>
                   <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 fill-blue-500 flex-shrink-0" />
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-zinc-800/90 border border-neutral-200 dark:border-zinc-700/80 font-mono text-[10px] uppercase tracking-wider text-neutral-700 dark:text-zinc-300">
+                    {activeCert.categoryLabel}
+                  </span>
                 </div>
-                <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate leading-tight">
+                <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate leading-tight mt-0.5">
                   {activeCert.issuer}
                   {activeCert.credentialType
                     ? ` · ${activeCert.credentialType}`
@@ -312,7 +424,7 @@ export const CertificateGrid: React.FC = () => {
               </div>
             </div>
 
-            {/* Slide Counter Pill (1 / 5) */}
+            {/* Slide Counter Pill (1 / N) */}
             <div className="px-2.5 py-1 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-800 dark:text-zinc-200 text-xs font-semibold tabular-nums tracking-wider flex-shrink-0">
               {safeSlideIndex + 1} / {totalSlides}
             </div>
@@ -347,7 +459,7 @@ export const CertificateGrid: React.FC = () => {
                 transform: `translateX(-${safeSlideIndex * 100}%)`,
               }}
             >
-              {certificatesData.map((cert) => (
+              {filteredCertificates.map((cert) => (
                 <div
                   key={cert.id}
                   className="w-full h-full flex-shrink-0 relative overflow-hidden flex items-center justify-center p-2 sm:p-5"
@@ -445,7 +557,7 @@ export const CertificateGrid: React.FC = () => {
                 role="tablist"
                 aria-label="Certificate slides"
               >
-                {certificatesData.map((cert, index) => {
+                {filteredCertificates.map((cert, index) => {
                   const isActive = index === safeSlideIndex;
                   return (
                     <button
@@ -545,45 +657,44 @@ export const CertificateGrid: React.FC = () => {
             </p>
 
             {/* Structured Credential Verification Metadata */}
-            {(activeCert.credentialType ||
-              activeCert.credentialId ||
-              activeCert.validThrough ||
-              activeCert.verifyUrl) && (
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                {activeCert.credentialType && (
-                  <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[10px] uppercase tracking-wider font-semibold border ${
-                      activeCert.credentialType === "Certification"
-                        ? "border-[#10B981]/40 bg-[#10B981]/10 text-emerald-700 dark:text-[#10B981]"
-                        : "border-neutral-300 dark:border-zinc-700 bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300"
-                    }`}
-                  >
-                    {activeCert.credentialType}
-                  </span>
-                )}
-                {activeCert.credentialId && (
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[11px] bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300">
-                    ID: {activeCert.credentialId}
-                  </span>
-                )}
-                {activeCert.validThrough && (
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[11px] bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-zinc-400">
-                    Valid through {activeCert.validThrough}
-                  </span>
-                )}
-                {activeCert.verifyUrl && (
-                  <a
-                    href={activeCert.verifyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono text-[11px] font-medium border border-[#10B981]/35 bg-[#10B981]/10 text-emerald-700 dark:text-[#10B981] hover:bg-[#10B981]/20 transition-colors"
-                  >
-                    <span>Verify at e-tesda.gov.ph</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                )}
-              </div>
-            )}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[10px] uppercase tracking-wider font-semibold border border-neutral-300 dark:border-zinc-700 bg-neutral-100 dark:bg-zinc-900 text-neutral-800 dark:text-zinc-200">
+                {activeCert.categoryLabel}
+              </span>
+
+              {activeCert.credentialType && (
+                <span
+                  className={`inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[10px] uppercase tracking-wider font-semibold border ${
+                    activeCert.credentialType === "Certification"
+                      ? "border-[#10B981]/40 bg-[#10B981]/10 text-emerald-700 dark:text-[#10B981]"
+                      : "border-neutral-300 dark:border-zinc-700 bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300"
+                  }`}
+                >
+                  {activeCert.credentialType}
+                </span>
+              )}
+              {activeCert.credentialId && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[11px] bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-700 dark:text-zinc-300">
+                  ID: {activeCert.credentialId}
+                </span>
+              )}
+              {activeCert.validThrough && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md font-mono text-[11px] bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-zinc-400">
+                  Valid through {activeCert.validThrough}
+                </span>
+              )}
+              {activeCert.verifyUrl && (
+                <a
+                  href={activeCert.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono text-[11px] font-medium border border-[#10B981]/35 bg-[#10B981]/10 text-emerald-700 dark:text-[#10B981] hover:bg-[#10B981]/20 transition-colors"
+                >
+                  <span>Verify at e-tesda.gov.ph</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
+            </div>
 
             {/* Instagram Post Timestamp */}
             <p className="text-[10px] uppercase tracking-wider text-neutral-400 dark:text-zinc-500 font-mono pt-0.5">
@@ -591,6 +702,130 @@ export const CertificateGrid: React.FC = () => {
             </p>
           </div>
         </article>
+
+        {/* Bryl Lim-Style Separated Certifications Directory by Classification */}
+        <div className="pt-4 space-y-5">
+          {visibleCategoryGroups.map((cat) => {
+            const groupCerts = certificatesData.filter(
+              (c) => c.category === cat.id
+            );
+            if (groupCerts.length === 0) return null;
+
+            return (
+              <div
+                key={cat.id}
+                className="rounded-2xl bg-white dark:bg-[#111116] border border-neutral-200 dark:border-zinc-800 p-4 sm:p-5 space-y-3"
+              >
+                {/* Classification Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pb-2.5 border-b border-neutral-100 dark:border-zinc-800/80">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm sm:text-base font-semibold text-neutral-900 dark:text-zinc-100">
+                        {cat.label}
+                      </h3>
+                      <span className="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 font-mono text-[10px] font-semibold text-neutral-600 dark:text-zinc-400 tabular-nums">
+                        {groupCerts.length}
+                      </span>
+                    </div>
+                    <p className="text-xs text-neutral-500 dark:text-zinc-400 mt-0.5">
+                      {cat.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Separated Credential Items within this Classification */}
+                <div className="divide-y divide-neutral-100 dark:divide-zinc-800/70">
+                  {groupCerts.map((cert) => {
+                    const isCurrentlyViewing = activeCert.id === cert.id;
+                    const isCertBadge = cert.credentialType === "Certification";
+
+                    return (
+                      <div
+                        key={cert.id}
+                        className={`py-2.5 first:pt-0.5 last:pb-0.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 transition-colors ${
+                          isCurrentlyViewing
+                            ? "text-neutral-900 dark:text-zinc-100"
+                            : "text-neutral-700 dark:text-zinc-300"
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => handleSelectCertFromDirectory(cert.id)}
+                          className="text-left group flex items-start gap-2.5 min-w-0 flex-1"
+                        >
+                          <span
+                            className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors ${
+                              isCurrentlyViewing
+                                ? "bg-[#10B981]"
+                                : "bg-neutral-300 dark:bg-zinc-700 group-hover:bg-neutral-500 dark:group-hover:bg-zinc-400"
+                            }`}
+                          />
+                          <div className="min-w-0">
+                            <div className="text-xs sm:text-sm leading-snug">
+                              <span
+                                className={`font-semibold group-hover:underline underline-offset-4 ${
+                                  isCurrentlyViewing
+                                    ? "text-neutral-900 dark:text-white"
+                                    : "text-neutral-900 dark:text-zinc-100"
+                                }`}
+                              >
+                                {cert.title}
+                              </span>
+                              <span className="text-neutral-400 dark:text-zinc-500 mx-1.5">
+                                —
+                              </span>
+                              <span className="text-neutral-500 dark:text-zinc-400">
+                                {cert.issuer}
+                              </span>
+                            </div>
+                            {cert.focus && (
+                              <p className="text-[11px] text-neutral-500 dark:text-zinc-400 mt-0.5 line-clamp-1">
+                                {cert.focus}
+                              </p>
+                            )}
+                          </div>
+                        </button>
+
+                        <div className="flex items-center gap-2 pl-4 sm:pl-0 flex-shrink-0">
+                          {cert.credentialType && (
+                            <span
+                              className={`px-2 py-0.5 rounded font-mono text-[10px] uppercase tracking-wider font-semibold border ${
+                                isCertBadge
+                                  ? "border-[#10B981]/35 bg-[#10B981]/10 text-emerald-700 dark:text-[#10B981]"
+                                  : "border-neutral-200 dark:border-zinc-800 bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-zinc-400"
+                              }`}
+                            >
+                              {cert.credentialType}
+                            </span>
+                          )}
+                          <span className="font-mono text-[11px] text-neutral-400 dark:text-zinc-500 tabular-nums">
+                            {cert.year ?? cert.postDate}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleSelectCertFromDirectory(cert.id)
+                            }
+                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] border transition-colors ${
+                              isCurrentlyViewing
+                                ? "border-[#10B981]/45 bg-[#10B981]/10 text-emerald-700 dark:text-[#10B981] font-semibold"
+                                : "border-neutral-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-900 text-neutral-600 dark:text-zinc-400 hover:text-neutral-900 dark:hover:text-zinc-200"
+                            }`}
+                          >
+                            <span>
+                              {isCurrentlyViewing ? "Viewing" : "View Slide"}
+                            </span>
+                            <ArrowUpRight className="w-2.5 h-2.5" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

@@ -1,10 +1,56 @@
-export type CredentialType = "Certification" | "Course Completion";
+export type CredentialType = "Certification" | "Course Completion" | "Seminar";
+
+export type CertificateCategory =
+  | "ai-ml"
+  | "cloud-devops"
+  | "engineering"
+  | "security-data";
+
+export interface CertificateCategoryMeta {
+  id: CertificateCategory;
+  label: string;
+  shortLabel: string;
+  description: string;
+}
+
+export const CERTIFICATE_CATEGORIES: CertificateCategoryMeta[] = [
+  {
+    id: "ai-ml",
+    label: "AI & Machine Learning",
+    shortLabel: "AI & ML",
+    description:
+      "Generative AI workflows, foundation models, RAG, AWS & Azure AI workloads, and ethical AI governance.",
+  },
+  {
+    id: "cloud-devops",
+    label: "Cloud & DevOps",
+    shortLabel: "Cloud & DevOps",
+    description:
+      "AWS cloud architecture, EC2, S3, Lambda, IAM security, VPC networking, and cloud governance.",
+  },
+  {
+    id: "engineering",
+    label: "Engineering",
+    shortLabel: "Engineering",
+    description:
+      "Python software engineering, object-oriented programming, modular architecture, and developer roadmaps.",
+  },
+  {
+    id: "security-data",
+    label: "Security & Data",
+    shortLabel: "Security & Data",
+    description:
+      "Ethical hacking, cybersecurity resilience, and data analytics for building safer systems.",
+  },
+];
 
 export interface Certificate {
   id: string;
   title: string;
   shortTitle: string;
   issuer: string;
+  category: CertificateCategory;
+  categoryLabel: string;
   credentialType?: CredentialType;
   credentialId?: string;
   verifyUrl?: string;
@@ -17,7 +63,7 @@ export interface Certificate {
 }
 
 /**
- * Verified certifications & course completions — presented cleanly across views.
+ * Verified certifications & course completions — classified by domain (Bryl Lim taxonomy).
  */
 export const certificatesData: Certificate[] = [
   {
@@ -25,6 +71,8 @@ export const certificatesData: Certificate[] = [
     title: "AWS Certified Cloud Practitioner (CLF-C02) — Course Completion",
     shortTitle: "AWS Cloud (TESDA)",
     issuer: "TESDA Online Program",
+    category: "cloud-devops",
+    categoryLabel: "Cloud & DevOps",
     credentialType: "Course Completion",
     credentialId: "CyiKhpQwvZ",
     verifyUrl: "https://e-tesda.gov.ph",
@@ -41,6 +89,8 @@ export const certificatesData: Certificate[] = [
     title: "Gemini Certified Student (University)",
     shortTitle: "Gemini Certified",
     issuer: "Google for Education",
+    category: "ai-ml",
+    categoryLabel: "AI & Machine Learning",
     credentialType: "Certification",
     validThrough: "November 14, 2029",
     focus:
@@ -56,6 +106,8 @@ export const certificatesData: Certificate[] = [
     title: "AWS Certified AI Practitioner (AIF-C01) — Course Completion",
     shortTitle: "AWS AI (TESDA)",
     issuer: "TESDA Online Program",
+    category: "ai-ml",
+    categoryLabel: "AI & Machine Learning",
     credentialType: "Course Completion",
     credentialId: "euZ5LSGDal",
     verifyUrl: "https://e-tesda.gov.ph",
@@ -73,6 +125,8 @@ export const certificatesData: Certificate[] = [
       "Microsoft Artificial Intelligence Course: Azure AI Fundamentals — Course Completion",
     shortTitle: "Azure AI (TESDA)",
     issuer: "TESDA Online Program",
+    category: "ai-ml",
+    categoryLabel: "AI & Machine Learning",
     credentialType: "Course Completion",
     credentialId: "ZhUJwes83g",
     verifyUrl: "https://e-tesda.gov.ph",
@@ -89,6 +143,8 @@ export const certificatesData: Certificate[] = [
     title: "Fundamentals of Artificial Intelligence — Course Completion",
     shortTitle: "AI Fundamentals (TESDA)",
     issuer: "TESDA Online Program",
+    category: "ai-ml",
+    categoryLabel: "AI & Machine Learning",
     credentialType: "Course Completion",
     credentialId: "VEhlLGlH6y",
     verifyUrl: "https://e-tesda.gov.ph",
@@ -105,6 +161,11 @@ export const certificatesData: Certificate[] = [
     title: "Python Essentials 1",
     shortTitle: "Python Essentials 1",
     issuer: "Cisco Networking Academy · Python Institute",
+    category: "engineering",
+    categoryLabel: "Engineering",
+    credentialType: "Certification",
+    focus:
+      "Python fundamentals, algorithmic control flow, data structures, and procedural programming.",
     caption:
       "Completed Python Essentials 1 via Cisco Networking Academy & OpenEDG Python Institute.",
     postDate: "APRIL 15, 2026",
@@ -116,6 +177,11 @@ export const certificatesData: Certificate[] = [
     title: "Python Essentials 2",
     shortTitle: "Python Essentials 2",
     issuer: "Cisco Networking Academy · Python Institute",
+    category: "engineering",
+    categoryLabel: "Engineering",
+    credentialType: "Certification",
+    focus:
+      "Object-oriented programming (OOP), Python modules, packages, exception handling, and standard library architecture.",
     caption:
       "Completed Python Essentials 2 covering OOP, modules, and standard library architecture.",
     postDate: "APRIL 15, 2026",
@@ -128,6 +194,11 @@ export const certificatesData: Certificate[] = [
       "Bridging Ethical Hacking and Data Analytics: Building Smarter and Safer Systems",
     shortTitle: "Ethical Hacking & Data",
     issuer: "De La Salle Lipa · Swinburne University",
+    category: "security-data",
+    categoryLabel: "Security & Data",
+    credentialType: "Seminar",
+    focus:
+      "Cybersecurity defense, ethical hacking methodologies, and data analytics for resilient system design.",
     caption:
       "Building Smarter and Safer Systems seminar at the De La Salle Lipa Amphitheater.",
     postDate: "JANUARY 13, 2026",
@@ -139,6 +210,11 @@ export const certificatesData: Certificate[] = [
     title: "DevRoutes: Learning How to Learn with Roadmaps",
     shortTitle: "DevRoutes",
     issuer: "JPCS — De La Salle Lipa Chapter",
+    category: "engineering",
+    categoryLabel: "Engineering",
+    credentialType: "Seminar",
+    focus:
+      "Structured software engineering roadmaps, full-stack skill progression, and modern developer workflows.",
     caption:
       "Developer roadmaps & engineering progression seminar at MB Auditorium, De La Salle Lipa.",
     postDate: "JANUARY 29, 2026",
@@ -150,6 +226,11 @@ export const certificatesData: Certificate[] = [
     title: "AI Ethics and Governance",
     shortTitle: "AI Ethics & Governance",
     issuer: "USAID · Asia Open RAN Academy",
+    category: "ai-ml",
+    categoryLabel: "AI & Machine Learning",
+    credentialType: "Certification",
+    focus:
+      "Responsible AI deployment frameworks, algorithmic fairness, model governance, and Indo-Pacific Open RAN standards.",
     caption:
       "Advancing Open RAN in Asia under the USAID Indo-Pacific Opportunity Program.",
     postDate: "OCTOBER 19, 2024",
