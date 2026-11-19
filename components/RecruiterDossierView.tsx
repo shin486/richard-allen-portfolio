@@ -46,10 +46,10 @@ interface RecruiterDossierViewProps {
 }
 
 const HERO_STATUS_NOTES: string[] = [
-  "Open to Full-Stack & Mobile Developer roles",
-  "Available for 500+ Hour OJT / Software Engineering Internship",
-  "Building cross-platform React Native & Supabase PostgreSQL systems",
-  "4th-year BS Information Technology at De La Salle Lipa",
+  "Open to Full-Stack & Software Developer OJT (486 hours)",
+  "BSIT — Major in System Development at De La Salle Lipa",
+  "Building multi-tenant SaaS, REST API & React Native systems",
+  "PalengkeHub Capstone: 100% pass rate (18 tests) · 4.17/5 UAT",
 ];
 
 interface ArchitectureStage {
@@ -75,26 +75,26 @@ const getProjectArchitectureSpec = (
   switch (project.id) {
     case "palengkehub":
       return {
-        qualityBadge: "✓ iOS & Android Tested",
+        qualityBadge: "✓ 100% Test Pass · 4.17/5 UAT",
         timelineBadge: dynamicTimelineBadge,
         cleanSubtitle:
-          "Public-Market Price Transparency & Offline-First Pre-Ordering",
+          "Cross-Platform Public-Market Marketplace & Price Transparency",
         stages: [
           {
             stageNumber: "01",
             layer: "Client",
-            tech: "React Native (Expo)",
+            tech: "React Native + React.js (Expo)",
             techKey: "React Native",
             description:
-              "Cross-platform mobile client with gesture navigation, offline caching, and camera integration.",
+              "Cross-platform mobile & web marketplace for Lipa City Public Market (Usability 4.35/5.00).",
           },
           {
             stageNumber: "02",
-            layer: "Logic",
-            tech: "TypeScript",
-            techKey: "TypeScript",
+            layer: "Workflows",
+            tech: "Node.js + Role Flows",
+            techKey: "Node.js",
             description:
-              "Strict type contracts across buyer, vendor, and admin transactional flows.",
+              "Consumer, vendor, and admin product management, transactions, and reporting (18/18 tests passed).",
           },
           {
             stageNumber: "03",
@@ -102,7 +102,7 @@ const getProjectArchitectureSpec = (
             tech: "Supabase (PostgreSQL)",
             techKey: "Supabase",
             description:
-              "ACID PostgreSQL schemas, Row-Level Security (RLS), and realtime price updates.",
+              "Supabase Auth, ACID PostgreSQL schemas, Row-Level Security (RLS), and realtime price updates.",
           },
         ],
       };
@@ -141,10 +141,10 @@ const getProjectArchitectureSpec = (
       };
     case "itelect4-project":
       return {
-        qualityBadge: "✓ Google Gemini AI Integrated",
+        qualityBadge: "✓ Gemini AI + Zod + JWT",
         timelineBadge: dynamicTimelineBadge,
         cleanSubtitle:
-          "AI-Powered Review & Full-Stack Microservice Platform",
+          "Full-Stack JWT CRUD & Google Gemini AI Platform",
         stages: [
           {
             stageNumber: "01",
@@ -320,7 +320,7 @@ const matchesStackDomain = (
 const SHORT_PROJECT_NAMES: Record<string, string> = {
   palengkehub: "PalengkeHub",
   "shinpay-plus": "ShinPay+",
-  "itelect4-project": "IT Elective 4",
+  "itelect4-project": "Submission Tracker",
   "auto-avenue-ims": "Auto Avenue",
   avms: "AVMS",
   "crave-cart": "Crave Cart",
@@ -962,9 +962,10 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
 
           {/* Supporting Sentence (32px / mt-8 directly below <h1>) */}
           <p className="mt-8 max-w-3xl text-base sm:text-lg lg:text-xl text-[#9CA3AF] leading-[1.6] font-normal">
-            Full-Stack &amp; Mobile Developer specializing in cross-platform React
-            Native applications and scalable PostgreSQL backends. 4th-year
-            BSIT at De La Salle Lipa.
+            Full-Stack &amp; Mobile Developer building multi-tenant SaaS, REST
+            APIs, and AI-integrated applications with Next.js, React Native,
+            TypeScript, and Supabase/PostgreSQL RLS. BSIT (Major in System
+            Development) at De La Salle Lipa — seeking a 486-hour OJT.
           </p>
 
           {/* Primary Action Row (32px / mt-8 below supporting sentence) */}
@@ -1565,8 +1566,8 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
             </div>
           </div>
 
-          {/* Cloud, Infrastructure & Applied AI Stack Strip */}
-          <div className="mt-8 pt-8 border-t border-white/[0.08] grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Cloud, Infrastructure, Applied AI & Resume Tooling Stack Strip */}
+          <div className="mt-8 pt-8 border-t border-white/[0.08] grid grid-cols-1 lg:grid-cols-3 gap-4">
             {cloudAiStackGroups.map((group) => (
               <div
                 key={group.id}
@@ -1577,7 +1578,11 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                     {group.label}
                   </span>
                   <span className="font-mono text-[11px] uppercase tracking-[0.05em] text-[#9CA3AF]">
-                    {group.id === "cloud-infra" ? "CLOUD & DEPLOY" : "LLM & RAG"}
+                    {group.id === "cloud-infra"
+                      ? "CLOUD & DEPLOY"
+                      : group.id === "ai-ml"
+                      ? "LLM & RAG"
+                      : "API & BI"}
                   </span>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">

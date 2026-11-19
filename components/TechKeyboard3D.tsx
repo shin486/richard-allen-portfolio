@@ -288,7 +288,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Type-safe interfaces, generics, and end-to-end full-stack safety.",
     usedIn: [
       { label: "ShinPay+", projectId: "shinpay-plus" },
-      { label: "IT Elective 4", projectId: "itelect4-project" },
+      { label: "Submission Tracker", projectId: "itelect4-project" },
     ],
     renderIcon: () => (
       <span className="font-mono font-black text-[11px] sm:text-xs tracking-tighter text-white leading-none">
@@ -346,7 +346,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     highlight: true,
     description: "Hooks, state management, and modular component architecture.",
     usedIn: [
-      { label: "IT Elective 4", projectId: "itelect4-project" },
+      { label: "Submission Tracker", projectId: "itelect4-project" },
       { label: "ShinPay+", projectId: "shinpay-plus" },
     ],
     renderIcon: () => (
@@ -427,7 +427,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     highlight: true,
     description: "REST APIs, JWT auth, rate-limiting, and local file handling.",
     usedIn: [
-      { label: "IT Elective 4", projectId: "itelect4-project" },
+      { label: "Submission Tracker", projectId: "itelect4-project" },
       { label: "Crave Cart", projectId: "crave-cart" },
     ],
     renderIcon: () => (
@@ -467,7 +467,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     color: "#15803D",
     wallColor: "#052E16",
     description: "Document data modeling and tenant-isolated CRUD operations.",
-    usedIn: [{ label: "IT Elective 4", projectId: "itelect4-project" }],
+    usedIn: [{ label: "Submission Tracker", projectId: "itelect4-project" }],
     renderIcon: () => (
       <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-emerald-200">
         <path d="M12 2C8 6.5 6.5 10.5 6.5 14.2 6.5 18 9 20.5 12 22c3-1.5 5.5-4 5.5-7.8C17.5 10.5 16 6.5 12 2zm0 17.5v-13" />
@@ -622,7 +622,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     highlight: true,
     description: "Multi-branch workflows, Pull Requests, and collaborative version control.",
     usedIn: [
-      { label: "IT Elective 4", projectId: "itelect4-project" },
+      { label: "Submission Tracker", projectId: "itelect4-project" },
       { label: "Auto Avenue", projectId: "auto-avenue-ims" },
       { label: "PalengkeHub", projectId: "palengkehub" },
     ],
@@ -648,7 +648,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     description: "Full-stack & frontend cloud deployment with environment configs.",
     usedIn: [
       { label: "ShinPay+", projectId: "shinpay-plus" },
-      { label: "IT Elective 4", projectId: "itelect4-project" },
+      { label: "Submission Tracker", projectId: "itelect4-project" },
     ],
     renderIcon: () => (
       <svg viewBox="0 0 24 24" className="w-3 h-3 fill-white">
@@ -666,7 +666,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     color: "#8B5CF6",
     wallColor: "#5B21B6",
     description: "Lightning-fast frontend build tooling and HMR dev server.",
-    usedIn: [{ label: "IT Elective 4", projectId: "itelect4-project" }],
+    usedIn: [{ label: "Submission Tracker", projectId: "itelect4-project" }],
     renderIcon: () => (
       <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-amber-300">
         <path d="M13 2L4 14h7l-1 8 10-12h-7l0-8z" />
@@ -684,7 +684,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
     wallColor: "#C2410C",
     highlight: true,
     description: "REST API testing, endpoint debugging, and payload validation.",
-    usedIn: [{ label: "IT Elective 4", projectId: "itelect4-project" }],
+    usedIn: [{ label: "Submission Tracker", projectId: "itelect4-project" }],
     renderIcon: () => (
       <span className="font-mono font-black text-[9px] sm:text-[10px] text-white leading-none">
         API
@@ -867,7 +867,7 @@ export const KEYCAP_SKILLS: KeycapSkill[] = [
       "Backed by Gemini Certified Student (University) from Google for Education (Applied generative AI workflows, prompt engineering & AI-assisted development).",
     usedIn: [
       { label: "Gemini Certified" },
-      { label: "IT Elective 4", projectId: "itelect4-project" },
+      { label: "Submission Tracker", projectId: "itelect4-project" },
     ],
     renderIcon: () => (
       <span className="font-mono font-black text-[9px] sm:text-[10px] tracking-tighter text-white leading-none">

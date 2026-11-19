@@ -3,11 +3,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 
 const IDLE_NOTES: string[] = [
-  "Open to Full-Stack & Mobile Developer roles.",
+  "Seeking a 486-hour Full-Stack / Software Dev OJT.",
   "Explore my projects below with interactive live demos.",
-  "Built with React Native, Next.js, TypeScript & Supabase.",
-  "4th-year BSIT preparing for OJT & internship.",
-  "Click around to test real live features and sandboxes.",
+  "Built with Next.js, React Native, TypeScript & Supabase RLS.",
+  "BSIT — Major in System Development @ De La Salle Lipa.",
+  "PalengkeHub validated: 100% test pass · 4.17/5.00 UAT.",
 ];
 
 interface ProfileNoteProps {

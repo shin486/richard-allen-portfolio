@@ -47,25 +47,25 @@ export const profileData: ProfileData = {
   title: "Full-Stack & Mobile Developer",
 
   bio:
-    "4th-year BS IT student building scalable web and cross-platform mobile apps focused on performance and clean architecture.",
+    "BSIT (Major in System Development) student at De La Salle Lipa building multi-tenant SaaS, REST API, AI-integrated, and cross-platform mobile applications. Seeking a 486-hour Full-Stack or Software Developer OJT / Internship.",
 
   educationSummary: {
-    degree: "Bachelor of Science in Information Technology",
+    degree: "Bachelor of Science in Information Technology — Major in System Development",
     school: "De La Salle Lipa",
-    expectedGraduation: "June 2, 2027",
+    expectedGraduation: "June 2027",
     location: "Lipa City, Batangas, Philippines",
   },
 
   highlightsList: [
     {
       icon: "GraduationCap",
-      text: "BS Information Technology",
-      subtext: "De La Salle Lipa",
+      text: "BSIT — Major in System Development",
+      subtext: "De La Salle Lipa (June 2027)",
     },
     {
       icon: "Laptop",
-      text: "Web Development",
-      subtext: "React, JavaScript & TypeScript",
+      text: "Web & Multi-Tenant SaaS",
+      subtext: "Next.js, React, TypeScript & RLS",
     },
     {
       icon: "Smartphone",
@@ -74,14 +74,14 @@ export const profileData: ProfileData = {
     },
     {
       icon: "Code2",
-      text: "Software Development",
-      subtext: "Building practical applications",
+      text: "REST APIs & AI Integration",
+      subtext: "Node.js, Express, JWT, Zod & Gemini",
     },
   ],
 
   stats: {
     projects: "06",
-    technologies: "32",
+    technologies: "36",
     certificates: "10",
   },
 
@@ -98,5 +98,5 @@ export const profileData: ProfileData = {
 
   isOpenToWork: true,
 
-  statusMessage: "Open to OJT & Internship Opportunities",
+  statusMessage: "Seeking 486-Hour Full-Stack / Software Dev OJT",
 };

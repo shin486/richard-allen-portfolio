@@ -102,13 +102,13 @@ export const devBlogPosts: DevBlogPost[] = [
           "If the network disappears mid-order, the app shouldn't punish the buyer.",
       },
       {
-        kicker: "02 // ARCHITECTURE",
-        heading: "Optimistic Queue + Sub-250ms Sync",
-        body: "In PalengkeHub, every pre-order writes locally first with an idempotent client key, updates the UI immediately, and replays automatically once signal returns — while Supabase Realtime streams price updates across 20+ SKUs in under 250ms.",
+        kicker: "02 // ARCHITECTURE & UAT VALIDATION",
+        heading: "100% Test Pass Rate & 4.17/5.00 UAT",
+        body: "Across our Lipa City Public Market cross-platform marketplace (React Native, React.js, Expo, Node.js, Supabase), we validated reliability with 18/18 passing functional test scenarios and 30 field evaluators (20 consumers, 8 vendors, 2 admins) — scoring 4.35 Usability and 4.28 Functionality.",
         bullets: [
-          "Idempotent client_mutation_id prevents duplicate stall orders on retry",
-          "8+ normalized PostgreSQL tables isolated by Supabase Row-Level Security",
-          "DTI Suggested Retail Price (SRP) comparison runs deterministically on-device",
+          "100% pass rate across 18 functional test scenarios & 4.17/5.00 overall UAT mean",
+          "Idempotent client_mutation_id prevents duplicate stall pre-orders on flaky reconnects",
+          "Supabase Auth & PostgreSQL Row-Level Security isolating consumer, vendor, and admin workflows",
         ],
       },
       {
@@ -375,7 +375,7 @@ USING (
       "bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-500/25",
     headline:
       "Taming LLM Outputs: Rate-Limited Gemini APIs with Strict Zod Schemas",
-    subtitle: "IT Elective 4 Microservice & Byte AI Assistant",
+    subtitle: "Submission Tracker (Aug–Oct 2026) & Byte AI Assistant",
     summary:
       "Turning unpredictable Google Gemini responses into schema-validated JSON endpoints with rate limiting and deterministic fallbacks.",
     slides: [
@@ -387,7 +387,7 @@ USING (
       {
         kicker: "02 // VALIDATION + GUARDRAILS",
         heading: "Zod Schema + Rate Limiter + Fallback",
-        body: "In my IT Elective 4 Express API (POST /api/ai) and this portfolio's Byte assistant, every LLM call passes through rate limiting, Zod validation, and a deterministic fallback synthesizer.",
+        body: "In my Submission Tracker Express API (POST /api/ai) and this portfolio's Byte assistant, every LLM call passes through rate limiting, Zod validation, and a deterministic fallback synthesizer.",
         codeSnippet: {
           filename: "server/routes/aiReview.ts",
           language: "TypeScript",
@@ -411,8 +411,8 @@ if (!parsed.success) return res.status(502).json({ error: "Schema mismatch" });`
       {
         heading: "Treating AI Endpoints Like Real Backend Contracts",
         paragraphs: [
-          "When integrating Google Gemini into my IT Elective 4 full-stack project (React + Express + MongoDB), the goal wasn't just getting text back — it was returning structured JSON reviews that the frontend could safely render without crashing.",
-          "We paired Express rate limiting (to protect API quota from accidental loops or abuse) with strict Zod runtime validation so malformed model responses are caught before reaching the client.",
+          "When integrating Google Gemini into Submission Tracker (React + Express + MongoDB, August – October 2026), the goal wasn't just getting text back — it was returning structured JSON reviews that the frontend could safely render without crashing.",
+          "We paired Express rate limiting (to protect API quota from accidental loops or abuse) with strict Zod runtime validation and multi-branch Vercel deployments via Pull Requests per deliverable.",
         ],
         code: {
           filename: "server/routes/aiReview.ts",
@@ -439,7 +439,7 @@ export function parseGeminiPayload(rawText: string) {
       "Design a deterministic fallback path so your UX never dead-ends when an external API hiccups.",
     ],
     deepLink: {
-      label: "Test IT Elective 4 Gemini Endpoint",
+      label: "Test Submission Tracker Gemini Endpoint",
       action: { type: "project", projectId: "itelect4-project" },
     },
   },
@@ -558,42 +558,42 @@ export function parseGeminiPayload(rawText: string) {
       "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/40",
     isCloseFriends: true,
     headline:
-      "From 80-Hour Creotec Immersion to Seeking My 500+ Hr OJT Engineering Team",
-    subtitle: "★ Close Friends · De La Salle Lipa BSIT (Class of June 2027)",
+      "Ready for My 486-Hour Full-Stack & Software Developer OJT Team",
+    subtitle: "★ Close Friends · DLSL BSIT — Major in System Development (June 2027)",
     summary:
-      "What corporate software immersion taught me about team sprints, code reviews, and how I'm ready to contribute on Day 1 of my OJT.",
+      "What shipping UAT-validated marketplaces, multi-tenant SaaS, and rate-limited AI REST APIs taught me about contributing on Day 1.",
     slides: [
       {
-        kicker: "★ CLOSE FRIENDS // INDUSTRY IMMERSION",
-        heading: "80 hours inside corporate software workflows",
-        body: "My 80-hour work immersion at Creotec Philippines Inc. bridged classroom coding and real engineering teams — practicing Agile sprint boards, clean PR reviews, and clear technical documentation.",
+        kicker: "★ CLOSE FRIENDS // ENGINEERING READINESS",
+        heading: "Tested in the field, built with PR discipline",
+        body: "From validating PalengkeHub across 30 Lipa City Public Market evaluators (100% pass rate across 18 test scenarios, 4.17/5.00 UAT) to shipping Submission Tracker via multi-branch Pull Requests and building ShinPay+ with PostgreSQL RLS, I engineer for production reliability.",
         bullets: [
-          "4th-year BS Information Technology at De La Salle Lipa (Graduating June 2027)",
-          "Active JPCS — DLSL Chapter member (DevRoutes & Ethical Hacking symposiums)",
-          "Ready for on-site, hybrid, or remote Full-Stack & Mobile OJT placements",
+          "BS Information Technology — Major in System Development, De La Salle Lipa (June 2027)",
+          "Active JPCS — De La Salle Lipa member (2023 – 2027)",
+          "Seeking a 486-hour Full-Stack or Software Developer OJT / Internship (On-site, Hybrid, or Remote)",
         ],
       },
       {
-        kicker: "★ CLOSE FRIENDS // OPEN FOR OJT",
+        kicker: "★ CLOSE FRIENDS // OPEN FOR 486-HR OJT",
         heading: "Ready to ship production code with your team",
-        body: "I'm actively looking for a 500+ hour OJT / Software Engineering Internship where I can contribute across Next.js, React Native, TypeScript, Supabase/PostgreSQL, and AI integrations while learning from senior engineers.",
+        body: "I'm actively looking for a 486-hour OJT / Software Developer Internship where I can contribute across Next.js, React, React Native, TypeScript, Node.js/Express, PostgreSQL/Supabase RLS, JWT/Zod, and AI integrations while learning from senior engineers.",
         quote:
-          "Available immediately — let's build something reliable together.",
+          "486 hours, strict TypeScript, clean PRs — ready to build with your team.",
       },
     ],
     articleSections: [
       {
         heading: "What I Bring to an Engineering Team on Day 1",
         paragraphs: [
-          "Through my 80-hour immersion at Creotec Philippines and shipping 6 end-to-end systems during my BSIT at De La Salle Lipa, I've learned that great junior engineers do three things consistently: write readable strict TypeScript, test their own edge cases before opening a PR, and communicate blockers early.",
-          "If your team is hiring a Full-Stack Web, Mobile (React Native / Expo), or Software Engineering OJT intern for 500+ hours, I would love to walk you through my live codebases or take on a technical assessment.",
+          "Across my BSIT (Major in System Development) at De La Salle Lipa and shipping multi-tenant SaaS (ShinPay+), AI-integrated REST APIs (Submission Tracker), and a UAT-validated cross-platform marketplace (PalengkeHub — 100% pass rate across 18 functional test scenarios and 4.17/5.00 UAT across 30 evaluators), I've learned that reliable junior engineers do three things consistently: enforce strict TypeScript & Zod contracts, isolate data at the database layer with RLS/JWT, and ship clean multi-branch PRs.",
+          "If your team is hiring a Full-Stack Developer or Software Developer OJT intern for 486 hours, I would love to walk you through my live codebases or take on a technical assessment.",
         ],
       },
     ],
     keyTakeaways: [
-      "500+ hour OJT availability for Full-Stack Web (Next.js / React) or Mobile (React Native / Expo).",
-      "Comfortable with Git PR workflows, relational SQL schemas, RLS security, and REST APIs.",
-      "Based in Batangas / Lipa City — open to On-site, Hybrid, or Remote setups.",
+      "486-hour OJT / Internship availability for Full-Stack Web (Next.js / React) or Mobile (React Native / Expo).",
+      "Hands-on with PostgreSQL/Supabase RLS, JWT auth, Zod schema validation, REST APIs, and multi-branch Git PR workflows.",
+      "Based in Mataas na Kahoy / Lipa City, Batangas — open to On-site, Hybrid, or Remote setups.",
     ],
     deepLink: {
       label: "Send an OJT / Internship Message",

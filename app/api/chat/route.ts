@@ -12,12 +12,12 @@ Speak naturally, conversationally, and directly to the user (like ChatGPT or Gem
 
 VERIFIED FACTS ABOUT RICHARD ALLEN LIMAN:
 - Name: Richard Allen Liman (preferred name: Richard Allen, handle: @shin486)
-- Education: Bachelor of Science in Information Technology (BSIT) at De La Salle Lipa (Lipa City, Batangas, Philippines), 2023 – June 2027 (Expected Graduation: June 2, 2027).
+- Education: Bachelor of Science in Information Technology — Major in System Development at De La Salle Lipa (Lipa City, Batangas, Philippines), Expected Graduation: June 2027.
 - Location: Mataas na Kahoy, Batangas, Philippines.
-- Organization: Active Member, Junior Philippine Computer Society (JPCS) - De La Salle Lipa Chapter (2023 – Present).
-- Career Goal: Open and actively seeking On-the-Job Training (OJT), internship, and junior full-stack / mobile developer opportunities.
-- Contact: richardallen0901@gmail.com | Phone: 09936105240 | GitHub: https://github.com/shin486 | LinkedIn: https://www.linkedin.com/in/allen-liman-00637438a
-- Resume: Official 1-page PDF available at /resume.pdf (includes verified projects PalengkeHub, ShinPay+, IT Elective 4, Cisco Python certifications, and DLSL education).
+- Activities & Organization: Member, Junior Philippine Computer Society (JPCS) — De La Salle Lipa (2023 – 2027).
+- Career Goal: Actively seeking a Full-Stack Developer or Software Developer OJT / Internship opportunity (486 hours).
+- Contact: richardallen0901@gmail.com | Phone: 09936105240 | GitHub: https://github.com/shin486 | LinkedIn: https://www.linkedin.com/in/allen-liman-00637438a | Portfolio: https://richard-allen-portfolio.vercel.app
+- Resume: Updated official 1-page PDF available at /resume.pdf (highlighting ShinPay+, Submission Tracker, PalengkeHub with 100% functional test pass rate & 4.17/5.00 UAT across 30 evaluators, TypeScript/Next.js/React Native/Supabase RLS/JWT/Zod/Power BI/UiPath, JPCS, and AWS/Cisco/USAID credentials).
 
 OFFICIAL PROJECTS (Exactly these 6):
 ${projectsData
@@ -69,21 +69,21 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
   const projectMatchers: { project: Project; keywords: string[]; whatHeDid: string }[] = [
     {
       project: projectsData[0], // PalengkeHub
-      keywords: ["palengkehub", "palengke", "capstone", "thesis", "public market", "market app"],
+      keywords: ["palengkehub", "palengke", "capstone", "thesis", "public market", "market app", "uat"],
       whatHeDid:
-        "Served as **Full-Stack Developer**, building the React Native mobile marketplace for consumer price viewing, stall locating, and pre-ordering, plus integrating **Supabase** authentication and database operations across consumer, vendor, and administrator workflows (product management, transaction processing, and admin reporting).",
+        "Served as **Full-Stack Developer** (March 2026 – October 2026), developing a cross-platform mobile and web marketplace (**React Native, React.js, Expo, Node.js, Supabase**) for public-market price transparency and stall-level pre-ordering in Lipa City Public Market. Built Supabase auth and workflows for consumers, vendors, and admins, and validated system reliability with a **100% pass rate across 18 functional test scenarios** and a **4.17/5.00 overall UAT mean score across 30 evaluators** (Usability **4.35/5.00**, Functionality **4.28/5.00**).",
     },
     {
       project: projectsData[1], // ShinPay+
       keywords: ["shinpay", "shin pay", "payroll", "hr saas", "multi-tenant", "multitenant"],
       whatHeDid:
-        "Serving as **Full-Stack Developer**, architecting the multi-tenant payroll and HR SaaS using **Next.js 14 App Router** and **TypeScript**, implementing **Supabase PostgreSQL** database services, authentication, file storage, and tenant-aware **Row-Level Security (RLS)** for Philippine statutory compliance, deployed on Vercel.",
+        "Serving as **Full-Stack Developer** (September 2026 – Present), architecting the multi-tenant payroll and HR SaaS platform using **Next.js App Router, TypeScript, Tailwind CSS, and Vercel**, implementing PostgreSQL schemas, authentication, file storage, and database-level **Row-Level Security (RLS)** via Supabase for Philippine statutory compliance.",
     },
     {
-      project: projectsData[2], // IT Elective 4 Project
-      keywords: ["elective 4", "itelect4", "it elective 4", "gemini", "zod"],
+      project: projectsData[2], // Submission Tracker
+      keywords: ["submission tracker", "submission", "tracker", "elective 4", "itelect4", "it elective 4", "gemini", "zod"],
       whatHeDid:
-        "Served as **Full-Stack Developer**, building a **React + Express + MongoDB** app with JWT-authenticated CRUD, protected routes, and tenant-isolated data, and integrating a live **Google Gemini AI** endpoint (`POST /api/ai`) with Zod-validated JSON reviews and rate limiting, deployed on Vercel.",
+        "Served as **Full-Stack Developer** (August 2026 – October 2026), engineering a **React, Express, and MongoDB** app with JWT-authenticated CRUD operations, protected routes, and tenant-isolated REST API data, integrating **Google Gemini AI** into a live `POST /api/ai` endpoint with **Zod**-validated JSON reviews and API rate-limiting, deployed to Vercel via a multi-branch PR Git workflow.",
     },
     {
       project: projectsData[3], // Auto Avenue
@@ -183,19 +183,19 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
   }
 
   if (
-    /\b(ojt|intern|internship|available|availability|hire|hiring|open to work|job|opportunity|recruit)\b/.test(
+    /\b(ojt|intern|internship|available|availability|hire|hiring|open to work|job|opportunity|recruit|486)\b/.test(
       lower
     )
   ) {
-    return `🐾 **Yes!** Richard is a 4th-year BS Information Technology student at **De La Salle Lipa** (graduating June 2027) and is **actively open for On-the-Job Training (OJT) and internship opportunities** in Full-Stack Web or Mobile Development.\n\n• **Email:** richardallenliman@gmail.com\n• **LinkedIn:** https://www.linkedin.com/in/allenliman\n• **GitHub:** https://github.com/shin486`;
+    return `🐾 **Yes!** Richard is a BS Information Technology (**Major in System Development**) student at **De La Salle Lipa** (Expected Graduation: June 2027) and is **actively seeking a Full-Stack Developer or Software Developer OJT / Internship opportunity (486 hours)**.\n\n• **Email:** richardallen0901@gmail.com\n• **Phone:** 09936105240\n• **LinkedIn:** https://www.linkedin.com/in/allen-liman-00637438a\n• **GitHub:** https://github.com/shin486`;
   }
 
   if (
-    /\b(stack|skill|technolog|language|framework|database|frontend|backend|mobile|tools|cloud|aws|azure|bedrock|rag|llm)\b/.test(
+    /\b(stack|skill|technolog|language|framework|database|frontend|backend|mobile|tools|cloud|aws|azure|bedrock|rag|llm|power bi|uipath|jwt|zod)\b/.test(
       lower
     )
   ) {
-    return `🐾 Here's what I fetched on Richard's technical stack and where he used each tool:\n\n• **Cloud & Infrastructure:** AWS (EC2, S3, Lambda, IAM, VPC), Microsoft Azure (AI Fundamentals), Vercel, Supabase, Render\n• **AI & Applied ML:** Generative AI / LLMs (RAG, Prompt Engineering, Amazon Bedrock, Google Gemini)\n• **Frontend & Mobile:** React (IT Elective 4), Next.js 14 (ShinPay+), React Native (PalengkeHub), TypeScript (ShinPay+, IT Elective 4), JavaScript, Tailwind CSS, Bootstrap\n• **Backend & Databases:** Supabase & PostgreSQL (PalengkeHub, ShinPay+), Node.js & Express (IT Elective 4, Crave Cart), PHP & MySQL (Auto Avenue), MongoDB (IT Elective 4)\n• **Workflow & Security:** Git, GitHub, Row-Level Security (RLS), JWT Auth, ITSM / RBAC`;
+    return `🐾 Here's what I fetched on Richard's technical stack and where he used each tool:\n\n• **Languages:** TypeScript, JavaScript, Python, SQL, Java, C++, PHP\n• **Frontend & Mobile:** Next.js (App Router), React, React Native, Expo, Tailwind CSS, Bootstrap, HTML, CSS\n• **Backend & Databases:** Node.js, Express, REST APIs, PostgreSQL, Supabase (Auth, Storage, RLS), MongoDB, MySQL, SQLite, JWT, Zod\n• **Tools & Workflow:** Git, GitHub, Vercel, Postman, Vite, Linux, Figma, VS Code, Power BI, UiPath\n• **Cloud & AI:** AWS (CLF-C02, AIF-C01 / Bedrock), Microsoft Azure AI, Google Gemini AI`;
   }
 
   if (
@@ -207,15 +207,15 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
   }
 
   if (
-    /\b(school|educat|college|university|dlsl|la salle|degree|course|graduate|graduation|jpcs|organization)\b/.test(
+    /\b(school|educat|college|university|dlsl|la salle|degree|course|graduate|graduation|jpcs|organization|major|system development)\b/.test(
       lower
     )
   ) {
-    return `🐾 Richard is pursuing his **Bachelor of Science in Information Technology (BSIT)** at **De La Salle Lipa** in Lipa City, Batangas (2023 – June 2027). He is also an active member of the **Junior Philippine Computer Society (JPCS) - DLSL Chapter**.`;
+    return `🐾 Richard is pursuing his **Bachelor of Science in Information Technology — Major in System Development** at **De La Salle Lipa** in Lipa City, Batangas (Expected Graduation: June 2027). He is also an active member of the **Junior Philippine Computer Society (JPCS) — De La Salle Lipa** (2023 – 2027).`;
   }
 
   if (/\b(resume|cv|curriculum vitae|biodata)\b/.test(lower)) {
-    return `🐾 You can view or download Richard's official 1-page resume directly here: [**Download Resume (PDF)**](/resume.pdf) — featuring his education at **De La Salle Lipa**, verified projects (**PalengkeHub**, **ShinPay+**, **IT Elective 4**), skills, and Cisco certifications!`;
+    return `🐾 You can view or download Richard's updated official 1-page resume directly here: [**Download Resume (PDF)**](/resume.pdf) — featuring his BSIT (**Major in System Development**) at **De La Salle Lipa**, flagship projects (**ShinPay+**, **Submission Tracker**, **PalengkeHub** with 100% test pass & 4.17/5.00 UAT), full technical stack, **486-hour OJT** target, and AWS/Cisco/USAID credentials!`;
   }
 
   if (/\b(contact|email|reach|linkedin|github|social|message|phone)\b/.test(lower)) {
@@ -228,14 +228,14 @@ function synthesizePortfolioReply(message: string, history: HistoryItem[] = []):
     ) ||
     isAskingWhatHeDidOrRole
   ) {
-    return `🐾 Richard has served as **Full-Stack Developer** across **6 official projects**:\n\n1. **PalengkeHub** (2025–2026) — Mobile public-market price transparency & pre-ordering app (**React Native, Supabase**)\n2. **ShinPay+** (2026–Present) — Multi-tenant payroll & HR SaaS with RLS (**Next.js 14, TypeScript, Supabase**)\n3. **IT Elective 4 Project** (2026–Present) — Full-stack JWT CRUD app + live Google Gemini AI endpoint (**React, Express, MongoDB**)\n4. **Auto Avenue** (2025) — Web Inventory Management System integrated with POS (**PHP, MySQL, Bootstrap**)\n5. **AVMS** (2024) — Automated Visitor Management System with QR badges & 99.9% SLA (**ITSM, RBAC & MFA**)\n6. **Crave Cart** — Web food ordering system with cart & Google Maps (**Node.js, JavaScript**)\n\nAsk me about any combination of these and I'll fetch the exact details!`;
+    return `🐾 Richard has served as **Full-Stack Developer** across **6 official projects**:\n\n1. **PalengkeHub** (Mar – Oct 2026) — Cross-platform mobile & web public-market marketplace (**100% pass rate across 18 tests · 4.17/5.00 UAT across 30 evaluators**; React Native, React.js, Expo, Node.js, Supabase)\n2. **ShinPay+** (Sep 2026 – Present) — Multi-tenant payroll & HR SaaS with PostgreSQL RLS (**Next.js App Router, TypeScript, Tailwind CSS, Supabase, Vercel**)\n3. **Submission Tracker** (Aug – Oct 2026) — JWT-authenticated CRUD + live Google Gemini AI endpoint (\`POST /api/ai\`) with Zod validation & rate-limiting (**React, Express, MongoDB**)\n4. **Auto Avenue** (Apr 2025) — Web Inventory Management System integrated with POS (**PHP, MySQL, Bootstrap**)\n5. **AVMS** (Dec 2024) — Automated Visitor Management System with QR badges & 99.9% SLA (**ITSM, RBAC & MFA**)\n6. **Crave Cart** — Web food ordering system with cart & Google Maps (**Node.js, JavaScript**)\n\nAsk me about any combination of these and I'll fetch the exact details!`;
   }
 
   if (/\b(who is richard|about richard|tell me about him|introduce|bio|summary)\b/.test(lower)) {
-    return `🐾 **Richard Allen Liman (@shin486)** is a 4th-year **BS Information Technology** student at **De La Salle Lipa** (graduating June 2027) and an aspiring **Full-Stack & Mobile Developer**.\n\nHe has built **6 projects** spanning React Native mobile apps (**PalengkeHub**), multi-tenant Next.js/Supabase SaaS (**ShinPay+**), Express/MongoDB + Gemini AI (**IT Elective 4**), and PHP/MySQL inventory systems (**Auto Avenue**). He is currently **open for OJT and internship opportunities**!`;
+    return `🐾 **Richard Allen Liman (@shin486)** is a **BS Information Technology (Major in System Development)** student at **De La Salle Lipa** (Expected Graduation: June 2027) and a **Full-Stack & Mobile Developer**.\n\nHe has hands-on experience building multi-tenant SaaS (**ShinPay+**), AI-integrated REST APIs (**Submission Tracker**), and UAT-validated cross-platform marketplaces (**PalengkeHub** — 100% functional test pass rate, 4.17/5.00 UAT). He is actively seeking a **486-hour OJT / Software Developer Internship**!`;
   }
 
-  return `Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Here's a quick summary of what I can help you with:\n\n• **His 6 Projects:** PalengkeHub, ShinPay+, IT Elective 4 Project, Auto Avenue, AVMS, and Crave Cart\n• **His Role & Contributions:** Full-Stack Web & Mobile architecture, Supabase RLS, REST APIs, and database design\n• **Education & Availability:** 4th-year BSIT at **De La Salle Lipa** (June 2027), actively open for **OJT / internships**\n\nTry asking: *"What did Richard do in ShinPay+ and PalengkeHub?"* or *"Compare his mobile and web projects!"*`;
+  return `Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Here's a quick summary of what I can help you with:\n\n• **His 6 Projects:** PalengkeHub (Capstone · 4.17/5 UAT), ShinPay+, Submission Tracker, Auto Avenue, AVMS, and Crave Cart\n• **His Role & Stack:** Full-Stack Web & Mobile (Next.js, React Native, TypeScript, Node/Express, Supabase RLS, JWT, Zod, Power BI, UiPath)\n• **Education & Availability:** BSIT (Major in System Development) at **De La Salle Lipa** (June 2027), seeking a **486-hour OJT / Internship**\n\nTry asking: *"What did Richard do in ShinPay+ and Submission Tracker?"* or *"Tell me about PalengkeHub's UAT results!"*`;
 }
 
 function sanitizeApiKey(raw?: string): string {

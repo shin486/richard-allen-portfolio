@@ -34,22 +34,22 @@ const SHIPPED_SYSTEMS = [
     id: "palengkehub",
     label: "PalengkeHub",
     architecture:
-      "React Native ▸ Expo ▸ TypeScript ▸ Supabase Realtime (<250ms) ▸ PostgreSQL RLS",
-    summary: "Offline-First Public Market Mobile App",
+      "React Native + React.js ▸ Expo ▸ Node.js ▸ Supabase Auth & PostgreSQL RLS",
+    summary: "Cross-Platform Public Market App · 100% Test Pass & 4.17/5 UAT",
   },
   {
     id: "shinpay-plus",
     label: "ShinPay+",
     architecture:
-      "Next.js 14 App Router ▸ TypeScript ▸ TRAIN Tax Engine ▸ Supabase ▸ PostgreSQL RLS",
+      "Next.js App Router ▸ TypeScript ▸ Tailwind CSS ▸ Supabase PostgreSQL RLS",
     summary: "Multi-Tenant Enterprise Payroll & HR SaaS",
   },
   {
     id: "itelect4-project",
-    label: "IT Elective 4",
+    label: "Submission Tracker",
     architecture:
-      "React + Vite ▸ TypeScript ▸ Node.js & Express ▸ Gemini AI ▸ MongoDB",
-    summary: "Full-Stack JWT CRUD & Google Gemini AI Endpoint",
+      "React + Vite ▸ TypeScript ▸ Node.js & Express ▸ JWT + Zod + Gemini AI ▸ MongoDB",
+    summary: "Full-Stack JWT CRUD & Google Gemini AI Platform",
   },
   {
     id: "auto-avenue-ims",
@@ -790,6 +790,39 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({
             </div>
           );
         })}
+      </div>
+
+      {/* Supplemental APIs, Schema Validation, Analytics & Automation Strip */}
+      <div className="mt-4 rounded-2xl border border-neutral-200/80 dark:border-zinc-800/80 bg-white dark:bg-[#0d0e13] p-4 sm:p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-neutral-100 dark:border-zinc-800/80">
+          <span className="text-[11px] font-mono uppercase tracking-[0.12em] font-semibold text-neutral-900 dark:text-zinc-100">
+            APIs, Validation, BI &amp; Automation
+          </span>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 dark:text-zinc-500">
+            +4 VERIFIED RESUME TOOLS
+          </span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {[
+            { name: "REST APIs", detail: "Express & Node.js" },
+            { name: "JWT", detail: "Auth & Protected Routes" },
+            { name: "Zod", detail: "Runtime Schema Validation" },
+            { name: "Power BI", detail: "Dashboards & Analytics" },
+            { name: "UiPath", detail: "RPA Process Automation" },
+          ].map((tool) => (
+            <div
+              key={tool.name}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-neutral-200/80 dark:border-zinc-800 bg-neutral-50/70 dark:bg-zinc-900/50 text-xs"
+            >
+              <span className="font-semibold text-neutral-900 dark:text-zinc-100">
+                {tool.name}
+              </span>
+              <span className="text-[10px] font-mono text-neutral-500 dark:text-zinc-400">
+                {tool.detail}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Fixed Full-Viewport 3D Keycap Flight Portal (Renders Flying Keycaps from Sidebar Keyboard -> Skill Sockets) */}

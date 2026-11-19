@@ -34,7 +34,7 @@ export const skillsData: SkillCategory[] = [
         name: "TypeScript",
         highlight: true,
         description: "Type-safe interfaces, Generics, Full-Stack apps",
-        usedIn: ["ShinPay+", "IT Elective 4 Project", "Portfolio"],
+        usedIn: ["ShinPay+", "Submission Tracker", "Portfolio"],
       },
       {
         name: "PHP",
@@ -74,7 +74,7 @@ export const skillsData: SkillCategory[] = [
         name: "React",
         highlight: true,
         description: "Hooks, State Management, Component Architecture",
-        usedIn: ["IT Elective 4 Project", "ShinPay+"],
+        usedIn: ["Submission Tracker", "ShinPay+", "PalengkeHub"],
       },
       {
         name: "React Native",
@@ -121,12 +121,12 @@ export const skillsData: SkillCategory[] = [
         name: "Node.js & Express",
         highlight: true,
         description: "REST APIs, JWT auth, rate-limiting, local file handling",
-        usedIn: ["IT Elective 4 Project", "Crave Cart"],
+        usedIn: ["Submission Tracker", "PalengkeHub", "Crave Cart"],
       },
       {
         name: "MongoDB",
         description: "Document data modeling & tenant-isolated CRUD",
-        usedIn: ["IT Elective 4 Project"],
+        usedIn: ["Submission Tracker"],
       },
       {
         name: "MySQL",
@@ -139,35 +139,47 @@ export const skillsData: SkillCategory[] = [
         description: "Embedded local relational database",
         usedIn: ["Academic Coursework"],
       },
+      {
+        name: "JWT & REST APIs",
+        highlight: true,
+        description: "Stateless JWT authentication, protected routes, and tenant-isolated REST APIs",
+        usedIn: ["Submission Tracker", "Crave Cart"],
+      },
+      {
+        name: "Zod",
+        highlight: true,
+        description: "Runtime TypeScript schema validation for structured AI JSON and API payloads",
+        usedIn: ["Submission Tracker", "ShinPay+"],
+      },
     ],
   },
   {
     title: "Tools & Workflow",
     categoryKey: "tools",
-    description: "Version control, cloud deployment, and UI/UX design tools",
+    description: "Version control, cloud deployment, analytics, automation, and UI/UX tools",
     skills: [
       {
         name: "Git & GitHub",
         highlight: true,
         description: "Multi-branch workflows, Pull Requests, version control",
-        usedIn: ["IT Elective 4 Project", "Auto Avenue", "PalengkeHub"],
+        usedIn: ["Submission Tracker", "Auto Avenue", "PalengkeHub"],
       },
       {
         name: "Vercel",
         highlight: true,
         description: "Full-stack & frontend cloud deployment, env configs",
-        usedIn: ["ShinPay+", "IT Elective 4 Project", "Portfolio"],
+        usedIn: ["ShinPay+", "Submission Tracker", "Portfolio"],
       },
       {
         name: "Postman",
         highlight: true,
         description: "REST API testing, endpoint debugging & validation",
-        usedIn: ["IT Elective 4 Project"],
+        usedIn: ["Submission Tracker"],
       },
       {
         name: "Vite",
         description: "Fast frontend build tooling and dev server",
-        usedIn: ["IT Elective 4 Project"],
+        usedIn: ["Submission Tracker"],
       },
       {
         name: "Figma",
@@ -190,6 +202,16 @@ export const skillsData: SkillCategory[] = [
         highlight: true,
         description: "React Native mobile development & testing",
         usedIn: ["PalengkeHub"],
+      },
+      {
+        name: "Power BI",
+        description: "Interactive business intelligence dashboards and data reporting",
+        usedIn: ["Analytics & Reporting"],
+      },
+      {
+        name: "UiPath",
+        description: "Robotic Process Automation (RPA) workflow design and automation",
+        usedIn: ["Process Automation"],
       },
     ],
   },
@@ -225,7 +247,7 @@ export const skillsData: SkillCategory[] = [
         highlight: true,
         description:
           "Backed by Gemini Certified Student (University) from Google for Education (Applied generative AI workflows, prompt engineering & AI-assisted development).",
-        usedIn: ["Gemini Certified", "IT Elective 4 Project"],
+        usedIn: ["Gemini Certified", "Submission Tracker"],
       },
       {
         name: "Machine Learning",
@@ -239,8 +261,8 @@ export const skillsData: SkillCategory[] = [
 ];
 
 /**
- * Shared Cloud & AI stack supplement groups rendered in Recruiter Dossier
- * so Cloud & AI credentials connect directly to deployment and infrastructure tags.
+ * Shared Cloud, AI & Resume Tooling supplement groups rendered in Recruiter Dossier
+ * and Skills views so all resume tools connect clearly to deployment and engineering tags.
  */
 export const cloudAiStackGroups = [
   {
@@ -250,15 +272,27 @@ export const cloudAiStackGroups = [
       "AWS (EC2, S3, Lambda, IAM, VPC)",
       "Microsoft Azure (AI Fundamentals)",
       "Vercel",
-      "Supabase",
-      "Render",
+      "Supabase (Auth, Storage, RLS)",
     ],
   },
   {
     id: "ai-ml",
     label: "AI & Applied ML",
     tags: [
-      "Generative AI / LLMs (RAG, Prompt Engineering, Amazon Bedrock, Google Gemini)",
+      "Google Gemini AI",
+      "Amazon Bedrock (RAG & Guardrails)",
+      "Prompt Engineering",
+    ],
+  },
+  {
+    id: "validation-automation",
+    label: "APIs, Validation & Automation",
+    tags: [
+      "REST APIs",
+      "JWT Authentication",
+      "Zod Schema Validation",
+      "Power BI",
+      "UiPath",
     ],
   },
 ] as const;

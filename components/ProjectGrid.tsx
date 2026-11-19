@@ -63,13 +63,13 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
   switch (project.id) {
     case "palengkehub":
       return {
-        qualityTag: "✓ iOS & Android Tested",
+        qualityTag: "✓ 100% Test Pass · 4.17/5 UAT",
         nodes: [
           {
             layer: "Client",
-            tech: "React Native (Expo)",
+            tech: "React Native + React.js",
             techKey: "React Native",
-            note: "Cross-platform mobile client with gesture navigation and camera barcode scanning.",
+            note: "Cross-platform mobile & web marketplace for Lipa City Public Market stalls.",
             brandClass:
               "border-cyan-500/50 bg-cyan-950/20 text-cyan-300 dark:text-cyan-200",
             haloClass: "hover:shadow-[0_0_14px_rgba(6,182,212,0.3)]",
@@ -373,7 +373,7 @@ const getProjectPipeline = (project: Project): ProjectPipeline => {
 const getProjectPillLabel = (proj: Project): string => {
   if (proj.id === "avms") return "AVMS";
   if (proj.id === "auto-avenue-ims") return "Auto Avenue";
-  if (proj.id === "itelect4-project") return "IT Elective 4";
+  if (proj.id === "itelect4-project") return "Submission Tracker";
   return proj.title;
 };
 

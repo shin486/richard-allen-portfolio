@@ -220,27 +220,27 @@ const getLocalByteReply = (message: string): string => {
   const projects = [
     {
       title: "PalengkeHub",
-      year: "September 2025 – October 2026",
-      tech: "JavaScript, React Native, Supabase, HTML",
-      keywords: ["palengkehub", "palengke", "capstone", "thesis", "market"],
+      year: "March 2026 – October 2026",
+      tech: "React Native, React.js, Expo, Node.js, Supabase",
+      keywords: ["palengkehub", "palengke", "capstone", "thesis", "market", "uat"],
       whatHeDid:
-        "Served as **Full-Stack Developer**, building the React Native mobile marketplace for consumer price viewing, stall locating, and pre-ordering, and integrating **Supabase** authentication and database operations across consumer, vendor, and administrator workflows.",
+        "Served as **Full-Stack Developer**, building a cross-platform mobile and web marketplace for public-market price transparency and stall pre-ordering in Lipa City Public Market with Supabase auth/workflows across consumer, vendor, and admin roles — validated with a **100% pass rate across 18 functional test scenarios** and a **4.17/5.00 overall UAT mean across 30 evaluators** (Usability **4.35/5.00**, Functionality **4.28/5.00**).",
     },
     {
       title: "ShinPay+",
       year: "September 2026 – Present",
-      tech: "Next.js 14, TypeScript, Supabase, PostgreSQL, Tailwind CSS, Vercel",
+      tech: "Next.js App Router, TypeScript, Tailwind CSS, Supabase, PostgreSQL, Vercel",
       keywords: ["shinpay", "shin pay", "payroll", "saas", "multi-tenant"],
       whatHeDid:
-        "Serving as **Full-Stack Developer**, architecting the multi-tenant payroll and HR SaaS using **Next.js 14 App Router** and **TypeScript**, with **Supabase PostgreSQL**, authentication, file storage, and tenant-aware **Row-Level Security (RLS)** for Philippine statutory compliance.",
+        "Serving as **Full-Stack Developer**, architecting the multi-tenant payroll and HR SaaS platform using **Next.js App Router** and **TypeScript**, implementing PostgreSQL schemas, authentication, file storage, and database-level **Row-Level Security (RLS)** via Supabase for Philippine statutory compliance.",
     },
     {
-      title: "IT Elective 4 Project",
-      year: "August 2026 – Present",
-      tech: "TypeScript, React, Vite, Express, MongoDB",
-      keywords: ["elective 4", "itelect4", "gemini", "zod"],
+      title: "Submission Tracker",
+      year: "August 2026 – October 2026",
+      tech: "TypeScript, React, Express, MongoDB, JWT, Zod, Gemini AI",
+      keywords: ["submission tracker", "submission", "tracker", "elective 4", "itelect4", "gemini", "zod"],
       whatHeDid:
-        "Served as **Full-Stack Developer**, building a **React + Express + MongoDB** app with JWT-authenticated CRUD, protected routes, tenant-isolated data, and a live **Google Gemini AI** endpoint (`POST /api/ai`) with Zod-validated JSON reviews.",
+        "Served as **Full-Stack Developer**, building a **React + Express + MongoDB** app with JWT-authenticated CRUD, protected routes, tenant-isolated REST API data, and a live **Google Gemini AI** endpoint (`POST /api/ai`) with Zod-validated JSON reviews and API rate-limiting, deployed to Vercel via a multi-branch PR workflow.",
     },
     {
       title: "Auto Avenue",
@@ -285,9 +285,10 @@ const getLocalByteReply = (message: string): string => {
     lower.includes("available") ||
     lower.includes("hire") ||
     lower.includes("hiring") ||
-    lower.includes("opportunity")
+    lower.includes("opportunity") ||
+    lower.includes("486")
   ) {
-    return "🐾 **Yes!** Richard is a 4th-year BS Information Technology student at **De La Salle Lipa** (graduating June 2027) and is **actively open for On-the-Job Training (OJT) and internship opportunities** in Full-Stack Web or Mobile Development. You can reach him directly at **richardallen0901@gmail.com** or on **LinkedIn**!";
+    return "🐾 **Yes!** Richard is a BS Information Technology (**Major in System Development**) student at **De La Salle Lipa** (Expected Graduation: June 2027) and is **actively seeking a Full-Stack Developer or Software Developer OJT / Internship opportunity (486 hours)**. You can reach him directly at **richardallen0901@gmail.com** or on **LinkedIn**!";
   }
   if (
     lower.includes("stack") ||
@@ -296,9 +297,12 @@ const getLocalByteReply = (message: string): string => {
     lower.includes("language") ||
     lower.includes("framework") ||
     lower.includes("bedrock") ||
-    lower.includes("rag")
+    lower.includes("rag") ||
+    lower.includes("power bi") ||
+    lower.includes("uipath") ||
+    lower.includes("jwt")
   ) {
-    return "🐾 Here's what I fetched on Richard's core technical stack:\n\n• **Cloud & Infrastructure:** AWS (EC2, S3, Lambda, IAM, VPC), Microsoft Azure (AI Fundamentals), Vercel, Supabase, Render\n• **AI & Applied ML:** Generative AI / LLMs (RAG, Prompt Engineering, Amazon Bedrock, Google Gemini)\n• **Frontend & Mobile:** React, Next.js 14, React Native, TypeScript, Tailwind CSS\n• **Backend & Databases:** Supabase, PostgreSQL, Node.js, Express, PHP, MySQL, MongoDB\n• **Tools & Workflow:** Git, GitHub, Vite, Figma, Expo";
+    return "🐾 Here's what I fetched on Richard's core technical stack:\n\n• **Languages:** TypeScript, JavaScript, Python, SQL, Java, C++, PHP\n• **Frontend & Mobile:** Next.js (App Router), React, React Native, Expo, Tailwind CSS, Bootstrap, HTML, CSS\n• **Backend & Databases:** Node.js, Express, REST APIs, PostgreSQL, Supabase (Auth, Storage, RLS), MongoDB, MySQL, SQLite, JWT, Zod\n• **Tools & Workflow:** Git, GitHub, Vercel, Postman, Vite, Linux, Figma, VS Code, Power BI, UiPath\n• **Cloud & AI:** AWS (CLF-C02, AIF-C01), Microsoft Azure AI, Google Gemini AI";
   }
   if (
     lower.includes("certificate") ||
@@ -321,12 +325,13 @@ const getLocalByteReply = (message: string): string => {
     lower.includes("university") ||
     lower.includes("dlsl") ||
     lower.includes("la salle") ||
-    lower.includes("student")
+    lower.includes("student") ||
+    lower.includes("major")
   ) {
-    return "🐾 Richard is pursuing his **Bachelor of Science in Information Technology (BSIT)** at **De La Salle Lipa** (2023 – June 2027), focusing on scalable web systems, mobile application architecture, and database design. He is also an active member of the **Junior Philippine Computer Society (JPCS) - DLSL Chapter**.";
+    return "🐾 Richard is pursuing his **Bachelor of Science in Information Technology — Major in System Development** at **De La Salle Lipa** (Expected Graduation: June 2027), focusing on multi-tenant SaaS, REST APIs, and cross-platform mobile architecture. He is also an active member of the **Junior Philippine Computer Society (JPCS) — De La Salle Lipa** (2023 – 2027).";
   }
   if (lower.includes("resume") || lower.includes("cv") || lower.includes("biodata")) {
-    return "🐾 You can view or download Richard's official 1-page resume directly here: [**Download Resume (PDF)**](/resume.pdf) — featuring his BSIT education at **De La Salle Lipa**, verified projects (**PalengkeHub**, **ShinPay+**, **IT Elective 4**), skills, and Cisco certifications!";
+    return "🐾 You can view or download Richard's updated official 1-page resume directly here: [**Download Resume (PDF)**](/resume.pdf) — featuring his BSIT (**Major in System Development**) at **De La Salle Lipa**, flagship projects (**ShinPay+**, **Submission Tracker**, **PalengkeHub** with 100% test pass & 4.17/5.00 UAT), **486-hour OJT** goal, skills, and AWS/Cisco/USAID credentials!";
   }
   if (
     lower.includes("contact") ||
@@ -339,10 +344,10 @@ const getLocalByteReply = (message: string): string => {
     return "🐾 You can get in touch with Richard directly via:\n\n• **Email:** richardallen0901@gmail.com\n• **Phone:** 09936105240\n• **GitHub:** https://github.com/shin486\n• **LinkedIn:** https://www.linkedin.com/in/allen-liman-00637438a\n• **Resume:** /resume.pdf";
   }
   if (lower.includes("project") || lower.includes("built") || lower.includes("portfolio")) {
-    return "🐾 Richard has built **6 official projects**:\n\n1. **PalengkeHub** — Mobile Market & Price Transparency App (React Native, Supabase)\n2. **ShinPay+** — Multi-Tenant Payroll & HR SaaS (Next.js 14, TypeScript, Supabase)\n3. **IT Elective 4 Project** — Full-Stack App + Gemini AI API (React, Express, MongoDB)\n4. **Auto Avenue** — Web Inventory Management System (PHP, MySQL)\n5. **AVMS** — Automated Visitor Management System (ITSM / QR Check-in)\n6. **Crave Cart** — Web Food Ordering System (Node.js, JS)\n\nAsk me about any combination of these and I'll fetch the details!";
+    return "🐾 Richard has built **6 official projects**:\n\n1. **PalengkeHub** (Mar–Oct 2026) — Cross-platform Mobile & Web Market App (**100% test pass · 4.17/5.00 UAT**; React Native, React.js, Expo, Node.js, Supabase)\n2. **ShinPay+** (Sep 2026–Present) — Multi-Tenant Payroll & HR SaaS (Next.js App Router, TypeScript, Supabase RLS)\n3. **Submission Tracker** (Aug–Oct 2026) — Full-Stack JWT CRUD + Gemini AI (`POST /api/ai` + Zod; React, Express, MongoDB)\n4. **Auto Avenue** — Web Inventory Management System (PHP, MySQL)\n5. **AVMS** — Automated Visitor Management System (ITSM / QR Check-in)\n6. **Crave Cart** — Web Food Ordering System (Node.js, JS)\n\nAsk me about any combination of these and I'll fetch the details!";
   }
 
-  return "Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Richard is a Full-Stack and Mobile Developer (BSIT student at **De La Salle Lipa**, graduating June 2027) who is actively seeking **OJT / internship opportunities**. Feel free to ask me to fetch details on his **6 projects** (PalengkeHub, ShinPay+, IT Elective 4, Auto Avenue, AVMS, Crave Cart), his **tech stack**, or his **certifications**!";
+  return "Woof! 🐾 I'm **Byte**, Richard's AI Cyber-Pup! Richard is a Full-Stack & Mobile Developer (BSIT — Major in System Development at **De La Salle Lipa**, graduating June 2027) seeking a **486-hour OJT / Software Developer Internship**. Ask me about his **6 projects** (PalengkeHub, ShinPay+, Submission Tracker, Auto Avenue, AVMS, Crave Cart), his **tech stack**, or his **certifications**!";
 };
 
 export const AiChatDrawer: React.FC = () => {

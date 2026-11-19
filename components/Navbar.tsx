@@ -478,7 +478,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     Full-Stack / Software Dev OJT
                   </p>
                   <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">
-                    Open to other IT internship roles
+                    486 hours · Internship Opportunity
                   </p>
                 </div>
 
@@ -491,7 +491,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     De La Salle Lipa
                   </p>
                   <p className="text-[11px] text-neutral-500 dark:text-zinc-400 mt-0.5">
-                    BS Information Technology · June 2027
+                    BSIT (Major in System Dev) · June 2027
                   </p>
                 </div>
 
@@ -514,10 +514,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <span>Primary Stack</span>
                   </div>
                   <p className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-zinc-100">
-                    React, Next.js, React Native
+                    Next.js, React, React Native
                   </p>
                   <p className="text-[11px] text-neutral-500 dark:text-zinc-400 mt-0.5">
-                    TypeScript, Supabase, Node.js, SQL
+                    TypeScript, Node/Express, Supabase RLS, JWT &amp; Zod
                   </p>
                 </div>
               </div>
@@ -525,20 +525,20 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Key Projects Snapshot */}
               <div className="space-y-2">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-zinc-500">
-                  Key Full-Stack Projects
+                  Resume Flagship Projects
                 </h3>
                 <div className="divide-y divide-neutral-200 dark:divide-zinc-800 border border-neutral-200 dark:border-zinc-800 rounded-xl overflow-hidden">
                   <div className="p-3 bg-white dark:bg-zinc-900/40 flex items-center justify-between gap-2">
                     <div>
                       <span className="text-xs font-bold text-neutral-900 dark:text-zinc-100">
-                        PalengkeHub (Capstone)
+                        ShinPay+ (In Progress)
                       </span>
                       <p className="text-[11px] text-neutral-500 dark:text-zinc-400">
-                        Mobile marketplace &amp; price transparency · React Native, Supabase
+                        Multi-tenant payroll &amp; HR SaaS with RLS · Next.js App Router, TypeScript, Supabase
                       </p>
                     </div>
                     <a
-                      href="https://github.com/shin486/PalengkeHubFinal"
+                      href="https://github.com/shin486/ShinPay-"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-1.5 text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
@@ -551,25 +551,34 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="p-3 bg-white dark:bg-zinc-900/40 flex items-center justify-between gap-2">
                     <div>
                       <span className="text-xs font-bold text-neutral-900 dark:text-zinc-100">
-                        ShinPay+ (In Progress)
+                        Submission Tracker
                       </span>
                       <p className="text-[11px] text-neutral-500 dark:text-zinc-400">
-                        Multi-tenant payroll &amp; HR SaaS with RLS · Next.js 14, TypeScript
+                        JWT-authenticated CRUD &amp; Gemini AI (POST /api/ai + Zod) · React, Express, MongoDB
                       </p>
                     </div>
+                    <a
+                      href="https://github.com/shin486/itelect4-project"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                      title="View on GitHub"
+                    >
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
                   </div>
 
                   <div className="p-3 bg-white dark:bg-zinc-900/40 flex items-center justify-between gap-2">
                     <div>
                       <span className="text-xs font-bold text-neutral-900 dark:text-zinc-100">
-                        IT Elective 4 Project
+                        PalengkeHub (Capstone)
                       </span>
                       <p className="text-[11px] text-neutral-500 dark:text-zinc-400">
-                        JWT-authenticated CRUD &amp; live REST API · React, Express, MongoDB
+                        Mobile &amp; web marketplace · 100% pass (18 tests) · 4.17/5.00 UAT · React Native, Supabase
                       </p>
                     </div>
                     <a
-                      href="https://github.com/shin486/itelect4-project"
+                      href="https://github.com/shin486/PalengkeHubFinal"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-1.5 text-neutral-400 hover:text-neutral-900 dark:hover:text-white"

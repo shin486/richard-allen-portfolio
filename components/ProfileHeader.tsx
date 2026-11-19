@@ -106,7 +106,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             {profileData.title}
           </p>
           <p className="text-neutral-700 dark:text-zinc-300 text-xs sm:text-sm leading-snug">
-            4th-year BSIT @{" "}
+            BSIT — System Development @{" "}
             <span className="font-semibold text-neutral-900 dark:text-zinc-100">
               De La Salle Lipa
             </span>

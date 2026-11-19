@@ -48,7 +48,7 @@ export const AboutSection: React.FC = () => {
           </h2>
         </div>
         <span className="text-[10px] font-mono tracking-widest uppercase text-emerald-600 dark:text-emerald-400 font-semibold">
-          OJT READY · JUNE 2027
+          486-HR OJT READY · JUNE 2027
         </span>
       </div>
 
@@ -124,35 +124,45 @@ export const AboutSection: React.FC = () => {
           <p>
             I&apos;m a <TechPill label="Full-Stack" techKey="nextjs" /> &amp;{" "}
             <TechPill label="Mobile Engineer" techKey="react-native" /> completing
-            my BS in Information Technology at{" "}
+            my BS in Information Technology — Major in System Development at{" "}
             <strong className="text-neutral-900 dark:text-zinc-100 font-semibold">
               De La Salle Lipa
             </strong>{" "}
-            (Graduating June 2027). I build production systems using{" "}
-            <TechPill label="Next.js 14" techKey="nextjs" />,{" "}
+            (Expected Graduation: June 2027). I build multi-tenant SaaS, REST
+            API, and AI-integrated applications using{" "}
+            <TechPill label="Next.js" techKey="nextjs" />,{" "}
             <TechPill label="React Native" techKey="react-native" />, and{" "}
             <TechPill label="Supabase" techKey="supabase" />.
           </p>
 
           <p>
-            My engineering focus is converting real-world friction into resilient
-            software — notably{" "}
+            My focus is shipping reliable software backed by real validation —
+            including{" "}
             <strong className="text-neutral-900 dark:text-zinc-100 font-semibold">
               PalengkeHub
+            </strong>{" "}
+            (100% pass rate across 18 functional test scenarios &amp; 4.17/5.00
+            UAT across 30 evaluators in Lipa City Public Market),{" "}
+            <strong className="text-neutral-900 dark:text-zinc-100 font-semibold">
+              ShinPay+
             </strong>
-            , a capstone delivering stall-level price transparency and order routing
-            for Batangas local public markets. I take projects from Figma design
-            tokens to typed, audited schemas in{" "}
-            <TechPill label="PostgreSQL" techKey="postgresql" />.
+            , and{" "}
+            <strong className="text-neutral-900 dark:text-zinc-100 font-semibold">
+              Submission Tracker
+            </strong>{" "}
+            — with hands-on focus on{" "}
+            <TechPill label="PostgreSQL RLS" techKey="postgresql" />, JWT
+            authentication, and Zod schema validation.
           </p>
 
           <p>
-            Currently seeking an{" "}
+            Currently seeking a{" "}
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-mono font-semibold border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-              OJT / Internship
+              486-Hour OJT / Internship
             </span>{" "}
-            role where I can contribute to production codebases, learn under senior
-            staff, and ship high-leverage software.
+            as a Full-Stack Developer or Software Developer where I can contribute
+            to production codebases, collaborate under senior engineers, and ship
+            dependable software.
           </p>
         </div>
 
@@ -160,13 +170,13 @@ export const AboutSection: React.FC = () => {
         <div className="border-y border-neutral-200/80 dark:border-zinc-800/80 py-4 grid grid-cols-3 gap-3">
           <div>
             <div className="text-base sm:text-xl font-mono font-bold text-neutral-900 dark:text-zinc-100 tabular-nums">
-              6 PROD APPS{" "}
+              100% PASS{" "}
               <span className="text-xs text-neutral-400 dark:text-zinc-500 font-normal">
                 ^
               </span>
             </div>
             <div className="text-[10px] font-mono tracking-[0.14em] text-neutral-400 dark:text-zinc-500 uppercase mt-0.5">
-              SHIPPED CODEBASES
+              18 TESTS · 4.17/5 UAT
             </div>
           </div>
           <div>
@@ -177,18 +187,18 @@ export const AboutSection: React.FC = () => {
               </span>
             </div>
             <div className="text-[10px] font-mono tracking-[0.14em] text-neutral-400 dark:text-zinc-500 uppercase mt-0.5">
-              DE LA SALLE LIPA BSIT
+              DLSL BSIT · SYSTEM DEV
             </div>
           </div>
           <div>
             <div className="text-base sm:text-xl font-mono font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
-              OJT READY{" "}
+              486 HRS{" "}
               <span className="text-xs text-neutral-400 dark:text-zinc-500 font-normal">
                 ^
               </span>
             </div>
             <div className="text-[10px] font-mono tracking-[0.14em] text-neutral-400 dark:text-zinc-500 uppercase mt-0.5">
-              FULL-STACK &amp; MOBILE
+              OJT / INTERNSHIP READY
             </div>
           </div>
         </div>
