@@ -26,7 +26,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       className="pt-16 sm:pt-20 md:pt-24 pb-4 sm:pb-6"
     >
       {/* Unified Responsive Instagram Profile Header */}
-      <div className="grid grid-cols-[auto_1fr] items-start gap-x-5 sm:gap-x-8 md:gap-x-12">
+      <div className="grid grid-cols-[auto_1fr] items-start gap-x-4 sm:gap-x-8 md:gap-x-12">
         {/* Column 1: Circular Avatar (Opens Main Instagram Prompt) + Thought Bubble Note */}
         <div className="col-start-1 row-start-1 sm:row-span-2 self-start relative flex flex-col items-start flex-shrink-0">
           {/* Retro Pixel Speech Bubble anchored cleanly above upper head */}
