@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import QRCode from "qrcode";
 import {
   X,
@@ -90,12 +91,17 @@ export const DeveloperIdBadgeModal: React.FC<DeveloperIdBadgeModalProps> = ({
   onSelectAvatarMode,
   onSwitchToRecruiter,
 }) => {
+  const [mounted, setMounted] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [qrTarget, setQrTarget] = useState<"resume" | "portfolio">("resume");
   const [qrSvg, setQrSvg] = useState<string>("");
   const [emailCopied, setEmailCopied] = useState(false);
   const [vcardDownloaded, setVcardDownloaded] = useState(false);
   const [clock, setClock] = useState(() => getManilaClock());
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // 3D pointer tilt & holographic foil sheen
   const cardWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -225,23 +231,23 @@ export const DeveloperIdBadgeModal: React.FC<DeveloperIdBadgeModalProps> = ({
     window.setTimeout(() => setVcardDownloaded(false), 2200);
   }, []);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fade-in"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md overflow-y-auto overscroll-contain animate-fade-in"
       role="dialog"
       aria-modal="true"
       aria-label="3D Holographic Developer ID Badge"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-[390px] flex flex-col items-center gap-3"
+        className="relative w-full max-w-[385px] my-auto flex flex-col items-center gap-2.5 sm:gap-3 py-2"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Modal Controls */}
         <div className="w-full flex items-center justify-between px-1">
-          <div className="inline-flex items-center gap-2 font-mono text-[11px] tracking-wider uppercase text-zinc-300">
+          <div className="inline-flex items-center gap-2 font-mono text-[11px] tracking-wider uppercase text-zinc-200">
             <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
             <span>Holographic Dev ID · NFC Pass</span>
           </div>
@@ -249,7 +255,7 @@ export const DeveloperIdBadgeModal: React.FC<DeveloperIdBadgeModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Close Developer ID Badge"
-            className="w-8 h-8 rounded-full bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 text-zinc-300 hover:text-white flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-zinc-900/95 hover:bg-zinc-800 border border-white/15 text-zinc-200 hover:text-white flex items-center justify-center transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -273,14 +279,18 @@ export const DeveloperIdBadgeModal: React.FC<DeveloperIdBadgeModalProps> = ({
             className="w-full"
           >
             <div
-              className={`holo-flip-inner relative w-full min-h-[540px] ${
+              className={`holo-flip-inner relative w-full min-h-[505px] sm:min-h-[535px] ${
                 isFlipped ? "is-flipped" : ""
               }`}
             >
               {/* ============================================================
                   FRONT FACE: IDENTITY, LIVE CANVAS PORTRAIT & PH TELEMETRY
                  ============================================================ */}
-              <div className="holo-face absolute inset-0 rounded-[24px] bg-[#0D0E12] border border-white/[0.14] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.16)] overflow-hidden flex flex-col justify-between p-5">
+              <div
+                className={`holo-face absolute inset-0 rounded-[24px] bg-[#0D0E12] border border-white/[0.14] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.16)] overflow-hidden flex flex-col justify-between p-4 sm:p-5 ${
+                  isFlipped ? "pointer-events-none" : "pointer-events-auto"
+                }`}
+              >
                 {/* Cursor-reactive holographic rainbow sheen */}
                 <div
                   aria-hidden="true"
@@ -318,7 +328,7 @@ export const DeveloperIdBadgeModal: React.FC<DeveloperIdBadgeModalProps> = ({
                       );
                     }}
                     title="Click portrait to cycle live Canvas lenses"
-                    className="group relative w-28 h-28 rounded-full p-[3px] animated-ig-ring shadow-lg transition-transform hover:scale-[1.03] active:scale-95 focus:outline-none"
+                    className="group relative w-24 h-24 sm:w-28 sm:h-28 rounded-full p-[3px] animated-ig-ring shadow-lg transition-transform hover:scale-[1.03] active:scale-95 focus:outline-none"
                   >
                     <div className="w-full h-full rounded-full bg-[#0D0E12] p-[2.5px]">
                       <div className="w-full h-full rounded-full overflow-hidden">
@@ -471,7 +481,11 @@ export const DeveloperIdBadgeModal: React.FC<DeveloperIdBadgeModalProps> = ({
               {/* ============================================================
                   BACK FACE: REAL SCANNABLE QR CODE & INSTANT RECRUITER KIT
                  ============================================================ */}
-              <div className="holo-face-back absolute inset-0 rounded-[24px] bg-[#0D0E12] border border-white/[0.14] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.16)] overflow-hidden flex flex-col justify-between p-5">
+              <div
+                className={`holo-face-back absolute inset-0 rounded-[24px] bg-[#0D0E12] border border-white/[0.14] shadow-[0_24px_60px_-15px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.16)] overflow-hidden flex flex-col justify-between p-4 sm:p-5 ${
+                  isFlipped ? "pointer-events-auto" : "pointer-events-none"
+                }`}
+              >
                 {/* Holographic Sheen */}
                 <div
                   aria-hidden="true"
@@ -631,14 +645,15 @@ export const DeveloperIdBadgeModal: React.FC<DeveloperIdBadgeModalProps> = ({
         </div>
 
         {/* Bottom Hint */}
-        <p className="font-mono text-[11px] text-zinc-400 text-center">
+        <p className="font-mono text-[11px] text-zinc-300 text-center">
           Move cursor across badge for 3D holo tilt · Press{" "}
-          <kbd className="px-1.5 py-0.5 rounded bg-zinc-900 border border-white/15 text-zinc-300">
+          <kbd className="px-1.5 py-0.5 rounded bg-zinc-900 border border-white/15 text-zinc-200">
             ESC
           </kbd>{" "}
           to close
         </p>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
