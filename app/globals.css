@@ -400,4 +400,53 @@ body {
   animation: igHeartDoubleTap 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards; /* impeccable-disable-line bounce-easing: authentic Instagram heart spring */
 }
 
+/* ============================================================
+   CYBERNETIC AVATAR SCANLINE & 3D HOLOGRAPHIC ID BADGE
+   ============================================================ */
+@keyframes cyberScanSweep {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(400%);
+    opacity: 0;
+  }
+}
+
+.animate-cyber-scan {
+  animation: cyberScanSweep 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.holo-perspective {
+  perspective: 1200px;
+}
+
+.holo-flip-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.holo-flip-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.holo-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.holo-face-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
+
+
 

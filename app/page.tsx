@@ -150,7 +150,7 @@ export default function HomePage() {
               <ProfileHeader
                 onSelectTab={setActiveTab}
                 onNavigateToSection={scrollToSection}
-                onOpenStories={() => handleOpenHighlight(0)}
+                onSwitchToRecruiter={() => handleViewChange("recruiter")}
               />
             </div>
 

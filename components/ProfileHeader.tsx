@@ -1,32 +1,61 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
+import React, { useState, useCallback } from "react";
 import { profileData } from "@/data/profile";
-import profilePic from "@/assets/PROFILEPIC.png";
 import { ProfileStats } from "./ProfileStats";
 import { VerifiedBadge } from "./VerifiedBadge";
 import { ProfileNote } from "./ProfileNote";
+import {
+  AvatarMode,
+  InteractiveAvatarCanvas,
+  getAvatarModeConfig,
+  getNextAvatarMode,
+} from "./InteractiveAvatarCanvas";
+import { DeveloperIdBadgeModal } from "./DeveloperIdBadgeModal";
 
 interface ProfileHeaderProps {
   onSelectTab: (tab: string) => void;
   onNavigateToSection: (sectionId: string) => void;
-  onOpenStories?: () => void;
+  onSwitchToRecruiter?: () => void;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onSelectTab,
   onNavigateToSection,
-  onOpenStories,
+  onSwitchToRecruiter,
 }) => {
-  const handleAvatarClick = () => {
-    if (onOpenStories) {
-      onOpenStories();
-    } else {
-      onSelectTab("projects");
-      onNavigateToSection("portfolio-grid");
+  const [avatarMode, setAvatarMode] = useState<AvatarMode>("photo");
+  const [isBadgeOpen, setIsBadgeOpen] = useState(false);
+
+  const emitThoughtNote = useCallback((note: string) => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("shin-profile-note", {
+          detail: { note },
+        })
+      );
     }
-  };
+  }, []);
+
+  const handleCycleAvatarMode = useCallback(() => {
+    setAvatarMode((prev) => {
+      const next = getNextAvatarMode(prev);
+      const cfg = getAvatarModeConfig(next);
+      emitThoughtNote(cfg.thoughtNote);
+      return next;
+    });
+  }, [emitThoughtNote]);
+
+  const handleSelectAvatarMode = useCallback(
+    (mode: AvatarMode) => {
+      setAvatarMode(mode);
+      const cfg = getAvatarModeConfig(mode);
+      emitThoughtNote(cfg.thoughtNote);
+    },
+    [emitThoughtNote]
+  );
+
+  const activeModeConfig = getAvatarModeConfig(avatarMode);
 
   return (
     <section
@@ -35,7 +64,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     >
       {/* Unified Responsive Instagram Profile Header */}
       <div className="grid grid-cols-[auto_1fr] items-start gap-x-5 sm:gap-x-8 md:gap-x-12">
-        {/* Column 1: Circular Avatar with Functional Instagram Story Ring + Thought Bubble Note */}
+        {/* Column 1: Interactive Live Canvas Avatar + Emerald 3D Holographic ID Trigger + Thought Bubble Note */}
         <div className="col-start-1 row-start-1 sm:row-span-2 self-start relative flex flex-col items-start flex-shrink-0">
           {/* Retro Pixel Speech Bubble anchored cleanly above upper head */}
           <div
@@ -45,38 +74,51 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             <ProfileNote tailAlign="left" />
           </div>
 
-          <button
-            type="button"
-            onClick={handleAvatarClick}
-            data-note="Click my story ring to watch my developer highlights, or just hire me already."
-            aria-label="Open developer story highlights"
-            className="relative group cursor-pointer focus:outline-none text-left"
-          >
-            <div className="w-[76px] h-[76px] sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full p-[2.5px] sm:p-[3px] animated-ig-ring shadow-sm sm:shadow-md transition-transform duration-300 group-hover:scale-105 active:scale-95">
-              <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] sm:p-[2.5px] transition-colors duration-200">
-                <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900 flex items-center justify-center">
-                  <Image
-                    src={profilePic}
-                    alt={profileData.name}
-                    fill
-                    sizes="(max-width: 640px) 76px, (max-width: 768px) 128px, 144px"
-                    className="object-cover"
-                    priority
-                  />
-                  {/* Subtle inner vignette so the bright studio backdrop bridges smoothly into dark mode */}
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 rounded-full pointer-events-none shadow-[inset_0_0_16px_rgba(0,0,0,0.22)] dark:shadow-[inset_0_0_20px_rgba(0,0,0,0.38)]"
-                  />
+          <div className="relative inline-block">
+            {/* Primary Avatar Button: Single Click Cycles Live Canvas Portrait Modes */}
+            <button
+              type="button"
+              onClick={handleCycleAvatarMode}
+              data-note="Click my portrait to cycle live Canvas lenses (Photo → ASCII → 8-Bit → Cyber Scan)."
+              aria-label={`Switch portrait lens mode (currently ${activeModeConfig.label})`}
+              title={`Portrait lens: ${activeModeConfig.label} — click to switch`}
+              className="relative group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] rounded-full block text-left"
+            >
+              <div className="w-[76px] h-[76px] sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full p-[2.5px] sm:p-[3px] animated-ig-ring shadow-sm sm:shadow-md transition-transform duration-300 group-hover:scale-105 active:scale-95">
+                <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] sm:p-[2.5px] transition-colors duration-200">
+                  <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900">
+                    <InteractiveAvatarCanvas
+                      mode={avatarMode}
+                      sizes="(max-width: 640px) 76px, (max-width: 768px) 128px, 144px"
+                      priority
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Active Status Dot */}
-            <div className="absolute bottom-0 right-0 sm:bottom-1 sm:right-1 md:bottom-2 md:right-2 bg-emerald-500 text-white rounded-full p-0.5 sm:p-1 border-2 border-white dark:border-[#0B0B0F] shadow-sm">
-              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
-            </div>
-          </button>
+              {/* Subtle Micro Lens Badge when a Canvas Mode (ASCII / 8-BIT / SCAN) is active */}
+              {avatarMode !== "photo" && (
+                <span className="pointer-events-none absolute -top-1 -right-1 sm:top-0 sm:right-0 px-1.5 py-0.5 rounded-full bg-[#0A0A0B]/95 border border-[#10B981]/60 font-mono text-[8px] sm:text-[9px] font-bold tracking-wider text-[#10B981] shadow-md">
+                  {activeModeConfig.shortTag}
+                </span>
+              )}
+            </button>
+
+            {/* Pulsing Emerald Status / 3D Holographic ID Pass Trigger */}
+            <button
+              type="button"
+              onClick={() => setIsBadgeOpen(true)}
+              data-note="Tap the emerald ID pass for my 3D Holographic Dev Badge: live PH clock, scannable Resume QR & .vcf contact."
+              aria-label="Open 3D Holographic Developer ID Badge and Live Telemetry"
+              title="Open 3D Holographic Developer ID Badge"
+              className="group/id absolute -bottom-0.5 -right-1 sm:bottom-1 sm:right-0 md:bottom-1.5 md:right-0.5 z-20 inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-[#10B981] hover:bg-[#34D399] text-[#04140D] border-2 border-white dark:border-[#0B0B0F] shadow-md transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]"
+            >
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white animate-pulse flex-shrink-0" />
+              <span className="font-mono text-[8px] sm:text-[10px] font-extrabold tracking-wider leading-none">
+                ID
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* Column 2: Username & Interactive 3-Column Stats (Leveled beside Avatar on mobile & desktop) */}
@@ -121,6 +163,15 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </p>
         </div>
       </div>
+
+      {/* 3D Holographic Developer ID Badge Modal (Live PH Clock + Scannable QR + .vcf + Recruiter Switch) */}
+      <DeveloperIdBadgeModal
+        isOpen={isBadgeOpen}
+        onClose={() => setIsBadgeOpen(false)}
+        avatarMode={avatarMode}
+        onSelectAvatarMode={handleSelectAvatarMode}
+        onSwitchToRecruiter={onSwitchToRecruiter}
+      />
     </section>
   );
 };

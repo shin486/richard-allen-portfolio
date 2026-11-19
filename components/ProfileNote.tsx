@@ -79,12 +79,30 @@ export const ProfileNote: React.FC<ProfileNoteProps> = ({
       }
     };
 
+    const handleCustomNote = (e: Event) => {
+      const customEvent = e as CustomEvent<{ note?: string }>;
+      const msg = customEvent.detail?.note;
+      if (msg) {
+        if (revertTimeoutRef.current) {
+          clearTimeout(revertTimeoutRef.current);
+        }
+        isHoveringTargetRef.current = true;
+        applyNote(msg);
+        revertTimeoutRef.current = setTimeout(() => {
+          isHoveringTargetRef.current = false;
+          applyNote(IDLE_NOTES[idleIndexRef.current]);
+        }, 4200);
+      }
+    };
+
     document.addEventListener("mouseover", handleMouseOver, { passive: true });
     document.addEventListener("mouseout", handleMouseOut, { passive: true });
+    window.addEventListener("shin-profile-note", handleCustomNote);
 
     return () => {
       document.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseout", handleMouseOut);
+      window.removeEventListener("shin-profile-note", handleCustomNote);
       if (revertTimeoutRef.current) {
         clearTimeout(revertTimeoutRef.current);
       }
