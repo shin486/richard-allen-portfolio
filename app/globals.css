@@ -448,5 +448,35 @@ body {
   transform: rotateY(180deg);
 }
 
+@keyframes igReactionFloat {
+  0% {
+    transform: translate(0, 0) scale(0.65) rotate(0deg);
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+    transform: translate(-6px, -24px) scale(1.18) rotate(-8deg);
+  }
+  100% {
+    transform: translate(12px, -165px) scale(0.85) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+.animate-ig-reaction {
+  animation: igReactionFloat 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.vinyl-mini-grooves {
+  background: repeating-radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.08) 0px,
+    rgba(255, 255, 255, 0.08) 1px,
+    rgba(12, 13, 18, 0.96) 2px,
+    rgba(18, 20, 26, 0.96) 4px
+  );
+}
+
+
 
 

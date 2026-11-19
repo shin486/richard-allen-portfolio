@@ -42,6 +42,23 @@ export default function HomePage() {
     }
   }, []);
 
+  // Zero-space Instagram DM browser-tab easter egg when visitor switches away
+  useEffect(() => {
+    const originalTitle = document.title;
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        document.title = "(1) @shin486 sent a message";
+      } else {
+        document.title = originalTitle;
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.title = originalTitle;
+    };
+  }, []);
+
   const handleViewChange = (mode: "studio" | "recruiter") => {
     setViewMode(mode);
     const url = new URL(window.location.href);
@@ -150,7 +167,6 @@ export default function HomePage() {
               <ProfileHeader
                 onSelectTab={setActiveTab}
                 onNavigateToSection={scrollToSection}
-                onSwitchToRecruiter={() => handleViewChange("recruiter")}
               />
             </div>
 

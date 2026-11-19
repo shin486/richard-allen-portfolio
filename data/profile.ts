@@ -7,6 +7,7 @@ export interface ProfileStats {
 export interface SocialLinks {
   github: string;
   linkedin: string;
+  instagram: string;
   email: string;
   phone?: string;
   resumeUrl: string;
@@ -87,6 +88,7 @@ export const profileData: ProfileData = {
   socials: {
     github: "https://github.com/shin486",
     linkedin: "https://www.linkedin.com/in/allen-liman-00637438a",
+    instagram: "https://www.instagram.com/richardallen0901/",
     email: "richardallen0901@gmail.com",
     phone: "09936105240",
     resumeUrl: "/resume.pdf",

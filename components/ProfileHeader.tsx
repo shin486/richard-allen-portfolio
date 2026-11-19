@@ -9,23 +9,23 @@ import {
   AvatarMode,
   InteractiveAvatarCanvas,
   getAvatarModeConfig,
-  getNextAvatarMode,
 } from "./InteractiveAvatarCanvas";
 import { DeveloperIdBadgeModal } from "./DeveloperIdBadgeModal";
 
 interface ProfileHeaderProps {
   onSelectTab: (tab: string) => void;
   onNavigateToSection: (sectionId: string) => void;
-  onSwitchToRecruiter?: () => void;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onSelectTab,
   onNavigateToSection,
-  onSwitchToRecruiter,
 }) => {
   const [avatarMode, setAvatarMode] = useState<AvatarMode>("photo");
-  const [isBadgeOpen, setIsBadgeOpen] = useState(false);
+  const [portalState, setPortalState] = useState<{
+    open: boolean;
+    side: "front" | "back";
+  }>({ open: false, side: "front" });
 
   const emitThoughtNote = useCallback((note: string) => {
     if (typeof window !== "undefined") {
@@ -36,15 +36,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       );
     }
   }, []);
-
-  const handleCycleAvatarMode = useCallback(() => {
-    setAvatarMode((prev) => {
-      const next = getNextAvatarMode(prev);
-      const cfg = getAvatarModeConfig(next);
-      emitThoughtNote(cfg.thoughtNote);
-      return next;
-    });
-  }, [emitThoughtNote]);
 
   const handleSelectAvatarMode = useCallback(
     (mode: AvatarMode) => {
@@ -64,7 +55,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     >
       {/* Unified Responsive Instagram Profile Header */}
       <div className="grid grid-cols-[auto_1fr] items-start gap-x-5 sm:gap-x-8 md:gap-x-12">
-        {/* Column 1: Interactive Live Canvas Avatar + Emerald 3D Holographic ID Trigger + Thought Bubble Note */}
+        {/* Column 1: Circular Avatar (Opens Real Instagram Portal Card) + Active Status Dot (Opens Close Friends Perks) */}
         <div className="col-start-1 row-start-1 sm:row-span-2 self-start relative flex flex-col items-start flex-shrink-0">
           {/* Retro Pixel Speech Bubble anchored cleanly above upper head */}
           <div
@@ -75,13 +66,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           </div>
 
           <div className="relative inline-block">
-            {/* Primary Avatar Button: Single Click Cycles Live Canvas Portrait Modes */}
+            {/* Primary Avatar Click: Opens "Visit the real @richardallen0901?" Portal Card */}
             <button
               type="button"
-              onClick={handleCycleAvatarMode}
-              data-note="Click my portrait to cycle live Canvas lenses (Photo → ASCII → 8-Bit → Cyber Scan)."
-              aria-label={`Switch portrait lens mode (currently ${activeModeConfig.label})`}
-              title={`Portrait lens: ${activeModeConfig.label} — click to switch`}
+              onClick={() => setPortalState({ open: true, side: "front" })}
+              data-note="Click my profile to visit my real Instagram (@richardallen0901) or unlock Close Friends perks."
+              aria-label="Open Instagram Profile Portal for @richardallen0901"
+              title="Visit @richardallen0901 on Instagram or unlock perks"
               className="relative group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] rounded-full block text-left"
             >
               <div className="w-[76px] h-[76px] sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full p-[2.5px] sm:p-[3px] animated-ig-ring shadow-sm sm:shadow-md transition-transform duration-300 group-hover:scale-105 active:scale-95">
@@ -104,19 +95,16 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               )}
             </button>
 
-            {/* Pulsing Emerald Status / 3D Holographic ID Pass Trigger */}
+            {/* Authentic Instagram Pulsing Active Dot -> Direct Shortcut to Close Friends Perks (☕ Coffee & Native QR) */}
             <button
               type="button"
-              onClick={() => setIsBadgeOpen(true)}
-              data-note="Tap the emerald ID pass for my 3D Holographic Dev Badge: live PH clock, scannable Resume QR & .vcf contact."
-              aria-label="Open 3D Holographic Developer ID Badge and Live Telemetry"
-              title="Open 3D Holographic Developer ID Badge"
-              className="group/id absolute -bottom-0.5 -right-1 sm:bottom-1 sm:right-0 md:bottom-1.5 md:right-0.5 z-20 inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full bg-[#10B981] hover:bg-[#34D399] text-[#04140D] border-2 border-white dark:border-[#0B0B0F] shadow-md transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]"
+              onClick={() => setPortalState({ open: true, side: "back" })}
+              data-note="Active in Lipa City, PH — tap the green dot for ☕ Virtual Coffee & instant Contact QR."
+              aria-label="Open Close Friends Perks: Virtual Coffee and Native Contact QR"
+              title="Close Friends Perks: Virtual Coffee & Contact QR"
+              className="absolute bottom-0 right-0 sm:bottom-1 sm:right-1 md:bottom-2 md:right-2 z-20 bg-[#10B981] hover:bg-[#34D399] text-white rounded-full p-1 sm:p-1.5 border-2 border-white dark:border-[#0B0B0F] shadow-md transition-transform duration-200 hover:scale-125 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]"
             >
-              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white animate-pulse flex-shrink-0" />
-              <span className="font-mono text-[8px] sm:text-[10px] font-extrabold tracking-wider leading-none">
-                ID
-              </span>
+              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
             </button>
           </div>
         </div>
@@ -164,13 +152,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
       </div>
 
-      {/* 3D Holographic Developer ID Badge Modal (Live PH Clock + Scannable QR + .vcf + Recruiter Switch) */}
+      {/* Flippable Instagram Profile Portal Card */}
       <DeveloperIdBadgeModal
-        isOpen={isBadgeOpen}
-        onClose={() => setIsBadgeOpen(false)}
+        isOpen={portalState.open}
+        initialSide={portalState.side}
+        onClose={() => setPortalState((prev) => ({ ...prev, open: false }))}
         avatarMode={avatarMode}
         onSelectAvatarMode={handleSelectAvatarMode}
-        onSwitchToRecruiter={onSwitchToRecruiter}
       />
     </section>
   );
