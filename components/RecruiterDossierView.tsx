@@ -19,7 +19,12 @@ import {
 } from "lucide-react";
 import { profileData } from "@/data/profile";
 import profilePic from "@/assets/PROFILEPIC.png";
-import { Project, projectsData } from "@/data/projects";
+import {
+  PROJECT_CLASSIFICATIONS,
+  Project,
+  ProjectClassification,
+  projectsData,
+} from "@/data/projects";
 import { ProjectModal } from "./ProjectModal";
 import { ProjectDemoHost } from "./demos/ProjectDemoHost";
 import { cloudAiStackGroups } from "@/data/skills";
@@ -741,12 +746,21 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
   // Hero cycling status thought
   const [statusIndex, setStatusIndex] = useState<number>(0);
 
-  // Selected project in Section 3 (All 6 portfolio projects preserved: 1/6 through 6/6)
+  // Selected project in Section 3 (All 6 portfolio projects preserved, filterable by classification)
+  const [projectClassificationFilter, setProjectClassificationFilter] =
+    useState<"all" | ProjectClassification>("all");
   const [activeProjectIndex, setActiveProjectIndex] = useState<number>(0);
   const [selectedProjectForModal, setSelectedProjectForModal] =
     useState<Project | null>(null);
   const [showInteractiveSandboxInStage, setShowInteractiveSandboxInStage] =
     useState<boolean>(false);
+
+  const visibleProjects =
+    projectClassificationFilter === "all"
+      ? projectsData
+      : projectsData.filter(
+          (p) => p.classification === projectClassificationFilter
+        );
 
   // Section 4 SHIN-28 Keyboard & Credentials Ledger state
   const [stackFilter, setStackFilter] = useState<StackFilterDomain>("all");
@@ -774,9 +788,26 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
     setShowInteractiveSandboxInStage(false);
   }, []);
 
+  const handleSelectProjectClassification = useCallback(
+    (classification: "all" | ProjectClassification) => {
+      setProjectClassificationFilter(classification);
+      if (classification !== "all") {
+        const firstIdx = projectsData.findIndex(
+          (p) => p.classification === classification
+        );
+        if (firstIdx !== -1) {
+          setActiveProjectIndex(firstIdx);
+          setShowInteractiveSandboxInStage(false);
+        }
+      }
+    },
+    []
+  );
+
   const handleSelectProjectById = useCallback((projectId: string) => {
     const foundIdx = projectsData.findIndex((p) => p.id === projectId);
     if (foundIdx !== -1) {
+      setProjectClassificationFilter("all");
       setActiveProjectIndex(foundIdx);
       setShowInteractiveSandboxInStage(false);
     }
@@ -1041,9 +1072,45 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
             </div>
           </div>
 
-          {/* Executive Bento Quick-Scan Grid (All 6 Systems Visible in 5 Seconds) */}
+          {/* Project Classification Filter Pills (Matches Social Studio Classifications) */}
+          <div className="flex flex-wrap items-center gap-2 mb-5">
+            <button
+              type="button"
+              onClick={() => handleSelectProjectClassification("all")}
+              className={`px-3 py-1.5 rounded-xl font-mono text-xs tracking-[0.04em] border transition-colors ${
+                projectClassificationFilter === "all"
+                  ? "bg-[#17191E] text-[#F4F4F6] border-[#10B981]/50 font-semibold"
+                  : "bg-[#111215] text-[#9CA3AF] border-white/[0.08] hover:text-[#F4F4F6]"
+              }`}
+            >
+              All Systems ({projectsData.length})
+            </button>
+            {PROJECT_CLASSIFICATIONS.map((cat) => {
+              const count = projectsData.filter(
+                (p) => p.classification === cat.id
+              ).length;
+              const active = projectClassificationFilter === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => handleSelectProjectClassification(cat.id)}
+                  className={`px-3 py-1.5 rounded-xl font-mono text-xs tracking-[0.04em] border transition-colors ${
+                    active
+                      ? "bg-[#17191E] text-[#F4F4F6] border-[#10B981]/50 font-semibold"
+                      : "bg-[#111215] text-[#9CA3AF] border-white/[0.08] hover:text-[#F4F4F6]"
+                  }`}
+                >
+                  {cat.label} ({count})
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Executive Bento Quick-Scan Grid (Filtered by Active Classification) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-            {projectsData.map((proj, idx) => {
+            {visibleProjects.map((proj) => {
+              const idx = projectsData.findIndex((p) => p.id === proj.id);
               const isSelected = idx === activeProjectIndex;
               const numLabel = `0${idx + 1}`;
               const shortTitle = SHORT_PROJECT_NAMES[proj.id] || proj.title;
@@ -1074,7 +1141,7 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
                       </span>
                     </div>
                     <span className="font-mono text-[10px] uppercase px-1.5 py-0.5 rounded bg-white/[0.06] text-[#9CA3AF] shrink-0">
-                      {proj.category}
+                      {proj.classificationLabel}
                     </span>
                   </div>
 
@@ -1094,13 +1161,14 @@ export const RecruiterDossierView: React.FC<RecruiterDossierViewProps> = ({
             })}
           </div>
 
-          {/* Named Project Switcher Tabs (All 6 Portfolio Projects: 01 through 06) */}
+          {/* Named Project Switcher Tabs */}
           <div
             role="tablist"
             aria-label="Portfolio Projects"
             className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 no-scrollbar"
           >
-            {projectsData.map((proj, idx) => {
+            {visibleProjects.map((proj) => {
+              const idx = projectsData.findIndex((p) => p.id === proj.id);
               const isSelected = idx === activeProjectIndex;
               const numLabel = `0${idx + 1}`;
               const shortTitle = SHORT_PROJECT_NAMES[proj.id] || proj.title;

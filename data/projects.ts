@@ -1,3 +1,39 @@
+export type ProjectClassification =
+  | "mobile-platform"
+  | "fullstack-saas-ai"
+  | "web-itsm";
+
+export interface ProjectClassificationMeta {
+  id: ProjectClassification;
+  label: string;
+  shortLabel: string;
+  description: string;
+}
+
+export const PROJECT_CLASSIFICATIONS: ProjectClassificationMeta[] = [
+  {
+    id: "mobile-platform",
+    label: "Mobile & Cross-Platform",
+    shortLabel: "Mobile",
+    description:
+      "Offline-first React Native mobile applications, realtime WebSocket price sync, and Supabase PostgreSQL RLS.",
+  },
+  {
+    id: "fullstack-saas-ai",
+    label: "Full-Stack SaaS & AI",
+    shortLabel: "Full-Stack & AI",
+    description:
+      "Multi-tenant Next.js SaaS engines, Google Gemini AI REST services, and real-time POS inventory systems.",
+  },
+  {
+    id: "web-itsm",
+    label: "Web Systems & ITSM",
+    shortLabel: "Web & ITSM",
+    description:
+      "IT Service Management security frameworks, QR gate access control, and interactive web ordering apps.",
+  },
+];
+
 export interface ProjectMilestone {
   /** Sortable date in YYYY-MM format (e.g. "2025-09") */
   date: string;
@@ -17,6 +53,8 @@ export interface Project {
   operationsNote?: string;
   role: string;
   category: "Mobile" | "Web" | "Full-Stack" | "Academic";
+  classification: ProjectClassification;
+  classificationLabel: string;
   year: string;
   technologies: string[];
   /** Path under /public — replace the placeholder file with a real screenshot anytime */
@@ -33,7 +71,7 @@ export interface Project {
 }
 
 /**
- * Official project list — verified projects and details.
+ * Official project list — verified projects classified by engineering domain.
  */
 export const projectsData: Project[] = [
   {
@@ -48,6 +86,8 @@ export const projectsData: Project[] = [
       "Engineered an offline-first mobile marketplace for public-market price transparency and pre-ordering. Built across 8+ normalized PostgreSQL tables protected by Row-Level Security (RLS) in Supabase. Implemented sub-250ms WebSocket sync for live stall price adjustments, an optimistic mutation queue with client-side reconciliation, and DTI Suggested Retail Price (SRP) compliance tracking.",
     role: "Full-Stack Developer",
     category: "Mobile",
+    classification: "mobile-platform",
+    classificationLabel: "Mobile & Cross-Platform",
     year: "September 2025 – October 2026",
     technologies: [
       "React Native",
@@ -80,6 +120,8 @@ export const projectsData: Project[] = [
       "Architected a multi-tenant payroll and statutory compliance SaaS platform designed for Philippine enterprises. Built with Next.js 14 App Router, TypeScript, and Supabase PostgreSQL with strict tenant-isolated RLS. Powered by a deterministic, zero-dependency statutory deduction engine computing TRAIN Law withholding tax, 2025 SSS tables, PhilHealth 5% split, Pag-IBIG caps, and BIR Form 2316 compliance.",
     role: "Full-Stack Developer",
     category: "Full-Stack",
+    classification: "fullstack-saas-ai",
+    classificationLabel: "Full-Stack SaaS & AI",
     year: "September 2026 – Present",
     technologies: [
       "Next.js 14",
@@ -112,6 +154,8 @@ export const projectsData: Project[] = [
       "Built a full-stack app with React + Express + MongoDB, delivering JWT-authenticated CRUD with protected routes and tenant-isolated data across a REST API. Integrated Google Gemini AI into a live endpoint (POST /api/ai), returning structured JSON reviews validated with Zod and rate-limited to prevent quota abuse. Deployed both frontend and backend to Vercel with environment-driven configuration, managed via a multi-branch Git workflow with Pull Requests per deliverable.",
     role: "Full-Stack Developer",
     category: "Full-Stack",
+    classification: "fullstack-saas-ai",
+    classificationLabel: "Full-Stack SaaS & AI",
     year: "August 2026 – Present",
     technologies: ["TypeScript", "React", "Vite", "Express", "MongoDB"],
     image: "/projects/itelect4-project.svg",
@@ -135,6 +179,8 @@ export const projectsData: Project[] = [
       "Engineered a centralized, web-based Inventory Management System (IMS) for Auto Avenue Car Care Center in Batangas. Designed to eliminate manual stock tracking errors, manage over 150+ automotive spare part and fluid SKUs, and integrate directly with Point of Sale (POS) checkouts for real-time stock deduction, low-threshold alerts, and automated purchase order generation.",
     role: "Full-Stack Developer",
     category: "Full-Stack",
+    classification: "fullstack-saas-ai",
+    classificationLabel: "Full-Stack SaaS & AI",
     year: "April 2025",
     technologies: ["PHP", "MySQL", "Bootstrap", "Git"],
     image: "/projects/auto-avenue-ims.svg",
@@ -160,6 +206,8 @@ export const projectsData: Project[] = [
       "Engineered around IT Service Management (ITSM) principles, featuring a detailed Service Level Agreement (SLA) targeting 99.9% uptime, structured incident and problem management lifecycles, and a rigorous security framework ensuring confidentiality, integrity, and availability through RBAC, MFA, encryption, and audit logs.",
     role: "IT Service Management Project",
     category: "Web",
+    classification: "web-itsm",
+    classificationLabel: "Web Systems & ITSM",
     year: "December 2024",
     technologies: [
       "ITSM",
@@ -188,6 +236,8 @@ export const projectsData: Project[] = [
       "Developed a lightweight, locally hosted web-based food ordering system designed to streamline customer ordering for small food businesses. Features include a digital menu browser, cart management, order placement confirmation, promotional banners, an embedded Google Map for store location, and a local file-handling feedback system built with Node.js.",
     role: "Full-Stack Developer",
     category: "Web",
+    classification: "web-itsm",
+    classificationLabel: "Web Systems & ITSM",
     year: "IT Elective 1 Project",
     technologies: [
       "Node.js",

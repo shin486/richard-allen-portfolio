@@ -23,10 +23,10 @@ OFFICIAL PROJECTS (Exactly these 6):
 ${projectsData
   .map(
     (p, i) => `
-${i + 1}. ${p.title} (${p.subtitle})
+${i + 1}. [${p.classificationLabel}] ${p.title} (${p.subtitle})
    - Role: ${p.role}
    - Timeline / Date: ${p.year}
-   - Category: ${p.category}
+   - Classification: ${p.classificationLabel} (${p.category})
    - Tech Stack: ${p.technologies.join(", ")}
    - What Richard Did / Description: ${p.description}
    ${p.operationsNote ? `- Operations / ITSM: ${p.operationsNote}` : ""}
