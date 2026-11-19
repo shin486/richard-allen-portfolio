@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { Highlights } from "@/components/Highlights";
-import { HighlightViewer } from "@/components/highlights/HighlightViewer";
+import {
+  DevBlogViewer,
+  DevBlogViewerMode,
+} from "@/components/highlights/DevBlogViewer";
 import { PortfolioTabs, PortfolioTabType } from "@/components/PortfolioTabs";
 import { ProjectGrid } from "@/components/ProjectGrid";
 import { SkillsSection } from "@/components/SkillsSection";
@@ -22,7 +25,10 @@ import { KeyboardShortcutsHUD } from "@/components/KeyboardShortcutsHUD";
 import { Project, projectsData } from "@/data/projects";
 import { skillsData } from "@/data/skills";
 import { certificatesData } from "@/data/certificates";
-import { highlightsData } from "@/data/highlights";
+import { BlogDeepLink, devBlogPosts } from "@/data/blogPosts";
+import { profileData } from "@/data/profile";
+
+const SEEN_BLOG_STORAGE_KEY = "shin486-seen-blog-v1";
 
 export default function HomePage() {
   const [viewMode, setViewMode] = useState<"studio" | "recruiter">("studio");
@@ -59,12 +65,41 @@ export default function HomePage() {
     nonce: number;
   } | null>(null);
 
-  const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const [activeHighlightIndex, setActiveHighlightIndex] = useState(0);
+  const [blogViewerState, setBlogViewerState] = useState<{
+    isOpen: boolean;
+    mode: DevBlogViewerMode;
+    postIndex: number;
+  }>({ isOpen: false, mode: "story", postIndex: 0 });
+  const [seenPostIds, setSeenPostIds] = useState<Record<string, boolean>>({});
 
-  const handleOpenHighlight = (index: number) => {
-    setActiveHighlightIndex(index);
-    setIsViewerOpen(true);
+  useEffect(() => {
+    try {
+      const rawSeen = localStorage.getItem(SEEN_BLOG_STORAGE_KEY);
+      if (rawSeen) setSeenPostIds(JSON.parse(rawSeen));
+    } catch {}
+  }, []);
+
+  const handleMarkBlogSeen = useCallback((postId: string) => {
+    setSeenPostIds((prev) => {
+      if (prev[postId]) return prev;
+      const next = { ...prev, [postId]: true };
+      try {
+        localStorage.setItem(SEEN_BLOG_STORAGE_KEY, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  }, []);
+
+  const handleOpenBlogPost = (index: number) => {
+    setBlogViewerState({ isOpen: true, mode: "story", postIndex: index });
+  };
+
+  const handleOpenBlogArchive = () => {
+    setBlogViewerState((prev) => ({
+      ...prev,
+      isOpen: true,
+      mode: "archive",
+    }));
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -107,6 +142,19 @@ export default function HomePage() {
     setActiveTab("projects");
     setProjectFocus({ projectId, nonce: Date.now() });
     scrollToSection("portfolio-grid");
+  };
+
+  const handleBlogDeepLink = (action: BlogDeepLink["action"]) => {
+    if (action.type === "project") {
+      handleViewProject(action.projectId);
+    } else if (action.type === "tab") {
+      setActiveTab(action.tab);
+      scrollToSection("portfolio-tabs");
+    } else if (action.type === "section") {
+      scrollToSection(action.sectionId);
+    } else if (action.type === "resume") {
+      window.open(profileData.socials.resumeUrl, "_blank", "noopener,noreferrer");
+    }
   };
 
   if (viewMode === "recruiter") {
@@ -153,9 +201,13 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Curated Story Highlights */}
+            {/* Engineering Dev Journal Highlights Row */}
             <div className="rise-in" style={{ animationDelay: "180ms" }}>
-              <Highlights onOpenHighlight={handleOpenHighlight} />
+              <Highlights
+                seenPostIds={seenPostIds}
+                onOpenPost={handleOpenBlogPost}
+                onOpenArchive={handleOpenBlogArchive}
+              />
             </div>
 
             {/* Instagram Post & Navigation Tabs */}
@@ -218,12 +270,18 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Instagram Story Viewer Modal */}
-      <HighlightViewer
-        isOpen={isViewerOpen}
-        initialHighlightIndex={activeHighlightIndex}
-        highlights={highlightsData}
-        onClose={() => setIsViewerOpen(false)}
+      {/* Instagram Dev Journal Story & Article Viewer Modal */}
+      <DevBlogViewer
+        isOpen={blogViewerState.isOpen}
+        initialMode={blogViewerState.mode}
+        initialPostIndex={blogViewerState.postIndex}
+        posts={devBlogPosts}
+        seenPostIds={seenPostIds}
+        onMarkSeen={handleMarkBlogSeen}
+        onDeepLink={handleBlogDeepLink}
+        onClose={() =>
+          setBlogViewerState((prev) => ({ ...prev, isOpen: false }))
+        }
       />
 
       {/* Instagram DM AI Portfolio Assistant */}
