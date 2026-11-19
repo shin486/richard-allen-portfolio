@@ -1,15 +1,12 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
+import Image from "next/image";
 import { profileData } from "@/data/profile";
+import profilePic from "@/assets/PROFILEPIC.png";
 import { ProfileStats } from "./ProfileStats";
 import { VerifiedBadge } from "./VerifiedBadge";
 import { ProfileNote } from "./ProfileNote";
-import {
-  AvatarMode,
-  InteractiveAvatarCanvas,
-  getAvatarModeConfig,
-} from "./InteractiveAvatarCanvas";
 import { DeveloperIdBadgeModal } from "./DeveloperIdBadgeModal";
 
 interface ProfileHeaderProps {
@@ -21,32 +18,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onSelectTab,
   onNavigateToSection,
 }) => {
-  const [avatarMode, setAvatarMode] = useState<AvatarMode>("photo");
-  const [portalState, setPortalState] = useState<{
-    open: boolean;
-    side: "front" | "back";
-  }>({ open: false, side: "front" });
-
-  const emitThoughtNote = useCallback((note: string) => {
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("shin-profile-note", {
-          detail: { note },
-        })
-      );
-    }
-  }, []);
-
-  const handleSelectAvatarMode = useCallback(
-    (mode: AvatarMode) => {
-      setAvatarMode(mode);
-      const cfg = getAvatarModeConfig(mode);
-      emitThoughtNote(cfg.thoughtNote);
-    },
-    [emitThoughtNote]
-  );
-
-  const activeModeConfig = getAvatarModeConfig(avatarMode);
+  const [isInstagramModalOpen, setIsInstagramModalOpen] = useState(false);
 
   return (
     <section
@@ -55,7 +27,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     >
       {/* Unified Responsive Instagram Profile Header */}
       <div className="grid grid-cols-[auto_1fr] items-start gap-x-5 sm:gap-x-8 md:gap-x-12">
-        {/* Column 1: Circular Avatar (Opens Real Instagram Portal Card) + Active Status Dot (Opens Close Friends Perks) */}
+        {/* Column 1: Circular Avatar (Opens Main Instagram Prompt) + Thought Bubble Note */}
         <div className="col-start-1 row-start-1 sm:row-span-2 self-start relative flex flex-col items-start flex-shrink-0">
           {/* Retro Pixel Speech Bubble anchored cleanly above upper head */}
           <div
@@ -65,48 +37,38 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             <ProfileNote tailAlign="left" />
           </div>
 
-          <div className="relative inline-block">
-            {/* Primary Avatar Click: Opens "Visit the real @richardallen0901?" Portal Card */}
-            <button
-              type="button"
-              onClick={() => setPortalState({ open: true, side: "front" })}
-              data-note="Click my profile to visit my real Instagram (@richardallen0901) or unlock Close Friends perks."
-              aria-label="Open Instagram Profile Portal for @richardallen0901"
-              title="Visit @richardallen0901 on Instagram or unlock perks"
-              className="relative group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981] rounded-full block text-left"
-            >
-              <div className="w-[76px] h-[76px] sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full p-[2.5px] sm:p-[3px] animated-ig-ring shadow-sm sm:shadow-md transition-transform duration-300 group-hover:scale-105 active:scale-95">
-                <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] sm:p-[2.5px] transition-colors duration-200">
-                  <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900">
-                    <InteractiveAvatarCanvas
-                      mode={avatarMode}
-                      sizes="(max-width: 640px) 76px, (max-width: 768px) 128px, 144px"
-                      priority
-                    />
-                  </div>
+          <button
+            type="button"
+            onClick={() => setIsInstagramModalOpen(true)}
+            data-note="Click my profile picture to visit my main Instagram (@richardallen0901)."
+            aria-label="Open main Instagram profile (@richardallen0901)"
+            className="relative group cursor-pointer focus:outline-none text-left"
+          >
+            <div className="w-[76px] h-[76px] sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full p-[2.5px] sm:p-[3px] animated-ig-ring shadow-sm sm:shadow-md transition-transform duration-300 group-hover:scale-105 active:scale-95">
+              <div className="w-full h-full bg-white dark:bg-[#0B0B0F] rounded-full p-[2px] sm:p-[2.5px] transition-colors duration-200">
+                <div className="w-full h-full rounded-full overflow-hidden relative bg-neutral-900 flex items-center justify-center">
+                  <Image
+                    src={profilePic}
+                    alt={profileData.name}
+                    fill
+                    sizes="(max-width: 640px) 76px, (max-width: 768px) 128px, 144px"
+                    className="object-cover"
+                    priority
+                  />
+                  {/* Subtle inner vignette so the bright studio backdrop bridges smoothly into dark mode */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 rounded-full pointer-events-none shadow-[inset_0_0_16px_rgba(0,0,0,0.22)] dark:shadow-[inset_0_0_20px_rgba(0,0,0,0.38)]"
+                  />
                 </div>
               </div>
+            </div>
 
-              {/* Subtle Micro Lens Badge when a Canvas Mode (ASCII / 8-BIT / SCAN) is active */}
-              {avatarMode !== "photo" && (
-                <span className="pointer-events-none absolute -top-1 -right-1 sm:top-0 sm:right-0 px-1.5 py-0.5 rounded-full bg-[#0A0A0B]/95 border border-[#10B981]/60 font-mono text-[8px] sm:text-[9px] font-bold tracking-wider text-[#10B981] shadow-md">
-                  {activeModeConfig.shortTag}
-                </span>
-              )}
-            </button>
-
-            {/* Authentic Instagram Pulsing Active Dot -> Direct Shortcut to Close Friends Perks (☕ Coffee & Native QR) */}
-            <button
-              type="button"
-              onClick={() => setPortalState({ open: true, side: "back" })}
-              data-note="Active in Lipa City, PH — tap the green dot for ☕ Virtual Coffee & instant Contact QR."
-              aria-label="Open Close Friends Perks: Virtual Coffee and Native Contact QR"
-              title="Close Friends Perks: Virtual Coffee & Contact QR"
-              className="absolute bottom-0 right-0 sm:bottom-1 sm:right-1 md:bottom-2 md:right-2 z-20 bg-[#10B981] hover:bg-[#34D399] text-white rounded-full p-1 sm:p-1.5 border-2 border-white dark:border-[#0B0B0F] shadow-md transition-transform duration-200 hover:scale-125 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10B981]"
-            >
+            {/* Active Status Dot */}
+            <div className="absolute bottom-0 right-0 sm:bottom-1 sm:right-1 md:bottom-2 md:right-2 bg-emerald-500 text-white rounded-full p-0.5 sm:p-1 border-2 border-white dark:border-[#0B0B0F] shadow-sm">
               <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
-            </button>
-          </div>
+            </div>
+          </button>
         </div>
 
         {/* Column 2: Username & Interactive 3-Column Stats (Leveled beside Avatar on mobile & desktop) */}
@@ -152,13 +114,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
       </div>
 
-      {/* Flippable Instagram Profile Portal Card */}
+      {/* Main Instagram Profile Prompt Modal */}
       <DeveloperIdBadgeModal
-        isOpen={portalState.open}
-        initialSide={portalState.side}
-        onClose={() => setPortalState((prev) => ({ ...prev, open: false }))}
-        avatarMode={avatarMode}
-        onSelectAvatarMode={handleSelectAvatarMode}
+        isOpen={isInstagramModalOpen}
+        onClose={() => setIsInstagramModalOpen(false)}
       />
     </section>
   );

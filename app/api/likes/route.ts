@@ -24,8 +24,6 @@ const ALLOWED_IDS = new Set([
   "auto-avenue-ims",
   "avms",
   "crave-cart",
-  // Profile Portal Interactions
-  "badge-coffee",
 ]);
 
 // Fallback in-memory store if external counter service is unreachable
